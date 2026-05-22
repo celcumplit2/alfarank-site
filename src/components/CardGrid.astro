@@ -6,6 +6,7 @@ type Card = {
   summary: string;
   href?: string;
   icon?: string;
+  tags?: string[];
 };
 
 type Props = {
@@ -44,9 +45,15 @@ const glyphStyleFor = (icon?: string) => {
             <SystemIcon name={item.icon} />
           </div>
           <div class="card-content">
-            <h3>{item.title}</h3>
-            <p>{item.summary}</p>
-            {item.href && <span class="card-link">Open</span>}
+            <div class="card-main">
+              <h3>{item.title}</h3>
+              <p>{item.summary}</p>
+            </div>
+            {item.tags && item.tags.length > 0 && (
+              <div class="card-tags">
+                {item.tags.slice(0, 3).map((tag) => <span>{tag}</span>)}
+              </div>
+            )}
           </div>
         </>
       ) : (

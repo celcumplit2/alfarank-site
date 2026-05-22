@@ -3,6 +3,16 @@ import CardGrid from "@/components/CardGrid.astro";
 import PageHero from "@/components/PageHero.astro";
 import Layout from "@/layouts/Layout.astro";
 import { capabilities } from "@/data/site";
+
+const capabilityTags: Record<string, string[]> = {
+  "ai-automation": ["AI workflows", "CRM", "Content"],
+  "web-product-development": ["Platforms", "Dashboards", "MVP"],
+  "seo-content-infrastructure": ["Content", "Publishing", "SEO"],
+  "data-systems-scraping": ["Scraping", "Monitoring", "Audits"],
+  "ecommerce-systems": ["Catalog", "Feeds", "Orders"],
+  "video-media-automation": ["Video", "Media", "Pipelines"],
+  "wordpress-api-integrations": ["WordPress", "APIs", "CMS"]
+};
 ---
 
 <Layout title="Capabilities | AlfaRank">
@@ -21,6 +31,7 @@ import { capabilities } from "@/data/site";
         title: item.title,
         icon: item.icon,
         summary: item.summary,
+        tags: capabilityTags[item.slug],
         href: `/capabilities/${item.slug}/`
       }))}
     />

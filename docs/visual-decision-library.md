@@ -32,6 +32,10 @@ system mark embedded into the glass layer.
   panel.
 - Keep text white with shadow on a separate reading layer.
 - Use low-to-medium opacity by default and increase clarity on hover.
+- Do not use a bottom `Open` label on glyph cards. The whole card is the link.
+- Use two or three short trigger tags at the bottom of the card instead.
+- Hover must not introduce an extra inner background tile, badge, or visible
+  icon container.
 - Do not use generic app icons, emoji, or filled colorful icons.
 
 ## Approved Layout Types
