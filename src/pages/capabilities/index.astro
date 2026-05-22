@@ -15,11 +15,14 @@ import { capabilities } from "@/data/site";
   />
 
   <section class="section">
-    <CardGrid items={capabilities.map((item) => ({
-      title: item.title,
-      icon: item.icon,
-      summary: item.summary,
-      href: `/capabilities/${item.slug}/`
-    }))} />
+    <CardGrid
+      variant="glyph"
+      items={capabilities.map((item) => ({
+        title: item.title,
+        icon: item.icon,
+        summary: item.summary,
+        href: `/capabilities/${item.slug}/`
+      }))}
+    />
   </section>
 </Layout>
