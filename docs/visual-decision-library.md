@@ -24,6 +24,11 @@ system mark embedded into the glass layer.
 - Use blue/cyan contour lines.
 - Remove the icon's internal tile/glass box in background mode.
 - Clip the glyph through the card edges with `overflow: hidden`.
+- Keep most of the glyph inside the card; cropping should feel intentional, not
+  like a random cut-off fragment.
+- Avoid overly dark card fills on the already dark-blue background. The card
+  layer should stay light enough to feel like glass over water, not a dark
+  panel.
 - Keep text white with shadow on a separate reading layer.
 - Use low-to-medium opacity by default and increase clarity on hover.
 - Do not use generic app icons, emoji, or filled colorful icons.
@@ -86,7 +91,7 @@ Use for:
 Behavior:
 
 - large glyph fills most of the card;
-- partly cropped by the card edge;
+- may be slightly cropped by the card edge, but should remain mostly readable;
 - soft blue contour lines;
 - text remains readable in front;
 - strongest candidate for the default AlfaRank card system.
@@ -95,6 +100,8 @@ Risk:
 
 - if opacity is too low, the glyph disappears;
 - if stroke is too heavy, the glyph becomes foreground.
+- if the glyph is pushed too far out of the card, it reads as an accidental
+  cropped fragment instead of a background system mark.
 
 ## Split Fragments
 
