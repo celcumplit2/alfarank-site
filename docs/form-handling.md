@@ -8,6 +8,14 @@ POST /api/start-project
 
 The function writes submissions into Cloudflare D1 using the `DB` binding.
 
+Production status:
+
+- D1 database: `alfarank-project-requests`
+- binding: `DB`
+- migration applied: `migrations/0001_project_requests.sql`
+- verified on production: form POST redirects to `/start-project/thank-you/`
+  and creates a D1 record.
+
 ## D1 Table
 
 Migration file:

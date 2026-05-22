@@ -195,15 +195,16 @@ DB
 - Cloudflare Pages project создан: `alfarank-site`;
 - production URL: `https://alfarank-site.pages.dev/`;
 - static deploy проходит успешно;
-- базовая Pages Function присутствует;
-- D1 binding временно не включен в `wrangler.toml`, потому что текущий
-  Cloudflare token не дает доступ к D1 API;
-- для завершения формы нужен Cloudflare API token с D1 правами или ручное
-  создание D1-базы и binding `DB` в Cloudflare dashboard.
+- Cloudflare Pages Function `/api/start-project` работает;
+- D1 database создана: `alfarank-project-requests`;
+- D1 binding `DB` включен в `wrangler.toml`;
+- migration `0001_project_requests.sql` применена на remote D1;
+- production-форма проверена: POST возвращает redirect на
+  `/start-project/thank-you/`, запись создается в D1.
 
 ## 9. Завершение production-настройки
 
-После появления D1-доступа:
+Выполнено после появления D1-доступа:
 
 1. Создать D1 database `alfarank-project-requests`.
 2. Добавить binding `DB` в Cloudflare Pages.
@@ -218,5 +219,4 @@ DB
 - добавить `robots.txt`;
 - добавить `sitemap.xml`;
 - добавить Open Graph metadata/images;
-- проверить production-форму после D1 binding;
 - настроить уведомления о новых заявках, если они нужны кроме хранения в D1.
