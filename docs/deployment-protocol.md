@@ -1,123 +1,222 @@
 # Deployment Protocol
 
-This protocol describes how AlfaRank.com is published from the local project to GitHub and Cloudflare Pages.
+Рабочий протокол публикации AlfaRank.com из локального проекта в GitHub и
+Cloudflare Pages.
 
-Secrets must never be committed to Git or printed in logs.
+Секреты нельзя коммитить в Git, выводить в терминал или фиксировать в
+документации.
 
-## 1. Check Environment
+## Цель
 
-- Locate `.env`.
-- Verify that GitHub and Cloudflare credentials exist.
-- Do not print token values.
-- Identify available variables:
-  - GitHub token;
-  - Cloudflare API token;
-  - Cloudflare account ID;
-  - optional GitHub owner/org;
-  - optional repo/project names.
+Развернуть корпоративный сайт AlfaRank как статический Astro-проект с
+Cloudflare Pages Functions для обработки формы заявки.
 
-## 2. Verify Local Project
+Целевая связка:
 
-- Install dependencies if needed.
-- Run production build.
-- Run TypeScript check.
-- Confirm that `dist/` is generated.
-- Confirm that `.gitignore` excludes:
-  - `.env`;
-  - `node_modules`;
-  - `dist`;
-  - `.astro`;
-  - local caches.
+- локальная разработка: `Astro`;
+- репозиторий: `GitHub`;
+- хостинг: `Cloudflare Pages`;
+- функция формы: `Cloudflare Pages Function`;
+- хранение заявок: `Cloudflare D1`;
+- production branch: `main`;
+- build command: `npm run build`;
+- output directory: `dist`.
 
-## 3. Initialize Git
+## 1. Проверка окружения
 
-- If `.git` does not exist, run `git init`.
-- Set branch to `main`.
-- Review changed files.
-- Create the first commit.
+- Проверить наличие `.env`.
+- Проверить, что есть GitHub token.
+- Проверить, что есть Cloudflare account ID.
+- Проверить, что есть Cloudflare API token.
+- Не печатать значения токенов.
+- Проверять только факт наличия переменных и права доступа через API.
 
-## 4. Create GitHub Repository
+Ожидаемые переменные:
 
-- Create GitHub repository through API or GitHub CLI.
-- Recommended repo name: `alfarank-site`.
-- Add GitHub remote.
-- Push `main`.
+```text
+GIT_HUB_TOKEN
+CLOUDFLARE_ACCOUNT_ID
+CLOUDFLARE_API_TOKEN_STREAM
+```
 
-## 5. Create Cloudflare D1
+Если Cloudflare token используется не только для Stream, он должен иметь права:
 
-- Create D1 database:
+- Cloudflare Pages: edit;
+- D1: edit;
+- Account: read.
+
+## 2. Проверка проекта
+
+Перед публикацией:
+
+```bash
+npm install
+npm run build
+npx astro check
+```
+
+Проверить, что `.gitignore` исключает:
+
+- `.env`;
+- `.env.*`;
+- `node_modules`;
+- `dist`;
+- `.astro`;
+- логи и локальные кеши.
+
+## 3. GitHub
+
+Если репозиторий еще не создан:
+
+```bash
+git init
+git branch -M main
+git add .
+git commit -m "Initial AlfaRank site"
+```
+
+Дальше создать репозиторий через GitHub API или GitHub CLI.
+
+Рекомендуемые параметры:
+
+- repository: `alfarank-site`;
+- visibility: private или public по решению владельца;
+- default branch: `main`.
+
+После создания:
+
+```bash
+git remote add origin https://github.com/celcumplit2/alfarank-site.git
+git push -u origin main
+```
+
+При push использовать токен только как временный HTTP-заголовок, не сохранять
+его в remote URL.
+
+## 4. Cloudflare Pages
+
+Создать Pages project и связать его с GitHub repository.
+
+Параметры проекта:
+
+```text
+Project name: alfarank-site
+Production branch: main
+Build command: npm run build
+Build output directory: dist
+Node.js version: 20+
+```
+
+В `wrangler.toml` обязательная базовая конфигурация:
+
+```toml
+name = "alfarank-site"
+compatibility_date = "2026-05-22"
+pages_build_output_dir = "dist"
+```
+
+## 5. Cloudflare D1
+
+D1 нужна для формы `/start-project/`.
+
+Создать базу:
 
 ```bash
 npx wrangler d1 create alfarank-project-requests
 ```
 
-- Copy the returned `database_id` into `wrangler.toml`.
-- Apply migration:
+После создания добавить реальный `database_id` в `wrangler.toml`:
+
+```toml
+[[d1_databases]]
+binding = "DB"
+database_name = "alfarank-project-requests"
+database_id = "<real database id>"
+```
+
+Применить миграцию:
 
 ```bash
 npx wrangler d1 migrations apply alfarank-project-requests
 ```
 
-## 6. Create Cloudflare Pages Project
+Важно: не добавлять placeholder `database_id`. Cloudflare Pages падает на
+deploy stage, если binding указывает на несуществующую D1-базу.
 
-- Create Pages project connected to GitHub repository.
-- Production branch: `main`.
-- Build command:
+## 6. Form Function
 
-```bash
-npm run build
-```
-
-- Build output directory:
+Форма отправляет данные сюда:
 
 ```text
-dist
+POST /api/start-project
 ```
 
-- Node.js version: `20+`.
+Функция:
 
-## 7. Bind D1 to Pages
+```text
+functions/api/start-project.ts
+```
 
-- Binding name:
+Миграция:
+
+```text
+migrations/0001_project_requests.sql
+```
+
+Обязательный binding в Cloudflare Pages:
 
 ```text
 DB
 ```
 
-- Database:
+Без binding `DB` production-функция должна вернуть ошибку конфигурации, а не
+терять заявку молча.
 
-```text
-alfarank-project-requests
-```
+## 7. Первый deploy
 
-- The Pages Function `/api/start-project` depends on this binding.
+После GitHub push Cloudflare Pages должен запустить production deploy.
 
-## 8. Configure Production Environment
+Проверить:
 
-- Add required environment variables to Cloudflare Pages if needed.
-- Never upload local `.env` to Git.
+- `/`;
+- `/capabilities/ai-automation/`;
+- `/solutions/generate-more-content/`;
+- `/systems/content-automation-workflows/`;
+- `/start-project/`;
+- `/start-project/thank-you/`;
+- `POST /api/start-project`;
+- появление записи в D1.
 
-## 9. Deploy
+## 8. Текущий статус
 
-- Trigger first production deploy.
-- Verify the generated Cloudflare Pages URL.
-- Check:
-  - `/`;
-  - `/capabilities/ai-automation/`;
-  - `/solutions/generate-more-content/`;
-  - `/systems/content-automation-workflows/`;
-  - `/start-project/`;
-  - `/start-project/thank-you/`;
-  - `POST /api/start-project`;
-  - D1 record creation.
+На момент фиксации протокола:
 
-## 10. Finalize
+- GitHub repository создан: `https://github.com/celcumplit2/alfarank-site`;
+- Cloudflare Pages project создан: `alfarank-site`;
+- production URL: `https://alfarank-site.pages.dev/`;
+- static deploy проходит успешно;
+- базовая Pages Function присутствует;
+- D1 binding временно не включен в `wrangler.toml`, потому что текущий
+  Cloudflare token не дает доступ к D1 API;
+- для завершения формы нужен Cloudflare API token с D1 правами или ручное
+  создание D1-базы и binding `DB` в Cloudflare dashboard.
 
-- Record production URL.
-- Record repository URL.
-- Record D1 database name and binding.
-- Add follow-up tasks:
-  - `robots.txt`;
-  - `sitemap.xml`;
-  - Open Graph images;
-  - domain connection for `AlfaRank.com`.
+## 9. Завершение production-настройки
+
+После появления D1-доступа:
+
+1. Создать D1 database `alfarank-project-requests`.
+2. Добавить binding `DB` в Cloudflare Pages.
+3. Добавить реальный `database_id` в `wrangler.toml`.
+4. Применить `migrations/0001_project_requests.sql`.
+5. Сделать новый commit и push.
+6. Проверить отправку формы и запись в D1.
+
+## 10. Следующие обязательные задачи
+
+- подключить основной домен `AlfaRank.com`;
+- добавить `robots.txt`;
+- добавить `sitemap.xml`;
+- добавить Open Graph metadata/images;
+- проверить production-форму после D1 binding;
+- настроить уведомления о новых заявках, если они нужны кроме хранения в D1.

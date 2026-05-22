@@ -1,7 +1,7 @@
 ---
 import PageHero from "@/components/PageHero.astro";
 import Layout from "@/layouts/Layout.astro";
-import { capabilities, systems } from "@/data/site";
+import { systems } from "@/data/site";
 
 export function getStaticPaths() {
   return systems.map((item) => ({
