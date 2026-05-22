@@ -30,8 +30,8 @@ system mark embedded into the glass layer.
 - Avoid overly dark card fills on the already dark-blue background. The card
   layer should stay light enough to feel like glass over water, not a dark
   panel.
-- For glyph cards, use a darker internal glass tint than ordinary panels so the
-  white text and blue contour glyph keep enough contrast.
+- Keep glyph cards almost transparent. If contrast is weak, darken the shared
+  liquid background layer, not the card fill.
 - Keep text white with shadow on a separate reading layer.
 - Use low-to-medium opacity by default and increase clarity on hover.
 - Do not use a bottom `Open` label on glyph cards. The whole card is the link.
