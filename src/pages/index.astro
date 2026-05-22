@@ -1,0 +1,114 @@
+---
+import CardGrid from "@/components/CardGrid.astro";
+import PageHero from "@/components/PageHero.astro";
+import Layout from "@/layouts/Layout.astro";
+import { capabilities, home, industries, solutions, systems, technologies } from "@/data/site";
+---
+
+<Layout>
+  <PageHero
+    eyebrow="Digital systems company"
+    title={home.heroTitle}
+    text={home.heroText}
+    primaryHref="/start-project/"
+    primaryLabel="Start a Project"
+    secondaryHref="/capabilities/"
+    secondaryLabel="Explore Capabilities"
+  />
+
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Capabilities</p>
+        <h2>What AlfaRank builds</h2>
+      </div>
+      <p>{home.buildText}</p>
+    </div>
+    <CardGrid items={capabilities.map((item) => ({
+      title: item.title,
+      icon: item.icon,
+      summary: item.summary,
+      href: `/capabilities/${item.slug}/`
+    }))} />
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Solutions</p>
+        <h2>Business problems mapped to systems</h2>
+      </div>
+      <p>{home.solutionsText}</p>
+    </div>
+    <CardGrid items={solutions.map((item) => ({
+      title: item.title,
+      icon: item.icon,
+      summary: item.summary,
+      href: `/solutions/${item.slug}/`
+    }))} />
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Systems</p>
+        <h2>Project and system profiles</h2>
+      </div>
+      <p>{home.systemsText}</p>
+    </div>
+    <CardGrid items={systems.slice(0, 3).map((item) => ({
+      title: item.title,
+      icon: item.icon,
+      summary: item.summary,
+      href: `/systems/${item.slug}/`
+    }))} />
+  </section>
+
+  <section class="section split-panel">
+    <div class="glass-panel">
+      <p class="eyebrow">Technology layer</p>
+      <h2>Built with practical, integration-ready technology.</h2>
+      <p>AlfaRank uses established web, automation, AI, data, and CMS technologies to create systems that can be launched, reviewed, integrated, and improved without locking the business into a fragile stack.</p>
+      <div class="section-actions">
+        <a class="button secondary" href="/technologies/">View Technologies</a>
+      </div>
+    </div>
+    <div class="glass-panel">
+      <div class="tag-grid">
+        {technologies.slice(0, 12).map((tech) => <span class="tag">{tech}</span>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Industries</p>
+        <h2>Where the systems apply</h2>
+      </div>
+      <p>The same system approach works across service businesses, e-commerce, media, travel, local businesses, SaaS, agencies, and data-heavy operations.</p>
+    </div>
+    <CardGrid items={industries.map((item) => ({
+      title: item.title,
+      icon: item.icon,
+      summary: item.summary,
+      href: "/industries/"
+    }))} />
+  </section>
+
+  <section class="section split-panel">
+    <div class="glass-panel">
+      <p class="eyebrow">Project flow</p>
+      <h2>How projects start</h2>
+      <p>Every project begins with a concrete operational problem. The first goal is to define the system that should exist, not to force the business into a predefined service package.</p>
+      <div class="section-actions">
+        <a class="button primary" href="/start-project/">Start a Project</a>
+      </div>
+    </div>
+    <div class="glass-panel">
+      <ul class="feature-list">
+        {home.process.map((step) => <li>{step}</li>)}
+      </ul>
+    </div>
+  </section>
+</Layout>

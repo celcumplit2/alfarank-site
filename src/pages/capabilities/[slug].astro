@@ -1,0 +1,100 @@
+---
+import PageHero from "@/components/PageHero.astro";
+import Layout from "@/layouts/Layout.astro";
+import { capabilities } from "@/data/site";
+
+export function getStaticPaths() {
+  return capabilities.map((item) => ({
+    params: { slug: item.slug },
+    props: { item }
+  }));
+}
+
+const { item } = Astro.props;
+---
+
+<Layout title={`${item.title} | AlfaRank`} description={item.summary}>
+  <PageHero
+    eyebrow="Capability"
+    title={item.title}
+    text={item.summary}
+    primaryHref="/start-project/"
+    primaryLabel="Start a Project"
+    secondaryHref="/solutions/"
+    secondaryLabel="View Solutions"
+  />
+
+  <section class="section split-panel">
+    <div class="glass-panel">
+      <h2>What this covers</h2>
+      {item.intro && <p>{item.intro}</p>}
+      <ul class="feature-list">
+        {(item.details ?? []).map((detail) => <li>{detail}</li>)}
+      </ul>
+    </div>
+    <div class="glass-panel">
+      <h2>Business output</h2>
+      <div class="tag-grid">
+        {(item.outputs ?? []).map((output) => <span class="tag">{output}</span>)}
+      </div>
+      {item.related && (
+        <>
+          <h3>Related solutions</h3>
+          <div class="tag-grid">
+            {item.related.map((related) => <span class="tag">{related}</span>)}
+          </div>
+        </>
+      )}
+    </div>
+  </section>
+
+  {item.modules && (
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">System modules</p>
+          <h2>What AlfaRank can build in this area</h2>
+        </div>
+        <p>Each capability is translated into practical modules: inputs, workflows, interfaces, integrations, outputs, and improvement loops.</p>
+      </div>
+      <div class="card-grid">
+        {item.modules.map((module) => (
+          <div class="glass-card">
+            <h3>{module.title}</h3>
+            <p>{module.text}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  )}
+
+  {item.workflow && (
+    <section class="section split-panel">
+      <div class="glass-panel">
+        <p class="eyebrow">Implementation logic</p>
+        <h2>From business problem to working system</h2>
+        <p>The workflow is designed around the business process first. Technologies are selected only after the inputs, outputs, review needs, and integration points are clear.</p>
+      </div>
+      <div class="glass-panel">
+        <ul class="feature-list">
+          {item.workflow.map((step) => <li>{step}</li>)}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  {item.useCases && (
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Use cases</p>
+          <h2>Where this capability applies</h2>
+        </div>
+        <p>The strongest use cases are the ones where repeated work, measurable output, and clear system ownership already exist.</p>
+      </div>
+      <ul class="feature-list">
+        {item.useCases.map((useCase) => <li>{useCase}</li>)}
+      </ul>
+    </section>
+  )}
+</Layout>

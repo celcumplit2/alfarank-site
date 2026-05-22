@@ -1,0 +1,100 @@
+---
+import PageHero from "@/components/PageHero.astro";
+import Layout from "@/layouts/Layout.astro";
+import { capabilities, systems } from "@/data/site";
+
+export function getStaticPaths() {
+  return systems.map((item) => ({
+    params: { slug: item.slug },
+    props: { item }
+  }));
+}
+
+const { item } = Astro.props;
+---
+
+<Layout title={`${item.title} | AlfaRank`} description={item.summary}>
+  <PageHero
+    eyebrow="System profile"
+    title={item.title}
+    text={item.summary}
+    primaryHref="/start-project/"
+    primaryLabel="Start a Project"
+    secondaryHref="/systems/"
+    secondaryLabel="All Systems"
+  />
+
+  <section class="section split-panel">
+    <div class="glass-panel">
+      <h2>System overview</h2>
+      {item.intro && <p>{item.intro}</p>}
+      <ul class="feature-list">
+        {(item.details ?? []).map((detail) => <li>{detail}</li>)}
+      </ul>
+    </div>
+    <div class="glass-panel">
+      <h2>Outputs</h2>
+      <div class="tag-grid">
+        {(item.outputs ?? []).map((output) => <span class="tag">{output}</span>)}
+      </div>
+      {item.related && (
+        <>
+          <h3>Related areas</h3>
+          <div class="tag-grid">
+            {item.related.map((related) => <span class="tag">{related}</span>)}
+          </div>
+        </>
+      )}
+    </div>
+  </section>
+
+  {item.modules && (
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Core modules</p>
+          <h2>What the system includes</h2>
+        </div>
+        <p>System profiles show reusable modules, workflow logic, technology areas, and business outputs without turning the section into a generic portfolio grid.</p>
+      </div>
+      <div class="card-grid">
+        {item.modules.map((module) => (
+          <div class="glass-card">
+            <h3>{module.title}</h3>
+            <p>{module.text}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  )}
+
+  {item.workflow && (
+    <section class="section split-panel">
+      <div class="glass-panel">
+        <p class="eyebrow">Workflow</p>
+        <h2>How the system operates</h2>
+        <p>The profile describes the operational flow: inputs, processing, review, integrations, publishing, reporting, or output delivery.</p>
+      </div>
+      <div class="glass-panel">
+        <ul class="feature-list">
+          {item.workflow.map((step) => <li>{step}</li>)}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  {item.useCases && (
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Use cases</p>
+          <h2>Where this system pattern applies</h2>
+        </div>
+        <p>The same architecture can be adapted to different business contexts when the workflow, data, and output requirements are clear.</p>
+      </div>
+      <ul class="feature-list">
+        {item.useCases.map((useCase) => <li>{useCase}</li>)}
+      </ul>
+    </section>
+  )}
+</Layout>

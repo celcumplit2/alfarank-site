@@ -1,0 +1,43 @@
+---
+import PageHero from "@/components/PageHero.astro";
+import Layout from "@/layouts/Layout.astro";
+import { technologies } from "@/data/site";
+---
+
+<Layout title="Technologies | AlfaRank">
+  <PageHero
+    eyebrow="Technologies"
+    title="The implementation layer behind AlfaRank systems."
+    text="The stack is selected for practical delivery: clear content models, stable deployment, API integration, automation, data processing, and measurable operations."
+    primaryHref="/start-project/"
+    primaryLabel="Start a Project"
+  />
+
+  <section class="section split-panel">
+    <div class="glass-panel">
+      <h2>Core stack</h2>
+      <p>AlfaRank uses web, CMS, AI, automation, data, and deployment tools as an integrated system layer. The goal is not tool novelty. The goal is reliable implementation that business teams can use and improve.</p>
+    </div>
+    <div class="glass-panel">
+      <div class="tag-grid">
+        {technologies.map((tech) => <span class="tag">{tech}</span>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Implementation areas</p>
+        <h2>Technology is grouped by system function.</h2>
+      </div>
+      <p>Each project combines only the layers needed for the business workflow: frontend, CMS, automation, data, AI, analytics, integrations, and deployment.</p>
+    </div>
+    <ul class="feature-list">
+      <li>Frontend and content sites with Astro, Next.js, and structured routing.</li>
+      <li>CMS and publishing systems with WordPress, APIs, custom fields, and content workflows.</li>
+      <li>AI workflows for content, media, research, lead handling, and internal operations.</li>
+      <li>Data processing for scraping, monitoring, normalization, scoring, reporting, and alerts.</li>
+    </ul>
+  </section>
+</Layout>

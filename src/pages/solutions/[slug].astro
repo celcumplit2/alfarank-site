@@ -1,0 +1,98 @@
+---
+import PageHero from "@/components/PageHero.astro";
+import Layout from "@/layouts/Layout.astro";
+import { capabilities, solutions } from "@/data/site";
+
+export function getStaticPaths() {
+  return solutions.map((item) => ({
+    params: { slug: item.slug },
+    props: { item }
+  }));
+}
+
+const { item } = Astro.props;
+---
+
+<Layout title={`${item.title} | AlfaRank`} description={item.summary}>
+  <PageHero
+    eyebrow="Solution"
+    title={item.title}
+    text={item.summary}
+    primaryHref="/start-project/"
+    primaryLabel="Start a Project"
+    secondaryHref="/capabilities/"
+    secondaryLabel="View Capabilities"
+  />
+
+  <section class="section split-panel">
+    <div class="glass-panel">
+      <h2>What this solution covers</h2>
+      {item.intro && <p>{item.intro}</p>}
+      <ul class="feature-list">
+        {(item.details ?? []).map((detail) => <li>{detail}</li>)}
+      </ul>
+    </div>
+    <div class="glass-panel">
+      <h2>Expected output</h2>
+      <div class="tag-grid">
+        {(item.outputs ?? []).map((output) => <span class="tag">{output}</span>)}
+      </div>
+      <h3>Relevant capabilities</h3>
+      <div class="tag-grid">
+        {capabilities.slice(0, 4).map((capability) => (
+          <a class="tag" href={`/capabilities/${capability.slug}/`}>{capability.title}</a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {item.modules && (
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">System modules</p>
+          <h2>What the system can include</h2>
+        </div>
+        <p>Each solution is implemented as a practical system with inputs, workflow states, integrations, review points, and measurable output.</p>
+      </div>
+      <div class="card-grid">
+        {item.modules.map((module) => (
+          <div class="glass-card">
+            <h3>{module.title}</h3>
+            <p>{module.text}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  )}
+
+  {item.workflow && (
+    <section class="section split-panel">
+      <div class="glass-panel">
+        <p class="eyebrow">Implementation path</p>
+        <h2>How the solution is built</h2>
+        <p>The work starts by defining the business process, then turns it into a system architecture with data, interfaces, automations, integrations, and launchable workflows.</p>
+      </div>
+      <div class="glass-panel">
+        <ul class="feature-list">
+          {item.workflow.map((step) => <li>{step}</li>)}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  {item.useCases && (
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Use cases</p>
+          <h2>When this solution fits</h2>
+        </div>
+        <p>This is most useful when a business process already exists but needs more structure, automation, visibility, or scale.</p>
+      </div>
+      <ul class="feature-list">
+        {item.useCases.map((useCase) => <li>{useCase}</li>)}
+      </ul>
+    </section>
+  )}
+</Layout>

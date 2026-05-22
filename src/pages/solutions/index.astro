@@ -1,0 +1,25 @@
+---
+import CardGrid from "@/components/CardGrid.astro";
+import PageHero from "@/components/PageHero.astro";
+import Layout from "@/layouts/Layout.astro";
+import { solutions } from "@/data/site";
+---
+
+<Layout title="Solutions | AlfaRank">
+  <PageHero
+    eyebrow="Solutions"
+    title="Business problems translated into working systems."
+    text="Solution pages connect operational, marketing, content, and data problems to the infrastructure required to solve them."
+    primaryHref="/start-project/"
+    primaryLabel="Start a Project"
+  />
+
+  <section class="section">
+    <CardGrid items={solutions.map((item) => ({
+      title: item.title,
+      icon: item.icon,
+      summary: item.summary,
+      href: `/solutions/${item.slug}/`
+    }))} />
+  </section>
+</Layout>

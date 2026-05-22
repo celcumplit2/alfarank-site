@@ -1,0 +1,25 @@
+---
+import CardGrid from "@/components/CardGrid.astro";
+import PageHero from "@/components/PageHero.astro";
+import Layout from "@/layouts/Layout.astro";
+import { capabilities } from "@/data/site";
+---
+
+<Layout title="Capabilities | AlfaRank">
+  <PageHero
+    eyebrow="Capabilities"
+    title="Technical directions for building digital systems."
+    text="AlfaRank capabilities are organized around what the company can build, connect, automate, and launch."
+    primaryHref="/start-project/"
+    primaryLabel="Start a Project"
+  />
+
+  <section class="section">
+    <CardGrid items={capabilities.map((item) => ({
+      title: item.title,
+      icon: item.icon,
+      summary: item.summary,
+      href: `/capabilities/${item.slug}/`
+    }))} />
+  </section>
+</Layout>

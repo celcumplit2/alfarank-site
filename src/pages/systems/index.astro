@@ -1,0 +1,25 @@
+---
+import CardGrid from "@/components/CardGrid.astro";
+import PageHero from "@/components/PageHero.astro";
+import Layout from "@/layouts/Layout.astro";
+import { systems } from "@/data/site";
+---
+
+<Layout title="Systems | AlfaRank">
+  <PageHero
+    eyebrow="Systems"
+    title="System and project profiles."
+    text="This section is structured around systems, modules, workflows, outputs, and implementation logic instead of a generic portfolio grid."
+    primaryHref="/start-project/"
+    primaryLabel="Start a Project"
+  />
+
+  <section class="section">
+    <CardGrid items={systems.map((item) => ({
+      title: item.title,
+      icon: item.icon,
+      summary: item.summary,
+      href: `/systems/${item.slug}/`
+    }))} />
+  </section>
+</Layout>

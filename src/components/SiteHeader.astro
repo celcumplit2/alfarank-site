@@ -1,0 +1,28 @@
+---
+const navItems = [
+  { label: "Capabilities", href: "/capabilities/" },
+  { label: "Solutions", href: "/solutions/" },
+  { label: "Systems", href: "/systems/" },
+  { label: "Technologies", href: "/technologies/" },
+  { label: "Industries", href: "/industries/" },
+  { label: "About", href: "/about/" }
+];
+---
+
+<header class="site-header">
+  <a class="brand" href="/" aria-label="AlfaRank home">
+    <span class="brand-mark">A</span>
+    <span>AlfaRank</span>
+  </a>
+  <nav class="site-nav desktop-nav" aria-label="Primary navigation">
+    {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
+  </nav>
+  <a class="header-cta" href="/start-project/">Start a Project</a>
+  <details class="mobile-menu">
+    <summary>Menu</summary>
+    <nav class="mobile-nav" aria-label="Mobile navigation">
+      {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
+      <a class="mobile-cta" href="/start-project/">Start a Project</a>
+    </nav>
+  </details>
+</header>

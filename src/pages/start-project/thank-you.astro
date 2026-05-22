@@ -1,0 +1,31 @@
+---
+import PageHero from "@/components/PageHero.astro";
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout title="Project Request Received | AlfaRank">
+  <PageHero
+    eyebrow="Request received"
+    title="Your project request has been submitted."
+    text="AlfaRank will review the project type, business problem, current system, and desired result before the next step."
+    primaryHref="/"
+    primaryLabel="Back to Home"
+    secondaryHref="/capabilities/"
+    secondaryLabel="Explore Capabilities"
+  />
+
+  <section class="section split-panel">
+    <div class="glass-panel">
+      <h2>What happens next</h2>
+      <ul class="feature-list">
+        <li>The request is reviewed against the relevant system type.</li>
+        <li>The current website, workflow, or infrastructure is checked if provided.</li>
+        <li>The next step is defined around scope, feasibility, timeline, and implementation path.</li>
+      </ul>
+    </div>
+    <div class="glass-panel">
+      <h2>Useful context</h2>
+      <p>If more details are needed, the follow-up will focus on business output, existing systems, required integrations, and what should be launched first.</p>
+    </div>
+  </section>
+</Layout>

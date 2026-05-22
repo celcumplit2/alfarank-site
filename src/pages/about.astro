@@ -1,0 +1,31 @@
+---
+import PageHero from "@/components/PageHero.astro";
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout title="About AlfaRank | Digital Systems Company">
+  <PageHero
+    eyebrow="About AlfaRank"
+    title="Practical system development for business output."
+    text="AlfaRank combines marketing logic, engineering, automation, content infrastructure, and data workflows to build digital systems that work inside real business processes."
+    primaryHref="/start-project/"
+    primaryLabel="Start a Project"
+  />
+
+  <section class="section split-panel">
+    <div class="glass-panel">
+      <h2>How AlfaRank works</h2>
+      <p>Projects start from the business problem and move toward a working system: scope, prototype, implementation, integration, launch, and measurement.</p>
+      <p>The work is focused on practical execution: interfaces, content models, automations, APIs, data flows, dashboards, and publishing systems.</p>
+    </div>
+    <div class="glass-panel">
+      <h2>Operating principles</h2>
+      <ul class="feature-list">
+        <li>Automation-first thinking where repeated work can be systematized.</li>
+        <li>Marketing and technology connected in one implementation layer.</li>
+        <li>Fast prototyping when the fastest path is a working model.</li>
+        <li>Measurable outputs instead of abstract deliverables.</li>
+      </ul>
+    </div>
+  </section>
+</Layout>

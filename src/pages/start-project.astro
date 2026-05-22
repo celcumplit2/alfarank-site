@@ -1,0 +1,77 @@
+---
+import PageHero from "@/components/PageHero.astro";
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout title="Start a Project | AlfaRank">
+  <PageHero
+    eyebrow="Start a Project"
+    title="Define the system your business needs."
+    text="Use the form to describe the project type, current setup, business problem, desired result, and optional timeline or budget."
+  />
+
+  <section class="section split-panel">
+    <form class="glass-panel" method="post" action="/api/start-project">
+      <input type="hidden" name="source_path" value="/start-project/" />
+      <div class="spam-field" aria-hidden="true">
+        <label for="company_website">Company website</label>
+        <input id="company_website" name="company_website" tabindex="-1" autocomplete="off" />
+      </div>
+      <div class="form-grid">
+        <div class="field">
+          <label for="name">Name</label>
+          <input id="name" name="name" autocomplete="name" required />
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email" required />
+        </div>
+        <div class="field">
+          <label for="project-type">Project type</label>
+          <select id="project-type" name="project_type">
+            <option>AI automation</option>
+            <option>Web platform</option>
+            <option>SEO/content infrastructure</option>
+            <option>Data or monitoring system</option>
+            <option>E-commerce infrastructure</option>
+            <option>WordPress/API integration</option>
+            <option>Internal business tool</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="current-system">Current website/system</label>
+          <input id="current-system" name="current_system" placeholder="URL or short description" />
+        </div>
+        <div class="field full">
+          <label for="problem">Business problem</label>
+          <textarea id="problem" name="business_problem" required></textarea>
+        </div>
+        <div class="field full">
+          <label for="result">Desired result</label>
+          <textarea id="result" name="desired_result" required></textarea>
+        </div>
+        <div class="field">
+          <label for="budget">Budget optional</label>
+          <input id="budget" name="budget" />
+        </div>
+        <div class="field">
+          <label for="timeline">Timeline optional</label>
+          <input id="timeline" name="timeline" />
+        </div>
+      </div>
+      <div class="section-actions" style="margin-top: 18px;">
+        <button class="button primary" type="submit">Send Project Request</button>
+      </div>
+    </form>
+
+    <aside class="glass-panel">
+      <h2>Good project inputs</h2>
+      <ul class="feature-list">
+        <li>What process needs to become faster, clearer, or more automated.</li>
+        <li>What data, website, CRM, CMS, or internal system already exists.</li>
+        <li>What output should be visible after the first implementation phase.</li>
+        <li>Which workflows are manual today and should become repeatable.</li>
+      </ul>
+    </aside>
+  </section>
+</Layout>
