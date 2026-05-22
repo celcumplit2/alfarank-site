@@ -61,6 +61,10 @@ For Cloudflare Pages, make sure the D1 binding is named:
 DB
 ```
 
+Note: `wrangler.toml` should only include the D1 binding after the real
+`database_id` is available. A placeholder `database_id` will make Cloudflare
+Pages deployment fail during the deploy stage.
+
 ## Flow
 
 ```text
