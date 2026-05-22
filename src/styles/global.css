@@ -394,13 +394,14 @@ li {
 }
 
 .glass-card--glyph {
-  min-height: 255px;
+  min-height: 315px;
   overflow: hidden;
   isolation: isolate;
   background:
-    radial-gradient(28rem 18rem at 24% 14%, rgba(255, 255, 255, 0.12), transparent 64%),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.08)),
-    rgba(255, 255, 255, 0.1);
+    radial-gradient(34rem 22rem at 22% 14%, rgba(255, 255, 255, 0.08), transparent 62%),
+    radial-gradient(28rem 18rem at 86% 72%, rgba(67, 162, 245, 0.16), transparent 64%),
+    linear-gradient(135deg, rgba(10, 35, 75, 0.72), rgba(7, 39, 84, 0.52)),
+    rgba(255, 255, 255, 0.06);
 }
 
 .glass-card--glyph .card-content {
@@ -408,43 +409,54 @@ li {
   z-index: 2;
   display: grid;
   height: 100%;
-  min-height: 215px;
+  min-height: 275px;
   grid-template-rows: 1fr auto;
   gap: 18px;
 }
 
 .glass-card--glyph .card-main {
   align-self: center;
+  transform: translateY(8px);
 }
 
 .glass-card--glyph .card-main h3 {
-  max-width: 82%;
+  max-width: 84%;
+  font-size: clamp(23px, 1.8vw, 34px);
+  line-height: 1.08;
 }
 
 .glass-card--glyph .card-main p {
-  max-width: 86%;
+  max-width: 82%;
   margin-bottom: 0;
+  font-size: 17px;
+  line-height: 1.55;
 }
 
 .card-tags {
   display: flex;
-  gap: 7px;
+  gap: 11px;
   align-items: center;
   flex-wrap: wrap;
 }
 
 .card-tags span {
   display: inline-flex;
-  min-height: 24px;
+  min-height: 20px;
   align-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 3px;
-  padding: 3px 8px;
-  color: rgba(255, 255, 255, 0.84);
-  background: rgba(255, 255, 255, 0.055);
-  font-size: 12px;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  color: rgba(224, 247, 255, 0.8);
+  background: transparent;
+  font-size: 13px;
   font-weight: 700;
   text-shadow: var(--text-shadow);
+}
+
+.card-tags span::before {
+  content: "#";
+  margin-right: 2px;
+  color: rgba(186, 230, 253, 0.66);
 }
 
 .card-glyph {
@@ -452,9 +464,9 @@ li {
   inset: 50% auto auto 50%;
   z-index: 1;
   pointer-events: none;
-  opacity: 0.32;
-  width: 84%;
-  height: 84%;
+  opacity: 0.48;
+  width: 104%;
+  height: 104%;
   transform: translate(-50%, -50%);
   transition:
     opacity 180ms ease,
@@ -491,33 +503,33 @@ li {
 
 .card-glyph .icon-lines,
 .glass-card--glyph .system-icon[data-icon] .icon-lines {
-  stroke: rgba(150, 217, 255, 0.72);
-  stroke-width: 1.15;
+  stroke: rgba(87, 166, 252, 0.82);
+  stroke-width: 1.28;
   filter:
-    drop-shadow(0 0 7px rgba(142, 215, 255, 0.36))
-    drop-shadow(0 0 18px rgba(66, 165, 245, 0.18));
+    drop-shadow(0 0 8px rgba(76, 164, 255, 0.5))
+    drop-shadow(0 0 20px rgba(34, 122, 238, 0.26));
 }
 
 .glyph-bleed .card-glyph {
-  width: 86%;
-  height: 86%;
+  width: 112%;
+  height: 112%;
 }
 
 .glyph-diagonal .card-glyph {
-  width: 82%;
-  height: 82%;
-  opacity: 0.34;
+  width: 116%;
+  height: 116%;
+  opacity: 0.52;
   transform: translate(-50%, -50%) rotate(-7deg);
 }
 
 .glyph-object .card-glyph {
-  width: 82%;
-  height: 82%;
-  opacity: 0.34;
+  width: 112%;
+  height: 112%;
+  opacity: 0.5;
 }
 
 .glass-card--glyph:hover .card-glyph {
-  opacity: 0.38;
+  opacity: 0.56;
   filter: blur(0);
 }
 
@@ -703,9 +715,10 @@ li {
 .glass-card--glyph:hover {
   border-color: transparent;
   background:
-    radial-gradient(28rem 18rem at 24% 14%, rgba(255, 255, 255, 0.12), transparent 64%),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.08)),
-    rgba(255, 255, 255, 0.1);
+    radial-gradient(34rem 22rem at 22% 14%, rgba(255, 255, 255, 0.08), transparent 62%),
+    radial-gradient(28rem 18rem at 86% 72%, rgba(67, 162, 245, 0.16), transparent 64%),
+    linear-gradient(135deg, rgba(10, 35, 75, 0.72), rgba(7, 39, 84, 0.52)),
+    rgba(255, 255, 255, 0.06);
   box-shadow: var(--glass-shadow);
 }
 

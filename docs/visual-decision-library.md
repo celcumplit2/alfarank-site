@@ -30,10 +30,13 @@ system mark embedded into the glass layer.
 - Avoid overly dark card fills on the already dark-blue background. The card
   layer should stay light enough to feel like glass over water, not a dark
   panel.
+- For glyph cards, use a darker internal glass tint than ordinary panels so the
+  white text and blue contour glyph keep enough contrast.
 - Keep text white with shadow on a separate reading layer.
 - Use low-to-medium opacity by default and increase clarity on hover.
 - Do not use a bottom `Open` label on glyph cards. The whole card is the link.
-- Use two or three short trigger tags at the bottom of the card instead.
+- Use two or three short trigger tags at the bottom of the card instead. Tags
+  should read like quiet hashtag triggers, not buttons.
 - Hover must not introduce an extra inner background tile, badge, or visible
   icon container.
 - Do not use generic app icons, emoji, or filled colorful icons.
