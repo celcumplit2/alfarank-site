@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev --host 127.0.0.1",
+    "dev:pages": "npm run build && npx wrangler pages dev dist --ip 127.0.0.1 --port 8788 --persist-to .wrangler/state",
+    "db:migrate:local": "npx wrangler d1 migrations apply DB --local --persist-to .wrangler/state",
     "build": "astro build",
     "preview": "astro preview --host 127.0.0.1"
   },

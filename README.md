@@ -16,6 +16,23 @@ npm run dev
 npm run build
 ```
 
+`npm run dev` runs the Astro frontend server only. Cloudflare Pages Functions
+are not available in that mode, so the Start Project form API will return 404
+locally.
+
+For a full local check with `/api/start-project`, use:
+
+```bash
+npm run db:migrate:local
+npm run dev:pages
+```
+
+The Pages dev server runs on:
+
+```text
+http://127.0.0.1:8788/
+```
+
 ## Cloudflare Pages
 
 - Build command: `npm run build`

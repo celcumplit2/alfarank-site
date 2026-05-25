@@ -14,7 +14,7 @@ type Props = {
   variant?: "standard" | "glyph";
 };
 
-const { items, variant = "standard" } = Astro.props;
+const { items, variant = "glyph" } = Astro.props;
 
 const glyphStyleFor = (icon?: string) => {
   if (["data", "monitor", "ranking"].includes(icon ?? "")) {
