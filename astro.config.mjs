@@ -2,5 +2,8 @@ import { defineConfig } from "astro/config";
 
 export default defineConfig({
   site: "https://alfarank.com",
-  output: "static"
+  output: "static",
+  build: {
+    inlineStylesheets: "always"
+  }
 });

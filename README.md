@@ -37,7 +37,7 @@ http://127.0.0.1:8788/
 
 - Build command: `npm run build`
 - Build output directory: `dist`
-- Node.js version: 20+
+- Node.js version: 22.12+
 - D1 binding: `DB`
 
 ## Project Requests

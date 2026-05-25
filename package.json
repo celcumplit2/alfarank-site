@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "dev": "astro dev --host 127.0.0.1",
     "dev:pages": "npm run build && npx wrangler pages dev dist --ip 127.0.0.1 --port 8788 --persist-to .wrangler/state",
@@ -11,10 +14,12 @@
     "preview": "astro preview --host 127.0.0.1"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.4",
-    "@cloudflare/workers-types": "^4.20260522.0",
-    "astro": "^4.16.18",
-    "typescript": "^5.6.3"
+    "@astrojs/check": "^0.9.9",
+    "@cloudflare/workers-types": "^4.20260525.1",
+    "astro": "^6.3.7",
+    "typescript": "^6.0.3"
   },
-  "devDependencies": {}
+  "overrides": {
+    "volar-service-yaml": "0.0.71"
+  }
 }

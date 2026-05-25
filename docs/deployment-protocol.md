@@ -104,7 +104,7 @@ Project name: alfarank-site
 Production branch: main
 Build command: npm run build
 Build output directory: dist
-Node.js version: 20+
+Node.js version: 22.12+
 ```
 
 В `wrangler.toml` обязательная базовая конфигурация:
