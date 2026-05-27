@@ -1,7 +1,9 @@
 ---
 import PageHero from "@/components/PageHero.astro";
+import SystemIcon from "@/components/SystemIcon.astro";
 import Layout from "@/layouts/Layout.astro";
-import { capabilities, solutions } from "@/data/site";
+import { capabilities, solutions, systems } from "@/data/site";
+import { itemHeroVisual } from "@/data/hero";
 
 export function getStaticPaths() {
   return solutions.map((item) => ({
@@ -11,6 +13,78 @@ export function getStaticPaths() {
 }
 
 const { item } = Astro.props;
+
+const relatedCapabilities = (item.related ?? [])
+  .map((title) => capabilities.find((capability) => capability.title.toLowerCase() === title.toLowerCase()))
+  .filter((capability): capability is (typeof capabilities)[number] => Boolean(capability))
+  .slice(0, 4);
+
+const relatedSystems = systems
+  .filter((system) =>
+    (system.related ?? []).some((related) => related.toLowerCase() === item.title.toLowerCase()) ||
+    (item.related ?? []).some((related) => system.title.toLowerCase().includes(related.toLowerCase().split(" ")[0]))
+  )
+  .slice(0, 3);
+
+const fallbackSystems = relatedSystems.length ? relatedSystems : systems.slice(0, 3);
+const solutionLowerTitle = item.title.toLowerCase();
+const firstOutput = (item.outputs ?? ["workflow output"])[0];
+const firstDetail = item.details?.[0] ?? item.summary;
+
+const solutionPattern = [
+  {
+    title: "Business problem",
+    icon: "lens",
+    text: item.details?.[0] ?? item.summary
+  },
+  {
+    title: "System that solves it",
+    icon: item.icon ?? "product",
+    text: item.intro ?? item.summary
+  },
+  {
+    title: "Core modules",
+    icon: "tools",
+    text: `${item.modules?.length ?? 0} buildable modules define the first implementation surface.`
+  },
+  {
+    title: "Operational output",
+    icon: "ranking",
+    text: item.outputs?.join(", ") ?? "Measurable system output."
+  }
+];
+
+const implementationOptions = [
+  {
+    title: "Prototype first",
+    text: `Validate ${solutionLowerTitle} with one working path: input, state, output, and user review.`
+  },
+  {
+    title: "Integrated build",
+    text: `Connect the ${firstOutput.toLowerCase()} layer to the site, CMS, CRM, APIs, database, analytics, or internal tools that already matter.`
+  },
+  {
+    title: "Operating layer",
+    text: `Add visibility around ${solutionLowerTitle}: dashboards, alerts, QA, reporting, ownership, and improvement loops for daily use.`
+  }
+];
+
+const solutionProof = [
+  {
+    title: "Campaign trigger",
+    text: item.useCases?.[0] ?? item.details?.[0] ?? item.summary
+  },
+  {
+    title: "Landing-page promise",
+    text: `Turn this into a visible system output: ${(item.outputs ?? ["workflow, data, and reporting"])[0]}.`
+  },
+  {
+    title: "Proof to collect",
+    text: (item.outputs ?? []).slice(0, 3).join(", ") || "Status, speed, quality, source, and operating output."
+  }
+];
+
+const solutionIntakeHref = `/start-project/?offer=${item.slug}&landing_page=/solutions/${item.slug}/`;
 ---
 
 <Layout title={`${item.title} | AlfaRank`} description={item.summary}>
@@ -18,11 +92,55 @@ const { item } = Astro.props;
     eyebrow="Solution"
     title={item.title}
     text={item.summary}
-    primaryHref="/start-project/"
+    primaryHref={solutionIntakeHref}
     primaryLabel="Start a Project"
     secondaryHref="/capabilities/"
     secondaryLabel="View Capabilities"
+    visual={itemHeroVisual(item, "solution")}
   />
+
+  <section class="section solution-pattern">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Solution pattern</p>
+        <h2>{item.title} as an operating system</h2>
+      </div>
+      <p>Start with {firstDetail.toLowerCase()}, then shape the system, modules, integration points, and proof that make {firstOutput.toLowerCase()} visible.</p>
+    </div>
+
+    <div class:list={["solution-mechanism", "ar-system-block", `solution-mechanism--${item.slug}`]}>
+      <article class="solution-mechanism__pressure ar-system-panel">
+        <SystemIcon name={solutionPattern[0].icon} />
+        <span>Problem pressure</span>
+        <h3>{solutionPattern[0].title}</h3>
+        <p>{solutionPattern[0].text}</p>
+      </article>
+
+      <article class="solution-mechanism__core ar-system-core">
+        <SystemIcon name={item.icon ?? "flow"} />
+        <span>Solution engine</span>
+        <strong>{item.title}</strong>
+        <p>{solutionPattern[1].text}</p>
+        <a class="button secondary" href={solutionIntakeHref}>Scope this solution</a>
+      </article>
+
+      <article class="solution-mechanism__output ar-system-panel">
+        <SystemIcon name={solutionPattern[3].icon} />
+        <span>Operating output</span>
+        <h3>{solutionPattern[3].title}</h3>
+        <p>{solutionPattern[3].text}</p>
+      </article>
+
+      <div class="solution-mechanism__routes ar-system-dock">
+        {(relatedCapabilities.length ? relatedCapabilities : capabilities.slice(0, 3)).slice(0, 3).map((capability) => (
+          <a href={`/capabilities/${capability.slug}/`}>
+            <span>Capability</span>
+            <strong>{capability.title}</strong>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
 
   <section class="section split-panel">
     <div class="glass-panel">
@@ -39,7 +157,7 @@ const { item } = Astro.props;
       </div>
       <h3>Relevant capabilities</h3>
       <div class="tag-grid">
-        {capabilities.slice(0, 4).map((capability) => (
+        {(relatedCapabilities.length ? relatedCapabilities : capabilities.slice(0, 4)).map((capability) => (
           <a class="tag" href={`/capabilities/${capability.slug}/`}>{capability.title}</a>
         ))}
       </div>
@@ -51,27 +169,81 @@ const { item } = Astro.props;
       <div class="section-header">
         <div>
           <p class="eyebrow">System modules</p>
-          <h2>What the system can include</h2>
+          <h2>Modules inside {solutionLowerTitle}</h2>
         </div>
-        <p>Each solution is implemented as a practical system with inputs, workflow states, integrations, review points, and measurable output.</p>
+        <p>The first scoped version should expose the inputs, workflow states, integrations, and review points behind {firstOutput.toLowerCase()}.</p>
       </div>
-      <div class="card-grid">
-        {item.modules.map((module) => (
-          <div class="glass-card">
+      <div class:list={["solution-module-rail", "ar-system-block", `solution-module-rail--${item.slug}`]}>
+        <article class="solution-module-rail__core ar-system-core">
+          <SystemIcon name={item.icon ?? "tools"} />
+          <span>Build rail</span>
+          <strong>{item.modules.length} connected modules</strong>
+          <p>For {solutionLowerTitle}, every module should become a usable station rather than a loose feature list.</p>
+        </article>
+        {item.modules.map((module, index) => (
+          <div class:list={["solution-module-station", "ar-system-node", `solution-module-station--${index + 1}`]} style={`--ar-level: ${76 + index * 5}%;`}>
+            <SystemIcon name={["lens", "ai", "content", "tools", "media", "ranking"][index] ?? "flow"} />
+            <span>{String(index + 1).padStart(2, "0")}</span>
             <h3>{module.title}</h3>
             <p>{module.text}</p>
+            <b class="ar-metric-bar"></b>
           </div>
         ))}
       </div>
     </section>
   )}
 
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Implementation options</p>
+        <h2>Three ways to launch {solutionLowerTitle}</h2>
+      </div>
+      <p>The build can start as a narrow proof, a connected workflow, or a fuller operating layer depending on how mature the current process is.</p>
+    </div>
+    <div class="option-grid">
+      {implementationOptions.map((option, index) => (
+        <article class="option-card" style={`--option-step: "${String(index + 1).padStart(2, "0")}";`}>
+          <h3>{option.title}</h3>
+          <p>{option.text}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="solution-proof-title">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Lead-generation proof</p>
+        <h2 id="solution-proof-title">How {solutionLowerTitle} earns a lead</h2>
+      </div>
+      <p>The page should make the before-and-after clear enough that a visitor can ask for the first version without decoding the whole technical stack.</p>
+    </div>
+    <div class:list={["solution-proof-engine", "ar-system-block", `solution-proof-engine--${item.slug}`]}>
+      {solutionProof.map((signal, index) => (
+        <article class:list={["solution-proof-node", "ar-system-node", `solution-proof-node--${index + 1}`]}>
+          <SystemIcon name={["lens", item.icon ?? "flow", "ranking"][index] ?? "tools"} />
+          <span>{signal.title}</span>
+          <h3>{index === 0 ? "Trigger" : index === 1 ? "Promise" : "Proof"}</h3>
+          <p>{signal.text}</p>
+        </article>
+      ))}
+      <article class="solution-proof-cta ar-system-core">
+        <SystemIcon name={item.icon ?? "flow"} />
+        <span>Next conversion step</span>
+        <strong>Scope the first {solutionLowerTitle} build.</strong>
+        <p>Send the current process, tools, and expected {firstOutput.toLowerCase()} so this can become a first working system.</p>
+        <a class="button primary" href={solutionIntakeHref}>Scope This Solution</a>
+      </article>
+    </div>
+  </section>
+
   {item.workflow && (
     <section class="section split-panel">
       <div class="glass-panel">
         <p class="eyebrow">Implementation path</p>
-        <h2>How the solution is built</h2>
-        <p>The work starts by defining the business process, then turns it into a system architecture with data, interfaces, automations, integrations, and launchable workflows.</p>
+        <h2>How {solutionLowerTitle} is built</h2>
+        <p>For {solutionLowerTitle}, the work starts by mapping the current process and then turning it into architecture, data, interfaces, automations, integrations, and launch workflow.</p>
       </div>
       <div class="glass-panel">
         <ul class="feature-list">
@@ -86,13 +258,31 @@ const { item } = Astro.props;
       <div class="section-header">
         <div>
           <p class="eyebrow">Use cases</p>
-          <h2>When this solution fits</h2>
+          <h2>When {solutionLowerTitle} fits</h2>
         </div>
-        <p>This is most useful when a business process already exists but needs more structure, automation, visibility, or scale.</p>
+        <p>This fits when {firstDetail.toLowerCase()} already creates pressure and the team needs structure, automation, visibility, or scale.</p>
       </div>
       <ul class="feature-list">
         {item.useCases.map((useCase) => <li>{useCase}</li>)}
       </ul>
     </section>
   )}
+
+  <section class="section split-panel">
+    <div class="glass-panel">
+      <p class="eyebrow">Related systems</p>
+      <h2>System profiles that support {solutionLowerTitle}</h2>
+      <p>These profiles turn the solution into concrete architecture: modules, workflow, integrations, and operating output around {firstOutput.toLowerCase()}.</p>
+    </div>
+    <div class="glass-panel">
+      <div class="tag-grid">
+        {fallbackSystems.map((system) => (
+          <a class="tag" href={`/systems/${system.slug}/`}>{system.title}</a>
+        ))}
+      </div>
+      <div class="section-actions" style="margin-top: 18px;">
+        <a class="button primary" href={solutionIntakeHref}>Scope This Solution</a>
+      </div>
+    </div>
+  </section>
 </Layout>

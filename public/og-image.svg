@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">AlfaRank Digital Systems Company</title>
+  <desc id="desc">A dark operational system map with connected modules for AlfaRank.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#020815" />
+      <stop offset="0.48" stop-color="#04265c" />
+      <stop offset="1" stop-color="#020a20" />
+    </linearGradient>
+    <linearGradient id="line" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#69e6ff" />
+      <stop offset="1" stop-color="#48f2ce" />
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="10" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <g opacity="0.18">
+    <path d="M0 112h1200M0 218h1200M0 324h1200M0 430h1200M0 536h1200M120 0v630M240 0v630M360 0v630M480 0v630M600 0v630M720 0v630M840 0v630M960 0v630M1080 0v630" stroke="#7dd3fc" />
+  </g>
+  <path d="M560 190H392c-42 0-42 74-84 74H184M640 190h164c42 0 42 74 84 74h128M560 440H410c-44 0-44-74-88-74H184M640 440h150c44 0 44-74 88-74h138M600 150v330" fill="none" stroke="url(#line)" stroke-width="4" stroke-linecap="round" filter="url(#glow)" />
+  <g fill="#061936" stroke="#69e6ff" stroke-opacity="0.48">
+    <rect x="500" y="226" width="200" height="178" rx="8" />
+    <rect x="104" y="222" width="210" height="116" rx="8" />
+    <rect x="886" y="222" width="210" height="116" rx="8" />
+    <rect x="104" y="354" width="210" height="116" rx="8" />
+    <rect x="886" y="354" width="210" height="116" rx="8" />
+  </g>
+  <g font-family="Inter, Arial, sans-serif" fill="#fff">
+    <text x="88" y="116" font-size="28" font-weight="800" letter-spacing="2">ALFARANK</text>
+    <text x="88" y="186" font-size="62" font-weight="900">Digital systems</text>
+    <text x="88" y="250" font-size="62" font-weight="900" fill="#69e6ff">connected and built</text>
+    <text x="88" y="304" font-size="62" font-weight="900">to perform.</text>
+    <text x="536" y="306" font-size="24" font-weight="900" text-anchor="middle" transform="translate(64 0)">SYSTEM CORE</text>
+    <text x="600" y="340" font-size="18" fill="#c7f4ff" text-anchor="middle">Automate. Integrate. Measure.</text>
+    <text x="140" y="270" font-size="20" font-weight="800">AI Automation</text>
+    <text x="924" y="270" font-size="20" font-weight="800">Web Platforms</text>
+    <text x="140" y="402" font-size="20" font-weight="800">Data Systems</text>
+    <text x="924" y="402" font-size="20" font-weight="800">Content Ops</text>
+    <text x="88" y="560" font-size="24" fill="#c7f4ff">Web platforms, automation, content infrastructure, data workflows, and integrations.</text>
+  </g>
+  <g fill="#48f2ce" filter="url(#glow)">
+    <circle cx="500" cy="315" r="6" />
+    <circle cx="700" cy="315" r="6" />
+    <circle cx="600" cy="226" r="6" />
+    <circle cx="600" cy="404" r="6" />
+  </g>
+</svg>

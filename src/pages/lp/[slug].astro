@@ -1,0 +1,429 @@
+---
+import PageHero from "@/components/PageHero.astro";
+import SystemIcon from "@/components/SystemIcon.astro";
+import Layout from "@/layouts/Layout.astro";
+import { landingOfferHeroVisual, landingOffers } from "@/data/landing";
+
+export function getStaticPaths() {
+  return landingOffers.map((offer) => ({
+    params: { slug: offer.slug },
+    props: { offer }
+  }));
+}
+
+const { offer } = Astro.props;
+const sourcePath = `/lp/${offer.slug}/`;
+const title = `${offer.title} | AlfaRank`;
+const isLeadOffer = offer.slug === "automate-lead-processing";
+const isContentOffer = offer.slug === "ai-content-workflow";
+const isCommerceOffer = offer.slug === "ecommerce-feed-system";
+const isWordPressOffer = offer.slug === "wordpress-crm-integration";
+const [beforeSignal, afterSignal, measurableSignal] = offer.proofSignals;
+const offerLowerTitle = offer.title.toLowerCase();
+const offerOutput = offer.desiredOutput.toLowerCase();
+const primaryOutcome = offer.outcomes[0]?.toLowerCase() ?? offerOutput;
+
+const leadSources = [
+  { label: "Website form", icon: "web" },
+  { label: "Ads", icon: "lead" },
+  { label: "Email", icon: "content" },
+  { label: "Referral", icon: "flow" }
+];
+const leadActions = [
+  { label: "CRM", href: "/capabilities/wordpress-api-integrations/", icon: "api" },
+  { label: "Score", href: "/capabilities/ai-automation/", icon: "ranking" },
+  { label: "Notify", href: "/solutions/automate-lead-processing/", icon: "monitor" },
+  { label: "Follow-up", href: "#landing-intake", icon: "lead" }
+];
+
+const contentRail = [
+  { label: "Topics", detail: "Intent map", icon: "content", href: "/capabilities/seo-content-infrastructure/" },
+  { label: "Data", detail: "Inputs clean", icon: "data", href: "/capabilities/data-systems-scraping/" },
+  { label: "Draft", detail: "AI assist", icon: "ai", href: "/capabilities/ai-automation/" },
+  { label: "Review", detail: "Human gate", icon: "tools", href: "#landing-intake" },
+  { label: "Publish", detail: "CMS ready", icon: "api", href: "/systems/content-automation-workflows/" },
+  { label: "Report", detail: "Loop back", icon: "ranking", href: "/solutions/scale-seo-infrastructure/" }
+];
+
+const commerceDeck = [
+  { label: "Catalog", icon: "commerce", href: "/capabilities/ecommerce-systems/" },
+  { label: "Feeds", icon: "api", href: "/lp/ecommerce-feed-system/" },
+  { label: "Stock", icon: "data", href: "/solutions/build-data-monitoring-system/" },
+  { label: "Pricing", icon: "ranking", href: "/systems/ecommerce-system/" },
+  { label: "Media", icon: "media", href: "/capabilities/video-media-automation/" },
+  { label: "Ads", icon: "lead", href: "#landing-intake" }
+];
+
+const wordpressLayers = [
+  { label: "Frontend", signal: "Interface", detail: "Forms, portal, dashboards", icon: "web", href: "/capabilities/web-product-development/" },
+  { label: "WordPress", signal: "Content hub", detail: "Pages, CMS, publishing", icon: "content", href: "/capabilities/wordpress-api-integrations/" },
+  { label: "API", signal: "Bridge", detail: "Events, sync, validation", icon: "api", href: "/capabilities/wordpress-api-integrations/" },
+  { label: "CRM", signal: "Pipeline", detail: "Leads, owners, follow-up", icon: "lead", href: "/solutions/automate-lead-processing/" },
+  { label: "Reports", signal: "Visibility", detail: "Status, quality, output", icon: "ranking", href: "/solutions/build-data-monitoring-system/" },
+  { label: "Deploy", signal: "Launch", detail: "Hosting, QA, handover", icon: "product", href: "/technologies/" }
+];
+---
+
+<Layout title={title} description={offer.summary}>
+  <PageHero
+    eyebrow={offer.eyebrow}
+    title={offer.title}
+    text={offer.summary}
+    primaryHref="#landing-intake"
+    primaryLabel="Request This System"
+    secondaryHref={offer.relatedLinks[0]?.href ?? "/solutions/"}
+    secondaryLabel={offer.relatedLinks[0]?.label ?? "Related Solution"}
+    visual={landingOfferHeroVisual(offer)}
+  />
+
+  <section class="section traffic-brief" aria-labelledby="traffic-brief-title">
+    <article class="traffic-brief__promise">
+      <p class="eyebrow">Paid traffic brief</p>
+      <h2 id="traffic-brief-title">{offer.trafficReady.promise}</h2>
+      <p>{offer.trafficReady.trigger}</p>
+      <div class="section-actions">
+        <a class="button primary" href="#landing-intake">Request this route</a>
+        <a class="button secondary" href={offer.relatedLinks[0]?.href ?? "/solutions/"}>See related route</a>
+      </div>
+    </article>
+
+    <div class="traffic-brief__signals" aria-label="Landing page conversion brief">
+      <article>
+        <SystemIcon name="tools" />
+        <span>First scope</span>
+        <p>{offer.trafficReady.firstScope}</p>
+      </article>
+      <article>
+        <SystemIcon name="ranking" />
+        <span>Proof metric</span>
+        <p>{offer.trafficReady.proofMetric}</p>
+      </article>
+      <article>
+        <SystemIcon name="monitor" />
+        <span>Risk removed</span>
+        <p>{offer.trafficReady.riskRemoved}</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section landing-problem" aria-labelledby="landing-fit-title">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Campaign fit</p>
+        <h2 id="landing-fit-title">Who this page should convert</h2>
+      </div>
+      <p>{offer.audience}</p>
+    </div>
+
+    <div class="landing-problem-grid">
+      <article>
+        <SystemIcon name={offer.icon} />
+        <h3>Buyer pressure</h3>
+        <ul>
+          {offer.painPoints.map((point) => <li>{point}</li>)}
+        </ul>
+      </article>
+      <article>
+        <SystemIcon name="ranking" />
+        <h3>Expected output</h3>
+        <ul>
+          {offer.outcomes.map((outcome) => <li>{outcome}</li>)}
+        </ul>
+      </article>
+      <article>
+        <SystemIcon name="flow" />
+        <h3>Best next action</h3>
+        <p>Send the current workflow, traffic source, tools, and the first result you need from {offerOutput}. AlfaRank can scope the smallest useful version from that context.</p>
+        <div class="landing-link-stack">
+          {offer.relatedLinks.map((link) => <a href={link.href}>{link.label}</a>)}
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section landing-system" aria-labelledby="landing-system-title">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">System offer</p>
+        <h2 id="landing-system-title">What the first {offerOutput} build can include</h2>
+      </div>
+      <p>This offer is specific enough for campaign traffic, but still flexible enough to shape around the buyer's current tools, constraints, and {primaryOutcome}.</p>
+    </div>
+
+    {isLeadOffer && (
+      <div class="lead-reactor landing-live-block">
+        <div class="lead-reactor__sources">
+          <span>Incoming sources</span>
+          {leadSources.map((source) => (
+            <a href="#landing-intake">
+              <SystemIcon name={source.icon} />
+              <strong>{source.label}</strong>
+              <small>Lead input</small>
+            </a>
+          ))}
+        </div>
+        <article class="lead-reactor__core">
+          <SystemIcon name="lead" />
+          <span>{offer.formProjectType}</span>
+          <strong>Lead reactor</strong>
+          <p>{offer.desiredOutput}</p>
+          <small>Source -> qualify -> route -> respond</small>
+        </article>
+        <div class="lead-reactor__actions">
+          <span>Activated outputs</span>
+          {leadActions.map((action) => (
+            <a href={action.href}>
+              <SystemIcon name={action.icon} />
+              <strong>{action.label}</strong>
+              <small>Output</small>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {isContentOffer && (
+      <div class="content-factory landing-live-block">
+        <article class="content-factory__core">
+          <SystemIcon name="content" />
+          <span>{offer.formProjectType}</span>
+          <strong>Content factory rail</strong>
+          <p>{offer.desiredOutput}</p>
+        </article>
+        <div class="content-factory__rail">
+          {contentRail.map((station, index) => (
+            <a class="factory-station" href={station.href} style={`--station-index: "${String(index + 1).padStart(2, "0")}";`}>
+              <SystemIcon name={station.icon} />
+              <strong>{station.label}</strong>
+              <small>{station.detail}</small>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {isCommerceOffer && (
+      <div class="commerce-control landing-live-block">
+        <article class="commerce-control__core">
+          <SystemIcon name="commerce" />
+          <span>{offer.formProjectType}</span>
+          <strong>Commerce control deck</strong>
+          <p>{offer.desiredOutput}</p>
+          <a class="button secondary" href="#landing-intake">Request system plan</a>
+          <div class="commerce-control__metrics">
+            <small>Feed status</small>
+            <small>Catalog QA</small>
+            <small>Ops report</small>
+          </div>
+        </article>
+        <div class="commerce-control__zones">
+          {commerceDeck.map((zone, index) => (
+            <a class:list={["commerce-zone", `commerce-zone--${index + 1}`]} href={zone.href}>
+              <SystemIcon name={zone.icon} />
+              <strong>{zone.label}</strong>
+              <small>{index % 2 === 0 ? "Sync" : "Monitor"}</small>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {isWordPressOffer && (
+      <div class="platform-blueprint landing-live-block">
+        <article class="platform-blueprint__copy">
+          <SystemIcon name="api" />
+          <span>{offer.formProjectType}</span>
+          <strong>Platform blueprint</strong>
+          <p>{offer.desiredOutput}</p>
+          <a class="button secondary" href="#landing-intake">Request system plan</a>
+        </article>
+        <div class="platform-blueprint__layers">
+          <article class="platform-blueprint__hub">
+            <SystemIcon name="flow" />
+            <span>Integration core</span>
+            <strong>WordPress + CRM</strong>
+            <p>One platform path for content, forms, lead data, reporting, and launch.</p>
+          </article>
+          {wordpressLayers.map((layer, index) => (
+            <a class:list={["blueprint-layer", `blueprint-layer--${index + 1}`]} href={layer.href}>
+              <SystemIcon name={layer.icon} />
+              <span>{layer.signal}</span>
+              <strong>{layer.label}</strong>
+              <small>{layer.detail}</small>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+  </section>
+
+  <section class="section" aria-labelledby="landing-proof-title">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Proof layer</p>
+        <h2 id="landing-proof-title">The page sells the {offerOutput} before and after</h2>
+      </div>
+      <p>For this campaign, the page needs to show what is broken now, what becomes structured, and which signals prove that {primaryOutcome} is improving.</p>
+    </div>
+
+    <div class="before-after-engine">
+      <article class="before-after-panel before-after-panel--before">
+        <SystemIcon name="tools" />
+        <span>{beforeSignal.title}</span>
+        <h3>Manual pressure</h3>
+        <p>{beforeSignal.text}</p>
+      </article>
+
+      <article class="before-after-engine__core">
+        <SystemIcon name={offer.icon} />
+        <span>{offer.formProjectType}</span>
+        <strong>System engine</strong>
+        <p>{offer.desiredOutput}</p>
+        <a class="button secondary" href="#landing-intake">Scope first build</a>
+      </article>
+
+      <article class="before-after-panel before-after-panel--after">
+        <SystemIcon name="monitor" />
+        <span>{afterSignal.title}</span>
+        <h3>Operational output</h3>
+        <p>{afterSignal.text}</p>
+      </article>
+
+      <article class="before-after-engine__signals">
+        <SystemIcon name="ranking" />
+        <span>{measurableSignal.title}</span>
+        <p>{measurableSignal.text}</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section landing-process" aria-labelledby="landing-process-title">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Implementation path</p>
+        <h2 id="landing-process-title">A practical first scope for {offerOutput}</h2>
+      </div>
+      <p>This page turns the ad click into a scoped system request: clear inputs, build modules, launch output, and a reason to start with {offerLowerTitle}.</p>
+    </div>
+
+    <div class="landing-process-grid">
+      {offer.process.map((step, index) => (
+        <article>
+          <span>{String(index + 1).padStart(2, "0")}</span>
+          <p>{step}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section split-panel landing-conversion" id="landing-intake">
+    <form class="glass-panel" method="post" action="/api/start-project" data-track-source data-conversion-form={`lp:${offer.slug}`}>
+      <input type="hidden" name="source_path" value={sourcePath} />
+      <input type="hidden" name="landing_page" value={sourcePath} />
+      <input type="hidden" name="landing_offer" value={offer.slug} />
+      <input type="hidden" name="project_type" value={offer.formProjectType} />
+      <input type="hidden" name="desired_output" value={offer.desiredOutput} />
+      <input type="hidden" name="integrations" value={offer.integrations} />
+      <input type="hidden" name="utm_source" />
+      <input type="hidden" name="utm_medium" />
+      <input type="hidden" name="utm_campaign" />
+      <input type="hidden" name="utm_term" />
+      <input type="hidden" name="utm_content" />
+      <div class="spam-field" aria-hidden="true">
+        <label for={`company_website_${offer.slug}`}>Company website</label>
+        <input id={`company_website_${offer.slug}`} name="company_website" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <p class="eyebrow">Project intake</p>
+      <h2>Ask for this system</h2>
+      <div class="form-grid landing-form-grid">
+        <div class="field">
+          <label for={`name_${offer.slug}`}>Name</label>
+          <input id={`name_${offer.slug}`} name="name" autocomplete="name" required />
+        </div>
+        <div class="field">
+          <label for={`email_${offer.slug}`}>Email</label>
+          <input id={`email_${offer.slug}`} name="email" type="email" autocomplete="email" required />
+        </div>
+        <div class="field full">
+          <label for={`company_${offer.slug}`}>Company optional</label>
+          <input id={`company_${offer.slug}`} name="company" autocomplete="organization" />
+        </div>
+        <div class="field full">
+          <label for={`current_system_${offer.slug}`}>Current website, system, or tools optional</label>
+          <input id={`current_system_${offer.slug}`} name="current_system" placeholder="URL, CRM, CMS, spreadsheet, workflow, or short context" />
+        </div>
+        <div class="field full">
+          <label for={`problem_${offer.slug}`}>What is happening now?</label>
+          <textarea id={`problem_${offer.slug}`} name="business_problem" required></textarea>
+        </div>
+        <div class="field full">
+          <label for={`result_${offer.slug}`}>What should the system make visible or faster?</label>
+          <textarea id={`result_${offer.slug}`} name="desired_result" required></textarea>
+        </div>
+        <div class="field full">
+          <label for={`timeline_${offer.slug}`}>Timeline optional</label>
+          <input id={`timeline_${offer.slug}`} name="timeline" />
+        </div>
+        <div class="field full">
+          <label for={`contact_details_${offer.slug}`}>Contact details optional</label>
+          <textarea id={`contact_details_${offer.slug}`} name="contact_details" placeholder="Preferred contact channel, time zone, or extra decision context"></textarea>
+        </div>
+      </div>
+      <div class="section-actions">
+        <button class="button primary" type="submit">Send Request</button>
+      </div>
+      <p class="form-status" data-form-status aria-live="polite"></p>
+    </form>
+
+    <aside class="glass-panel landing-faq">
+      <p class="eyebrow">Buyer questions</p>
+      <h2>Before a lead asks</h2>
+      {offer.faq.map((entry) => (
+        <details>
+          <summary>{entry.question}</summary>
+          <p>{entry.answer}</p>
+        </details>
+      ))}
+    </aside>
+  </section>
+
+  <script is:inline>
+    (() => {
+      const params = new URLSearchParams(window.location.search);
+      const aliases = {
+        landing_page: ["landing_page", "lp"],
+        landing_offer: ["landing_offer", "offer"],
+        utm_source: ["utm_source"],
+        utm_medium: ["utm_medium"],
+        utm_campaign: ["utm_campaign"],
+        utm_term: ["utm_term"],
+        utm_content: ["utm_content"]
+      };
+
+      document.querySelectorAll("form[data-track-source]").forEach((form) => {
+        const source = form.querySelector("[name='source_path']");
+        if (source) source.value = `${window.location.pathname}${window.location.search}`;
+
+        Object.entries(aliases).forEach(([name, keys]) => {
+          const input = form.querySelector(`[name='${name}']`);
+          if (!input) return;
+          const value = keys.map((key) => params.get(key)).find(Boolean);
+          if (value) input.value = value;
+          if (name === "landing_page" && !input.value) input.value = window.location.pathname;
+        });
+
+        form.addEventListener("submit", () => {
+          const button = form.querySelector("button[type='submit']");
+          const status = form.querySelector("[data-form-status]");
+          if (button) {
+            button.dataset.defaultLabel = button.textContent || "";
+            button.textContent = "Sending request...";
+            button.disabled = true;
+          }
+          if (status) status.textContent = "Sending request with campaign context...";
+        });
+      });
+    })();
+  </script>
+</Layout>

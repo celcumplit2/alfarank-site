@@ -1,8 +1,42 @@
 ---
-import CardGrid from "@/components/CardGrid.astro";
 import PageHero from "@/components/PageHero.astro";
+import SystemIcon from "@/components/SystemIcon.astro";
 import Layout from "@/layouts/Layout.astro";
 import { solutions } from "@/data/site";
+import { collectionHeroVisual } from "@/data/hero";
+
+const problemRouteRows = [
+  {
+    problem: "Slow leads",
+    problemText: "Leads leak. Growth stays flat.",
+    problemIcon: "lead",
+    problemHref: "/solutions/automate-lead-processing/",
+    output: "Qualified pipeline",
+    outputText: "Better leads. More opportunities.",
+    outputIcon: "lead",
+    outputHref: "/lp/automate-lead-processing/"
+  },
+  {
+    problem: "Manual content",
+    problemText: "Too much time. Not enough output.",
+    problemIcon: "content",
+    problemHref: "/solutions/generate-more-content/",
+    output: "Publish engine",
+    outputText: "Content at scale. Always on.",
+    outputIcon: "media",
+    outputHref: "/lp/ai-content-workflow/"
+  },
+  {
+    problem: "Broken data",
+    problemText: "Messy, scattered, unusable.",
+    problemIcon: "data",
+    problemHref: "/solutions/build-data-monitoring-system/",
+    output: "Live dashboards",
+    outputText: "Real-time clarity. Smarter decisions.",
+    outputIcon: "ranking",
+    outputHref: "/capabilities/data-systems-scraping/"
+  }
+];
 ---
 
 <Layout title="Solutions | AlfaRank">
@@ -12,14 +46,57 @@ import { solutions } from "@/data/site";
     text="Solution pages connect operational, marketing, content, and data problems to the infrastructure required to solve them."
     primaryHref="/start-project/"
     primaryLabel="Start a Project"
+    visual={collectionHeroVisual(solutions, {
+      mode: "solutions",
+      icon: "flow",
+      label: "Solution router",
+      state: "Problem routes mapped",
+      output: "Business needs translated into operating systems",
+      primaryMetric: "Solutions",
+      secondaryMetric: "Routing"
+    })}
   />
 
-  <section class="section">
-    <CardGrid items={solutions.map((item) => ({
-      title: item.title,
-      icon: item.icon,
-      summary: item.summary,
-      href: `/solutions/${item.slug}/`
-    }))} />
+  <section class="section solution-route-map" aria-labelledby="solution-map-title">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Solution routes</p>
+        <h2 id="solution-map-title">Business pressure routed into system output.</h2>
+      </div>
+      <p>Each solution starts from an operational problem and turns it into a path for content, leads, data, products, teams, or growth systems.</p>
+    </div>
+
+    <div class="system-route-lab">
+      <div class="system-route-lab__problems">
+        {problemRouteRows.map((row) => (
+          <a class="route-problem-card" href={row.problemHref}>
+            <SystemIcon name={row.problemIcon} />
+            <div>
+              <strong>{row.problem}</strong>
+              <p>{row.problemText}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <article class="system-route-lab__core">
+        <SystemIcon name="flow" />
+        <strong>ALFARANK ROUTING ENGINE</strong>
+        <span>Capture. Process. Route. Deliver.</span>
+        <a href="/start-project/">Scope a route</a>
+      </article>
+
+      <div class="system-route-lab__outputs">
+        {problemRouteRows.map((row) => (
+          <a class="route-output-card" href={row.outputHref}>
+            <SystemIcon name={row.outputIcon} />
+            <div>
+              <strong>{row.output}</strong>
+              <p>{row.outputText}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
   </section>
 </Layout>

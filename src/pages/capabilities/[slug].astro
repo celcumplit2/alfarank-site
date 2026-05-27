@@ -1,7 +1,9 @@
 ---
 import PageHero from "@/components/PageHero.astro";
+import SystemIcon from "@/components/SystemIcon.astro";
 import Layout from "@/layouts/Layout.astro";
 import { capabilities } from "@/data/site";
+import { itemHeroVisual } from "@/data/hero";
 
 export function getStaticPaths() {
   return capabilities.map((item) => ({
@@ -11,6 +13,43 @@ export function getStaticPaths() {
 }
 
 const { item } = Astro.props;
+const isDataCapability = item.slug === "data-systems-scraping";
+const isAutomationCapability = item.slug === "ai-automation";
+const isMediaCapability = item.slug === "video-media-automation";
+const dataSignalNodes = [
+  { title: "Web sources", state: "Clean", icon: "web", detail: "Pages, listings, catalogs" },
+  { title: "APIs", state: "Match", icon: "api", detail: "Structured external data" },
+  { title: "Feeds", state: "Rank", icon: "commerce", detail: "Products and updates" },
+  { title: "SERP signals", state: "Alert", icon: "ranking", detail: "Visibility and movement" },
+  { title: "Files", state: "Clean", icon: "content", detail: "CSV, exports, sheets" },
+  { title: "Dashboards", state: "Live", icon: "monitor", detail: "Operational output" }
+];
+const automationTowerSteps = [
+  { title: "Capture", text: "Collect requests, prompts, records, source data, or tasks.", icon: "lead" },
+  { title: "Enrich", text: "Add context, entities, rules, metadata, and missing fields.", icon: "data" },
+  { title: "Score", text: "Classify fit, urgency, confidence, risk, or priority.", icon: "ranking" },
+  { title: "Route", text: "Send work to CRM, CMS, dashboard, owner, or queue.", icon: "flow" },
+  { title: "Follow-up", text: "Trigger notifications, updates, reports, and next actions.", icon: "monitor" }
+];
+const aiReviewStages = [
+  { title: "Brief", state: "Input", detail: "Offer, audience, source assets, and constraints enter one queue.", icon: "content", href: "/lp/ai-content-workflow/" },
+  { title: "Generate", state: "Draft", detail: "Scripts, scenes, variants, captions, and metadata are produced.", icon: "ai", href: "/capabilities/ai-automation/" },
+  { title: "Review", state: "Gate", detail: "Human checks approve quality, facts, tone, rights, and brand fit.", icon: "tools", href: "/solutions/generate-more-content/" },
+  { title: "Render", state: "Output", detail: "Assets are exported into ready formats for publishing channels.", icon: "media", href: "/systems/content-automation-workflows/" },
+  { title: "Report", state: "Loop", detail: "Performance and production status feed the next batch.", icon: "ranking", href: "/solutions/scale-seo-infrastructure/" }
+];
+const aiReviewMetrics = ["Rights clear", "Brand fit", "Ready to publish"];
+const genericCapabilityModules = (item.modules ?? []).map((module, index) => ({
+  ...module,
+  icon: ["data", item.icon ?? "tools", "api", "monitor", "ranking", "flow"][index] ?? "tools",
+  state: ["Input", "Build", "Connect", "Operate", "Improve", "Scale"][index] ?? "Module",
+  level: `${76 + index * 5}%`
+}));
+const capabilitySystemSignals = (item.outputs ?? []).slice(0, 3);
+const capabilityIntakeHref = `/start-project/?offer=capability-${item.slug}&landing_page=/capabilities/${item.slug}/`;
+const capabilityLowerTitle = item.title.toLowerCase();
+const primaryOutput = (item.outputs ?? [item.summary])[0];
+const moduleIntro = item.modules?.[0]?.title.toLowerCase() ?? capabilityLowerTitle;
 ---
 
 <Layout title={`${item.title} | AlfaRank`} description={item.summary}>
@@ -18,10 +57,11 @@ const { item } = Astro.props;
     eyebrow="Capability"
     title={item.title}
     text={item.summary}
-    primaryHref="/start-project/"
+    primaryHref={capabilityIntakeHref}
     primaryLabel="Start a Project"
     secondaryHref="/solutions/"
     secondaryLabel="View Solutions"
+    visual={itemHeroVisual(item, "capability")}
   />
 
   <section class="section split-panel">
@@ -53,18 +93,100 @@ const { item } = Astro.props;
       <div class="section-header">
         <div>
           <p class="eyebrow">System modules</p>
-          <h2>What AlfaRank can build in this area</h2>
+          <h2>Buildable modules for {capabilityLowerTitle}</h2>
         </div>
-        <p>Each capability is translated into practical modules: inputs, workflows, interfaces, integrations, outputs, and improvement loops.</p>
+        <p>This capability becomes useful when {moduleIntro} connects to real inputs, review states, integrations, and a visible output such as {primaryOutput.toLowerCase()}.</p>
       </div>
-      <div class="card-grid">
-        {item.modules.map((module) => (
-          <div class="glass-card">
-            <h3>{module.title}</h3>
-            <p>{module.text}</p>
+      {isDataCapability ? (
+        <div class="data-signal-map">
+          <article class="data-signal-map__core">
+            <SystemIcon name="data" />
+            <span>Signal processor</span>
+            <strong>Collect. Normalize. Decide.</strong>
+            <p>Raw sources become clean records, matched entities, ranked signals, alerts, reports, and operational dashboards.</p>
+          </article>
+          {dataSignalNodes.map((node, index) => (
+            <article class:list={["data-signal-node", `data-signal-node--${index + 1}`]}>
+              <SystemIcon name={node.icon} />
+              <span>{node.state}</span>
+              <h3>{node.title}</h3>
+              <p>{node.detail}</p>
+            </article>
+          ))}
+        </div>
+      ) : isAutomationCapability ? (
+        <div class="automation-tower">
+          <article class="automation-tower__copy">
+            <SystemIcon name="ai" />
+            <span>Automation tower</span>
+            <strong>Build the flow</strong>
+            <p>AI automation becomes valuable when the whole operating path is visible: capture, enrich, score, route, and follow up.</p>
+            <a class="button secondary" href={capabilityIntakeHref}>Start automation scope</a>
+          </article>
+          <div class="automation-tower__stack">
+            {automationTowerSteps.map((step, index) => (
+              <article class:list={["automation-floor", `automation-floor--${index + 1}`]}>
+                <SystemIcon name={step.icon} />
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <h3>{step.title}</h3>
+                <p>{step.text}</p>
+              </article>
+            ))}
           </div>
-        ))}
-      </div>
+        </div>
+      ) : isMediaCapability ? (
+        <div class="ai-review-console">
+          <article class="ai-review-console__preview">
+            <div class="ai-review-console__bar">
+              <span>AI Review Console</span>
+              <small>Batch 04 / Ready for review</small>
+            </div>
+            <div class="ai-review-console__frame">
+              <SystemIcon name="media" />
+              <strong>Media workflow preview</strong>
+              <p>Creative production becomes a visible queue: brief, generate, review, render, publish, and learn.</p>
+            </div>
+            <div class="ai-review-console__timeline" aria-label="Review quality checks">
+              {aiReviewMetrics.map((metric) => <span>{metric}</span>)}
+            </div>
+          </article>
+
+          <div class="ai-review-console__queue">
+            {aiReviewStages.map((stage, index) => (
+              <a class:list={["ai-review-step", `ai-review-step--${index + 1}`]} href={stage.href}>
+                <SystemIcon name={stage.icon} />
+                <span>{stage.state}</span>
+                <strong>{stage.title}</strong>
+                <p>{stage.detail}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div class:list={["capability-module-system", "ar-system-block", "ar-system-layer", `capability-module-system--${item.slug}`]}>
+          <div class="ar-connector-field" aria-hidden="true"></div>
+          <article class="capability-module-system__core ar-system-core">
+            <SystemIcon name={item.icon} />
+            <span>Capability system</span>
+            <strong>{item.title}</strong>
+            <p>{item.summary}</p>
+            <a class="button secondary" href={capabilityIntakeHref}>Scope this capability</a>
+          </article>
+
+          {genericCapabilityModules.map((module, index) => (
+            <article class:list={["capability-module-node", "ar-system-node", `capability-module-node--${index + 1}`]}>
+              <SystemIcon name={module.icon} />
+              <span>{module.state}</span>
+              <h3>{module.title}</h3>
+              <p>{module.text}</p>
+              <b class="ar-metric-bar" style={`--ar-level: ${module.level};`}></b>
+            </article>
+          ))}
+          <div class="capability-module-system__signals ar-signal-strip">
+            {capabilitySystemSignals.map((signal) => <span class="ar-signal">{signal}</span>)}
+          </div>
+        </div>
+      )}
     </section>
   )}
 
@@ -72,8 +194,8 @@ const { item } = Astro.props;
     <section class="section split-panel">
       <div class="glass-panel">
         <p class="eyebrow">Implementation logic</p>
-        <h2>From business problem to working system</h2>
-        <p>The workflow is designed around the business process first. Technologies are selected only after the inputs, outputs, review needs, and integration points are clear.</p>
+        <h2>How {capabilityLowerTitle} becomes a working system</h2>
+        <p>The build starts with the business process behind {primaryOutput.toLowerCase()}, then chooses the stack, review points, and integrations that make the workflow reliable.</p>
       </div>
       <div class="glass-panel">
         <ul class="feature-list">
@@ -88,9 +210,9 @@ const { item } = Astro.props;
       <div class="section-header">
         <div>
           <p class="eyebrow">Use cases</p>
-          <h2>Where this capability applies</h2>
+          <h2>Best-fit use cases for {capabilityLowerTitle}</h2>
         </div>
-        <p>The strongest use cases are the ones where repeated work, measurable output, and clear system ownership already exist.</p>
+        <p>Look for repeated work around {moduleIntro}, clear ownership, and output that can be reviewed, routed, published, monitored, or improved.</p>
       </div>
       <ul class="feature-list">
         {item.useCases.map((useCase) => <li>{useCase}</li>)}

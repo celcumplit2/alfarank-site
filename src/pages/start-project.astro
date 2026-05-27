@@ -1,6 +1,27 @@
 ---
 import PageHero from "@/components/PageHero.astro";
+import SystemIcon from "@/components/SystemIcon.astro";
 import Layout from "@/layouts/Layout.astro";
+import { intakeHeroVisual } from "@/data/hero";
+
+const intakeSignals = ["Problem", "Current system", "Desired output", "Integrations"];
+const intakePath = [
+  {
+    title: "Capture context",
+    icon: "lead",
+    text: "The request enters with source, offer, UTM, current system, and business pressure."
+  },
+  {
+    title: "Map scope",
+    icon: "flow",
+    text: "Inputs, integrations, expected output, and first launch boundary are turned into a build path."
+  },
+  {
+    title: "Route next step",
+    icon: "monitor",
+    text: "The project can be reviewed as a landing page, automation, system, platform, or data workflow."
+  }
+];
 ---
 
 <Layout title="Start a Project | AlfaRank">
@@ -8,11 +29,20 @@ import Layout from "@/layouts/Layout.astro";
     eyebrow="Start a Project"
     title="Define the system your business needs."
     text="Use the form to describe the project type, current setup, business problem, desired result, and optional timeline or budget."
+    visual={intakeHeroVisual}
   />
 
-  <section class="section split-panel">
-    <form class="glass-panel" method="post" action="/api/start-project">
+  <section class="section">
+    <div class="intake-reactor ar-system-block">
+    <form class="glass-panel intake-reactor__form" method="post" action="/api/start-project" data-track-source data-conversion-form="start-project">
       <input type="hidden" name="source_path" value="/start-project/" />
+      <input type="hidden" name="landing_page" />
+      <input type="hidden" name="landing_offer" />
+      <input type="hidden" name="utm_source" />
+      <input type="hidden" name="utm_medium" />
+      <input type="hidden" name="utm_campaign" />
+      <input type="hidden" name="utm_term" />
+      <input type="hidden" name="utm_content" />
       <div class="spam-field" aria-hidden="true">
         <label for="company_website">Company website</label>
         <input id="company_website" name="company_website" tabindex="-1" autocomplete="off" />
@@ -25,6 +55,10 @@ import Layout from "@/layouts/Layout.astro";
         <div class="field">
           <label for="email">Email</label>
           <input id="email" name="email" type="email" autocomplete="email" required />
+        </div>
+        <div class="field">
+          <label for="company">Company optional</label>
+          <input id="company" name="company" autocomplete="organization" />
         </div>
         <div class="field">
           <label for="project-type">Project type</label>
@@ -42,6 +76,17 @@ import Layout from "@/layouts/Layout.astro";
           <label for="current-system">Current website/system</label>
           <input id="current-system" name="current_system" placeholder="URL or short description" />
         </div>
+        <div class="field">
+          <label for="desired-output">Desired output</label>
+          <select id="desired-output" name="desired_output">
+            <option>Working first version</option>
+            <option>Automation workflow</option>
+            <option>Website or platform launch</option>
+            <option>Dashboard or internal tool</option>
+            <option>Content/publishing system</option>
+            <option>Data monitoring/reporting system</option>
+          </select>
+        </div>
         <div class="field full">
           <label for="problem">Business problem</label>
           <textarea id="problem" name="business_problem" required></textarea>
@@ -49,6 +94,10 @@ import Layout from "@/layouts/Layout.astro";
         <div class="field full">
           <label for="result">Desired result</label>
           <textarea id="result" name="desired_result" required></textarea>
+        </div>
+        <div class="field full">
+          <label for="integrations">Systems, tools, or integrations</label>
+          <textarea id="integrations" name="integrations" placeholder="CMS, CRM, APIs, spreadsheets, databases, analytics, automation tools"></textarea>
         </div>
         <div class="field">
           <label for="budget">Budget optional</label>
@@ -58,20 +107,88 @@ import Layout from "@/layouts/Layout.astro";
           <label for="timeline">Timeline optional</label>
           <input id="timeline" name="timeline" />
         </div>
+        <div class="field full">
+          <label for="contact-details">Contact details optional</label>
+          <textarea id="contact-details" name="contact_details" placeholder="Preferred contact channel, time zone, or extra context"></textarea>
+        </div>
       </div>
       <div class="section-actions" style="margin-top: 18px;">
         <button class="button primary" type="submit">Send Project Request</button>
       </div>
+      <p class="form-status" data-form-status aria-live="polite"></p>
     </form>
 
-    <aside class="glass-panel">
-      <h2>Good project inputs</h2>
-      <ul class="feature-list">
-        <li>What process needs to become faster, clearer, or more automated.</li>
-        <li>What data, website, CRM, CMS, or internal system already exists.</li>
-        <li>What output should be visible after the first implementation phase.</li>
-        <li>Which workflows are manual today and should become repeatable.</li>
-      </ul>
-    </aside>
+    <div class="intake-reactor__console">
+      <article class="intake-reactor__core ar-system-core">
+        <SystemIcon name="lead" />
+        <span>Intake reactor</span>
+        <strong>Turn context into scope.</strong>
+        <p>The form routes business pressure, current systems, desired output, and integrations into one project request.</p>
+        <div class="ar-signal-strip">
+          {intakeSignals.map((signal) => <span class="ar-signal">{signal}</span>)}
+        </div>
+      </article>
+
+      <div class="intake-reactor__path">
+        {intakePath.map((step, index) => (
+          <article class:list={["intake-reactor__step", `intake-reactor__step--${index + 1}`]}>
+            <SystemIcon name={step.icon} />
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <h3>{step.title}</h3>
+            <p>{step.text}</p>
+          </article>
+        ))}
+      </div>
+
+      <aside class="glass-panel intake-reactor__guide">
+        <h2>Good project inputs</h2>
+        <ul class="feature-list">
+          <li>What process needs to become faster, clearer, or more automated.</li>
+          <li>What data, website, CRM, CMS, or internal system already exists.</li>
+          <li>What output should be visible after the first implementation phase.</li>
+          <li>Which integrations, tools, or manual workflows should be connected.</li>
+        </ul>
+      </aside>
+    </div>
+    </div>
   </section>
+
+  <script is:inline>
+    (() => {
+      const params = new URLSearchParams(window.location.search);
+      const aliases = {
+        landing_page: ["landing_page", "lp"],
+        landing_offer: ["landing_offer", "offer"],
+        utm_source: ["utm_source"],
+        utm_medium: ["utm_medium"],
+        utm_campaign: ["utm_campaign"],
+        utm_term: ["utm_term"],
+        utm_content: ["utm_content"]
+      };
+
+      document.querySelectorAll("form[data-track-source]").forEach((form) => {
+        const source = form.querySelector("[name='source_path']");
+        if (source) source.value = `${window.location.pathname}${window.location.search}`;
+
+        Object.entries(aliases).forEach(([name, keys]) => {
+          const input = form.querySelector(`[name='${name}']`);
+          if (!input) return;
+          const value = keys.map((key) => params.get(key)).find(Boolean);
+          if (value) input.value = value;
+          if (name === "landing_page" && !input.value) input.value = window.location.pathname;
+        });
+
+        form.addEventListener("submit", () => {
+          const button = form.querySelector("button[type='submit']");
+          const status = form.querySelector("[data-form-status]");
+          if (button) {
+            button.dataset.defaultLabel = button.textContent || "";
+            button.textContent = "Sending request...";
+            button.disabled = true;
+          }
+          if (status) status.textContent = "Sending request with source context...";
+        });
+      });
+    })();
+  </script>
 </Layout>

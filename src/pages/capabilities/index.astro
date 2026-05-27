@@ -1,8 +1,9 @@
 ---
-import CardGrid from "@/components/CardGrid.astro";
 import PageHero from "@/components/PageHero.astro";
+import SystemIcon from "@/components/SystemIcon.astro";
 import Layout from "@/layouts/Layout.astro";
-import { capabilities } from "@/data/site";
+import { capabilities, solutions } from "@/data/site";
+import { collectionHeroVisual } from "@/data/hero";
 
 const capabilityTags: Record<string, string[]> = {
   "ai-automation": ["AI workflows", "CRM", "Content"],
@@ -13,6 +14,40 @@ const capabilityTags: Record<string, string[]> = {
   "video-media-automation": ["Video", "Media", "Pipelines"],
   "wordpress-api-integrations": ["WordPress", "APIs", "CMS"]
 };
+
+const capabilityGroups = [
+  {
+    title: "Automation and operations",
+    icon: "ai",
+    text: "Repeated work, lead handling, content production, reporting, routing, and review loops.",
+    slugs: ["ai-automation", "wordpress-api-integrations", "web-product-development"],
+    solutionSlugs: ["automate-lead-processing", "build-internal-tools"]
+  },
+  {
+    title: "Content and growth systems",
+    icon: "content",
+    text: "Publishing infrastructure, programmatic pages, SEO workflows, media production, and monitoring.",
+    slugs: ["seo-content-infrastructure", "video-media-automation", "ai-automation"],
+    solutionSlugs: ["generate-more-content", "scale-seo-infrastructure"]
+  },
+  {
+    title: "Data and commerce infrastructure",
+    icon: "data",
+    text: "Collection, normalization, scoring, feeds, catalog operations, dashboards, and alerts.",
+    slugs: ["data-systems-scraping", "ecommerce-systems", "wordpress-api-integrations"],
+    solutionSlugs: ["build-data-monitoring-system", "upgrade-existing-website"]
+  }
+];
+
+const capabilityBySlug = new Map(capabilities.map((item) => [item.slug, item]));
+const solutionBySlug = new Map(solutions.map((item) => [item.slug, item]));
+
+const serviceZones = capabilities.map((item, index) => ({
+  ...item,
+  verb: ["Automate", "Build", "Publish", "Signal", "Operate", "Generate", "Connect"][index] ?? "Create",
+  zone: String(index + 1).padStart(2, "0"),
+  level: `${74 + index * 3}%`
+}));
 ---
 
 <Layout title="Capabilities | AlfaRank">
@@ -22,18 +57,90 @@ const capabilityTags: Record<string, string[]> = {
     text="AlfaRank capabilities are organized around what the company can build, connect, automate, and launch."
     primaryHref="/start-project/"
     primaryLabel="Start a Project"
+    visual={collectionHeroVisual(capabilities, {
+      mode: "capabilities",
+      icon: "tools",
+      label: "Capability network",
+      state: "Build directions online",
+      output: "AI, web, content, data, commerce, media, integrations",
+      primaryMetric: "Directions",
+      secondaryMetric: "Build map"
+    })}
   />
 
+  <section class="section capability-foundation">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Capability foundation</p>
+        <h2>Capabilities are grouped by operating layer.</h2>
+      </div>
+      <p>Each group combines build directions with the solution routes where that capability usually becomes a working system.</p>
+    </div>
+
+    <div class="capability-lanes">
+      {capabilityGroups.map((group) => (
+        <article class="capability-lane">
+          <div class="capability-lane__header">
+            <SystemIcon name={group.icon} />
+            <div>
+              <h3>{group.title}</h3>
+              <p>{group.text}</p>
+            </div>
+          </div>
+
+          <div class="capability-lane__stack">
+            {group.slugs.map((slug, index) => {
+              const item = capabilityBySlug.get(slug);
+              return item && (
+                <a href={`/capabilities/${item.slug}/`} style={`--lane-level: ${72 + index * 8}%;`}>
+                  <strong>{item.title}</strong>
+                  <span>{capabilityTags[item.slug]?.join(" / ")}</span>
+                  <b></b>
+                </a>
+              );
+            })}
+          </div>
+
+          <div class="capability-lane__routes">
+            {group.solutionSlugs.map((slug) => {
+              const item = solutionBySlug.get(slug);
+              return item && <a href={`/solutions/${item.slug}/`}>{item.title}</a>;
+            })}
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
   <section class="section">
-    <CardGrid
-      variant="glyph"
-      items={capabilities.map((item) => ({
-        title: item.title,
-        icon: item.icon,
-        summary: item.summary,
-        tags: capabilityTags[item.slug],
-        href: `/capabilities/${item.slug}/`
-      }))}
-    />
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Catalog</p>
+        <h2>All build directions</h2>
+      </div>
+      <p>Use the full catalog when the system is already clear, or start from the layer groups above when the problem still needs routing.</p>
+    </div>
+    <div class="service-surface">
+      <div class="service-surface__axis" aria-hidden="true"></div>
+      <article class="service-surface__core">
+        <SystemIcon name="tools" />
+        <span>Service navigation surface</span>
+        <strong>Choose the build zone</strong>
+        <p>Each zone opens a capability page with practical modules, workflow use cases, and related system routes.</p>
+        <a class="button secondary" href="/start-project/">Scope the first zone</a>
+      </article>
+      {serviceZones.map((item, index) => (
+        <a class:list={["service-zone", `service-zone--${index + 1}`]} href={`/capabilities/${item.slug}/`}>
+          <span>{item.zone}</span>
+          <SystemIcon name={item.icon} />
+          <div>
+            <small>{item.verb}</small>
+            <h3>{item.title}</h3>
+            <p>{capabilityTags[item.slug]?.join(" / ")}</p>
+            <b style={`--service-level: ${item.level};`}></b>
+          </div>
+        </a>
+      ))}
+    </div>
   </section>
 </Layout>

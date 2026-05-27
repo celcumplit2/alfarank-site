@@ -2,6 +2,59 @@
 
 Internal visual decisions for AlfaRank.com.
 
+For the broader page/block system, use:
+
+```text
+docs/block-system.md
+```
+
+## Global Angular Background
+
+Decision date: 2026-05-27
+
+Status: approved as the current site-wide background direction.
+
+## Direction
+
+The global site background uses the lower-left reference direction from the
+background exploration: large diagonal glass planes, architectural depth,
+subtle grid structure, and cyan signal edges.
+
+The background should make AlfaRank feel like a future-facing systems company
+without becoming a foreground illustration.
+
+## Base Rules
+
+- Use one global background layer through `.liquid-background`.
+- Keep decorative planes behind all page content.
+- Do not stack extra page-level glow fields on top of the global background
+  unless a section needs a specific system scene.
+- Keep the left reading column calmer than the visual side of the page.
+- Use masks to reduce plane strength behind large headings and form fields.
+- Keep the palette in deep navy, cyan, teal, and subtle blue.
+- Avoid purple-heavy gradients, beige, brown, orange, and decorative orbs.
+- Mobile must keep the same direction, but with lower opacity and less visual
+  pressure around the headline and primary CTA.
+- If readability drops, reduce plane opacity or shift masks before darkening
+  cards or adding new panels.
+
+## Implementation Notes
+
+Current implementation:
+
+- `src/components/LiquidBackground.astro` renders the single fixed background
+  node.
+- `src/styles/global.css` owns the angular plane composition through
+  `.liquid-background`, `.liquid-background::before`, and
+  `.liquid-background::after`.
+- The mobile override lives in the `max-width: 560px` media query.
+
+Reference QA artifacts:
+
+```text
+artifacts/background-qa/
+```
+
 ## Liquid Glass Cards With Background Glyphs
 
 Decision date: 2026-05-22

@@ -1,7 +1,91 @@
 ---
 import PageHero from "@/components/PageHero.astro";
+import SystemIcon from "@/components/SystemIcon.astro";
 import Layout from "@/layouts/Layout.astro";
 import { technologies } from "@/data/site";
+import { technologiesHeroVisual } from "@/data/hero";
+
+const technologyMatrix = [
+  {
+    group: "Web platforms",
+    icon: "web",
+    tools: ["Astro", "Next.js", "Cloudflare Pages"],
+    function: "Public sites, product interfaces, fast static delivery, and launchable web surfaces.",
+    connectsTo: "CMS, analytics, forms, APIs"
+  },
+  {
+    group: "CMS and publishing",
+    icon: "content",
+    tools: ["WordPress", "APIs", "GitHub"],
+    function: "Content models, custom fields, editorial workflows, templates, and publishing operations.",
+    connectsTo: "SEO, content QA, media, automations"
+  },
+  {
+    group: "AI and automation",
+    icon: "ai",
+    tools: ["AI models", "Automation tools", "Video generation"],
+    function: "Generation, classification, enrichment, routing, review support, and repeatable actions.",
+    connectsTo: "CMS, CRM, internal tools, data"
+  },
+  {
+    group: "Data and scraping",
+    icon: "data",
+    tools: ["Scraping", "Data processing", "Analytics"],
+    function: "Collection, normalization, monitoring, scoring, reports, exports, and alerts.",
+    connectsTo: "Dashboards, audits, rankings, feeds"
+  },
+  {
+    group: "APIs and integrations",
+    icon: "api",
+    tools: ["APIs", "CRM integrations", "Automation tools"],
+    function: "Connections between websites, forms, CRMs, databases, CMS layers, and external platforms.",
+    connectsTo: "Lead routing, project intake, operations"
+  },
+  {
+    group: "Hosting and operations",
+    icon: "product",
+    tools: ["Cloudflare Pages", "GitHub", "Analytics"],
+    function: "Deployment, version control, performance, observability, and production review workflows.",
+    connectsTo: "Launch, measurement, iteration"
+  }
+];
+
+const technologyLinks: Record<string, string> = {
+  WordPress: "/capabilities/wordpress-api-integrations/",
+  Astro: "/technologies/",
+  "Next.js": "/capabilities/web-product-development/",
+  APIs: "/capabilities/wordpress-api-integrations/",
+  "AI models": "/capabilities/ai-automation/",
+  "Automation tools": "/capabilities/ai-automation/",
+  Scraping: "/capabilities/data-systems-scraping/",
+  "Data processing": "/capabilities/data-systems-scraping/",
+  "Video generation": "/capabilities/video-media-automation/",
+  Analytics: "/solutions/build-data-monitoring-system/",
+  "CRM integrations": "/solutions/automate-lead-processing/",
+  "Cloudflare Pages": "/technologies/"
+};
+
+const technologyIcons: Record<string, string> = {
+  WordPress: "content",
+  Astro: "space",
+  "Next.js": "web",
+  APIs: "api",
+  "AI models": "ai",
+  "Automation tools": "tools",
+  Scraping: "monitor",
+  "Data processing": "data",
+  "Video generation": "media",
+  Analytics: "ranking",
+  "CRM integrations": "lead",
+  "Cloudflare Pages": "product"
+};
+
+const technologyRadar = technologies.slice(0, 12).map((tech, index) => ({
+  tech,
+  slot: index + 1,
+  href: technologyLinks[tech] ?? "/technologies/",
+  icon: technologyIcons[tech] ?? "api"
+}));
 ---
 
 <Layout title="Technologies | AlfaRank">
@@ -11,33 +95,71 @@ import { technologies } from "@/data/site";
     text="The stack is selected for practical delivery: clear content models, stable deployment, API integration, automation, data processing, and measurable operations."
     primaryHref="/start-project/"
     primaryLabel="Start a Project"
+    visual={technologiesHeroVisual}
   />
 
-  <section class="section split-panel">
-    <div class="glass-panel">
+  <section class="section tech-radar-showcase tech-radar-showcase--page" aria-labelledby="core-stack-title">
+    <div class="tech-radar-copy">
       <h2>Core stack</h2>
       <p>AlfaRank uses web, CMS, AI, automation, data, and deployment tools as an integrated system layer. The goal is not tool novelty. The goal is reliable implementation that business teams can use and improve.</p>
     </div>
-    <div class="glass-panel">
-      <div class="tag-grid">
-        {technologies.map((tech) => <span class="tag">{tech}</span>)}
+    <div class="tech-radar tech-radar--wide" aria-label="Core stack radar">
+      <div class="tech-radar__ring tech-radar__ring--outer"></div>
+      <div class="tech-radar__ring tech-radar__ring--inner"></div>
+      <div class="tech-radar__core">
+        <SystemIcon name="product" />
+        <strong id="core-stack-title">Implementation core</strong>
+        <span>Tools orbit the workflow</span>
       </div>
+      {technologyRadar.map((item) => (
+        <a class:list={["tech-radar__chip", `tech-radar__chip--${item.slot}`]} href={item.href}>
+          <SystemIcon name={item.icon} />
+          <span>{item.tech}</span>
+        </a>
+      ))}
     </div>
   </section>
 
   <section class="section">
     <div class="section-header">
       <div>
-        <p class="eyebrow">Implementation areas</p>
+        <p class="eyebrow">Technology matrix</p>
         <h2>Technology is grouped by system function.</h2>
       </div>
       <p>Each project combines only the layers needed for the business workflow: frontend, CMS, automation, data, AI, analytics, integrations, and deployment.</p>
     </div>
-    <ul class="feature-list">
-      <li>Frontend and content sites with Astro, Next.js, and structured routing.</li>
-      <li>CMS and publishing systems with WordPress, APIs, custom fields, and content workflows.</li>
-      <li>AI workflows for content, media, research, lead handling, and internal operations.</li>
-      <li>Data processing for scraping, monitoring, normalization, scoring, reporting, and alerts.</li>
-    </ul>
+    <div class="technology-matrix">
+      {technologyMatrix.map((group) => (
+        <article class="technology-cell">
+          <div class="technology-cell__head">
+            <SystemIcon name={group.icon} />
+            <div>
+              <h3>{group.group}</h3>
+              <p>{group.function}</p>
+            </div>
+          </div>
+          <div class="tag-grid">
+            {group.tools.map((tool) => <span class="tag">{tool}</span>)}
+          </div>
+          <small>{group.connectsTo}</small>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section split-panel">
+    <div class="glass-panel">
+      <p class="eyebrow">Selection logic</p>
+      <h2>The stack follows the workflow.</h2>
+      <p>AlfaRank does not start with a preferred tool list. The project starts with the business process, then the stack is selected around content models, users, data sources, automation points, integrations, hosting, and measurement.</p>
+    </div>
+    <div class="glass-panel">
+      <ul class="feature-list">
+        <li>Static-first delivery when speed and reliability matter.</li>
+        <li>CMS-backed publishing when teams need editorial control.</li>
+        <li>API-first integration when business systems need to exchange state.</li>
+        <li>Data and AI layers only when the workflow has clear inputs and review logic.</li>
+      </ul>
+    </div>
   </section>
 </Layout>

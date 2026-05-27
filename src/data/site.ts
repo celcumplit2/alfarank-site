@@ -24,7 +24,7 @@ export const company = {
 };
 
 export const home = {
-  heroTitle: "Digital systems for business operations, content, data, and growth.",
+  heroTitle: "Digital systems connected, automated, built to perform.",
   heroText:
     "AlfaRank builds the infrastructure behind modern business workflows: web platforms, AI automation, SEO/content systems, data tools, e-commerce operations, and integrations.",
   buildText:

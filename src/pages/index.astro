@@ -1,12 +1,210 @@
 ---
-import CardGrid from "@/components/CardGrid.astro";
-import PageHero from "@/components/PageHero.astro";
+import SystemHero from "@/components/SystemHero.astro";
+import SystemIcon from "@/components/SystemIcon.astro";
 import Layout from "@/layouts/Layout.astro";
+import { landingOffers } from "@/data/landing";
 import { capabilities, home, industries, solutions, systems, technologies } from "@/data/site";
+
+const decisionRoutes = [
+  {
+    title: "Automate repeated work",
+    icon: "ai",
+    signal: "Manual workflow",
+    text: "AI, rules, review states, and connected actions for content, leads, reports, or internal operations.",
+    primaryLabel: "AI Automation",
+    primaryHref: "/capabilities/ai-automation/",
+    secondaryLabel: "Lead Processing",
+    secondaryHref: "/solutions/automate-lead-processing/",
+    output: "Automation flow"
+  },
+  {
+    title: "Launch or rebuild a web platform",
+    icon: "web",
+    signal: "Website / product layer",
+    text: "Structured pages, product interfaces, dashboards, portals, MVPs, and integration-ready frontend systems.",
+    primaryLabel: "Web Development",
+    primaryHref: "/capabilities/web-product-development/",
+    secondaryLabel: "Upgrade Website",
+    secondaryHref: "/solutions/upgrade-existing-website/",
+    output: "Launchable platform"
+  },
+  {
+    title: "Scale content or SEO",
+    icon: "content",
+    signal: "Publishing engine",
+    text: "Topic data, templates, editorial QA, metadata, CMS publishing, and performance monitoring.",
+    primaryLabel: "Content Infrastructure",
+    primaryHref: "/capabilities/seo-content-infrastructure/",
+    secondaryLabel: "Generate Content",
+    secondaryHref: "/solutions/generate-more-content/",
+    output: "Publishing system"
+  },
+  {
+    title: "Track data, competitors, or rankings",
+    icon: "data",
+    signal: "Market signal",
+    text: "Scraping, APIs, normalization, scoring, dashboards, alerts, exports, and recurring reports.",
+    primaryLabel: "Data Systems",
+    primaryHref: "/capabilities/data-systems-scraping/",
+    secondaryLabel: "Monitoring System",
+    secondaryHref: "/solutions/build-data-monitoring-system/",
+    output: "Signal dashboard"
+  },
+  {
+    title: "Improve e-commerce operations",
+    icon: "commerce",
+    signal: "Catalog operations",
+    text: "Product data, feeds, stock and price monitoring, catalog content, marketplaces, and analytics.",
+    primaryLabel: "E-commerce Systems",
+    primaryHref: "/capabilities/ecommerce-systems/",
+    secondaryLabel: "E-commerce Profile",
+    secondaryHref: "/systems/ecommerce-system/",
+    output: "Catalog system"
+  },
+  {
+    title: "Connect WordPress, APIs, and tools",
+    icon: "api",
+    signal: "Integration layer",
+    text: "Custom CMS structures, CRM connections, publishing workflows, business automations, and admin tools.",
+    primaryLabel: "WordPress & APIs",
+    primaryHref: "/capabilities/wordpress-api-integrations/",
+    secondaryLabel: "WordPress Tools",
+    secondaryHref: "/systems/wordpress-tools/",
+    output: "Connected CMS"
+  }
+];
+
+const systemPath = [
+  { title: "Capabilities", text: "what can be built", href: "/capabilities/", icon: "tools" },
+  { title: "Solutions", text: "which problem it solves", href: "/solutions/", icon: "flow" },
+  { title: "Systems", text: "how it operates", href: "/systems/", icon: "product" },
+  { title: "Technologies", text: "what connects it", href: "/technologies/", icon: "api" },
+  { title: "Start Project", text: "what to scope first", href: "/start-project/", icon: "lead" }
+];
+
+const capabilityBySlug = new Map(capabilities.map((item) => [item.slug, item]));
+
+const commandFieldNodes = [
+  {
+    slug: "ai-automation",
+    title: "AI Automation",
+    detail: "Workflows that run while you sleep",
+    state: "Automate"
+  },
+  {
+    slug: "web-product-development",
+    title: "Web Platforms",
+    detail: "Scalable websites and apps that perform",
+    state: "Interface"
+  },
+  {
+    slug: "seo-content-infrastructure",
+    title: "Content Engine",
+    detail: "From idea to publish at machine speed",
+    state: "Publish"
+  },
+  {
+    slug: "video-media-automation",
+    title: "Media Flow",
+    detail: "Create. Distribute. Amplify.",
+    state: "Media"
+  },
+  {
+    slug: "wordpress-api-integrations",
+    title: "API Layer",
+    detail: "Connect systems. Expose capabilities",
+    state: "Connect"
+  },
+  {
+    slug: "data-systems-scraping",
+    title: "Data Signals",
+    detail: "Collect, normalize, turn into insight",
+    state: "Signal"
+  },
+  {
+    slug: "ecommerce-systems",
+    title: "Commerce Ops",
+    detail: "Operations that drive revenue",
+    state: "Catalog"
+  }
+].map((node, index) => ({
+  ...node,
+  source: capabilityBySlug.get(node.slug),
+  metric: `${74 + index * 3}%`,
+  slot: index + 1
+}));
+
+const technologyLinks: Record<string, string> = {
+  WordPress: "/capabilities/wordpress-api-integrations/",
+  Astro: "/technologies/",
+  "Next.js": "/capabilities/web-product-development/",
+  APIs: "/capabilities/wordpress-api-integrations/",
+  "AI models": "/capabilities/ai-automation/",
+  "Automation tools": "/capabilities/ai-automation/",
+  Scraping: "/capabilities/data-systems-scraping/",
+  "Data processing": "/capabilities/data-systems-scraping/",
+  "Video generation": "/capabilities/video-media-automation/",
+  Analytics: "/solutions/build-data-monitoring-system/",
+  "CRM integrations": "/solutions/automate-lead-processing/",
+  "Cloudflare Pages": "/technologies/"
+};
+
+const technologyIcons: Record<string, string> = {
+  WordPress: "content",
+  Astro: "space",
+  "Next.js": "web",
+  APIs: "api",
+  "AI models": "ai",
+  "Automation tools": "tools",
+  Scraping: "monitor",
+  "Data processing": "data",
+  "Video generation": "media",
+  Analytics: "ranking",
+  "CRM integrations": "lead",
+  "Cloudflare Pages": "product"
+};
+
+const technologyRadar = technologies.slice(0, 12).map((tech, index) => ({
+  tech,
+  slot: index + 1,
+  href: technologyLinks[tech] ?? "/technologies/",
+  icon: technologyIcons[tech] ?? "api"
+}));
+
+const routeEngine = [
+  {
+    input: "Slow leads",
+    inputHref: "/solutions/automate-lead-processing/",
+    output: "Qualified pipeline",
+    outputHref: "/lp/automate-lead-processing/",
+    icon: "lead"
+  },
+  {
+    input: "Manual content",
+    inputHref: "/solutions/generate-more-content/",
+    output: "Publish engine",
+    outputHref: "/lp/ai-content-workflow/",
+    icon: "content"
+  },
+  {
+    input: "Broken data",
+    inputHref: "/solutions/build-data-monitoring-system/",
+    output: "Live dashboards",
+    outputHref: "/capabilities/data-systems-scraping/",
+    icon: "data"
+  }
+];
+
+const blueprintStations = [
+  { title: "Input", text: "Lead, content, catalog, or source data enters one controlled model.", stat: "12 sources", icon: "data" },
+  { title: "Rules + AI", text: "Automation classifies, enriches, routes, drafts, and checks work.", stat: "logic layer", icon: "ai" },
+  { title: "Human Review", text: "Approvals, corrections, owner decisions, and fallback states stay visible.", stat: "QA ready", icon: "tools" },
+  { title: "Output", text: "CRM actions, published pages, dashboards, feeds, or reports leave the system.", stat: "CRM ready", icon: "ranking" }
+];
 ---
 
 <Layout>
-  <PageHero
+  <SystemHero
     eyebrow="Digital systems company"
     title={home.heroTitle}
     text={home.heroText}
@@ -16,84 +214,233 @@ import { capabilities, home, industries, solutions, systems, technologies } from
     secondaryLabel="Explore Capabilities"
   />
 
-  <section class="section">
+  <section class="section home-decision" aria-labelledby="decision-title">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Decision hub</p>
+        <h2 id="decision-title">What system do you need?</h2>
+      </div>
+      <p>Start from the operational need. Each route points to the most relevant capability, solution, or system profile so the home page works like a map of the company.</p>
+    </div>
+
+    <div class="decision-board">
+      <div class="decision-board__core">
+        <SystemIcon name="product" />
+        <strong>Need -> System</strong>
+        <p>Choose the pressure point, then follow the route into the section with the right level of detail.</p>
+        <div class="decision-board__stats">
+          <span><b>{capabilities.length}</b> capabilities</span>
+          <span><b>{solutions.length}</b> solutions</span>
+          <span><b>{systems.length}</b> profiles</span>
+        </div>
+      </div>
+
+      <div class="decision-grid">
+        {decisionRoutes.map((route) => (
+          <article class="decision-route">
+            <div class="decision-route__icon">
+              <SystemIcon name={route.icon} />
+            </div>
+            <div class="decision-route__body">
+              <span>{route.signal}</span>
+              <h3>{route.title}</h3>
+              <p>{route.text}</p>
+              <div class="decision-route__links">
+                <a href={route.primaryHref}>{route.primaryLabel}</a>
+                <a href={route.secondaryHref}>{route.secondaryLabel}</a>
+              </div>
+            </div>
+            <small>{route.output}</small>
+          </article>
+        ))}
+      </div>
+    </div>
+
+    <nav class="home-flow" aria-label="Homepage system routes">
+      {systemPath.map((step, index) => (
+        <a href={step.href}>
+          <span>{String(index + 1).padStart(2, "0")}</span>
+          <SystemIcon name={step.icon} />
+          <strong>{step.title}</strong>
+          <small>{step.text}</small>
+        </a>
+      ))}
+    </nav>
+  </section>
+
+  <section class="section campaign-offers" aria-labelledby="campaign-offers-title">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Campaign landing pages</p>
+        <h2 id="campaign-offers-title">Offer pages built for ads and client leads</h2>
+      </div>
+      <p>These pages translate the broader system catalog into concrete buyer-ready offers with a problem, modules, proof signals, and a tracked intake path.</p>
+    </div>
+
+    <div class="landing-offer-core">
+      <article class="landing-offer-core__center">
+        <SystemIcon name="lead" />
+        <span>Lead acquisition layer</span>
+        <strong>{landingOffers.length} offer pages</strong>
+        <p>Each campaign page turns one buyer problem into a scoped system request with proof, modules, CTA, and intake tracking.</p>
+        <a class="button secondary" href="/start-project/">Plan campaign route</a>
+      </article>
+
+      {landingOffers.map((offer, index) => (
+        <a class:list={["landing-offer-node", `landing-offer-node--${index + 1}`]} href={`/lp/${offer.slug}/`}>
+          <SystemIcon name={offer.icon} />
+          <span>{offer.eyebrow}</span>
+          <h3>{offer.title}</h3>
+          <p>{offer.summary}</p>
+          <small>{offer.desiredOutput}</small>
+        </a>
+      ))}
+
+      <div class="landing-offer-core__signals" aria-label="Landing page conversion signals">
+        <span>Ad message</span>
+        <span>Proof layer</span>
+        <span>Tracked intake</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section home-spectrum" aria-labelledby="capability-spectrum-title">
     <div class="section-header">
       <div>
         <p class="eyebrow">Capabilities</p>
-        <h2>What AlfaRank builds</h2>
+        <h2 id="capability-spectrum-title">What AlfaRank builds</h2>
       </div>
       <p>{home.buildText}</p>
     </div>
-    <CardGrid items={capabilities.map((item) => ({
-      title: item.title,
-      icon: item.icon,
-      summary: item.summary,
-      href: `/capabilities/${item.slug}/`
-    }))} />
+
+    <div class="command-field">
+      <div class="command-field__paths" aria-hidden="true"></div>
+      <div class="command-core">
+        <SystemIcon name="tools" />
+        <span>ALFARANK CORE</span>
+        <strong>{capabilities.length} connected directions</strong>
+        <p>Capabilities are not a menu of services. They are a set of technical forces that can be combined into one operating system.</p>
+      </div>
+      {commandFieldNodes.map((item) => item.source && (
+        <a class:list={["command-node", `command-node--${item.slot}`]} href={`/capabilities/${item.slug}/`}>
+          <SystemIcon name={item.source.icon} />
+          <span>{item.state}</span>
+          <h3>{item.title}</h3>
+          <p>{item.detail}</p>
+          <small style={`--command-level: ${item.metric};`}></small>
+        </a>
+      ))}
+    </div>
   </section>
 
-  <section class="section">
+  <section class="section home-solution-field" aria-labelledby="home-solution-title">
     <div class="section-header">
       <div>
         <p class="eyebrow">Solutions</p>
-        <h2>Business problems mapped to systems</h2>
+        <h2 id="home-solution-title">Business problems mapped to systems</h2>
       </div>
       <p>{home.solutionsText}</p>
     </div>
-    <CardGrid items={solutions.map((item) => ({
-      title: item.title,
-      icon: item.icon,
-      summary: item.summary,
-      href: `/solutions/${item.slug}/`
-    }))} />
+
+    <div class="route-engine">
+      <div class="route-engine__column">
+        <span class="route-engine__label">Business pressure</span>
+        {routeEngine.map((item) => (
+          <a class="route-pulse" href={item.inputHref}>
+            <SystemIcon name={item.icon} />
+            <strong>{item.input}</strong>
+          </a>
+        ))}
+      </div>
+      <div class="route-engine__core">
+        <SystemIcon name="flow" />
+        <span>Route engine</span>
+        <strong>Problem to system</strong>
+        <p>Inputs are converted into scoped implementation paths, then into measurable business outputs.</p>
+        <a class="button secondary" href="/solutions/">View solution routes</a>
+      </div>
+      <div class="route-engine__column route-engine__column--output">
+        <span class="route-engine__label">System output</span>
+        {routeEngine.map((item) => (
+          <a class="route-output" href={item.outputHref}>
+            <strong>{item.output}</strong>
+            <small>Open route</small>
+          </a>
+        ))}
+      </div>
+    </div>
   </section>
 
-  <section class="section">
+  <section class="section" aria-labelledby="home-blueprint-title">
     <div class="section-header">
       <div>
-        <p class="eyebrow">Systems</p>
-        <h2>Project and system profiles</h2>
+        <p class="eyebrow">System blueprint</p>
+        <h2 id="home-blueprint-title">From client workflow to operating system</h2>
       </div>
       <p>{home.systemsText}</p>
     </div>
-    <CardGrid items={systems.slice(0, 3).map((item) => ({
-      title: item.title,
-      icon: item.icon,
-      summary: item.summary,
-      href: `/systems/${item.slug}/`
-    }))} />
+    <div class="client-blueprint">
+      <div class="client-blueprint__track" aria-hidden="true"></div>
+      {blueprintStations.map((station, index) => (
+        <article class:list={["client-blueprint__stage", `client-blueprint__stage--${index + 1}`]}>
+          <div class="client-blueprint__platform">
+            <SystemIcon name={station.icon} />
+          </div>
+          <span>{String(index + 1).padStart(2, "0")}</span>
+          <h3>{station.title}</h3>
+          <p>{station.text}</p>
+          <small>{station.stat}</small>
+        </article>
+      ))}
+    </div>
   </section>
 
-  <section class="section split-panel">
-    <div class="glass-panel">
+  <section class="section tech-radar-showcase" aria-labelledby="home-tech-title">
+    <div class="tech-radar-copy">
       <p class="eyebrow">Technology layer</p>
-      <h2>Built with practical, integration-ready technology.</h2>
+      <h2 id="home-tech-title">Built with practical, integration-ready technology.</h2>
       <p>AlfaRank uses established web, automation, AI, data, and CMS technologies to create systems that can be launched, reviewed, integrated, and improved without locking the business into a fragile stack.</p>
       <div class="section-actions">
         <a class="button secondary" href="/technologies/">View Technologies</a>
       </div>
     </div>
-    <div class="glass-panel">
-      <div class="tag-grid">
-        {technologies.slice(0, 12).map((tech) => <span class="tag">{tech}</span>)}
+    <div class="tech-radar" aria-label="Technology radar">
+      <div class="tech-radar__ring tech-radar__ring--outer"></div>
+      <div class="tech-radar__ring tech-radar__ring--inner"></div>
+      <div class="tech-radar__core">
+        <SystemIcon name="api" />
+        <strong>Stack logic</strong>
+        <span>CMS / AI / Data / APIs / Deploy</span>
       </div>
+      {technologyRadar.map((item) => (
+        <a class:list={["tech-radar__chip", `tech-radar__chip--${item.slot}`]} href={item.href}>
+          <SystemIcon name={item.icon} />
+          <span>{item.tech}</span>
+        </a>
+      ))}
     </div>
   </section>
 
-  <section class="section">
+  <section class="section industry-trajectory" aria-labelledby="industry-trajectory-title">
     <div class="section-header">
       <div>
         <p class="eyebrow">Industries</p>
-        <h2>Where the systems apply</h2>
+        <h2 id="industry-trajectory-title">Where the systems apply</h2>
       </div>
       <p>The same system approach works across service businesses, e-commerce, media, travel, local businesses, SaaS, agencies, and data-heavy operations.</p>
     </div>
-    <CardGrid items={industries.map((item) => ({
-      title: item.title,
-      icon: item.icon,
-      summary: item.summary,
-      href: "/industries/"
-    }))} />
+
+    <div class="market-trajectory">
+      <div class="market-trajectory__line"></div>
+      {industries.map((item, index) => (
+        <a class:list={["market-node", `market-node--${index + 1}`]} href={`/industries/${item.slug}/`}>
+          <SystemIcon name={item.icon} />
+          <span>{String(index + 1).padStart(2, "0")}</span>
+          <h3>{item.title}</h3>
+          <p>{item.summary}</p>
+        </a>
+      ))}
+    </div>
   </section>
 
   <section class="section split-panel">

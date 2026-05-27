@@ -8,8 +8,10 @@
   },
   "scripts": {
     "dev": "astro dev --host 127.0.0.1",
-    "dev:pages": "npm run build && npx wrangler pages dev dist --ip 127.0.0.1 --port 8788 --persist-to .wrangler/state",
-    "db:migrate:local": "npx wrangler d1 migrations apply DB --local --persist-to .wrangler/state",
+    "dev:pages": "npm run build && wrangler pages dev dist --ip 127.0.0.1 --port 8788 --persist-to .wrangler/state",
+    "db:migrate:local": "wrangler d1 migrations apply DB --local --persist-to .wrangler/state",
+    "db:migrate:remote": "wrangler d1 migrations apply DB --remote",
+    "db:migrations:remote": "wrangler d1 migrations list DB --remote",
     "build": "astro build",
     "preview": "astro preview --host 127.0.0.1"
   },
@@ -21,5 +23,8 @@
   },
   "overrides": {
     "volar-service-yaml": "0.0.71"
+  },
+  "devDependencies": {
+    "wrangler": "^4.95.0"
   }
 }

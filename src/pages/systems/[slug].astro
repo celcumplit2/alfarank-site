@@ -1,7 +1,9 @@
 ---
 import PageHero from "@/components/PageHero.astro";
+import SystemIcon from "@/components/SystemIcon.astro";
 import Layout from "@/layouts/Layout.astro";
-import { systems } from "@/data/site";
+import { capabilities, solutions, systems } from "@/data/site";
+import { itemHeroVisual } from "@/data/hero";
 
 export function getStaticPaths() {
   return systems.map((item) => ({
@@ -11,6 +13,43 @@ export function getStaticPaths() {
 }
 
 const { item } = Astro.props;
+
+const linkSources = [
+  ...capabilities.map((entry) => ({ title: entry.title, href: `/capabilities/${entry.slug}/` })),
+  ...solutions.map((entry) => ({ title: entry.title, href: `/solutions/${entry.slug}/` }))
+];
+
+const relatedLinks = (item.related ?? [])
+  .map((title) => linkSources.find((entry) => entry.title.toLowerCase() === title.toLowerCase()) ?? { title, href: "/capabilities/" })
+  .slice(0, 6);
+
+const blueprintLayers = [
+  {
+    title: "Input layer",
+    icon: "data",
+    text: "What the system needs before work can happen.",
+    items: (item.details ?? item.workflow ?? []).slice(0, 3)
+  },
+  {
+    title: "Workflow modules",
+    icon: item.icon ?? "flow",
+    text: "The operational blocks that turn inputs into useful movement.",
+    items: (item.modules ?? []).map((module) => module.title).slice(0, 4)
+  },
+  {
+    title: "Automation layer",
+    icon: "flow",
+    text: "Rules, review states, integrations, and repeatable actions.",
+    items: (item.workflow ?? []).slice(1, 4)
+  },
+  {
+    title: "Output layer",
+    icon: "ranking",
+    text: "The visible result that makes the system worth building.",
+    items: (item.outputs ?? []).slice(0, 4)
+  }
+];
+const systemIntakeHref = `/start-project/?offer=system-${item.slug}&landing_page=/systems/${item.slug}/`;
 ---
 
 <Layout title={`${item.title} | AlfaRank`} description={item.summary}>
@@ -18,11 +57,48 @@ const { item } = Astro.props;
     eyebrow="System profile"
     title={item.title}
     text={item.summary}
-    primaryHref="/start-project/"
+    primaryHref={systemIntakeHref}
     primaryLabel="Start a Project"
     secondaryHref="/systems/"
     secondaryLabel="All Systems"
+    visual={itemHeroVisual(item, "system-profile")}
   />
+
+  <section class="section system-template">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">System blueprint</p>
+        <h2>Inputs, modules, automation, and outputs in one operating model.</h2>
+      </div>
+      <p>This template shows how every system profile is meant to be read: what enters the system, what happens inside it, what gets automated, and what business output appears.</p>
+    </div>
+
+    <div class:list={["system-blueprint-surface", "ar-system-block", "ar-system-layer", `system-blueprint-surface--${item.slug}`]}>
+      <article class="system-blueprint-surface__core ar-system-core">
+        <SystemIcon name={item.icon ?? "product"} />
+        <span>System architecture</span>
+        <strong>{item.title}</strong>
+        <p>{item.summary}</p>
+      </article>
+      {blueprintLayers.map((layer, index) => (
+        <article class:list={["system-blueprint-layer", "ar-system-node", `system-blueprint-layer--${index + 1}`]} style={`--ar-level: ${74 + index * 6}%;`}>
+          <SystemIcon name={layer.icon} />
+          <div>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <h3>{layer.title}</h3>
+            <p>{layer.text}</p>
+          </div>
+          <ul>
+            {layer.items.map((entry) => <li>{entry}</li>)}
+          </ul>
+          <b class="ar-metric-bar"></b>
+        </article>
+      ))}
+      <div class="system-blueprint-surface__dock ar-signal-strip">
+        {(item.outputs ?? []).slice(0, 3).map((output) => <span class="ar-signal">{output}</span>)}
+      </div>
+    </div>
+  </section>
 
   <section class="section split-panel">
     <div class="glass-panel">
@@ -53,15 +129,24 @@ const { item } = Astro.props;
       <div class="section-header">
         <div>
           <p class="eyebrow">Core modules</p>
-          <h2>What the system includes</h2>
+          <h2>Module map</h2>
         </div>
-        <p>System profiles show reusable modules, workflow logic, technology areas, and business outputs without turning the section into a generic portfolio grid.</p>
+        <p>Each module is a buildable part of the system, not a loose feature idea. The modules define what has to exist for the workflow to operate.</p>
       </div>
-      <div class="card-grid">
-        {item.modules.map((module) => (
-          <div class="glass-card">
+      <div class:list={["system-module-console", "ar-system-block", `system-module-console--${item.slug}`]}>
+        <article class="system-module-console__header ar-system-core">
+          <SystemIcon name="tools" />
+          <span>Module console</span>
+          <strong>{item.modules.length} build modules</strong>
+          <p>Modules define the working parts of the system: what receives input, what processes it, and what produces output.</p>
+        </article>
+        {item.modules.map((module, index) => (
+          <div class:list={["system-module-console__item", "ar-system-node", `system-module-console__item--${index + 1}`]} style={`--ar-level: ${72 + index * 5}%;`}>
+            <SystemIcon name={["data", "flow", "tools", "ranking", "monitor", "api"][index] ?? item.icon ?? "product"} />
+            <span>{String(index + 1).padStart(2, "0")}</span>
             <h3>{module.title}</h3>
             <p>{module.text}</p>
+            <b class="ar-metric-bar"></b>
           </div>
         ))}
       </div>
@@ -97,4 +182,21 @@ const { item } = Astro.props;
       </ul>
     </section>
   )}
+
+  <section class="section split-panel">
+    <div class="glass-panel">
+      <p class="eyebrow">Related build paths</p>
+      <h2>Where this system connects next</h2>
+      <p>System profiles are designed to connect back into capabilities and solutions, so the profile can become a scoped implementation path instead of a standalone case note.</p>
+      <div class="section-actions">
+        <a class="button primary" href={systemIntakeHref}>Scope This System</a>
+        <a class="button secondary" href="/systems/">All Systems</a>
+      </div>
+    </div>
+    <div class="glass-panel">
+      <div class="tag-grid">
+        {relatedLinks.map((link) => <a class="tag" href={link.href}>{link.title}</a>)}
+      </div>
+    </div>
+  </section>
 </Layout>

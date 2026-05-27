@@ -1,4 +1,29 @@
 ---
+import SystemIcon from "@/components/SystemIcon.astro";
+
+type HeroNode = {
+  title: string;
+  state?: string;
+  icon?: string;
+  detail?: string;
+  meter?: string;
+};
+
+type HeroMetric = {
+  value: string;
+  label: string;
+};
+
+type HeroVisual = {
+  icon?: string;
+  label?: string;
+  state?: string;
+  mode?: string;
+  output?: string;
+  nodes?: HeroNode[];
+  metrics?: HeroMetric[];
+};
+
 type Props = {
   eyebrow?: string;
   title: string;
@@ -7,6 +32,7 @@ type Props = {
   primaryLabel?: string;
   secondaryHref?: string;
   secondaryLabel?: string;
+  visual?: HeroVisual;
 };
 
 const {
@@ -16,18 +42,214 @@ const {
   primaryHref,
   primaryLabel,
   secondaryHref,
-  secondaryLabel
+  secondaryLabel,
+  visual
 } = Astro.props;
+
+const heroType = (eyebrow ?? "System").toLowerCase();
+
+const iconByType: Record<string, string> = {
+  capabilities: "tools",
+  capability: "tools",
+  solutions: "flow",
+  solution: "flow",
+  systems: "product",
+  "system profile": "product",
+  technologies: "api",
+  industries: "map",
+  "about alfarank": "space",
+  "start a project": "lead",
+  "request received": "lead"
+};
+
+const coreIcon = iconByType[heroType] ?? "product";
+
+const iconKeywords: [string[], string][] = [
+  [["ai", "generation", "assistant", "prompt"], "ai"],
+  [["content", "publishing", "editorial", "seo", "topic", "metadata"], "content"],
+  [["data", "scraping", "source", "collection", "monitoring"], "data"],
+  [["audit", "ranking", "score", "quality"], "ranking"],
+  [["report", "dashboard", "analytics", "alert"], "monitor"],
+  [["catalog", "feed", "commerce", "product", "pricing", "stock"], "commerce"],
+  [["video", "media", "asset", "thumbnail"], "media"],
+  [["wordpress", "api", "cms", "integration"], "api"],
+  [["lead", "crm", "form", "request", "sales"], "lead"],
+  [["web", "frontend", "interface", "portal", "mvp"], "web"],
+  [["workflow", "routing", "flow", "status", "approval"], "flow"],
+  [["scale", "growth", "programmatic"], "scale"],
+  [["industry", "travel", "local", "location"], "map"],
+  [["tool", "admin", "operation"], "tools"]
+];
+
+const iconFromText = (value: string) => {
+  const normalized = value.toLowerCase();
+  return iconKeywords.find(([keywords]) => keywords.some((keyword) => normalized.includes(keyword)))?.[1];
+};
+
+const compact = (value: string, max = 34) => {
+  const simplified = value
+    .replace(" and ", " + ")
+    .replace(" & ", " + ")
+    .replace("Infrastructure", "Infra")
+    .replace("Automation", "Auto")
+    .replace("Integration", "Connect")
+    .replace("Integrations", "Connect");
+
+  return simplified.length > max ? `${simplified.slice(0, max - 1).trim()}...` : simplified;
+};
+
+const hashString = (value: string) =>
+  value.split("").reduce((total, char) => total + char.charCodeAt(0), 0);
+
+const variant = (visual?.mode ?? heroType)
+  .toLowerCase()
+  .replace(/[^a-z0-9]+/g, "-")
+  .replace(/^-|-$/g, "");
+
+const routeSets = [
+  {
+    layout: "orbit",
+    paths: [
+      "M76 96h132c30 0 30 54 62 54h58",
+      "M76 262h122c34 0 34-50 70-50h72",
+      "M196 52v88c0 24 34 24 34 48v70",
+      "M340 62v76c0 28-34 28-34 54v76",
+      "M154 350h90c34 0 34-42 68-42h64"
+    ],
+    dots: [
+      [230, 188],
+      [306, 212],
+      [244, 350]
+    ]
+  },
+  {
+    layout: "relay",
+    paths: [
+      "M86 78h90c38 0 38 58 76 58h92",
+      "M84 184h104c40 0 40 64 82 64h90",
+      "M86 308h142c34 0 34-54 70-54h64",
+      "M210 64v92c0 26 30 26 30 52v90",
+      "M330 84v208c0 28-34 28-34 62v44"
+    ],
+    dots: [
+      [252, 136],
+      [270, 248],
+      [296, 354]
+    ]
+  },
+  {
+    layout: "stack",
+    paths: [
+      "M78 124h112c30 0 30 46 62 46h86",
+      "M338 96h-86c-34 0-34 74-72 74H78",
+      "M92 294h122c34 0 34-46 70-46h70",
+      "M208 58v94c0 32 48 32 48 68v120",
+      "M146 380h130c32 0 32-48 68-48h50"
+    ],
+    dots: [
+      [256, 220],
+      [180, 170],
+      [344, 332]
+    ]
+  }
+];
+
+const routeSet = routeSets[hashString(`${title}-${eyebrow ?? ""}`) % routeSets.length];
+
+const statePresets: Record<string, string[]> = {
+  capabilities: ["Buildable", "Reusable", "Connected", "Launchable", "Measured"],
+  capability: ["Input", "Workflow", "Control", "Output", "Loop"],
+  solutions: ["Problem", "System", "Modules", "Result", "Signal"],
+  solution: ["Capture", "Process", "Connect", "Deliver", "Measure"],
+  systems: ["Profile", "Modules", "Workflow", "Output", "Reuse"],
+  "system profile": ["Input", "Module", "Automation", "Interface", "Output"],
+  technologies: ["Frontend", "CMS/API", "AI/Data", "Deploy", "Observe"],
+  industries: ["Context", "Workflow", "Systems", "Signals", "Growth"],
+  "about alfarank": ["Scope", "Prototype", "Build", "Launch", "Measure"],
+  "start a project": ["Type", "Context", "Problem", "Output", "Next"],
+  "request received": ["Received", "Review", "Map", "Scope", "Reply"]
+};
+
+const fallbackNodes: HeroNode[] = [
+  { title: "Scope", state: "Defined", icon: "space", detail: "Business layer" },
+  { title: "Inputs", state: "Mapped", icon: "data", detail: "Sources ready" },
+  { title: "Modules", state: "Ready", icon: "tools", detail: "Build blocks" },
+  { title: "Output", state: "Measured", icon: "ranking", detail: "Result loop" }
+];
+
+const stateList = statePresets[heroType] ?? ["Mapped", "Connected", "Active", "Measured", "Ready"];
+
+const nodes = (visual?.nodes?.length ? visual.nodes : fallbackNodes).slice(0, 4).map((node, index) => ({
+  title: compact(node.title),
+  state: node.state ?? stateList[index % stateList.length],
+  icon: node.icon ?? iconFromText(node.title) ?? coreIcon,
+  detail: compact(node.detail ?? stateList[(index + 1) % stateList.length], 32),
+  meter: node.meter ?? `${62 + ((hashString(node.title) + index * 9) % 31)}%`
+}));
+
+const metrics = visual?.metrics?.length
+  ? visual.metrics.slice(0, 3)
+  : [
+      { value: String(nodes.length), label: "Mapped nodes" },
+      { value: "Live", label: "Flow state" },
+      { value: "1", label: "Output path" }
+    ];
+
+const coreLabel = compact(visual?.label ?? eyebrow ?? "System", 28);
+const coreState = visual?.state ?? `${nodes.length} nodes online`;
+const visualOutput = compact(visual?.output ?? text.split(".")[0] ?? "Business output", 42);
+const visualIcon = visual?.icon ?? coreIcon;
 ---
 
-<section class="page-hero">
-  {eyebrow && <p class="eyebrow">{eyebrow}</p>}
-  <h1>{title}</h1>
-  <p class="hero-text">{text}</p>
-  {(primaryHref || secondaryHref) && (
-    <div class="hero-actions">
-      {primaryHref && <a class="button primary" href={primaryHref}>{primaryLabel}</a>}
-      {secondaryHref && <a class="button secondary" href={secondaryHref}>{secondaryLabel}</a>}
+<section class="page-hero" data-variant={variant}>
+  <div class="page-hero__copy">
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h1>{title}</h1>
+    <p class="hero-text">{text}</p>
+    {(primaryHref || secondaryHref) && (
+      <div class="hero-actions">
+        {primaryHref && <a class="button primary" href={primaryHref}>{primaryLabel}</a>}
+        {secondaryHref && <a class="button secondary" href={secondaryHref}>{secondaryLabel}</a>}
+      </div>
+    )}
+  </div>
+
+  <div class="page-system-map" data-layout={routeSet.layout} aria-label={`${title} system map`}>
+    <svg class="page-system-map__routes" viewBox="0 0 460 430" preserveAspectRatio="none" aria-hidden="true">
+      {routeSet.paths.map((path, index) => (
+        <path class={`route ${index % 2 === 0 ? "route--dash" : "route--solid"}`} d={path} />
+      ))}
+      {routeSet.dots.map(([cx, cy], index) => (
+        <circle class={`route-dot route-dot--page-${index + 1}`} cx={cx} cy={cy} r={index === 0 ? 5 : 4} />
+      ))}
+    </svg>
+
+    <div class="page-system-map__core">
+      <SystemIcon name={visualIcon} />
+      <strong>{coreLabel}</strong>
+      <span>{visualOutput}</span>
+      <small><i></i>{coreState}</small>
     </div>
-  )}
+
+    {nodes.map((node, index) => (
+      <div class={`page-system-node page-system-node--${index + 1}`} style={`--node-meter: ${node.meter};`}>
+        <SystemIcon name={node.icon} />
+        <div class="page-system-node__body">
+          <strong>{node.title}</strong>
+          <span>{node.detail}</span>
+          <b></b>
+        </div>
+        <small><i></i>{node.state}</small>
+      </div>
+    ))}
+
+    <div class="page-system-map__metrics">
+      {metrics.map((metric) => (
+        <span>
+          <strong>{metric.value}</strong>
+          <small>{metric.label}</small>
+        </span>
+      ))}
+    </div>
+  </div>
 </section>

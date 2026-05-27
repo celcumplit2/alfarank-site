@@ -1,0 +1,114 @@
+---
+import SystemIcon from "@/components/SystemIcon.astro";
+
+type Props = {
+  eyebrow?: string;
+  title: string;
+  text: string;
+  primaryHref?: string;
+  primaryLabel?: string;
+  secondaryHref?: string;
+  secondaryLabel?: string;
+};
+
+const {
+  eyebrow,
+  title,
+  text,
+  primaryHref,
+  primaryLabel,
+  secondaryHref,
+  secondaryLabel
+} = Astro.props;
+
+const [titleLead, titleTail] = title.includes(" connected, ")
+  ? title.split(" connected, ")
+  : [title, ""];
+
+const accentTitle = titleTail ? `connected, ${titleTail}` : "";
+
+const modules = [
+  { key: "data", title: "Data", state: "Syncing", meta: "Signals", icon: "data", href: "/capabilities/data-systems-scraping/" },
+  { key: "ai", title: "AI", state: "Active", meta: "Automation", icon: "ai", href: "/capabilities/ai-automation/" },
+  { key: "content", title: "Content", state: "Published", meta: "SEO engine", icon: "content", href: "/capabilities/seo-content-infrastructure/" },
+  { key: "crm", title: "CRM", state: "Connected", meta: "Lead flow", icon: "lead", href: "/solutions/automate-lead-processing/" },
+  { key: "apis", title: "APIs", state: "Live", meta: "Integrations", icon: "api", href: "/capabilities/wordpress-api-integrations/" },
+  { key: "reports", title: "Reports", state: "Updated", meta: "Decisions", icon: "ranking", href: "/solutions/build-data-monitoring-system/" }
+];
+
+const telemetry = [
+  { label: "Capabilities", value: "7 directions", href: "/capabilities/" },
+  { label: "Systems", value: "Launchable", href: "/systems/" },
+  { label: "Leads", value: "Ready", href: "/start-project/" }
+];
+---
+
+<section class="system-hero" aria-labelledby="system-hero-title">
+  <div class="system-hero__copy">
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h1 id="system-hero-title">
+      <span class="system-hero__line">{titleLead}</span>
+      {accentTitle && <span class="system-hero__accent">{accentTitle}</span>}
+    </h1>
+    <p class="hero-text">{text}</p>
+    {(primaryHref || secondaryHref) && (
+      <div class="hero-actions">
+        {primaryHref && <a class="button primary" href={primaryHref}>{primaryLabel}</a>}
+        {secondaryHref && <a class="button secondary" href={secondaryHref}>{secondaryLabel}</a>}
+      </div>
+    )}
+  </div>
+
+  <div class="system-map" aria-label="AlfaRank operational system map">
+    <div class="system-map__status">
+      <span><i></i>Mission control</span>
+      <small>Client system map / live routing</small>
+    </div>
+
+    <svg class="system-map__routes" viewBox="0 0 760 560" preserveAspectRatio="none" aria-hidden="true">
+      <path class="route route--dash" d="M170 220H330c24 0 24 44 48 44h42" />
+      <path class="route route--dash" d="M590 220H430c-24 0-24 44-48 44h-42" />
+      <path class="route route--dash" d="M278 94v88c0 20 24 20 24 40v42" />
+      <path class="route route--dash" d="M486 94v88c0 20-24 20-24 40v42" />
+      <path class="route route--dash" d="M300 486v-86c0-24 34-24 34-48v-58" />
+      <path class="route route--dash" d="M486 486v-86c0-24-34-24-34-48v-58" />
+      <path class="route route--solid" d="M160 284h154c30 0 30-48 60-48h76c28 0 28 48 56 48h94" />
+      <path class="route route--solid" d="M380 112v330" />
+      <path class="route route--solid" d="M334 430h92" />
+      <circle class="route-dot route-dot--one" cx="314" cy="284" r="5" />
+      <circle class="route-dot route-dot--two" cx="380" cy="236" r="5" />
+      <circle class="route-dot route-dot--three" cx="506" cy="284" r="5" />
+      <circle class="route-dot route-dot--four" cx="380" cy="430" r="5" />
+    </svg>
+
+    <div class="system-map__core">
+      <SystemIcon name="product" />
+      <strong>AlfaRank core</strong>
+      <span>Orchestrate. Automate. Scale.</span>
+      <small><i></i>System online</small>
+    </div>
+
+    {modules.map((module) => (
+      <a class={`system-node system-node--${module.key}`} href={module.href}>
+        <SystemIcon name={module.icon} />
+        <div>
+          <strong>{module.title}</strong>
+          <em>{module.meta}</em>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <small><i></i>{module.state}</small>
+      </a>
+    ))}
+
+    <div class="system-map__dock">
+      {telemetry.map((item) => (
+        <a href={item.href}>
+          <span>{item.label}</span>
+          <strong>{item.value}</strong>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

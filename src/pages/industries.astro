@@ -1,8 +1,45 @@
 ---
 import CardGrid from "@/components/CardGrid.astro";
 import PageHero from "@/components/PageHero.astro";
+import SystemIcon from "@/components/SystemIcon.astro";
 import Layout from "@/layouts/Layout.astro";
 import { industries } from "@/data/site";
+import { collectionHeroVisual } from "@/data/hero";
+
+const priorityIndustries = [
+  {
+    title: "Service businesses",
+    href: "/industries/service-businesses/",
+    icon: "lead",
+    signal: "Demand",
+    systems: ["Lead automation", "CRM flow", "Local landing pages"],
+    output: "Faster qualified requests"
+  },
+  {
+    title: "E-commerce",
+    href: "/industries/ecommerce/",
+    icon: "commerce",
+    signal: "Catalog",
+    systems: ["Catalog data", "Feeds", "Monitoring"],
+    output: "Cleaner product operations"
+  },
+  {
+    title: "Media and content",
+    href: "/industries/media-content-projects/",
+    icon: "media",
+    signal: "Production",
+    systems: ["Editorial workflow", "Publishing pipeline", "Media automation"],
+    output: "Repeatable production"
+  },
+  {
+    title: "SaaS / MVP",
+    href: "/industries/saas-mvp/",
+    icon: "product",
+    signal: "Product",
+    systems: ["MVP", "Dashboard", "Portal"],
+    output: "Launchable product layer"
+  }
+];
 ---
 
 <Layout title="Industries | AlfaRank">
@@ -12,14 +49,62 @@ import { industries } from "@/data/site";
     text="AlfaRank systems can be adapted to different industries when the business needs structured web platforms, automation, content infrastructure, integrations, or monitoring."
     primaryHref="/start-project/"
     primaryLabel="Start a Project"
+    visual={collectionHeroVisual(industries, {
+      mode: "industries",
+      icon: "map",
+      label: "Industry map",
+      state: "Market contexts mapped",
+      output: "Service, commerce, media, travel, local, SaaS, agency, data-heavy workflows",
+      primaryMetric: "Industries",
+      secondaryMetric: "Fit map"
+    })}
   />
 
+  <section class="section industry-priority">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Priority industry routes</p>
+        <h2>Start with the business model, then map the system.</h2>
+      </div>
+      <p>The strongest industry pages translate repeated business needs into concrete system patterns: lead flow, catalog operations, publishing, product interfaces, monitoring, and integrations.</p>
+    </div>
+
+    <div class="growth-signal-funnel">
+      <article class="growth-signal-funnel__core">
+        <SystemIcon name="map" />
+        <span>Growth signal funnel</span>
+        <strong>Market context becomes system scope.</strong>
+        <p>Every industry route is treated as a live business signal: demand, catalog, content, product, data, and operational pressure.</p>
+      </article>
+      {priorityIndustries.map((industry, index) => (
+        <a class:list={["industry-route", `industry-route--${index + 1}`]} href={industry.href}>
+          <SystemIcon name={industry.icon} />
+          <span>{industry.signal}</span>
+          <div>
+            <h3>{industry.title}</h3>
+            <ul>
+              {industry.systems.map((system) => <li>{system}</li>)}
+            </ul>
+          </div>
+          <small>{industry.output}</small>
+        </a>
+      ))}
+    </div>
+  </section>
+
   <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Industry catalog</p>
+        <h2>All current industry contexts</h2>
+      </div>
+      <p>Each industry now has a profile page with system fit, likely build paths, and a project intake route.</p>
+    </div>
     <CardGrid items={industries.map((item) => ({
       title: item.title,
       icon: item.icon,
       summary: item.summary,
-      href: "/start-project/"
+      href: `/industries/${item.slug}/`
     }))} />
   </section>
 </Layout>

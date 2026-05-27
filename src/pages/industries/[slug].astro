@@ -1,0 +1,226 @@
+---
+import PageHero from "@/components/PageHero.astro";
+import SystemIcon from "@/components/SystemIcon.astro";
+import Layout from "@/layouts/Layout.astro";
+import { capabilities, industries, solutions, systems } from "@/data/site";
+
+export function getStaticPaths() {
+  return industries.map((item) => ({
+    params: { slug: item.slug },
+    props: { item }
+  }));
+}
+
+const { item } = Astro.props;
+
+const industryMap: Record<string, {
+  needs: string[];
+  capabilitySlugs: string[];
+  solutionSlugs: string[];
+  systemSlugs: string[];
+}> = {
+  "service-businesses": {
+    needs: ["Lead capture and routing", "CRM follow-up", "Local/service landing infrastructure", "Operational dashboards"],
+    capabilitySlugs: ["ai-automation", "web-product-development", "wordpress-api-integrations"],
+    solutionSlugs: ["automate-lead-processing", "upgrade-existing-website", "build-internal-tools"],
+    systemSlugs: ["wordpress-tools", "data-audit-ranking-systems"]
+  },
+  ecommerce: {
+    needs: ["Catalog data quality", "Feeds and marketplace sync", "Stock and pricing monitoring", "Product/category content"],
+    capabilitySlugs: ["ecommerce-systems", "data-systems-scraping", "seo-content-infrastructure"],
+    solutionSlugs: ["build-data-monitoring-system", "scale-seo-infrastructure", "upgrade-existing-website"],
+    systemSlugs: ["ecommerce-system", "data-audit-ranking-systems"]
+  },
+  "media-content-projects": {
+    needs: ["Editorial workflow", "AI-assisted drafts", "Media asset preparation", "Publishing and monitoring"],
+    capabilitySlugs: ["seo-content-infrastructure", "video-media-automation", "ai-automation"],
+    solutionSlugs: ["generate-more-content", "scale-seo-infrastructure", "build-internal-tools"],
+    systemSlugs: ["content-automation-workflows", "sova-vidorix"]
+  },
+  travel: {
+    needs: ["Destination data", "Availability or catalog structures", "Programmatic SEO pages", "Monitoring and scraping"],
+    capabilitySlugs: ["data-systems-scraping", "seo-content-infrastructure", "web-product-development"],
+    solutionSlugs: ["build-data-monitoring-system", "scale-seo-infrastructure", "upgrade-existing-website"],
+    systemSlugs: ["data-audit-ranking-systems", "content-automation-workflows"]
+  },
+  "local-business": {
+    needs: ["Local landing pages", "Lead flow", "Review and ranking signals", "Website and CRM connections"],
+    capabilitySlugs: ["web-product-development", "wordpress-api-integrations", "seo-content-infrastructure"],
+    solutionSlugs: ["automate-lead-processing", "upgrade-existing-website", "scale-seo-infrastructure"],
+    systemSlugs: ["wordpress-tools", "data-audit-ranking-systems"]
+  },
+  "saas-mvp": {
+    needs: ["MVP scope", "Product interface", "Dashboard and admin tools", "Data and integration model"],
+    capabilitySlugs: ["web-product-development", "ai-automation", "data-systems-scraping"],
+    solutionSlugs: ["launch-digital-product", "build-internal-tools", "build-data-monitoring-system"],
+    systemSlugs: ["whitespace", "data-audit-ranking-systems"]
+  },
+  agencies: {
+    needs: ["White-label reporting", "Client dashboards", "Content production systems", "Internal workflow tooling"],
+    capabilitySlugs: ["data-systems-scraping", "seo-content-infrastructure", "web-product-development"],
+    solutionSlugs: ["build-internal-tools", "generate-more-content", "build-data-monitoring-system"],
+    systemSlugs: ["content-automation-workflows", "data-audit-ranking-systems"]
+  },
+  "data-heavy-businesses": {
+    needs: ["Data collection", "Normalization and scoring", "Monitoring and alerts", "Reports and exports"],
+    capabilitySlugs: ["data-systems-scraping", "ai-automation", "web-product-development"],
+    solutionSlugs: ["build-data-monitoring-system", "build-internal-tools", "launch-digital-product"],
+    systemSlugs: ["data-audit-ranking-systems", "whitespace"]
+  }
+};
+
+const profile = industryMap[item.slug] ?? industryMap["service-businesses"];
+const capabilityLinks = profile.capabilitySlugs
+  .map((slug) => capabilities.find((entry) => entry.slug === slug))
+  .filter((entry): entry is (typeof capabilities)[number] => Boolean(entry));
+const solutionLinks = profile.solutionSlugs
+  .map((slug) => solutions.find((entry) => entry.slug === slug))
+  .filter((entry): entry is (typeof solutions)[number] => Boolean(entry));
+const systemLinks = profile.systemSlugs
+  .map((slug) => systems.find((entry) => entry.slug === slug))
+  .filter((entry): entry is (typeof systems)[number] => Boolean(entry));
+
+const visual = {
+  mode: "industries",
+  icon: item.icon,
+  label: item.title,
+  state: "Industry fit mapped",
+  output: item.summary,
+  nodes: profile.needs.slice(0, 4).map((need, index) => ({
+    title: need,
+    icon: ["lead", "flow", "data", "ranking"][index],
+    state: ["Need", "Workflow", "Signal", "Output"][index],
+    detail: "Industry system",
+    meter: `${72 + index * 6}%`
+  })),
+  metrics: [
+    { value: String(profile.needs.length).padStart(2, "0"), label: "Needs" },
+    { value: String(capabilityLinks.length).padStart(2, "0"), label: "Capabilities" },
+    { value: String(solutionLinks.length).padStart(2, "0"), label: "Solutions" }
+  ]
+};
+
+const industryLeadPlan = [
+  {
+    title: "Landing angle",
+    text: `Start from ${profile.needs[0].toLowerCase()} and show how it becomes a managed digital system.`
+  },
+  {
+    title: "Offer route",
+    text: solutionLinks[0]
+      ? `Use ${solutionLinks[0].title} as the first commercial solution route.`
+      : "Use the strongest repeated workflow as the first commercial solution route."
+  },
+  {
+    title: "Proof signals",
+    text: `Make ${profile.needs.slice(0, 3).join(", ").toLowerCase()} measurable instead of implied.`
+  }
+];
+
+const industryIntakeHref = `/start-project/?offer=industry-${item.slug}&landing_page=/industries/${item.slug}/`;
+const industryLowerTitle = item.title.toLowerCase();
+const primaryNeed = profile.needs[0].toLowerCase();
+const secondaryNeed = (profile.needs[1] ?? profile.needs[0]).toLowerCase();
+---
+
+<Layout title={`${item.title} | AlfaRank Industries`} description={item.summary}>
+  <PageHero
+    eyebrow="Industry profile"
+    title={item.title}
+    text={item.summary}
+    primaryHref={industryIntakeHref}
+    primaryLabel="Start a Project"
+    secondaryHref="/industries/"
+    secondaryLabel="All Industries"
+    visual={visual}
+  />
+
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">System fit</p>
+        <h2>Where {industryLowerTitle} systems usually start</h2>
+      </div>
+      <p>For {item.title}, the page needs to make {primaryNeed}, {secondaryNeed}, and the first measurable operating layer obvious before a visitor asks for scope.</p>
+    </div>
+
+    <div class:list={["industry-detail-funnel", "ar-system-block", `industry-detail-funnel--${item.slug}`]}>
+      <article class="industry-detail-funnel__core ar-system-core">
+        <SystemIcon name={item.icon} />
+        <span>Industry system core</span>
+        <strong>{item.title}</strong>
+        <p>Start with the repeated pressure in {industryLowerTitle}, then shape it into a buildable workflow, data model, and intake path.</p>
+        <a class="button secondary" href={industryIntakeHref}>Scope an industry system</a>
+      </article>
+
+      {profile.needs.map((need, index) => (
+        <article class:list={["industry-need-node", "ar-system-node", `industry-need-node--${index + 1}`]} style={`--ar-level: ${72 + index * 6}%;`}>
+          <SystemIcon name={["lead", "flow", "data", "ranking"][index] ?? "tools"} />
+          <span>{["Need", "Workflow", "Signal", "Output"][index] ?? "Fit"}</span>
+          <h3>{need}</h3>
+          <p>Make {need.toLowerCase()} visible enough to scope, assign, automate, or measure.</p>
+          <b class="ar-metric-bar"></b>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class:list={["industry-route-console", "ar-system-block", `industry-route-console--${item.slug}`]}>
+      <article class="industry-route-console__core ar-system-core">
+        <SystemIcon name="flow" />
+        <span>Route console</span>
+        <strong>{item.title} pressure to build path</strong>
+        <p>Route {primaryNeed} into the capabilities, solution pages, and reusable profiles that make sense for this market.</p>
+      </article>
+    <article class="industry-route-panel ar-system-panel">
+      <SystemIcon name="tools" />
+      <h2>{item.title} capabilities</h2>
+      <div class="tag-grid">
+        {capabilityLinks.map((entry) => <a class="tag" href={`/capabilities/${entry.slug}/`}>{entry.title}</a>)}
+      </div>
+    </article>
+    <article class="industry-route-panel ar-system-panel">
+      <SystemIcon name="flow" />
+      <h2>Solution routes for {industryLowerTitle}</h2>
+      <div class="tag-grid">
+        {solutionLinks.map((entry) => <a class="tag" href={`/solutions/${entry.slug}/`}>{entry.title}</a>)}
+      </div>
+    </article>
+    <article class="industry-route-panel ar-system-panel">
+      <SystemIcon name="product" />
+      <h2>System profiles for {industryLowerTitle}</h2>
+      <div class="tag-grid">
+        {systemLinks.map((entry) => <a class="tag" href={`/systems/${entry.slug}/`}>{entry.title}</a>)}
+      </div>
+    </article>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="industry-growth-title">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Landing-page development</p>
+        <h2 id="industry-growth-title">How {industryLowerTitle} traffic becomes scoped demand</h2>
+      </div>
+      <p>This page should turn {primaryNeed} and related system routes into a clear reason to request the first working version, whether the visitor comes from ads, search, or outreach.</p>
+    </div>
+    <div class:list={["industry-offer-engine", "ar-system-block", `industry-offer-engine--${item.slug}`]}>
+      {industryLeadPlan.map((signal, index) => (
+        <article class:list={["industry-offer-signal", "ar-system-node", `industry-offer-signal--${index + 1}`]}>
+          <SystemIcon name={["lens", "flow", "ranking"][index] ?? item.icon} />
+          <span>{signal.title}</span>
+          <h3>{index === 0 ? "Angle" : index === 1 ? "Route" : "Evidence"}</h3>
+          <p>{signal.text}</p>
+        </article>
+      ))}
+      <article class="industry-offer-cta ar-system-core">
+        <SystemIcon name={item.icon} />
+        <span>Next conversion step</span>
+        <strong>Scope the first {industryLowerTitle} system.</strong>
+        <p>Describe the current {primaryNeed} workflow and the result that should become visible first.</p>
+        <a class="button primary" href={industryIntakeHref}>Scope Industry System</a>
+      </article>
+    </div>
+  </section>
+</Layout>

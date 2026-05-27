@@ -1,8 +1,11 @@
 ---
-import CardGrid from "@/components/CardGrid.astro";
 import PageHero from "@/components/PageHero.astro";
+import SystemIcon from "@/components/SystemIcon.astro";
 import Layout from "@/layouts/Layout.astro";
 import { systems } from "@/data/site";
+import { collectionHeroVisual } from "@/data/hero";
+
+const systemSignals = ["Profile", "Modules", "Workflow", "Output", "Scope", "Launch"];
 ---
 
 <Layout title="Systems | AlfaRank">
@@ -12,14 +15,36 @@ import { systems } from "@/data/site";
     text="This section is structured around systems, modules, workflows, outputs, and implementation logic instead of a generic portfolio grid."
     primaryHref="/start-project/"
     primaryLabel="Start a Project"
+    visual={collectionHeroVisual(systems, {
+      mode: "systems",
+      icon: "product",
+      label: "System profiles",
+      state: "Reusable patterns online",
+      output: "Profiles, modules, workflows, outputs, implementation logic",
+      primaryMetric: "Profiles",
+      secondaryMetric: "Reuse"
+    })}
   />
 
   <section class="section">
-    <CardGrid items={systems.map((item) => ({
-      title: item.title,
-      icon: item.icon,
-      summary: item.summary,
-      href: `/systems/${item.slug}/`
-    }))} />
+    <div class="systems-navigation-console ar-system-block">
+      <article class="systems-navigation-console__core ar-system-core">
+        <SystemIcon name="product" />
+        <span>System profile library</span>
+        <strong>{systems.length} reusable patterns</strong>
+        <p>Each profile shows modules, workflow, output, and how the pattern can become a scoped implementation path.</p>
+        <a class="systems-navigation-console__cta button secondary" href="/start-project/?offer=system-profile-library&amp;landing_page=/systems/">Scope a system</a>
+      </article>
+
+      {systems.map((item, index) => (
+        <a class:list={["systems-navigation-node", "ar-system-node", `systems-navigation-node--${index + 1}`]} href={`/systems/${item.slug}/`} style={`--ar-level: ${72 + index * 4}%;`}>
+          <SystemIcon name={item.icon} />
+          <span>{systemSignals[index] ?? "System"}</span>
+          <h3>{item.title}</h3>
+          <p>{item.summary}</p>
+          <b class="ar-metric-bar"></b>
+        </a>
+      ))}
+    </div>
   </section>
 </Layout>
