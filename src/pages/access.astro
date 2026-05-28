@@ -12,6 +12,11 @@ type Props = {
 const { locale = "en" } = Astro.props;
 const ui = privateUi[locale];
 const fallbackNext = localizePath("/projects/", locale);
+const accessTags = {
+  en: ["HttpOnly cookie", "No public sitemap", "Noindex"],
+  ro: ["Cookie HttpOnly", "Fara sitemap public", "Fara indexare"],
+  ru: ["Защищенная сессия", "Нет в публичной карте сайта", "Индексация закрыта"]
+}[locale];
 
 const accessVisual = {
   mode: "private-access",
@@ -26,7 +31,7 @@ const accessVisual = {
   ],
   metrics: [
     { value: "01", label: ui.code },
-    { value: "Lock", label: ui.access },
+    { value: ui.access, label: ui.access },
     { value: "3", label: ui.languages }
   ]
 };
@@ -58,9 +63,7 @@ const accessVisual = {
         <h2>{ui.privateProjects}</h2>
         <p>{ui.accessHint}</p>
         <div class="tag-grid">
-          <span class="tag">HttpOnly cookie</span>
-          <span class="tag">No public sitemap</span>
-          <span class="tag">Noindex</span>
+          {accessTags.map((tag) => <span class="tag">{tag}</span>)}
         </div>
       </article>
     </section>

@@ -30,7 +30,7 @@ const projectHeroVisual = {
   metrics: [
     { value: String(projects.length).padStart(2, "0"), label: ui.privateProjects },
     { value: String(projects.reduce((total, project) => total + project.modules.length, 0)).padStart(2, "0"), label: ui.modules },
-    { value: "Lock", label: ui.access }
+    { value: ui.access, label: ui.access }
   ]
 };
 ---
