@@ -2,24 +2,51 @@
 import LiquidBackground from "@/components/LiquidBackground.astro";
 import SiteFooter from "@/components/SiteFooter.astro";
 import SiteHeader from "@/components/SiteHeader.astro";
+import {
+  alternatePaths,
+  getClientTranslations,
+  localeFromPath,
+  localeOg,
+  localizePath,
+  stripLocaleFromPath,
+  t,
+  translateCopy
+} from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
 import "@/styles/global.css";
 
 type Props = {
   title?: string;
   description?: string;
   image?: string;
+  locale?: Locale;
+  robots?: string;
 };
 
 const {
-  title = "AlfaRank | Digital Systems Company",
-  description = "AlfaRank designs and launches digital systems for business operations, content infrastructure, automation, and growth.",
-  image = "/og-image.svg"
+  locale = localeFromPath(Astro.url.pathname),
+  title = t(locale, "defaultTitle"),
+  description = t(locale, "defaultDescription"),
+  image = "/og-image.svg",
+  robots = "index, follow"
 } = Astro.props;
 
 const siteUrl = Astro.site ?? new URL("https://alfarank.com");
-const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
+const basePath = stripLocaleFromPath(Astro.url.pathname);
+const canonicalPath = localizePath(basePath, locale);
+const canonicalUrl = new URL(canonicalPath, siteUrl).toString();
 const imageUrl = new URL(image, siteUrl).toString();
 const baseUrl = siteUrl.toString().replace(/\/$/, "");
+const pageTitle = title
+  .split(" | ")
+  .map((part) => translateCopy(locale, part))
+  .join(" | ");
+const pageDescription = translateCopy(locale, description);
+const alternates = alternatePaths(basePath).map((entry) => ({
+  ...entry,
+  href: new URL(entry.href, siteUrl).toString()
+}));
+const clientTranslations = JSON.stringify(getClientTranslations(locale));
 const structuredData = JSON.stringify([
   {
     "@context": "https://schema.org",
@@ -27,55 +54,1444 @@ const structuredData = JSON.stringify([
     name: "AlfaRank",
     url: baseUrl,
     logo: new URL("/og-image.svg", siteUrl).toString(),
-    description
+    description: pageDescription
   },
   {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "AlfaRank",
     url: baseUrl,
-    description
+    description: pageDescription
   }
 ]);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={locale}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={description} />
-    <meta name="robots" content="index, follow" />
+    <meta name="description" content={pageDescription} />
+    <meta name="robots" content={robots} />
     <link rel="canonical" href={canonicalUrl} />
+    {alternates.map((entry) => <link rel="alternate" hreflang={entry.locale} href={entry.href} />)}
+    <link rel="alternate" hreflang="x-default" href={new URL(basePath, siteUrl).toString()} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta property="og:site_name" content="AlfaRank" />
-    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale" content={localeOg[locale]} />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={imageUrl} />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
     <meta name="twitter:image" content={imageUrl} />
     <script is:inline type="application/ld+json" set:html={structuredData}></script>
-    <title>{title}</title>
+    <script is:inline type="application/json" id="alfarank-translations" set:html={clientTranslations}></script>
+    <title>{pageTitle}</title>
   </head>
   <body>
     <LiquidBackground />
     <div class="site-shell">
-      <SiteHeader />
+      <SiteHeader locale={locale} />
       <main>
         <slot />
       </main>
-      <SiteFooter />
+      <SiteFooter locale={locale} />
     </div>
     <script is:inline>
       (() => {
+        const pageLocale = document.documentElement.lang;
+        const runtimeTranslations = (() => {
+          try {
+            return JSON.parse(document.getElementById("alfarank-translations")?.textContent || "{}");
+          } catch {
+            return {};
+          }
+        })();
+
+        const ruExactFallback = {
+          "4 modules mapped": "4 модуля на карте",
+          "4 connected modules": "4 связанных модуля",
+          "4 build modules": "4 модуля сборки",
+          "Scope This Solution": "Запросить это решение",
+          "Scope This System": "Запросить эту систему",
+          "Scope this solution": "Запросить это решение",
+          "Scope this capability": "Запросить эту возможность",
+          "Scope first build": "Описать первую сборку",
+          "See related route": "Смотреть связанный маршрут",
+          "Send Request": "Отправить заявку",
+          "Ask for this system": "Запросить эту систему",
+          "What is happening now?": "Что происходит сейчас?",
+          "What should the system make visible or faster?": "Что система должна сделать видимым или быстрее?",
+          "Who this page should convert": "Кого должна конвертировать эта страница",
+          "System offer": "Системный оффер",
+          "System engine": "Системный двигатель",
+          "Paid traffic brief": "Бриф для рекламного трафика",
+          Before: "До",
+          After: "После",
+          "Signals to show": "Сигналы, которые нужно показать",
+          "Problem pressure": "Давление проблемы",
+          "Solution engine": "Двигатель решения",
+          "Solution pattern": "Паттерн решения",
+          "Prototype first": "Сначала прототип",
+          "Integrated build": "Интегрированная сборка",
+          "Operating layer": "Операционный слой",
+          "Operating output": "Операционный результат",
+          "Campaign trigger": "Триггер кампании",
+          "Landing-page promise": "Обещание посадочной страницы",
+          "Proof to collect": "Доказательства для сбора",
+          Trigger: "Триггер",
+          Promise: "Обещание",
+          "Related solutions": "Связанные решения",
+          "Build rail": "Рельс сборки",
+          "Input layer": "Входной слой",
+          "Workflow modules": "Модули процесса",
+          "Automation layer": "Слой автоматизации",
+          "Output layer": "Слой результата",
+          "Module console": "Консоль модулей",
+          "Module map": "Карта модулей",
+          "How the system operates": "Как работает система",
+          "Where this system pattern applies": "Где применяется этот системный паттерн",
+          "System architecture": "Архитектура системы",
+          "Related areas": "Связанные направления",
+          Module: "Модуль",
+          Modules: "Модули",
+          Control: "Контроль",
+          Connect: "Подключение",
+          Signal: "Сигнал",
+          Live: "Активно",
+          Operate: "Работа",
+          Publish: "Публикация",
+          Capture: "Захват",
+          Process: "Процесс",
+          Monitor: "Мониторинг",
+          Sync: "Синхронизация",
+          Review: "Проверка",
+          Travel: "Туризм",
+          "Decision-ready reports": "Отчеты для решений",
+          "Audit system": "Система аудита",
+          "Custom WordPress platform": "Кастомная WordPress-платформа",
+          "Repeatable content production": "Повторяемое производство контента",
+          "Structured workflow": "Структурированный процесс",
+          "Product data model": "Модель продуктовых данных",
+          "Custom content structures": "Кастомные структуры контента",
+          "Topic and data inputs": "Темы и входные данные",
+          "Automation tools": "Инструменты автоматизации",
+          "Data processing": "Обработка данных",
+          "Video generation": "Генерация видео",
+          "CRM integrations": "CRM-интеграции",
+          "AI models": "AI-модели",
+          Analytics: "Аналитика",
+          Scraping: "Сбор данных",
+          "Web platforms": "Веб-платформы",
+          "WordPress tools": "Инструменты WordPress",
+          "Data/audit/ranking systems": "Системы данных, аудита и ранжирования",
+          "Data/Audit/Ranking Systems": "Системы данных, аудита и ранжирования",
+          "Data systems и scraping": "Системы данных и сбор данных",
+          "Data Systems & Scraping": "Системы данных и сбор данных",
+          "Видео и media automation": "Видео и медиа-автоматизация",
+          "Video & Media Automation": "Видео и медиа-автоматизация",
+          "Workflow автоматизации контента": "Процессы автоматизации контента",
+          "Content Automation Workflows": "Процессы автоматизации контента",
+          "Data/monitoring система": "Система данных и мониторинга",
+          "Build a Data/Monitoring System": "Система данных и мониторинга",
+          "Next conversion step": "Следующий шаг конверсии",
+          "Следующий conversion step": "Следующий шаг конверсии",
+          "Scope a system": "Запросить систему",
+          "Scope Industry System": "Запросить систему для индустрии",
+          "Scope an industry system": "Запросить систему для индустрии",
+          "Route console": "Консоль маршрутов",
+          "Industry system core": "Ядро индустриальной системы",
+          "Landing angle": "Угол посадочной страницы",
+          "Offer route": "Маршрут оффера",
+          "Proof signals": "Сигналы доказательства",
+          Angle: "Угол",
+          Route: "Маршрут",
+          Evidence: "Доказательства"
+        };
+
+        const ruPhraseFallback = [
+          [/^(.+) as an operating system$/i, "$1 как операционная система"],
+          [/^(\d+) modules mapped$/i, "$1 модуля на карте"],
+          [/^(\d+) connected modules$/i, "$1 связанных модуля"],
+          [/^(\d+) build modules$/i, "$1 модуля сборки"],
+          [/^System profiles for (.+)$/i, "Профили систем для $1"],
+          [/^Solution routes for (.+)$/i, "Маршруты решений для $1"],
+          [/^(.+) capabilities$/i, "Возможности для $1"],
+          [/^Where (.+) systems usually start$/i, "Где обычно начинаются системы для $1"],
+          [/^For (.+), the page needs to make (.+) obvious before a visitor asks for scope\.$/i, "Для $1 страница должна сделать $2 очевидным до запроса объема работ."],
+          [/^Start with (.+), then shape the system, modules, integration points, and proof that make (.+) visible\.$/i, "Начните с $1, затем соберите систему, модули, точки интеграции и доказательства, которые делают $2 видимым."],
+          [/^Validate (.+) with one working path: input, state, output, and user review\.$/i, "Проверьте $1 на одном рабочем маршруте: вход, состояние, результат и пользовательская проверка."],
+          [/^Connect the (.+) layer to the site, CMS, CRM, APIs, database, analytics, or internal tools that already matter\.$/i, "Подключите слой $1 к сайту, CMS, CRM, API, базе данных, аналитике или внутренним инструментам, которые уже важны."],
+          [/^Add visibility around (.+): dashboards, alerts, QA, reporting, ownership, and improvement loops for daily use\.$/i, "Добавьте видимость вокруг $1: панели, уведомления, QA, отчетность, ответственность и циклы улучшения для ежедневной работы."],
+          [/^Turn this into a visible system output: (.+)\.$/i, "Превратите это в видимый системный результат: $1."],
+          [/^Send the current process, tools, and expected (.+) so this can become a first working system\.$/i, "Отправьте текущий процесс, инструменты и ожидаемый результат $1, чтобы это стало первой рабочей системой."],
+          [/^The build can start as a narrow proof, a connected workflow, or a fuller operating layer depending on how mature the current process is\.$/i, "Сборка может начаться как узкое доказательство, связанный процесс или полноценный операционный слой, в зависимости от зрелости текущего процесса."],
+          [/^The page should make the before-and-after clear enough that a visitor can ask for the first version without decoding the whole technical stack\.$/i, "Страница должна ясно показать состояние до и после, чтобы посетитель мог запросить первую версию без расшифровки всего технического стека."],
+          [/^Inputs, modules, automation, and outputs in one operating model\.$/i, "Входные данные, модули, автоматизация и результаты в одной операционной модели."],
+          [/^This template shows how every system profile is meant to be read: what enters the system, what happens inside it, what gets automated, and what business output appears\.$/i, "Этот шаблон показывает, как читать каждый профиль системы: что входит в систему, что происходит внутри, что автоматизируется и какой бизнес-результат появляется."],
+          [/^What the system needs before work can happen\.$/i, "Что нужно системе до начала работы."],
+          [/^The operational blocks that turn inputs into useful movement\.$/i, "Операционные блоки, которые превращают входные данные в полезное движение."],
+          [/^Rules, review states, integrations, and repeatable actions\.$/i, "Правила, состояния проверки, интеграции и повторяемые действия."],
+          [/^The visible result that makes the system worth building\.$/i, "Видимый результат, ради которого систему стоит строить."],
+          [/^Each module is a buildable part of the system, not a loose feature idea\. The modules define what has to exist for the workflow to operate\.$/i, "Каждый модуль - собираемая часть системы, а не свободная идея функции. Модули определяют, что должно существовать, чтобы процесс работал."],
+          [/^Modules define the working parts of the system: what receives input, what processes it, and what produces output\.$/i, "Модули определяют рабочие части системы: что принимает вход, что его обрабатывает и что выдает результат."],
+          [/^The profile describes the operational flow: inputs, processing, review, integrations, publishing, reporting, or output delivery\.$/i, "Профиль описывает операционный поток: входные данные, обработку, проверку, интеграции, публикацию, отчетность или доставку результата."],
+          [/^The same architecture can be adapted to different business contexts when the workflow, data, and output requirements are clear\.$/i, "Ту же архитектуру можно адаптировать под разные бизнес-контексты, когда понятны процесс, данные и требования к результату."],
+          [/^System profiles are designed to connect back into capabilities and solutions, so the profile can become a scoped implementation path instead of a standalone case note\.$/i, "Профили систем связаны с возможностями и решениями, поэтому профиль может стать конкретным маршрутом реализации, а не отдельной заметкой."],
+          [/^A focused landing offer for companies that receive website, ad, or referral leads and need faster qualification, routing, follow-up, and source visibility\.$/i, "Сфокусированный посадочный оффер для компаний, которые получают лиды с сайта, рекламы или рекомендаций и нуждаются в быстрой квалификации, маршрутизации, последующих действиях и видимости источника."],
+          [/^A landing offer for companies that need more content, product pages, guides, briefs, or media drafts without turning publishing into a quality problem\.$/i, "Посадочный оффер для компаний, которым нужно больше контента, продуктовых страниц, гайдов, брифов или медиа-черновиков без потери качества публикации."],
+          [/^A landing offer for stores and catalog businesses that need cleaner product data, feed workflows, stock or price monitoring, and operational reporting\.$/i, "Посадочный оффер для магазинов и каталоговых бизнесов, которым нужны более чистые продуктовые данные, процессы фидов, мониторинг остатков или цен и операционная отчетность."],
+          [/^A landing offer for businesses that rely on WordPress but need it to act like a connected operating layer instead of a fragile plugin stack\.$/i, "Посадочный оффер для бизнесов на WordPress, которым нужен связанный операционный слой вместо хрупкого набора плагинов."],
+          [/^Turn every serious request into a qualified, routed, visible lead before the first response window closes\.$/i, "Превратите каждый серьезный запрос в квалифицированный, маршрутизированный и видимый лид до закрытия окна первого ответа."],
+          [/^Use this route when paid search, referrals, or website forms already create requests but the team reacts too slowly\.$/i, "Используйте этот маршрут, когда платный поиск, рекомендации или формы сайта уже дают заявки, но команда реагирует слишком медленно."],
+          [/^Make WordPress behave like a controlled workflow layer instead of a fragile stack of plugins\.$/i, "Заставьте WordPress работать как контролируемый процессный слой вместо хрупкого набора плагинов."],
+          [/^Turn catalog data, feeds, and monitoring into one operating layer the team can trust\.$/i, "Превратите данные каталога, фиды и мониторинг в единый операционный слой, которому команда может доверять."],
+          [/^Use this route when catalog updates, feeds, marketplace data, or product checks keep creating manual operations work\.$/i, "Используйте этот маршрут, когда обновления каталога, фиды, данные маркетплейсов или проверки товаров постоянно создают ручную операционную работу."]
+        ];
+
+        const ruTermFallback = {
+          "data workflow": "процессы данных",
+          "data workflows": "процессы данных",
+          "data tools": "инструменты данных",
+          workflow: "процесс",
+          workflows: "процессы",
+          "business-workflow": "бизнес-процесс",
+          dashboard: "панель",
+          dashboards: "панели",
+          publishing: "публикация",
+          "publishing tools": "инструменты публикации",
+          "publishing workflow": "процесс публикации",
+          "media automation": "медиа-автоматизация",
+          "media workflow": "медиа-процесс",
+          "production workflow": "производственный процесс",
+          production: "производство",
+          "review workflow": "процесс проверки",
+          review: "проверка",
+          enrichment: "обогащение",
+          scoring: "оценка",
+          routing: "маршрутизация",
+          "follow-up": "последующие действия",
+          "lead workflow": "процесс лидов",
+          "lead automation": "автоматизация лидов",
+          "lead systems": "системы лидов",
+          "lead flow": "поток лидов",
+          "CRM flow": "CRM-поток",
+          custom: "кастомные",
+          "admin utilities": "админ-инструменты",
+          "admin tools": "админ-инструменты",
+          "product content": "продуктовый контент",
+          pricing: "цены",
+          availability: "доступность",
+          "destination data": "данные направлений",
+          "reporting automation": "автоматизация отчетности",
+          "content production": "производство контента",
+          "internal tooling": "внутренние инструменты",
+          "onboarding flows": "онбординг-процессы",
+          "data models": "модели данных",
+          "organic growth": "органический рост",
+          "conversion paths": "маршруты конверсии",
+          "data structures": "структуры данных",
+          "scoring entities": "оценки сущностей",
+          assets: "ассетов",
+          asset: "ассет",
+          ranking: "ранжирование",
+          "review/data workflow": "процесс проверки и данных",
+          "white-label": "брендируемые",
+          "White-label": "Брендируемые",
+          landing: "посадочная",
+          "landing page": "посадочная страница",
+          "Landing page": "Посадочная страница",
+          outreach: "исходящей коммуникации",
+          live: "активная",
+          engine: "двигатель",
+          Integrations: "Интеграции",
+          Leads: "Лиды",
+          profiles: "профили",
+          "Manual workflow": "Ручной процесс",
+          "Automation flow": "Поток автоматизации",
+          "Website / product layer": "Сайт / продуктовый слой",
+          "Publishing engine": "Двигатель публикации",
+          "Market signal": "Рыночный сигнал",
+          "Catalog operations": "Операции каталога",
+          "Integration layer": "Слой интеграций",
+          "Launchable platform": "Запускаемая платформа",
+          "Signal dashboard": "Панель сигналов",
+          "Catalog system": "Система каталога",
+          "Connected CMS": "Связанная CMS"
+        };
+
+        const ruWordFallback = {
+          a: "",
+          an: "",
+          the: "",
+          and: "и",
+          or: "или",
+          for: "для",
+          that: "который",
+          this: "это",
+          to: "к",
+          with: "с",
+          of: "",
+          in: "в",
+          on: "на",
+          as: "как",
+          by: "через",
+          from: "из",
+          into: "в",
+          is: "",
+          are: "",
+          be: "быть",
+          can: "может",
+          should: "должен",
+          not: "не",
+          than: "чем",
+          rather: "вместо",
+          without: "без",
+          but: "но",
+          so: "поэтому",
+          it: "это",
+          what: "что",
+          where: "где",
+          when: "когда",
+          how: "как",
+          every: "каждый",
+          each: "каждый",
+          one: "один",
+          first: "первый",
+          current: "текущий",
+          existing: "существующий",
+          real: "реальный",
+          better: "лучше",
+          useful: "полезный",
+          visible: "видимый",
+          clear: "понятный",
+          enough: "достаточно",
+          faster: "быстрее",
+          higher: "выше",
+          cleaner: "чище",
+          controlled: "контролируемый",
+          connected: "связанный",
+          structured: "структурированный",
+          repeatable: "повторяемый",
+          scalable: "масштабируемый",
+          reusable: "переиспользуемый",
+          buildable: "собираемый",
+          scoped: "ограниченный",
+          ready: "готовый",
+          launchready: "готовый к запуску",
+          decisionready: "готовый для решений",
+          businesscritical: "критичный для бизнеса",
+          integrationready: "готовый к интеграции",
+          cmsready: "готовый для CMS",
+          templatebased: "на шаблонах",
+          data: "данные",
+          product: "продукт",
+          products: "продукты",
+          content: "контент",
+          media: "медиа",
+          video: "видео",
+          business: "бизнес",
+          businesses: "бизнесы",
+          companies: "компании",
+          company: "компания",
+          service: "сервис",
+          services: "сервисы",
+          team: "команда",
+          teams: "команды",
+          user: "пользователь",
+          users: "пользователи",
+          buyer: "покупатель",
+          clients: "клиенты",
+          lead: "лид",
+          leads: "лиды",
+          request: "запрос",
+          requests: "запросы",
+          source: "источник",
+          sources: "источники",
+          input: "вход",
+          inputs: "входные данные",
+          output: "результат",
+          outputs: "результаты",
+          result: "результат",
+          results: "результаты",
+          action: "действие",
+          actions: "действия",
+          step: "шаг",
+          state: "состояние",
+          states: "состояния",
+          status: "статус",
+          owner: "ответственный",
+          ownership: "ответственность",
+          assignment: "назначение",
+          rate: "доля",
+          time: "время",
+          response: "ответ",
+          risk: "риск",
+          removed: "снят",
+          system: "система",
+          systems: "системы",
+          solution: "решение",
+          solutions: "решения",
+          capability: "возможность",
+          capabilities: "возможности",
+          profile: "профиль",
+          profiles: "профили",
+          module: "модуль",
+          modules: "модули",
+          layer: "слой",
+          layers: "слои",
+          architecture: "архитектура",
+          structure: "структура",
+          structures: "структуры",
+          model: "модель",
+          models: "модели",
+          platform: "платформа",
+          platforms: "платформы",
+          interface: "интерфейс",
+          interfaces: "интерфейсы",
+          frontend: "фронтенд",
+          backend: "бекенд",
+          website: "сайт",
+          websites: "сайты",
+          web: "веб",
+          page: "страница",
+          pages: "страницы",
+          landing: "посадочная",
+          lp: "посадочная",
+          route: "маршрут",
+          routes: "маршруты",
+          path: "маршрут",
+          paths: "маршруты",
+          flow: "поток",
+          flows: "потоки",
+          process: "процесс",
+          processes: "процессы",
+          operation: "операция",
+          operations: "операции",
+          operational: "операционный",
+          operating: "операционный",
+          automation: "автоматизация",
+          automated: "автоматизированный",
+          automations: "автоматизации",
+          connect: "подключить",
+          connects: "подключает",
+          connected: "связанный",
+          integration: "интеграция",
+          integrations: "интеграции",
+          handoff: "передача",
+          api: "API",
+          apis: "API",
+          crm: "CRM",
+          cms: "CMS",
+          database: "база данных",
+          databases: "базы данных",
+          storage: "хранилище",
+          collection: "сбор",
+          collect: "собирать",
+          normalizing: "нормализация",
+          normalization: "нормализация",
+          normalize: "нормализовать",
+          processing: "обработка",
+          process: "процесс",
+          clean: "очистка",
+          monitor: "мониторинг",
+          monitoring: "мониторинг",
+          alerts: "уведомления",
+          alerting: "уведомления",
+          export: "экспорт",
+          exports: "экспорты",
+          report: "отчет",
+          reports: "отчеты",
+          reporting: "отчетность",
+          analytics: "аналитика",
+          metric: "метрика",
+          metrics: "метрики",
+          proof: "доказательство",
+          signal: "сигнал",
+          signals: "сигналы",
+          map: "карта",
+          mapped: "на карте",
+          mapping: "картирование",
+          tracking: "отслеживание",
+          track: "отслеживать",
+          trigger: "триггер",
+          triggers: "триггеры",
+          rules: "правила",
+          logic: "логика",
+          scoring: "оценка",
+          score: "оценить",
+          ranking: "ранжирование",
+          audit: "аудит",
+          audits: "аудиты",
+          validation: "валидация",
+          validate: "проверить",
+          checks: "проверки",
+          quality: "качество",
+          qa: "QA",
+          review: "проверка",
+          reviewed: "проверяется",
+          approval: "согласование",
+          approvals: "согласования",
+          correction: "исправление",
+          corrections: "исправления",
+          manual: "ручной",
+          human: "человек",
+          fallback: "резервный сценарий",
+          launch: "запуск",
+          launched: "запущен",
+          launchable: "готовый к запуску",
+          build: "сборка",
+          built: "построенный",
+          rebuild: "пересобрать",
+          building: "сборка",
+          design: "дизайн",
+          designed: "спроектирован",
+          define: "определить",
+          shape: "сформировать",
+          create: "создать",
+          generate: "генерировать",
+          generation: "генерация",
+          draft: "черновик",
+          drafts: "черновики",
+          editorial: "редакционный",
+          topic: "тема",
+          topics: "темы",
+          keyword: "ключевое слово",
+          keywords: "ключевые слова",
+          entity: "сущность",
+          entities: "сущности",
+          template: "шаблон",
+          templates: "шаблоны",
+          metadata: "метаданные",
+          indexation: "индексация",
+          linking: "линковка",
+          organic: "органический",
+          growth: "рост",
+          performance: "эффективность",
+          catalog: "каталог",
+          catalogs: "каталоги",
+          feed: "фид",
+          feeds: "фиды",
+          stock: "остатки",
+          pricing: "цены",
+          availability: "доступность",
+          marketplace: "маркетплейс",
+          marketplaces: "маркетплейсы",
+          competitors: "конкуренты",
+          serp: "SERP",
+          serps: "SERP",
+          commerce: "коммерция",
+          ecommerce: "e-commerce",
+          ecommerce: "e-commerce",
+          store: "магазин",
+          stores: "магазины",
+          video: "видео",
+          asset: "ассет",
+          assets: "ассеты",
+          creative: "креативный",
+          distribution: "дистрибуция",
+          pipeline: "пайплайн",
+          pipelines: "пайплайны",
+          publishing: "публикация",
+          publish: "публиковать",
+          admin: "админ",
+          tool: "инструмент",
+          tools: "инструменты",
+          tooling: "инструменты",
+          internal: "внутренний",
+          portal: "портал",
+          portals: "порталы",
+          dashboard: "панель",
+          dashboards: "панели",
+          sheet: "таблица",
+          spreadsheets: "таблицы",
+          forms: "формы",
+          form: "форма",
+          email: "email",
+          notifications: "уведомления",
+          notify: "уведомить",
+          classify: "классифицировать",
+          classification: "классификация",
+          qualified: "квалифицированный",
+          qualification: "квалификация",
+          enrichment: "обогащение",
+          followup: "последующие действия",
+          intake: "прием заявки",
+          source: "источник",
+          campaign: "кампания",
+          traffic: "трафик",
+          ads: "реклама",
+          paid: "платный",
+          search: "поиск",
+          referrals: "рекомендации",
+          offer: "оффер",
+          promise: "обещание",
+          before: "до",
+          after: "после",
+          context: "контекст",
+          brief: "бриф",
+          details: "детали",
+          fields: "поля",
+          category: "категория",
+          type: "тип",
+          project: "проект",
+          expected: "ожидаемый",
+          desired: "желаемый",
+          result: "результат",
+          capacity: "емкость",
+          speed: "скорость",
+          improvement: "улучшение",
+          improve: "улучшить",
+          loops: "циклы",
+          loop: "цикл",
+          scale: "масштабировать",
+          support: "поддержка",
+          supports: "поддерживает",
+          required: "требуемый",
+          requirements: "требования",
+          starts: "начинается",
+          start: "начать",
+          add: "добавить",
+          use: "использовать",
+          make: "сделать",
+          turn: "превратить",
+          turning: "превращение",
+          convert: "конвертировать",
+          request: "запрос",
+          ask: "запросить",
+          send: "отправить",
+          see: "смотреть",
+          related: "связанный",
+          pattern: "паттерн",
+          prototype: "прототип",
+          version: "версия",
+          case: "кейс",
+          cases: "кейсы",
+          note: "заметка",
+          stack: "стек",
+          technical: "технический",
+          information: "информационная",
+          critical: "критичный",
+          fragile: "хрупкий",
+          plugin: "плагин",
+          plugins: "плагины",
+          loosely: "слабо",
+          serious: "серьезный",
+          response: "ответ",
+          window: "окно",
+          closes: "закрывается",
+          lost: "теряется",
+          slow: "медленный",
+          broken: "сломанные",
+          manual: "ручной",
+          useful: "полезный",
+          successful: "успешный",
+          local: "локальный",
+          travel: "туризм",
+          cta: "призыв",
+          whitelabel: "брендируемые",
+          dataheavy: "данные-насыщенный"
+        };
+
+        const cleanRuCopy = (value) => {
+          let result = ruExactFallback[value] || value;
+          for (const [pattern, replacement] of ruPhraseFallback) {
+            if (pattern.test(result)) {
+              result = result.replace(pattern, replacement);
+              break;
+            }
+          }
+          Object.entries(ruTermFallback)
+            .sort((a, b) => b[0].length - a[0].length)
+            .forEach(([term, replacement]) => {
+              result = result.replace(new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g"), replacement);
+            });
+          return result
+            .replace(/\bAI-workflow\b/g, "AI-процессы")
+            .replace(/\bAI-assisted\b/g, "AI-поддерживаемый")
+            .replace(/\bData-heavy\b/g, "данные-насыщенные")
+            .replace(/\bdata-heavy\b/g, "данные-насыщенные")
+            .replace(/[A-Za-z][A-Za-z.-]*/g, (word) => {
+              const suffix = word.match(/\\.{1,3}$/)?.[0] || "";
+              const normalized = word.toLowerCase().replace(/[^a-z.-]/g, "").replace(/\\.+$/, "");
+              const compact = normalized.replace(/[-.]/g, "");
+              const allowed = new Set([
+                "alfarank",
+                "ai",
+                "seo",
+                "crm",
+                "cms",
+                "api",
+                "apis",
+                "wordpress",
+                "saas",
+                "mvp",
+                "d1",
+                "post",
+                "qa",
+                "utm",
+                "html",
+                "css",
+                "url",
+                "github",
+                "cloudflare",
+                "astro",
+                "next.js"
+              ]);
+              if (allowed.has(normalized) || allowed.has(compact)) return word;
+              const replacement = ruWordFallback[normalized] || ruWordFallback[compact] || "";
+              return replacement ? `${replacement}${suffix === "..." ? "" : suffix}` : "";
+            })
+            .replace(/\s+([,.:;])/g, "$1")
+            .replace(/\s{2,}/g, " ")
+            .trim();
+        };
+
+        const roExactFallback = {
+          "Manual workflow": "Flux manual",
+          "Lead Processing": "Procesare leaduri",
+          "Web Development": "Dezvoltare web",
+          "Upgrade Website": "Modernizare site",
+          "Scale content or SEO": "Scalare continut sau SEO",
+          "Content Infrastructure": "Infrastructura de continut",
+          "Generate Content": "Genereaza continut",
+          "Publishing system": "Sistem de publicare",
+          "Monitoring System": "Sistem de monitorizare",
+          "Signal dashboard": "Dashboard de semnale",
+          "Catalog system": "Sistem de catalog",
+          "Start Project": "Porneste proiectul",
+          "Build directions online": "Directii de construire active",
+          "Build map": "Harta construirii",
+          "Automation and operations": "Automatizare si operatiuni",
+          "All build directions": "Toate directiile de construire",
+          "Choose the build zone": "Alege zona de construire",
+          "Scope the first zone": "Defineste prima zona",
+          "System profiles": "Profiluri de sistem",
+          "System profile library": "Biblioteca de profiluri de sistem",
+          "Scope a system": "Defineste un sistem",
+          "Technology is grouped by system function.": "Tehnologia este grupata dupa functia sistemului.",
+          "Tools orbit the workflow": "Instrumentele orbiteaza fluxul de lucru",
+          "CMS and publishing": "CMS si publicare",
+          "AI and automation": "AI si automatizare",
+          "Data and scraping": "Date si colectare",
+          "APIs and integrations": "API-uri si integrari",
+          "Hosting and operations": "Hosting si operatiuni",
+          "Business local": "Afaceri locale",
+          "Media and content": "Media si continut",
+          "Start a project": "Porneste un proiect",
+          "System design": "Design de sistem",
+          "Launch output": "Rezultat de lansare",
+          "Measurable output": "Rezultat masurabil",
+          "Review queue active": "Coada de review activa",
+          "Request workflow": "Fluxul solicitarii",
+          "Review, map, scope.": "Revizie, mapare, definire.",
+          "Next route": "Ruta urmatoare",
+          "Existing workflow": "Flux existent",
+          "First launch scope": "Scope pentru prima lansare",
+          "Content + publishing workflows": "Fluxuri de continut si publicare",
+          "Lead + CRM automation": "Automatizare leaduri si CRM",
+          "Human-in-the-loop control": "Control cu om in bucla",
+          "Repeatable content": "Continut repetabil",
+          "AI-assisted operating processes": "Procese operationale asistate de AI",
+          "Connected CRM, CMS, and database actions": "Actiuni conectate in CRM, CMS si baza de date",
+          "Repeatable content, lead, data, or reporting pipelines": "Pipeline-uri repetabile pentru continut, leaduri, date sau raportare",
+          "Generate more content": "Genereaza mai mult continut",
+          "Automate lead processing": "Automatizeaza procesarea leadurilor",
+          "Build internal tools": "Construieste instrumente interne",
+          "Capability system": "Sistem de capabilitate",
+          "Scope this capability": "Defineste aceasta capabilitate",
+          "Dashboards + internal tools": "Dashboarduri si instrumente interne",
+          "Operational tools": "Instrumente operationale",
+          "Content architecture": "Arhitectura de continut",
+          "Content performance layer": "Strat de performanta pentru continut",
+          "Workflow-uri editoriale": "Fluxuri editoriale",
+          "Dashboard": "Dashboard",
+          "Landing page": "Pagina de landing",
+          "PROFILES": "PROFILURI",
+          "SOLUTION PATTERN": "PATTERN DE SOLUTIE",
+          "SOLUTION ENGINE": "MOTOR DE SOLUTIE",
+          "SOLUTION ROUTER": "ROUTER DE SOLUTII",
+          "Source + signal mapping": "Mapare surse + semnale",
+          "Data source mapping": "Maparea surselor de date",
+          "Monitoring solution": "Solutie de monitorizare",
+          "Input": "Intrare",
+          "INPUT": "INTRARE",
+          "Output": "Rezultat",
+          "Scope": "Definire",
+          "Data Systems": "Sisteme de date",
+          "Automated workflows": "Fluxuri automatizate",
+          "Monitoring systems": "Sisteme de monitorizare",
+          "MONITORING SYSTEMS": "SISTEME DE MONITORIZARE",
+          "Feed systems": "Sisteme de feeduri",
+          "FEED SYSTEMS": "SISTEME DE FEEDURI",
+          "Programmatic SEO systems": "Sisteme SEO programatice",
+          "Publishing workflows": "Fluxuri de publicare",
+          "Scalable SEO systems": "Sisteme SEO scalabile",
+          "SCALABLE SEO SYSTEMS": "SISTEME SEO SCALABILE",
+          "Media workflows": "Fluxuri media",
+          "Template-based production workflows": "Fluxuri de productie pe template-uri",
+          "Connected publishing systems": "Sisteme de publicare conectate",
+          "CONNECTED PUBLISHING SYSTEMS": "SISTEME DE PUBLICARE CONECTATE",
+          "Human-in-the-loop automation for controlled output": "Automatizare cu revizie umana pentru rezultat controlat",
+          "Start automation scope": "Defineste automatizarea",
+          "FIRST SCOPE": "PRIMA DEFINIRE",
+          "Product scope + flows": "Definire produs + fluxuri",
+          "E-commerce systems": "Sisteme e-commerce",
+          "Scalable page systems": "Sisteme de pagini scalabile",
+          "SCALABLE PAGE SYSTEMS": "SISTEME DE PAGINI SCALABILE",
+          "PROBLEM ROUTES MAPPED": "RUTE DE PROBLEME MAPATE",
+          "SOLUTION ROUTES": "RUTE DE SOLUTII",
+          "The stack follows the workflow.": "Stackul urmeaza fluxul de lucru.",
+          "AlfaRank does not start with a preferred tool list. The project starts with the business process, then the stack is selected around content models, users, data sources, automation points, integrations, hosting, and measurement.": "AlfaRank nu porneste de la o lista preferata de instrumente. Proiectul porneste de la procesul de business, apoi stackul este ales in jurul modelelor de continut, utilizatorilor, surselor de date, punctelor de automatizare, integrarilor, hostingului si masurarii.",
+          "Static-first delivery when speed and reliability matter.": "Livrare static-first cand viteza si fiabilitatea conteaza.",
+          "CMS-backed publishing when teams need editorial control.": "Publicare prin CMS cand echipele au nevoie de control editorial.",
+          "API-first integration when business systems need to exchange state.": "Integrare API-first cand sistemele de business trebuie sa schimbe stari.",
+          "Data and AI layers only when the workflow has clear inputs and review logic.": "Straturi de date si AI doar cand fluxul are intrari clare si logica de revizie.",
+          "Profiles, modules, workflows, outputs, implementation logic": "Profiluri, module, fluxuri, rezultate si logica de implementare",
+          "Reusable patterns online": "Patternuri reutilizabile active",
+          "This section is structured around systems, modules, workflows, outputs, and implementation logic instead of a generic portfolio grid.": "Sectiunea este structurata in jurul sistemelor, modulelor, fluxurilor, rezultatelor si logicii de implementare, nu ca o grila generica de portofoliu.",
+          "Build the site architecture, data structures, templates, and publishing workflows needed for scalable organic growth.": "Construieste arhitectura site-ului, structurile de date, template-urile si fluxurile de publicare necesare pentru crestere organica scalabila.",
+          "WordPress and API integrations at AlfaRank treat WordPress as a business platform, not only a website CMS. The work can include custom content structures, admin tools, API connections, CRM workflows, automation, publishing systems, and operational interfaces built around WordPress.": "Integrarile WordPress si API la AlfaRank trateaza WordPress ca platforma de business, nu doar ca CMS de site. Lucrul poate include structuri custom de continut, instrumente admin, conexiuni API, fluxuri CRM, automatizare, sisteme de publicare si interfete operationale construite in jurul WordPress.",
+          "This solution is for companies that need more content without turning production into uncontrolled manual work. AlfaRank designs content systems that combine topic databases, templates, AI-assisted drafting, editorial review, media preparation, CMS publishing, and performance monitoring.": "Aceasta solutie este pentru companii care au nevoie de mai mult continut fara sa transforme productia in munca manuala necontrolata. AlfaRank proiecteaza sisteme de continut care combina baze de topicuri, template-uri, drafting asistat de AI, revizie editoriala, pregatire media, publicare CMS si monitorizare de performanta.",
+          "This solution is for companies that need to turn a business idea, internal workflow, or productized service into a working digital product. AlfaRank helps define the first launchable version, design the interface and data model, build the core system, and prepare it for real users.": "Aceasta solutie este pentru companii care trebuie sa transforme o idee de business, un flux intern sau un serviciu productizat intr-un produs digital functional. AlfaRank ajuta la definirea primei versiuni lansabile, proiectarea interfetei si modelului de date, construirea nucleului sistemului si pregatirea pentru utilizatori reali.",
+          "This solution is for companies that need better visibility into changing data. AlfaRank builds monitoring systems that collect information from websites, APIs, feeds, SERPs, catalogs, or internal sources, then turn it into alerts, dashboards, reports, scores, and decisions.": "Aceasta solutie este pentru companii care au nevoie de vizibilitate mai buna asupra datelor care se schimba. AlfaRank construieste sisteme de monitorizare care colecteaza informatie din site-uri, API-uri, feeduri, SERP-uri, cataloage sau surse interne, apoi o transforma in alerte, dashboarduri, rapoarte, scoruri si decizii.",
+          "This solution is for companies that need organic growth to come from a structured system rather than disconnected SEO tasks. AlfaRank designs the architecture, templates, data structures, publishing workflows, and monitoring layer needed to scale SEO infrastructure.": "Aceasta solutie este pentru companii care vor ca cresterea organica sa vina dintr-un sistem structurat, nu din taskuri SEO separate. AlfaRank proiecteaza arhitectura, template-urile, structurile de date, fluxurile de publicare si stratul de monitorizare necesare pentru scalarea infrastructurii SEO.",
+          "WhiteSpace is presented as a system profile for business workflows that need structure, data, content, automation, and operational visibility. The exact implementation can vary by use case, but the profile demonstrates how AlfaRank thinks about productized systems rather than isolated tasks.": "WhiteSpace este prezentat ca profil de sistem pentru fluxuri de business care au nevoie de structura, date, continut, automatizare si vizibilitate operationala. Implementarea exacta poate varia dupa caz, dar profilul arata cum gandeste AlfaRank sistemele productizate, nu taskurile izolate.",
+          "Content Automation Workflows is a system profile for companies that need repeatable content production without losing control over quality. The system combines topic structures, AI-assisted generation, enrichment, review, CMS publishing, and monitoring.": "Content Automation Workflows este un profil de sistem pentru companii care au nevoie de productie de continut repetabila fara sa piarda controlul calitatii. Sistemul combina structuri de topicuri, generare asistata de AI, imbogatire, revizie, publicare CMS si monitorizare.",
+          "A focused landing offer for companies that receive website, ad, or referral leads and need faster qualification, routing, follow-up, and source visibility.": "Oferta de landing pentru companii care primesc leaduri din site, reclame sau recomandari si au nevoie de calificare, rutare, follow-up si vizibilitate asupra sursei mai rapide.",
+          "A landing offer for companies that need more content, product pages, guides, briefs, or media drafts without turning publishing into a quality problem.": "Oferta de landing pentru companii care au nevoie de mai mult continut, pagini de produs, ghiduri, briefuri sau drafturi media fara ca publicarea sa devina o problema de calitate.",
+          "Convert content ideas and data into a repeatable AI-assisted production workflow with human review built in.": "Transforma ideile si datele de continut intr-un flux de productie repetabil, asistat de AI, cu revizie umana inclusa.",
+          "E-commerce teams, catalog businesses, marketplace operators, and product-heavy companies with repeated product data work.": "Echipe e-commerce, afaceri de catalog, operatori de marketplace si companii cu volum mare de date de produs.",
+          "WordPress-based businesses, service companies, publishers, agencies, and teams that need custom forms, CRM handoff, publishing, or data workflows.": "Afaceri bazate pe WordPress, companii de servicii, publisheri, agentii si echipe care au nevoie de formulare custom, predare catre CRM, publicare sau fluxuri de date.",
+          "Programmatic page structures": "Structuri de pagini programatice",
+          "Content templates and data sources": "Template-uri de continut si surse de date",
+          "Technical SEO and internal linking logic": "SEO tehnic si logica de linking intern",
+          "Publishing, monitoring, and improvement cycles": "Cicluri de publicare, monitorizare si imbunatatire",
+          "Information architecture": "Arhitectura informatiei",
+          "Programmatic publishing layer": "Strat de publicare programatica",
+          "Technical and content QA": "QA tehnic si de continut",
+          "Monitoring and improvement loop": "Bucla de monitorizare si imbunatatire",
+          "Page types, site structure, taxonomy, internal linking, navigation, templates, and content relationships.": "Tipuri de pagini, structura site-ului, taxonomie, linking intern, navigatie, template-uri si relatii de continut.",
+          "Data-driven page creation, reusable layouts, content variables, metadata patterns, and automated publishing logic.": "Creare de pagini din date, layouturi reutilizabile, variabile de continut, patternuri de metadate si logica de publicare automatizata.",
+          "Checks for indexation, metadata, schema, internal links, duplicate patterns, content completeness, and page quality.": "Verificari pentru indexare, metadate, schema, linkuri interne, patternuri duplicate, completitudinea continutului si calitatea paginii.",
+          "Rank tracking, indexing checks, content gap analysis, performance signals, and prioritized improvement workflows.": "Urmarire ranking, verificari de indexare, analiza golurilor de continut, semnale de performanta si fluxuri prioritizate de imbunatatire.",
+          "Structured publishing": "Publicare structurata",
+          "Measurable organic growth infrastructure": "Infrastructura masurabila pentru crestere organica",
+          "Define the organic growth model and target page groups.": "Defineste modelul de crestere organica si grupurile tinta de pagini.",
+          "Design site architecture, templates, content models, and data relationships.": "Proiecteaza arhitectura site-ului, template-urile, modelele de continut si relatiile de date.",
+          "Build publishing workflows and CMS/static-site structures.": "Construieste fluxuri de publicare si structuri CMS/static-site.",
+          "Add technical QA, metadata, internal linking, and monitoring.": "Adauga QA tehnic, metadate, linking intern si monitorizare.",
+          "Use performance signals to improve the system continuously.": "Foloseste semnalele de performanta pentru imbunatatirea continua a sistemului.",
+          "Scale landing pages for locations, services, products, categories, or data entities.": "Scaleaza pagini de landing pentru locatii, servicii, produse, categorii sau entitati de date.",
+          "Create programmatic SEO pages from structured data.": "Creeaza pagini SEO programatice din date structurate.",
+          "Improve an existing site architecture before content production scales.": "Imbunatateste arhitectura site-ului existent inainte ca productia de continut sa creasca.",
+          "Build AI-assisted content workflows with editorial control.": "Construieste fluxuri de continut asistate de AI cu control editorial.",
+          "Monitor rankings, indexation, content quality, and technical issues.": "Monitorizeaza rankinguri, indexare, calitatea continutului si probleme tehnice.",
+          "Review possible build directions": "Revizuieste directiile posibile de construire",
+          "Map the business problem": "Mapeaza problema de afaceri",
+          "Explore operating patterns": "Exploreaza patternuri operationale"
+        };
+
+        const roPhraseFallback = [
+          [/^(.+) as an operating system$/i, "$1 ca sistem operational"],
+          [/^(\d+) modules mapped$/i, "$1 module mapate"],
+          [/^(\d+) connected modules$/i, "$1 module conectate"],
+          [/^(\d+) build modules$/i, "$1 module de construit"],
+          [/^System profiles for (.+)$/i, "Profiluri de sistem pentru $1"],
+          [/^Solution routes for (.+)$/i, "Rute de solutii pentru $1"],
+          [/^(.+) capabilities$/i, "Capabilitati pentru $1"],
+          [/^Where (.+) systems usually start$/i, "Unde incep de obicei sistemele pentru $1"],
+          [/^Start with (.+), then shape the system, modules, integration points, and proof that make (.+) visible\.$/i, "Porneste de la $1, apoi modeleaza sistemul, modulele, punctele de integrare si dovezile care fac $2 vizibil."],
+          [/^This capability becomes useful when (.+) connects to real inputs, review states, integrations, and a visible output such as (.+)\.$/i, "Aceasta capabilitate devine utila cand $1 se conecteaza la inputuri reale, stari de review, integrari si un output vizibil precum $2."],
+          [/^The build can start as a narrow proof, a connected workflow, or a fuller operating layer depending on how mature the current process is\.$/i, "Construirea poate incepe ca dovada restransa, flux conectat sau strat operational mai amplu, in functie de maturitatea procesului curent."],
+          [/^The page should make the before-and-after clear enough that a visitor can ask for the first version without decoding the whole technical stack\.$/i, "Pagina trebuie sa faca starea dinainte si dupa suficient de clara incat vizitatorul sa poata cere prima versiune fara sa decodeze tot stackul tehnic."],
+          [/^How (.+) is built$/i, "Cum se construieste $1"],
+          [/^For (.+), the work starts by mapping the current process and then turning it into architecture, data, interfaces, automations, integrations, and launch workflow\.$/i, "Pentru $1, lucrul incepe prin maparea procesului curent si transformarea lui in arhitectura, date, interfete, automatizari, integrari si flux de lansare."],
+          [/^For (.+), every module should become a usable station rather than a loose feature list\.$/i, "Pentru $1, fiecare modul trebuie sa devina o statie utilizabila, nu o lista vaga de functionalitati."],
+          [/^System profiles that support (.+)$/i, "Profiluri de sistem care sustin $1"],
+          [/^These profiles turn the solution into concrete architecture: modules, workflow, integrations, and operating output around (.+)\.$/i, "Aceste profiluri transforma solutia in arhitectura concreta: module, flux de lucru, integrari si rezultat operational in jurul $1."],
+          [/^What this solution covers$/i, "Ce acopera solutia"],
+          [/^Expected output$/i, "Rezultat asteptat"],
+          [/^Inputs, modules, automation, and outputs in one operating model\.$/i, "Inputuri, module, automatizare si outputuri intr-un singur model operational."],
+          [/^Each module is a buildable part of the system, not a loose feature idea\. The modules define what has to exist for the workflow to operate\.$/i, "Fiecare modul este o parte construibila a sistemului, nu o idee vaga de functionalitate. Modulele definesc ce trebuie sa existe pentru ca fluxul sa opereze."],
+          [/^The request is reviewed against system type, current workflow, feasibility, timeline, and implementation path\.$/i, "Solicitarea este analizata dupa tipul sistemului, fluxul curent, fezabilitate, timeline si ruta de implementare."],
+          [/^Projects move through scope, prototype, implementation, integration, launch, and measurement\.$/i, "Proiectele trec prin definire, prototip, implementare, integrare, lansare si masurare."]
+        ];
+
+        const roTermFallback = {
+          "landing page": "pagina de landing",
+          "workflow-urilor": "fluxurilor de lucru",
+          "workflow-ul": "fluxul de lucru",
+          "workflow-uri": "fluxuri de lucru",
+          workflow: "flux de lucru",
+          workflows: "fluxuri de lucru",
+          dashboard: "dashboard",
+          dashboards: "dashboarduri",
+          output: "rezultat",
+          outputs: "rezultate",
+          input: "intrare",
+          inputs: "intrari",
+          review: "revizie",
+          scope: "definire",
+          businessuri: "afaceri",
+          business: "afaceri",
+          content: "continut",
+          tools: "instrumente",
+          lead: "lead",
+          leads: "leaduri",
+          route: "ruta",
+          routes: "rute",
+          system: "sistem",
+          systems: "sisteme",
+          build: "construire",
+          operating: "operational",
+          internal: "intern",
+          publishing: "publicare",
+          monitoring: "monitorizare",
+          reporting: "raportare",
+          scraping: "colectare",
+          automation: "automatizare",
+          automated: "automatizat",
+          data: "date",
+          web: "web",
+          operations: "operatiuni",
+          product: "produs",
+          pricing: "preturi",
+          analytics: "analitica",
+          alerts: "alerte",
+          scoring: "scoring",
+          routing: "rutare",
+          enrichment: "imbogatire",
+          "follow-up": "follow-up",
+          "white-label": "white-label",
+          "product content": "continut de produs",
+          "onboarding flows": "fluxuri de onboarding",
+          "review/data": "review/date"
+        };
+
+        const roWordFallback = {
+          the: "",
+          a: "",
+          an: "",
+          and: "si",
+          or: "sau",
+          does: "",
+          is: "este",
+          are: "sunt",
+          be: "fi",
+          been: "fost",
+          being: "fiind",
+          can: "poate",
+          must: "trebuie",
+          needs: "are nevoie",
+          needed: "necesar",
+          need: "nevoie",
+          not: "nu",
+          only: "doar",
+          as: "ca",
+          of: "de",
+          at: "la",
+          in: "in",
+          on: "pe",
+          by: "de",
+          around: "in jurul",
+          behind: "din spatele",
+          with: "cu",
+          without: "fara",
+          into: "in",
+          from: "din",
+          for: "pentru",
+          this: "acest",
+          that: "care",
+          should: "trebuie sa",
+          where: "unde",
+          what: "ce",
+          when: "cand",
+          instead: "in loc de",
+          before: "inainte",
+          after: "dupa",
+          turn: "transforma",
+          make: "face",
+          makes: "face",
+          meant: "menit",
+          read: "citit",
+          start: "porneste",
+          starts: "porneste",
+          starting: "pornind",
+          chosen: "ales",
+          selected: "selectat",
+          follows: "urmeaza",
+          preferred: "preferata",
+          tool: "instrument",
+          list: "lista",
+          then: "apoi",
+          company: "companie",
+          companies: "companii",
+          receive: "primesc",
+          receives: "primeste",
+          focused: "focusat",
+          visibility: "vizibilitate",
+          guides: "ghiduri",
+          guide: "ghid",
+          briefs: "briefuri",
+          brief: "brief",
+          convert: "transforma",
+          built: "construit",
+          station: "statie",
+          loose: "vag",
+          feature: "functionalitate",
+          features: "functionalitati",
+          rather: "mai degraba",
+          than: "decat",
+          treat: "trateaza",
+          treats: "trateaza",
+          structures: "structuri",
+          interfaces: "interfete",
+          publishers: "publisheri",
+          agencies: "agentii",
+          losing: "pierzand",
+          over: "asupra",
+          presented: "prezentat",
+          demonstrates: "arata",
+          how: "cum",
+          vary: "varia",
+          case: "caz",
+          but: "dar",
+          isolated: "izolate",
+          tasks: "taskuri",
+          helps: "ajuta",
+          prepare: "pregateste",
+          uncontrolled: "necontrolat",
+          manual: "manuala",
+          combine: "combina",
+          databases: "baze de date",
+          drafting: "drafting",
+          preparation: "pregatire",
+          collect: "colecteaza",
+          changing: "care se schimba",
+          better: "mai buna",
+          decisions: "decizii",
+          signal: "semnal",
+          turning: "transformand",
+          work: "lucrul",
+          mapping: "maparea",
+          solution: "solutie",
+          profiles: "profiluri",
+          concrete: "concreta",
+          architecture: "arhitectura",
+          support: "sustin",
+          scope: "definire",
+          output: "rezultat",
+          input: "intrare",
+          review: "revizie",
+          route: "ruta",
+          routes: "rute",
+          tools: "instrumente",
+          content: "continut",
+          business: "afaceri",
+          lead: "lead",
+          leads: "leaduri",
+          system: "sistem",
+          systems: "sisteme",
+          workflow: "flux de lucru",
+          workflows: "fluxuri de lucru",
+          operating: "operational",
+          operational: "operational",
+          layer: "strat",
+          layers: "straturi",
+          module: "modul",
+          modules: "module",
+          map: "harta",
+          mapped: "mapat",
+          problem: "problema",
+          problems: "probleme",
+          process: "proces",
+          processes: "procese",
+          current: "curent",
+          expected: "asteptat",
+          desired: "dorit",
+          result: "rezultat",
+          request: "solicitare",
+          requests: "solicitari",
+          source: "sursa",
+          tracking: "tracking",
+          stored: "stocate",
+          first: "prima",
+          launch: "lansare",
+          path: "ruta",
+          directions: "directii",
+          possible: "posibile",
+          explore: "exploreaza",
+          patterns: "patternuri",
+          pattern: "pattern",
+          direction: "directie",
+          define: "defineste",
+          structure: "structura",
+          it: "lui",
+          controlled: "controlat",
+          humanintheloop: "cu revizie umana",
+          useful: "util",
+          visible: "vizibil",
+          real: "real",
+          states: "stari",
+          integrations: "integrari",
+          connected: "conectat",
+          actions: "actiuni",
+          rules: "reguli",
+          reports: "rapoarte",
+          report: "raport",
+          repeated: "repetat",
+          handling: "procesare",
+          loops: "bucle",
+          production: "productie",
+          all: "toate",
+          full: "complet",
+          complete: "complet",
+          catalog: "catalog",
+          collection: "colectare",
+          normalization: "normalizare",
+          feeds: "feeduri",
+          page: "pagina",
+          pages: "pagini",
+          practical: "practice",
+          use: "foloseste",
+          cases: "cazuri",
+          related: "conexe",
+          grouped: "grupate",
+          group: "grup",
+          combines: "combina",
+          usually: "de obicei",
+          becomes: "devine",
+          become: "devin",
+          became: "devenit",
+          working: "functional",
+          capability: "capabilitate",
+          capabilities: "capabilitati",
+          public: "publice",
+          sites: "site-uri",
+          fields: "campuri",
+          custom: "custom",
+          generation: "generare",
+          classification: "clasificare",
+          support: "suport",
+          supports: "sustine",
+          repeatable: "repetabile",
+          reports: "rapoarte",
+          exports: "exporturi",
+          connections: "conexiuni",
+          between: "intre",
+          external: "externe",
+          platforms: "platforme",
+          deployment: "deploy",
+          performance: "performanta",
+          observability: "observabilitate",
+          version: "versiune",
+          versions: "versiuni",
+          control: "control",
+          project: "proiect",
+          projects: "proiecte",
+          type: "tip",
+          category: "categorie",
+          setup: "setup",
+          timeline: "timeline",
+          budget: "buget",
+          form: "formular",
+          forms: "formulare",
+          pressure: "presiune",
+          offer: "oferta",
+          details: "detalii",
+          feasibility: "fezabilitate",
+          submitted: "trimise",
+          existing: "existent",
+          process: "proces",
+          processes: "procese",
+          stack: "stack",
+          stacks: "stackuri",
+          points: "puncte",
+          point: "punct",
+          current: "curent",
+          desired: "dorit",
+          result: "rezultat",
+          results: "rezultate",
+          reliable: "fiabil",
+          practical: "practic",
+          delivery: "livrare",
+          clear: "clar",
+          clearer: "mai clar",
+          faster: "mai rapid",
+          measurable: "masurabil",
+          automated: "automatizat",
+          improve: "imbunatati",
+          improved: "imbunatatit",
+          improvement: "imbunatatire",
+          usable: "utilizabil",
+          user: "utilizator",
+          users: "utilizatori",
+          quality: "calitate",
+          confidence: "incredere",
+          risk: "risc",
+          priority: "prioritate",
+          owner: "responsabil",
+          owners: "responsabili",
+          queue: "coada",
+          records: "inregistrari",
+          record: "inregistrare",
+          fields: "campuri",
+          field: "camp",
+          files: "fisiere",
+          file: "fisier",
+          sources: "surse",
+          source: "sursa",
+          assets: "asseturi",
+          asset: "asset",
+          prompts: "prompturi",
+          prompt: "prompt",
+          models: "modele",
+          model: "model",
+          online: "online",
+          sales: "vanzari",
+          easier: "mai usor",
+          manage: "gestionat",
+          managed: "gestionat",
+          monitor: "monitorizat",
+          scale: "scalat",
+          connect: "conectat",
+          connected: "conectat",
+          other: "alte",
+          whole: "intreg",
+          valuable: "valoros",
+          less: "mai putin",
+          more: "mai multa",
+          consistency: "consistenta",
+          classified: "clasificat",
+          classify: "clasifica",
+          enrich: "imbogateste",
+          enriched: "imbogatit",
+          score: "scor",
+          capture: "captureaza",
+          publish: "publica",
+          published: "publicat",
+          publishing: "publicare",
+          drafts: "drafturi",
+          draft: "draft",
+          tasks: "taskuri",
+          task: "task",
+          notifications: "notificari",
+          updates: "actualizari",
+          update: "actualizare",
+          checks: "verificari",
+          check: "verificare",
+          rights: "drepturi",
+          brand: "brand",
+          fit: "potrivire",
+          ready: "gata",
+          batch: "batch",
+          batches: "batchuri",
+          scenes: "scene",
+          variants: "variante",
+          captions: "subtitrari",
+          metadata: "metadate",
+          produced: "produse",
+          exported: "exportate",
+          formats: "formate",
+          channels: "canale",
+          creative: "creativa",
+          learn: "invata",
+          raw: "brute",
+          clean: "curate",
+          matched: "potrivite",
+          ranked: "rankate",
+          alerts: "alerte",
+          operational: "operational",
+          structured: "structurat",
+          external: "externe",
+          internal: "interne",
+          information: "informatie",
+          signals: "semnale",
+          score: "scor",
+          scores: "scoruri",
+          issue: "problema",
+          issues: "probleme",
+          recommendations: "recomandari",
+          recurring: "recurente",
+          public: "publice",
+          websites: "site-uri",
+          website: "site",
+          decorative: "decorative",
+          include: "include",
+          ideas: "idei",
+          idea: "idee",
+          concepts: "concepte",
+          roles: "roluri",
+          actions: "actiuni",
+          screens: "ecrane",
+          objects: "obiecte",
+          required: "necesar",
+          minimum: "minim",
+          frontend: "frontend",
+          backend: "backend",
+          authentication: "autentificare",
+          permissions: "permisiuni",
+          logic: "logica",
+          handling: "gestionare",
+          feedback: "feedback",
+          issue: "problema",
+          tracking: "urmarire",
+          custom: "custom",
+          taxonomies: "taxonomii",
+          screens: "ecrane",
+          editorial: "editorial",
+          scheduled: "programat",
+          plugin: "plugin",
+          plugins: "pluginuri",
+          fragile: "fragil",
+          chains: "lanturi",
+          businessfacing: "orientate spre afaceri",
+          integrationready: "gata de integrari",
+          aiassisted: "asistat de AI",
+          cmsready: "gata pentru CMS"
+        };
+
+        const cleanRoCopy = (value) => {
+          const englishSignal = /\b(the|and|with|without|into|from|this|that|should|where|what|when|instead|before|after|turn|make|build|built|workflow|workflows|dashboard|landing page|operating|output|input|review|route|routes|tools|content|business|lead|system|systems|scope|solution|profiles|companies|company|rather|than|station|feature|manual|collect|visibility|source|signal)\b/i;
+          let result = roExactFallback[value] || value;
+          for (const [pattern, replacement] of roPhraseFallback) {
+            if (pattern.test(result)) {
+              result = result.replace(pattern, replacement);
+              break;
+            }
+          }
+          if (!englishSignal.test(result) && !roExactFallback[value]) return result;
+          Object.entries(roTermFallback)
+            .sort((a, b) => b[0].length - a[0].length)
+            .forEach(([term, replacement]) => {
+              result = result.replace(
+                new RegExp(`\\b${term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "gi"),
+                replacement
+              );
+            });
+          return result
+            .replace(/[A-Za-z][A-Za-z.-]*/g, (word) => {
+              const suffix = word.match(/\\.{1,3}$/)?.[0] || "";
+              const normalized = word.toLowerCase().replace(/[^a-z.-]/g, "").replace(/\\.+$/, "");
+              const compact = normalized.replace(/[-.]/g, "");
+              const allowed = new Set(["alfarank", "ai", "seo", "crm", "cms", "api", "apis", "wordpress", "saas", "mvp", "d1", "post", "qa", "utm", "github", "cloudflare", "astro", "next", "next.js"]);
+              if (allowed.has(normalized) || allowed.has(compact)) return word;
+              const replacement = Object.prototype.hasOwnProperty.call(roWordFallback, normalized)
+                ? roWordFallback[normalized]
+                : Object.prototype.hasOwnProperty.call(roWordFallback, compact)
+                  ? roWordFallback[compact]
+                  : undefined;
+              return replacement === undefined ? word : `${replacement}${suffix === "..." ? "" : suffix}`;
+            })
+            .replace(/\s+([,.:;])/g, "$1")
+            .replace(/\s{2,}/g, " ")
+            .trim();
+        };
+
+        const dynamicTranslate = (value) => {
+          if (pageLocale === "ru") {
+            return cleanRuCopy(value
+              .replace(/^(.+) pressure to build path$/, "$1: путь к сборке системы")
+              .replace(/^(\d+) capabilities$/, "$1 возможностей")
+              .replace(/^(\d+) solutions$/, "$1 решений")
+              .replace(/^(\d+) profiles$/, "$1 профилей")
+              .replace(/^(\d+) connected directions$/, "$1 связанных направлений")
+              .replace(/^(\d+) offer pages$/, "$1 оффер-страниц")
+              .replace(/^(.+) capabilities$/, "Возможности для $1")
+              .replace(/^Solution routes for (.+)$/, "Маршруты решений для $1")
+              .replace(/^System profiles for (.+)$/, "Профили систем для $1")
+              .replace(/^Route (.+) into the capabilities, solution pages, and reusable profiles that make sense for this market\.$/, "Переведите $1 в возможности, страницы решений и reusable-профили, которые подходят этому рынку.")
+              .replace(/^Make (.+) visible enough to scope, assign, automate, or measure\.$/, "Сделайте $1 достаточно видимым, чтобы его можно было оценить, назначить, автоматизировать или измерить.")
+              .replace(/^Start with (.+) and show how it becomes a managed digital system\.$/, "Начните с $1 и покажите, как это становится управляемой цифровой системой.")
+              .replace(/^Use (.+) as the first commercial solution route\.$/, "Используйте $1 как первый коммерческий маршрут решения.")
+              .replace(/^Make (.+) measurable instead of implied\.$/, "Сделайте $1 измеримыми, а не подразумеваемыми."));
+          }
+
+          if (pageLocale === "ro") {
+            return value
+              .replace(/^(.+) pressure to build path$/, "$1: ruta catre sistem")
+              .replace(/^(\d+) capabilities$/, "$1 capabilitati")
+              .replace(/^(\d+) solutions$/, "$1 solutii")
+              .replace(/^(\d+) profiles$/, "$1 profiluri")
+              .replace(/^(\d+) connected directions$/, "$1 directii conectate")
+              .replace(/^(\d+) offer pages$/, "$1 pagini de oferta")
+              .replace(/^(.+) capabilities$/, "Capabilitati pentru $1")
+              .replace(/^Solution routes for (.+)$/, "Rute de solutii pentru $1")
+              .replace(/^System profiles for (.+)$/, "Profiluri de sistem pentru $1")
+              .replace(/^Route (.+) into the capabilities, solution pages, and reusable profiles that make sense for this market\.$/, "Transforma $1 in capabilitati, pagini de solutii si profiluri reutilizabile potrivite pentru aceasta piata.")
+              .replace(/^Make (.+) visible enough to scope, assign, automate, or measure\.$/, "Fa $1 suficient de vizibil pentru a putea fi estimat, asignat, automatizat sau masurat.")
+              .replace(/^Start with (.+) and show how it becomes a managed digital system\.$/, "Porneste de la $1 si arata cum devine un sistem digital gestionat.")
+              .replace(/^Use (.+) as the first commercial solution route\.$/, "Foloseste $1 ca prima ruta comerciala de solutie.")
+              .replace(/^Make (.+) measurable instead of implied\.$/, "Fa $1 masurabile, nu doar presupuse.");
+          }
+
+          return value;
+        };
+
+        const translateRuntimeText = (value) => {
+          const leading = value.match(/^\s*/)?.[0] || "";
+          const trailing = value.match(/\s*$/)?.[0] || "";
+          const trimmed = value.trim();
+          if (!trimmed) return value;
+          const translated = runtimeTranslations[trimmed] || dynamicTranslate(trimmed);
+          const cleaned =
+            pageLocale === "ru" ? cleanRuCopy(translated) : pageLocale === "ro" ? cleanRoCopy(translated) : translated;
+          return `${leading}${cleaned}${trailing}`;
+        };
+
+        if (pageLocale === "ro" || pageLocale === "ru") {
+          const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+            acceptNode(node) {
+              const parent = node.parentElement;
+              if (!parent || ["SCRIPT", "STYLE", "SVG", "TEXTAREA", "CODE", "PRE"].includes(parent.tagName)) {
+                return NodeFilter.FILTER_REJECT;
+              }
+              if (parent.closest("[data-no-translate]")) {
+                return NodeFilter.FILTER_REJECT;
+              }
+              return node.nodeValue?.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+            }
+          });
+          const nodes = [];
+          while (walker.nextNode()) nodes.push(walker.currentNode);
+          nodes.forEach((node) => {
+            node.nodeValue = translateRuntimeText(node.nodeValue || "");
+          });
+
+          document.querySelectorAll("[placeholder], [aria-label], [title]").forEach((element) => {
+            if (element.closest("[data-no-translate]")) return;
+            ["placeholder", "aria-label", "title"].forEach((attribute) => {
+              const value = element.getAttribute(attribute);
+              if (value) element.setAttribute(attribute, translateRuntimeText(value));
+            });
+          });
+        }
+
+        if (pageLocale === "ro" || pageLocale === "ru") {
+          document.querySelectorAll("a[href^='/']").forEach((link) => {
+            if (link.closest("[data-no-translate]")) return;
+            const href = link.getAttribute("href") || "";
+            if (
+              href.startsWith(`/${pageLocale}/`) ||
+              href.startsWith("/ro/") ||
+              href.startsWith("/ru/") ||
+              href.startsWith("/api/")
+            ) {
+              return;
+            }
+
+            link.setAttribute("href", `/${pageLocale}${href}`);
+          });
+        }
+
         const params = new URLSearchParams(window.location.search);
         const campaignContext = () => {
-          const lpMatch = window.location.pathname.match(/^\/lp\/([^/]+)\//);
+          const lpMatch = window.location.pathname.match(/^(?:\/(?:ro|ru))?\/lp\/([^/]+)\//);
           return {
             path: window.location.pathname,
             source_path: `${window.location.pathname}${window.location.search}`,
@@ -130,7 +1546,7 @@ const structuredData = JSON.stringify([
         window.alfaRankTrack = track;
         track("page_view");
 
-        if (window.location.pathname === "/start-project/thank-you/") {
+        if (/^(?:\/(?:ro|ru))?\/start-project\/thank-you\/$/.test(window.location.pathname)) {
           track("thank_you_view");
         }
 

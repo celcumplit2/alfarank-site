@@ -3,8 +3,16 @@ import CardGrid from "@/components/CardGrid.astro";
 import PageHero from "@/components/PageHero.astro";
 import SystemIcon from "@/components/SystemIcon.astro";
 import Layout from "@/layouts/Layout.astro";
-import { industries } from "@/data/site";
 import { collectionHeroVisual } from "@/data/hero";
+import { getIndustries, localizePath, translateCopy } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
+
+type Props = {
+  locale?: Locale;
+};
+
+const { locale = "en" } = Astro.props;
+const industries = getIndustries(locale);
 
 const priorityIndustries = [
   {
@@ -39,16 +47,24 @@ const priorityIndustries = [
     systems: ["MVP", "Dashboard", "Portal"],
     output: "Launchable product layer"
   }
-];
+].map((industry) => ({
+  ...industry,
+  title: translateCopy(locale, industry.title),
+  href: localizePath(industry.href, locale),
+  signal: translateCopy(locale, industry.signal),
+  systems: industry.systems.map((system) => translateCopy(locale, system)),
+  output: translateCopy(locale, industry.output)
+}));
 ---
 
-<Layout title="Industries | AlfaRank">
+<Layout title="Industries | AlfaRank" locale={locale}>
   <PageHero
     eyebrow="Industries"
     title="Digital systems for businesses with operational, content, data, and growth workflows."
     text="AlfaRank systems can be adapted to different industries when the business needs structured web platforms, automation, content infrastructure, integrations, or monitoring."
     primaryHref="/start-project/"
     primaryLabel="Start a Project"
+    locale={locale}
     visual={collectionHeroVisual(industries, {
       mode: "industries",
       icon: "map",
@@ -63,18 +79,18 @@ const priorityIndustries = [
   <section class="section industry-priority">
     <div class="section-header">
       <div>
-        <p class="eyebrow">Priority industry routes</p>
-        <h2>Start with the business model, then map the system.</h2>
+        <p class="eyebrow">{translateCopy(locale, "Priority industry routes")}</p>
+        <h2>{translateCopy(locale, "Start with the business model, then map the system.")}</h2>
       </div>
-      <p>The strongest industry pages translate repeated business needs into concrete system patterns: lead flow, catalog operations, publishing, product interfaces, monitoring, and integrations.</p>
+      <p>{translateCopy(locale, "The strongest industry pages translate repeated business needs into concrete system patterns: lead flow, catalog operations, publishing, product interfaces, monitoring, and integrations.")}</p>
     </div>
 
     <div class="growth-signal-funnel">
       <article class="growth-signal-funnel__core">
         <SystemIcon name="map" />
-        <span>Growth signal funnel</span>
-        <strong>Market context becomes system scope.</strong>
-        <p>Every industry route is treated as a live business signal: demand, catalog, content, product, data, and operational pressure.</p>
+        <span>{translateCopy(locale, "Growth signal funnel")}</span>
+        <strong>{translateCopy(locale, "Market context becomes system scope.")}</strong>
+        <p>{translateCopy(locale, "Every industry route is treated as a live business signal: demand, catalog, content, product, data, and operational pressure.")}</p>
       </article>
       {priorityIndustries.map((industry, index) => (
         <a class:list={["industry-route", `industry-route--${index + 1}`]} href={industry.href}>
@@ -95,16 +111,16 @@ const priorityIndustries = [
   <section class="section">
     <div class="section-header">
       <div>
-        <p class="eyebrow">Industry catalog</p>
-        <h2>All current industry contexts</h2>
+        <p class="eyebrow">{translateCopy(locale, "Industry catalog")}</p>
+        <h2>{translateCopy(locale, "All current industry contexts")}</h2>
       </div>
-      <p>Each industry now has a profile page with system fit, likely build paths, and a project intake route.</p>
+      <p>{translateCopy(locale, "Each industry now has a profile page with system fit, likely build paths, and a project intake route.")}</p>
     </div>
     <CardGrid items={industries.map((item) => ({
       title: item.title,
       icon: item.icon,
       summary: item.summary,
-      href: `/industries/${item.slug}/`
+      href: localizePath(`/industries/${item.slug}/`, locale)
     }))} />
   </section>
 </Layout>

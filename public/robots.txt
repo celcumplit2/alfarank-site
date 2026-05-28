@@ -1,4 +1,10 @@
 User-agent: *
 Allow: /
+Disallow: /projects/
+Disallow: /ro/projects/
+Disallow: /ru/projects/
+Disallow: /access/
+Disallow: /ro/access/
+Disallow: /ru/access/
 
 Sitemap: https://alfarank.com/sitemap.xml

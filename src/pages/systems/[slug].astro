@@ -2,8 +2,15 @@
 import PageHero from "@/components/PageHero.astro";
 import SystemIcon from "@/components/SystemIcon.astro";
 import Layout from "@/layouts/Layout.astro";
-import { capabilities, solutions, systems } from "@/data/site";
+import { systems } from "@/data/site";
 import { itemHeroVisual } from "@/data/hero";
+import { getCapabilities, getSolutions, localizePath } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
+
+type Props = {
+  locale?: Locale;
+  item: (typeof systems)[number];
+};
 
 export function getStaticPaths() {
   return systems.map((item) => ({
@@ -12,47 +19,184 @@ export function getStaticPaths() {
   }));
 }
 
-const { item } = Astro.props;
+const { item, locale = "en" } = Astro.props as Props;
+const localizedCapabilities = getCapabilities(locale);
+const localizedSolutions = getSolutions(locale);
 
 const linkSources = [
-  ...capabilities.map((entry) => ({ title: entry.title, href: `/capabilities/${entry.slug}/` })),
-  ...solutions.map((entry) => ({ title: entry.title, href: `/solutions/${entry.slug}/` }))
+  ...localizedCapabilities.map((entry) => ({ title: entry.title, href: localizePath(`/capabilities/${entry.slug}/`, locale) })),
+  ...localizedSolutions.map((entry) => ({ title: entry.title, href: localizePath(`/solutions/${entry.slug}/`, locale) }))
 ];
 
 const relatedLinks = (item.related ?? [])
-  .map((title) => linkSources.find((entry) => entry.title.toLowerCase() === title.toLowerCase()) ?? { title, href: "/capabilities/" })
+  .map((title) => linkSources.find((entry) => entry.title.toLowerCase() === title.toLowerCase()) ?? { title, href: localizePath("/capabilities/", locale) })
   .slice(0, 6);
+
+const systemIntakeHref = `/start-project/?offer=system-${item.slug}&landing_page=/systems/${item.slug}/`;
+const localizedSystemIntakeHref = localizePath(systemIntakeHref, locale);
+const systemCopy = {
+  blueprintEyebrow: locale === "ru" ? "Чертеж системы" : locale === "ro" ? "Blueprint de sistem" : "System blueprint",
+  blueprintTitle:
+    locale === "ru"
+      ? "Входы, модули, автоматизация и результаты в одной операционной модели."
+      : locale === "ro"
+        ? "Intrari, module, automatizare si rezultate intr-un singur model operational."
+        : "Inputs, modules, automation, and outputs in one operating model.",
+  blueprintText:
+    locale === "ru"
+      ? "Этот профиль показывает, как читать систему: что входит на входе, что происходит внутри, что автоматизируется и какой бизнес-результат появляется на выходе."
+      : locale === "ro"
+        ? "Acest profil arata cum trebuie citit sistemul: ce intra, ce se intampla in interior, ce se automatizeaza si ce rezultat de business apare."
+        : "This template shows how every system profile is meant to be read: what enters the system, what happens inside it, what gets automated, and what business output appears.",
+  architecture: locale === "ru" ? "Архитектура системы" : locale === "ro" ? "Arhitectura sistemului" : "System architecture",
+  overview: locale === "ru" ? "Обзор системы" : locale === "ro" ? "Prezentare sistem" : "System overview",
+  outputs: locale === "ru" ? "Результаты" : locale === "ro" ? "Rezultate" : "Outputs",
+  relatedAreas: locale === "ru" ? "Связанные направления" : locale === "ro" ? "Zone asociate" : "Related areas",
+  coreModules: locale === "ru" ? "Ключевые модули" : locale === "ro" ? "Module principale" : "Core modules",
+  moduleMap: locale === "ru" ? "Карта модулей" : locale === "ro" ? "Harta modulelor" : "Module map",
+  moduleText:
+    locale === "ru"
+      ? "Каждый модуль должен быть собираемой частью системы, а не абстрактной идеей функции. Модули показывают, что должно существовать, чтобы процесс работал."
+      : locale === "ro"
+        ? "Fiecare modul este o parte construibila a sistemului, nu o idee libera de feature. Modulele arata ce trebuie sa existe ca procesul sa functioneze."
+        : "Each module is a buildable part of the system, not a loose feature idea. The modules define what has to exist for the workflow to operate.",
+  moduleConsole: locale === "ru" ? "Консоль модулей" : locale === "ro" ? "Consola modulelor" : "Module console",
+  buildModules:
+    locale === "ru"
+      ? `${item.modules?.length ?? 0} рабочих модулей`
+      : locale === "ro"
+        ? `${item.modules?.length ?? 0} module de build`
+        : `${item.modules?.length ?? 0} build modules`,
+  moduleConsoleText:
+    locale === "ru"
+      ? "Модули определяют рабочие части системы: что принимает входные данные, что их обрабатывает и что создает результат."
+      : locale === "ro"
+        ? "Modulele definesc partile active ale sistemului: ce primeste intrari, ce le proceseaza si ce produce rezultatul."
+        : "Modules define the working parts of the system: what receives input, what processes it, and what produces output.",
+  workflow: locale === "ru" ? "Рабочий процесс" : locale === "ro" ? "Flux de lucru" : "Workflow",
+  workflowTitle: locale === "ru" ? "Как работает система" : locale === "ro" ? "Cum opereaza sistemul" : "How the system operates",
+  workflowText:
+    locale === "ru"
+      ? "Профиль описывает операционный поток: входные данные, обработку, проверку, интеграции, публикацию, отчетность или доставку результата."
+      : locale === "ro"
+        ? "Profilul descrie fluxul operational: intrari, procesare, revizie, integrari, publicare, raportare sau livrarea rezultatului."
+        : "The profile describes the operational flow: inputs, processing, review, integrations, publishing, reporting, or output delivery.",
+  useCases: locale === "ru" ? "Сценарии применения" : locale === "ro" ? "Cazuri de utilizare" : "Use cases",
+  useCasesTitle:
+    locale === "ru"
+      ? "Где применяется этот системный паттерн"
+      : locale === "ro"
+        ? "Unde se aplica acest pattern de sistem"
+        : "Where this system pattern applies",
+  useCasesText:
+    locale === "ru"
+      ? "Ту же архитектуру можно адаптировать под разные бизнес-контексты, если понятны процесс, данные и требования к результату."
+      : locale === "ro"
+        ? "Aceeasi arhitectura poate fi adaptata la contexte de business diferite cand procesul, datele si rezultatul sunt clare."
+        : "The same architecture can be adapted to different business contexts when the workflow, data, and output requirements are clear.",
+  relatedPaths: locale === "ru" ? "Связанные маршруты сборки" : locale === "ro" ? "Rute de build asociate" : "Related build paths",
+  connectsTitle:
+    locale === "ru"
+      ? "Куда система подключается дальше"
+      : locale === "ro"
+        ? "Unde se conecteaza mai departe sistemul"
+        : "Where this system connects next",
+  connectsText:
+    locale === "ru"
+      ? "Профиль связан с возможностями и решениями, поэтому его можно превратить в конкретный маршрут реализации, а не оставить отдельным описанием."
+      : locale === "ro"
+        ? "Profilul se conecteaza inapoi la capabilitati si solutii, astfel incat poate deveni o ruta concreta de implementare, nu doar o nota separata."
+        : "System profiles are designed to connect back into capabilities and solutions, so the profile can become a scoped implementation path instead of a standalone case note.",
+  scopeThis: locale === "ru" ? "Запросить эту систему" : locale === "ro" ? "Defineste acest sistem" : "Scope This System",
+  allSystems: locale === "ru" ? "Все системы" : locale === "ro" ? "Toate sistemele" : "All Systems",
+  layers:
+    locale === "ru"
+      ? [
+          {
+            title: "Входной слой",
+            text: "Что нужно системе до начала работы."
+          },
+          {
+            title: "Модули процесса",
+            text: "Операционные блоки, которые превращают входные данные в полезное движение."
+          },
+          {
+            title: "Слой автоматизации",
+            text: "Правила, состояния проверки, интеграции и повторяемые действия."
+          },
+          {
+            title: "Слой результата",
+            text: "Видимый результат, ради которого систему имеет смысл собирать."
+          }
+        ]
+      : locale === "ro"
+        ? [
+            {
+              title: "Strat de intrare",
+              text: "Ce are nevoie sistemul inainte ca lucrul sa inceapa."
+            },
+            {
+              title: "Module de workflow",
+              text: "Blocurile operationale care transforma intrarile in miscare utila."
+            },
+            {
+              title: "Strat de automatizare",
+              text: "Reguli, stari de revizie, integrari si actiuni repetabile."
+            },
+            {
+              title: "Strat de rezultat",
+              text: "Rezultatul vizibil care face sistemul util."
+            }
+          ]
+        : [
+            {
+              title: "Input layer",
+              text: "What the system needs before work can happen."
+            },
+            {
+              title: "Workflow modules",
+              text: "The operational blocks that turn inputs into useful movement."
+            },
+            {
+              title: "Automation layer",
+              text: "Rules, review states, integrations, and repeatable actions."
+            },
+            {
+              title: "Output layer",
+              text: "The visible result that makes the system worth building."
+            }
+          ]
+};
 
 const blueprintLayers = [
   {
-    title: "Input layer",
+    title: systemCopy.layers[0].title,
     icon: "data",
-    text: "What the system needs before work can happen.",
+    text: systemCopy.layers[0].text,
     items: (item.details ?? item.workflow ?? []).slice(0, 3)
   },
   {
-    title: "Workflow modules",
+    title: systemCopy.layers[1].title,
     icon: item.icon ?? "flow",
-    text: "The operational blocks that turn inputs into useful movement.",
+    text: systemCopy.layers[1].text,
     items: (item.modules ?? []).map((module) => module.title).slice(0, 4)
   },
   {
-    title: "Automation layer",
+    title: systemCopy.layers[2].title,
     icon: "flow",
-    text: "Rules, review states, integrations, and repeatable actions.",
+    text: systemCopy.layers[2].text,
     items: (item.workflow ?? []).slice(1, 4)
   },
   {
-    title: "Output layer",
+    title: systemCopy.layers[3].title,
     icon: "ranking",
-    text: "The visible result that makes the system worth building.",
+    text: systemCopy.layers[3].text,
     items: (item.outputs ?? []).slice(0, 4)
   }
 ];
-const systemIntakeHref = `/start-project/?offer=system-${item.slug}&landing_page=/systems/${item.slug}/`;
 ---
 
-<Layout title={`${item.title} | AlfaRank`} description={item.summary}>
+<Layout title={`${item.title} | AlfaRank`} description={item.summary} locale={locale}>
   <PageHero
     eyebrow="System profile"
     title={item.title}
@@ -61,22 +205,23 @@ const systemIntakeHref = `/start-project/?offer=system-${item.slug}&landing_page
     primaryLabel="Start a Project"
     secondaryHref="/systems/"
     secondaryLabel="All Systems"
+    locale={locale}
     visual={itemHeroVisual(item, "system-profile")}
   />
 
   <section class="section system-template">
     <div class="section-header">
       <div>
-        <p class="eyebrow">System blueprint</p>
-        <h2>Inputs, modules, automation, and outputs in one operating model.</h2>
+        <p class="eyebrow">{systemCopy.blueprintEyebrow}</p>
+        <h2>{systemCopy.blueprintTitle}</h2>
       </div>
-      <p>This template shows how every system profile is meant to be read: what enters the system, what happens inside it, what gets automated, and what business output appears.</p>
+      <p>{systemCopy.blueprintText}</p>
     </div>
 
     <div class:list={["system-blueprint-surface", "ar-system-block", "ar-system-layer", `system-blueprint-surface--${item.slug}`]}>
       <article class="system-blueprint-surface__core ar-system-core">
         <SystemIcon name={item.icon ?? "product"} />
-        <span>System architecture</span>
+        <span>{systemCopy.architecture}</span>
         <strong>{item.title}</strong>
         <p>{item.summary}</p>
       </article>
@@ -102,20 +247,20 @@ const systemIntakeHref = `/start-project/?offer=system-${item.slug}&landing_page
 
   <section class="section split-panel">
     <div class="glass-panel">
-      <h2>System overview</h2>
+      <h2>{systemCopy.overview}</h2>
       {item.intro && <p>{item.intro}</p>}
       <ul class="feature-list">
         {(item.details ?? []).map((detail) => <li>{detail}</li>)}
       </ul>
     </div>
     <div class="glass-panel">
-      <h2>Outputs</h2>
+      <h2>{systemCopy.outputs}</h2>
       <div class="tag-grid">
         {(item.outputs ?? []).map((output) => <span class="tag">{output}</span>)}
       </div>
       {item.related && (
         <>
-          <h3>Related areas</h3>
+          <h3>{systemCopy.relatedAreas}</h3>
           <div class="tag-grid">
             {item.related.map((related) => <span class="tag">{related}</span>)}
           </div>
@@ -128,17 +273,17 @@ const systemIntakeHref = `/start-project/?offer=system-${item.slug}&landing_page
     <section class="section">
       <div class="section-header">
         <div>
-          <p class="eyebrow">Core modules</p>
-          <h2>Module map</h2>
+          <p class="eyebrow">{systemCopy.coreModules}</p>
+          <h2>{systemCopy.moduleMap}</h2>
         </div>
-        <p>Each module is a buildable part of the system, not a loose feature idea. The modules define what has to exist for the workflow to operate.</p>
+        <p>{systemCopy.moduleText}</p>
       </div>
       <div class:list={["system-module-console", "ar-system-block", `system-module-console--${item.slug}`]}>
         <article class="system-module-console__header ar-system-core">
           <SystemIcon name="tools" />
-          <span>Module console</span>
-          <strong>{item.modules.length} build modules</strong>
-          <p>Modules define the working parts of the system: what receives input, what processes it, and what produces output.</p>
+          <span>{systemCopy.moduleConsole}</span>
+          <strong>{systemCopy.buildModules}</strong>
+          <p>{systemCopy.moduleConsoleText}</p>
         </article>
         {item.modules.map((module, index) => (
           <div class:list={["system-module-console__item", "ar-system-node", `system-module-console__item--${index + 1}`]} style={`--ar-level: ${72 + index * 5}%;`}>
@@ -156,9 +301,9 @@ const systemIntakeHref = `/start-project/?offer=system-${item.slug}&landing_page
   {item.workflow && (
     <section class="section split-panel">
       <div class="glass-panel">
-        <p class="eyebrow">Workflow</p>
-        <h2>How the system operates</h2>
-        <p>The profile describes the operational flow: inputs, processing, review, integrations, publishing, reporting, or output delivery.</p>
+        <p class="eyebrow">{systemCopy.workflow}</p>
+        <h2>{systemCopy.workflowTitle}</h2>
+        <p>{systemCopy.workflowText}</p>
       </div>
       <div class="glass-panel">
         <ul class="feature-list">
@@ -172,10 +317,10 @@ const systemIntakeHref = `/start-project/?offer=system-${item.slug}&landing_page
     <section class="section">
       <div class="section-header">
         <div>
-          <p class="eyebrow">Use cases</p>
-          <h2>Where this system pattern applies</h2>
+          <p class="eyebrow">{systemCopy.useCases}</p>
+          <h2>{systemCopy.useCasesTitle}</h2>
         </div>
-        <p>The same architecture can be adapted to different business contexts when the workflow, data, and output requirements are clear.</p>
+        <p>{systemCopy.useCasesText}</p>
       </div>
       <ul class="feature-list">
         {item.useCases.map((useCase) => <li>{useCase}</li>)}
@@ -185,12 +330,12 @@ const systemIntakeHref = `/start-project/?offer=system-${item.slug}&landing_page
 
   <section class="section split-panel">
     <div class="glass-panel">
-      <p class="eyebrow">Related build paths</p>
-      <h2>Where this system connects next</h2>
-      <p>System profiles are designed to connect back into capabilities and solutions, so the profile can become a scoped implementation path instead of a standalone case note.</p>
+      <p class="eyebrow">{systemCopy.relatedPaths}</p>
+      <h2>{systemCopy.connectsTitle}</h2>
+      <p>{systemCopy.connectsText}</p>
       <div class="section-actions">
-        <a class="button primary" href={systemIntakeHref}>Scope This System</a>
-        <a class="button secondary" href="/systems/">All Systems</a>
+        <a class="button primary" href={localizedSystemIntakeHref}>{systemCopy.scopeThis}</a>
+        <a class="button secondary" href={localizePath("/systems/", locale)}>{systemCopy.allSystems}</a>
       </div>
     </div>
     <div class="glass-panel">

@@ -1,0 +1,84 @@
+---
+import PageHero from "@/components/PageHero.astro";
+import Layout from "@/layouts/Layout.astro";
+import { privateUi } from "@/data/private-projects";
+import { localizePath } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
+
+type Props = {
+  locale?: Locale;
+};
+
+const { locale = "en" } = Astro.props;
+const ui = privateUi[locale];
+const fallbackNext = localizePath("/projects/", locale);
+
+const accessVisual = {
+  mode: "private-access",
+  icon: "lens",
+  label: ui.privateProjects,
+  state: `${ui.code} ${ui.required}`,
+  output: ui.accessHint,
+  nodes: [
+    { title: ui.accessCode, state: ui.required, icon: "lens", detail: ui.protectedRoute, meter: "78%" },
+    { title: ui.privateWorkspace, state: ui.privateProjects, icon: "product", detail: ui.projectLibrary, meter: "86%" },
+    { title: ui.session, state: ui.cookieSession, icon: "api", detail: ui.access, meter: "72%" }
+  ],
+  metrics: [
+    { value: "01", label: ui.code },
+    { value: "Lock", label: ui.access },
+    { value: "3", label: ui.languages }
+  ]
+};
+---
+
+<Layout title={`${ui.accessTitle} | AlfaRank`} description={ui.accessText} locale={locale} robots="noindex, nofollow">
+  <div class="private-project-page" data-no-translate>
+    <PageHero
+      eyebrow={ui.privateProjects}
+      title={ui.accessTitle}
+      text={ui.accessText}
+      locale={locale}
+      visual={accessVisual}
+    />
+
+    <section class="section split-panel private-access-section">
+      <form class="glass-panel private-access-form" method="post" action="/api/private-access" data-private-access-form>
+        <input type="hidden" name="next" value={fallbackNext} data-private-next />
+        <label>
+          <span>{ui.accessCode}</span>
+          <input name="access_code" type="password" autocomplete="current-password" required />
+        </label>
+        <p class="private-access-error" data-private-access-error hidden>{ui.accessError}</p>
+        <button class="button primary" type="submit">{ui.accessSubmit}</button>
+      </form>
+
+      <article class="glass-panel">
+        <p class="eyebrow">{ui.guardrails}</p>
+        <h2>{ui.privateProjects}</h2>
+        <p>{ui.accessHint}</p>
+        <div class="tag-grid">
+          <span class="tag">HttpOnly cookie</span>
+          <span class="tag">No public sitemap</span>
+          <span class="tag">Noindex</span>
+        </div>
+      </article>
+    </section>
+  </div>
+
+  <script is:inline>
+    (() => {
+      const params = new URLSearchParams(window.location.search);
+      const next = params.get("next");
+      const error = params.get("error");
+      const nextField = document.querySelector("[data-private-next]");
+      const errorNode = document.querySelector("[data-private-access-error]");
+      if (next && next.startsWith("/")) {
+        nextField?.setAttribute("value", next);
+      }
+      if (error === "1") {
+        errorNode?.removeAttribute("hidden");
+      }
+    })();
+  </script>
+</Layout>

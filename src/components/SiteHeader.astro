@@ -1,28 +1,75 @@
 ---
+import { alternatePaths, localeLabels, localizePath, stripLocaleFromPath, t } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
+
+type Props = {
+  locale?: Locale;
+};
+
+const { locale = "en" } = Astro.props;
 const navItems = [
-  { label: "Capabilities", href: "/capabilities/" },
-  { label: "Solutions", href: "/solutions/" },
-  { label: "Systems", href: "/systems/" },
-  { label: "Technologies", href: "/technologies/" },
-  { label: "Industries", href: "/industries/" },
-  { label: "About", href: "/about/" }
-];
+  { label: t(locale, "capabilities"), href: "/capabilities/" },
+  { label: t(locale, "solutions"), href: "/solutions/" },
+  { label: t(locale, "systems"), href: "/systems/" },
+  { label: t(locale, "technologies"), href: "/technologies/" },
+  { label: t(locale, "industries"), href: "/industries/" },
+  { label: t(locale, "about"), href: "/about/" }
+].map((item) => ({ ...item, href: localizePath(item.href, locale) }));
+
+const homeHref = localizePath("/", locale);
+const startProjectHref = localizePath("/start-project/", locale);
+const languageLinks = alternatePaths(stripLocaleFromPath(Astro.url.pathname));
+const languageNames: Record<Locale, string> = {
+  en: "English",
+  ro: "Romana",
+  ru: "Русский"
+};
 ---
 
 <header class="site-header">
-  <a class="brand" href="/" aria-label="AlfaRank home">
-    <span class="brand-mark">A</span>
+  <a class="brand" href={homeHref} aria-label={t(locale, "homeAria")}>
+    <span class="brand-mark" data-no-translate>A</span>
     <span>AlfaRank</span>
   </a>
-  <nav class="site-nav desktop-nav" aria-label="Primary navigation">
+  <nav class="site-nav desktop-nav" aria-label={t(locale, "primaryNavigation")}>
     {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
   </nav>
-  <a class="header-cta" href="/start-project/">Start a Project</a>
+  <div class="header-actions">
+    <details class="language-switcher" data-no-translate>
+      <summary aria-label={t(locale, "language")}>
+        <span>{localeLabels[locale]}</span>
+        <span class="language-switcher__chevron" aria-hidden="true">▾</span>
+      </summary>
+      <div class="language-switcher__menu" role="list">
+        {languageLinks.map((item) => (
+          <a class:list={{ active: item.locale === locale }} href={item.href} aria-current={item.locale === locale ? "true" : undefined} role="listitem">
+            <span>{localeLabels[item.locale]}</span>
+            <small>{languageNames[item.locale]}</small>
+          </a>
+        ))}
+      </div>
+    </details>
+    <a class="header-cta" href={startProjectHref}>{t(locale, "startProject")}</a>
+  </div>
   <details class="mobile-menu">
-    <summary>Menu</summary>
-    <nav class="mobile-nav" aria-label="Mobile navigation">
+    <summary>{t(locale, "menu")}</summary>
+    <nav class="mobile-nav" aria-label={t(locale, "mobileNavigation")}>
       {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
-      <a class="mobile-cta" href="/start-project/">Start a Project</a>
+      <details class="language-switcher mobile-language-switcher" data-no-translate>
+        <summary aria-label={t(locale, "language")}>
+          <span>{localeLabels[locale]}</span>
+          <span class="language-switcher__chevron" aria-hidden="true">▾</span>
+        </summary>
+        <div class="language-switcher__menu" role="list">
+          {languageLinks.map((item) => (
+            <a class:list={{ active: item.locale === locale }} href={item.href} aria-current={item.locale === locale ? "true" : undefined} role="listitem">
+              <span>{localeLabels[item.locale]}</span>
+              <small>{languageNames[item.locale]}</small>
+            </a>
+          ))}
+        </div>
+      </details>
+      <a class="mobile-cta" href={startProjectHref}>{t(locale, "startProject")}</a>
     </nav>
   </details>
 </header>

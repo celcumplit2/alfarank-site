@@ -1,0 +1,234 @@
+---
+import PageHero from "@/components/PageHero.astro";
+import SystemIcon from "@/components/SystemIcon.astro";
+import Layout from "@/layouts/Layout.astro";
+import { getPrivateProjects, privateUi } from "@/data/private-projects";
+import { localizePath } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
+import type { PrivateModule, PrivateProject } from "@/data/private-projects";
+
+type Props = {
+  locale?: Locale;
+  project: PrivateProject;
+  module: PrivateModule;
+};
+
+export function getStaticPaths() {
+  return getPrivateProjects("en").flatMap((project) =>
+    project.modules.map((module) => ({
+      params: { project: project.slug, module: module.slug },
+      props: { project, module, locale: "en" }
+    }))
+  );
+}
+
+const { project, module, locale = "en" } = Astro.props as Props;
+const ui = privateUi[locale];
+const relatedModules = project.modules.filter((entry) => entry.slug !== module.slug).slice(0, 4);
+const presentationSlides = [
+  {
+    eyebrow: ui.valuePromise,
+    title: module.title,
+    text: module.executive,
+    items: module.outputs.slice(0, 3)
+  },
+  {
+    eyebrow: ui.pilotStory,
+    title: module.pilot.title,
+    text: module.pilot.goal,
+    items: module.pilot.steps.slice(0, 3)
+  },
+  {
+    eyebrow: ui.proofPoints,
+    title: ui.strategicEffect,
+    text: module.effects.slice(0, 2).join(" / "),
+    items: module.pilot.metrics.slice(0, 4)
+  }
+];
+
+const moduleVisual = {
+  mode: "private-module",
+  icon: module.icon,
+  label: project.client,
+  state: module.outputs[0],
+  output: module.positioning,
+  nodes: module.layers.map((layer, index) => ({
+    title: layer.title,
+    state: layer.items[0] ?? ui.modules,
+    icon: layer.icon,
+    detail: layer.text,
+    meter: `${74 + index * 5}%`
+  })),
+  metrics: [
+    { value: String(module.layers.length).padStart(2, "0"), label: ui.modules },
+    { value: String(module.outputs.length).padStart(2, "0"), label: ui.outputs },
+    { value: "Pilot", label: ui.pilot }
+  ]
+};
+---
+
+<Layout title={`${module.title} | ${project.title} | AlfaRank`} description={module.summary} locale={locale} robots="noindex, nofollow">
+  <div class="private-project-page" data-no-translate>
+    <PageHero
+      eyebrow={project.title}
+      title={module.title}
+      text={module.summary}
+      primaryHref={`/projects/${project.slug}/`}
+      primaryLabel={ui.backToProject}
+      secondaryHref="/projects/"
+      secondaryLabel={ui.allProjects}
+      locale={locale}
+      visual={moduleVisual}
+    />
+
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">{ui.moduleBlueprint}</p>
+          <h2>{module.positioning}</h2>
+        </div>
+        <p>{module.executive}</p>
+      </div>
+
+      <div class="system-blueprint-surface private-blueprint ar-system-block ar-system-layer">
+        <article class="system-blueprint-surface__core ar-system-core">
+          <SystemIcon name={module.icon} />
+          <span>{project.client}</span>
+          <strong>{module.title}</strong>
+          <p>{module.summary}</p>
+        </article>
+        {module.layers.map((layer, index) => (
+          <article class:list={["system-blueprint-layer", "ar-system-node", `system-blueprint-layer--${index + 1}`]} style={`--ar-level: ${74 + index * 6}%;`}>
+            <SystemIcon name={layer.icon} />
+            <div>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <h3>{layer.title}</h3>
+              <p>{layer.text}</p>
+            </div>
+            <ul>
+              {layer.items.map((item) => <li>{item}</li>)}
+            </ul>
+            <b class="ar-metric-bar"></b>
+          </article>
+        ))}
+        <div class="system-blueprint-surface__dock ar-signal-strip">
+          {module.outputs.slice(0, 3).map((output) => <span class="ar-signal">{output}</span>)}
+        </div>
+      </div>
+    </section>
+
+    <section class="section split-panel">
+      <article class="glass-panel private-slide-card">
+        <p class="eyebrow">{ui.valuePromise}</p>
+        <h2>{module.title}</h2>
+        <p>{module.summary}</p>
+        <div class="tag-grid">
+          {module.outputs.map((output) => <span class="tag">{output}</span>)}
+        </div>
+      </article>
+      <article class="glass-panel private-slide-card">
+        <p class="eyebrow">{ui.guardrails}</p>
+        <ul class="feature-list">
+          {module.guardrails.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">{ui.presentationFlow}</p>
+          <h2>{module.title}</h2>
+        </div>
+        <p>{module.positioning}</p>
+      </div>
+      <div class="private-presentation-deck">
+        {presentationSlides.map((slide, index) => (
+          <article class="glass-panel private-slide-card">
+            <span class="private-slide-number">{String(index + 1).padStart(2, "0")}</span>
+            <p class="eyebrow">{slide.eyebrow}</p>
+            <h3>{slide.title}</h3>
+            <p>{slide.text}</p>
+            <div class="tag-grid">
+              {slide.items.map((item) => <span class="tag">{item}</span>)}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section split-panel">
+      <article class="glass-panel private-slide-card">
+        <p class="eyebrow">{ui.dataSources}</p>
+        <h2>{ui.internalSources}</h2>
+        <div class="tag-grid">
+          {module.sources.internal.slice(0, 8).map((source) => <span class="tag">{source}</span>)}
+        </div>
+      </article>
+      <article class="glass-panel private-slide-card">
+        <p class="eyebrow">{ui.dataSources}</p>
+        <h2>{ui.externalSources}</h2>
+        <div class="tag-grid">
+          {module.sources.external.slice(0, 8).map((source) => <span class="tag">{source}</span>)}
+        </div>
+      </article>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <div>
+        <p class="eyebrow">{ui.pilotStory}</p>
+          <h2>{module.pilot.title}</h2>
+        </div>
+        <p>{module.pilot.goal}</p>
+      </div>
+      <ol class="private-step-list">
+        {module.pilot.steps.map((step, index) => (
+          <li>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <p>{step}</p>
+          </li>
+        ))}
+      </ol>
+      <div class="private-metric-panel glass-panel">
+        <h3>{ui.pilotMetrics}</h3>
+        <div class="tag-grid">
+          {module.pilot.metrics.map((metric) => <span class="tag">{metric}</span>)}
+        </div>
+      </div>
+    </section>
+
+    <section class="section split-panel">
+      <article class="glass-panel private-executive-panel private-slide-card">
+        <p class="eyebrow">{ui.executiveFraming}</p>
+        <h2>{module.title}</h2>
+        <p>{module.executive}</p>
+      </article>
+      <article class="glass-panel private-slide-card">
+        <p class="eyebrow">{ui.strategicEffect}</p>
+        <ul class="feature-list">
+          {module.effects.slice(0, 6).map((effect) => <li>{effect}</li>)}
+        </ul>
+      </article>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">{ui.relatedModules}</p>
+          <h2>{project.title}</h2>
+        </div>
+        <p>{project.description}</p>
+      </div>
+      <div class="private-related-grid">
+        {relatedModules.map((entry) => (
+          <a class="glass-panel private-related-card" href={localizePath(`/projects/${project.slug}/${entry.slug}/`, locale)}>
+            <SystemIcon name={entry.icon} />
+            <h3>{entry.title}</h3>
+            <p>{entry.summary}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+  </div>
+</Layout>

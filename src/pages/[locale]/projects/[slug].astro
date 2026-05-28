@@ -1,0 +1,18 @@
+---
+import ProjectPage from "@/pages/projects/[slug].astro";
+import { getPrivateProjects } from "@/data/private-projects";
+import { translatedLocales } from "@/data/i18n";
+
+export function getStaticPaths() {
+  return translatedLocales.flatMap((locale) =>
+    getPrivateProjects(locale).map((project) => ({
+      params: { locale, slug: project.slug },
+      props: { locale, project }
+    }))
+  );
+}
+
+const { locale, project } = Astro.props;
+---
+
+<ProjectPage locale={locale} project={project} />

@@ -3,38 +3,58 @@ import PageHero from "@/components/PageHero.astro";
 import SystemIcon from "@/components/SystemIcon.astro";
 import Layout from "@/layouts/Layout.astro";
 import { intakeHeroVisual } from "@/data/hero";
+import { translateCopy } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
 
-const intakeSignals = ["Problem", "Current system", "Desired output", "Integrations"];
+type Props = {
+  locale?: Locale;
+};
+
+const { locale = "en" } = Astro.props;
+
+const intakeSignals = ["Problem", "Current system", "Desired output", "Integrations"].map((signal) => translateCopy(locale, signal));
 const intakePath = [
   {
-    title: "Capture context",
+    title: translateCopy(locale, "Capture context"),
     icon: "lead",
-    text: "The request enters with source, offer, UTM, current system, and business pressure."
+    text: translateCopy(locale, "The request enters with source, offer, UTM, current system, and business pressure.")
   },
   {
-    title: "Map scope",
+    title: translateCopy(locale, "Map scope"),
     icon: "flow",
-    text: "Inputs, integrations, expected output, and first launch boundary are turned into a build path."
+    text: translateCopy(locale, "Inputs, integrations, expected output, and first launch boundary are turned into a build path.")
   },
   {
-    title: "Route next step",
+    title: translateCopy(locale, "Route next step"),
     icon: "monitor",
-    text: "The project can be reviewed as a landing page, automation, system, platform, or data workflow."
+    text: translateCopy(locale, "The project can be reviewed as a landing page, automation, system, platform, or data workflow.")
   }
 ];
+
+const sendingRequestLabel = translateCopy(locale, "Sending request...");
+const sendingSourceStatus = translateCopy(locale, "Sending request with source context...");
 ---
 
-<Layout title="Start a Project | AlfaRank">
+<Layout title="Start a Project | AlfaRank" locale={locale}>
   <PageHero
-    eyebrow="Start a Project"
-    title="Define the system your business needs."
-    text="Use the form to describe the project type, current setup, business problem, desired result, and optional timeline or budget."
+    eyebrow={translateCopy(locale, "Start a Project")}
+    title={translateCopy(locale, "Define the system your business needs.")}
+    text={translateCopy(locale, "Use the form to describe the project type, current setup, business problem, desired result, and optional timeline or budget.")}
     visual={intakeHeroVisual}
+    locale={locale}
   />
 
   <section class="section">
     <div class="intake-reactor ar-system-block">
-    <form class="glass-panel intake-reactor__form" method="post" action="/api/start-project" data-track-source data-conversion-form="start-project">
+    <form
+      class="glass-panel intake-reactor__form"
+      method="post"
+      action="/api/start-project"
+      data-track-source
+      data-conversion-form="start-project"
+      data-sending-label={sendingRequestLabel}
+      data-sending-status={sendingSourceStatus}
+    >
       <input type="hidden" name="source_path" value="/start-project/" />
       <input type="hidden" name="landing_page" />
       <input type="hidden" name="landing_offer" />
@@ -44,76 +64,76 @@ const intakePath = [
       <input type="hidden" name="utm_term" />
       <input type="hidden" name="utm_content" />
       <div class="spam-field" aria-hidden="true">
-        <label for="company_website">Company website</label>
+        <label for="company_website">{translateCopy(locale, "Company website")}</label>
         <input id="company_website" name="company_website" tabindex="-1" autocomplete="off" />
       </div>
       <div class="form-grid">
         <div class="field">
-          <label for="name">Name</label>
+          <label for="name">{translateCopy(locale, "Name")}</label>
           <input id="name" name="name" autocomplete="name" required />
         </div>
         <div class="field">
-          <label for="email">Email</label>
+          <label for="email">{translateCopy(locale, "Email")}</label>
           <input id="email" name="email" type="email" autocomplete="email" required />
         </div>
         <div class="field">
-          <label for="company">Company optional</label>
+          <label for="company">{translateCopy(locale, "Company optional")}</label>
           <input id="company" name="company" autocomplete="organization" />
         </div>
         <div class="field">
-          <label for="project-type">Project type</label>
+          <label for="project-type">{translateCopy(locale, "Project type")}</label>
           <select id="project-type" name="project_type">
-            <option>AI automation</option>
-            <option>Web platform</option>
-            <option>SEO/content infrastructure</option>
-            <option>Data or monitoring system</option>
-            <option>E-commerce infrastructure</option>
-            <option>WordPress/API integration</option>
-            <option>Internal business tool</option>
+            <option>{translateCopy(locale, "AI automation")}</option>
+            <option>{translateCopy(locale, "Web platform")}</option>
+            <option>{translateCopy(locale, "SEO/content infrastructure")}</option>
+            <option>{translateCopy(locale, "Data or monitoring system")}</option>
+            <option>{translateCopy(locale, "E-commerce infrastructure")}</option>
+            <option>{translateCopy(locale, "WordPress/API integration")}</option>
+            <option>{translateCopy(locale, "Internal business tool")}</option>
           </select>
         </div>
         <div class="field">
-          <label for="current-system">Current website/system</label>
-          <input id="current-system" name="current_system" placeholder="URL or short description" />
+          <label for="current-system">{translateCopy(locale, "Current website/system")}</label>
+          <input id="current-system" name="current_system" placeholder={translateCopy(locale, "URL or short description")} />
         </div>
         <div class="field">
-          <label for="desired-output">Desired output</label>
+          <label for="desired-output">{translateCopy(locale, "Desired output")}</label>
           <select id="desired-output" name="desired_output">
-            <option>Working first version</option>
-            <option>Automation workflow</option>
-            <option>Website or platform launch</option>
-            <option>Dashboard or internal tool</option>
-            <option>Content/publishing system</option>
-            <option>Data monitoring/reporting system</option>
+            <option>{translateCopy(locale, "Working first version")}</option>
+            <option>{translateCopy(locale, "Automation workflow")}</option>
+            <option>{translateCopy(locale, "Website or platform launch")}</option>
+            <option>{translateCopy(locale, "Dashboard or internal tool")}</option>
+            <option>{translateCopy(locale, "Content/publishing system")}</option>
+            <option>{translateCopy(locale, "Data monitoring/reporting system")}</option>
           </select>
         </div>
         <div class="field full">
-          <label for="problem">Business problem</label>
+          <label for="problem">{translateCopy(locale, "Business problem")}</label>
           <textarea id="problem" name="business_problem" required></textarea>
         </div>
         <div class="field full">
-          <label for="result">Desired result</label>
+          <label for="result">{translateCopy(locale, "Desired result")}</label>
           <textarea id="result" name="desired_result" required></textarea>
         </div>
         <div class="field full">
-          <label for="integrations">Systems, tools, or integrations</label>
-          <textarea id="integrations" name="integrations" placeholder="CMS, CRM, APIs, spreadsheets, databases, analytics, automation tools"></textarea>
+          <label for="integrations">{translateCopy(locale, "Systems, tools, or integrations")}</label>
+          <textarea id="integrations" name="integrations" placeholder={translateCopy(locale, "CMS, CRM, APIs, spreadsheets, databases, analytics, automation tools")}></textarea>
         </div>
         <div class="field">
-          <label for="budget">Budget optional</label>
+          <label for="budget">{translateCopy(locale, "Budget optional")}</label>
           <input id="budget" name="budget" />
         </div>
         <div class="field">
-          <label for="timeline">Timeline optional</label>
+          <label for="timeline">{translateCopy(locale, "Timeline optional")}</label>
           <input id="timeline" name="timeline" />
         </div>
         <div class="field full">
-          <label for="contact-details">Contact details optional</label>
-          <textarea id="contact-details" name="contact_details" placeholder="Preferred contact channel, time zone, or extra context"></textarea>
+          <label for="contact-details">{translateCopy(locale, "Contact details optional")}</label>
+          <textarea id="contact-details" name="contact_details" placeholder={translateCopy(locale, "Preferred contact channel, time zone, or extra context")}></textarea>
         </div>
       </div>
       <div class="section-actions" style="margin-top: 18px;">
-        <button class="button primary" type="submit">Send Project Request</button>
+        <button class="button primary" type="submit">{translateCopy(locale, "Send Project Request")}</button>
       </div>
       <p class="form-status" data-form-status aria-live="polite"></p>
     </form>
@@ -121,9 +141,9 @@ const intakePath = [
     <div class="intake-reactor__console">
       <article class="intake-reactor__core ar-system-core">
         <SystemIcon name="lead" />
-        <span>Intake reactor</span>
-        <strong>Turn context into scope.</strong>
-        <p>The form routes business pressure, current systems, desired output, and integrations into one project request.</p>
+        <span>{translateCopy(locale, "Intake reactor")}</span>
+        <strong>{translateCopy(locale, "Turn context into scope.")}</strong>
+        <p>{translateCopy(locale, "The form routes business pressure, current systems, desired output, and integrations into one project request.")}</p>
         <div class="ar-signal-strip">
           {intakeSignals.map((signal) => <span class="ar-signal">{signal}</span>)}
         </div>
@@ -141,12 +161,12 @@ const intakePath = [
       </div>
 
       <aside class="glass-panel intake-reactor__guide">
-        <h2>Good project inputs</h2>
+        <h2>{translateCopy(locale, "Good project inputs")}</h2>
         <ul class="feature-list">
-          <li>What process needs to become faster, clearer, or more automated.</li>
-          <li>What data, website, CRM, CMS, or internal system already exists.</li>
-          <li>What output should be visible after the first implementation phase.</li>
-          <li>Which integrations, tools, or manual workflows should be connected.</li>
+          <li>{translateCopy(locale, "What process needs to become faster, clearer, or more automated.")}</li>
+          <li>{translateCopy(locale, "What data, website, CRM, CMS, or internal system already exists.")}</li>
+          <li>{translateCopy(locale, "What output should be visible after the first implementation phase.")}</li>
+          <li>{translateCopy(locale, "Which integrations, tools, or manual workflows should be connected.")}</li>
         </ul>
       </aside>
     </div>
@@ -183,10 +203,10 @@ const intakePath = [
           const status = form.querySelector("[data-form-status]");
           if (button) {
             button.dataset.defaultLabel = button.textContent || "";
-            button.textContent = "Sending request...";
+            button.textContent = form.dataset.sendingLabel || "Sending request...";
             button.disabled = true;
           }
-          if (status) status.textContent = "Sending request with source context...";
+          if (status) status.textContent = form.dataset.sendingStatus || "Sending request with source context...";
         });
       });
     })();

@@ -1,0 +1,17 @@
+---
+import SolutionPage from "@/pages/solutions/[slug].astro";
+import { getSolutions, translatedLocales } from "@/data/i18n";
+
+export function getStaticPaths() {
+  return translatedLocales.flatMap((locale) =>
+    getSolutions(locale).map((item) => ({
+      params: { locale, slug: item.slug },
+      props: { locale, item }
+    }))
+  );
+}
+
+const { locale, item } = Astro.props;
+---
+
+<SolutionPage locale={locale} item={item} />

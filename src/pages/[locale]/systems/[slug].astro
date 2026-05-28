@@ -1,0 +1,17 @@
+---
+import SystemPage from "@/pages/systems/[slug].astro";
+import { getSystems, translatedLocales } from "@/data/i18n";
+
+export function getStaticPaths() {
+  return translatedLocales.flatMap((locale) =>
+    getSystems(locale).map((item) => ({
+      params: { locale, slug: item.slug },
+      props: { locale, item }
+    }))
+  );
+}
+
+const { locale, item } = Astro.props;
+---
+
+<SystemPage locale={locale} item={item} />

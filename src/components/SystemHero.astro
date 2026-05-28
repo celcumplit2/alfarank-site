@@ -1,5 +1,7 @@
 ---
 import SystemIcon from "@/components/SystemIcon.astro";
+import { localizePath, translateCopy } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
 
 type Props = {
   eyebrow?: string;
@@ -9,6 +11,7 @@ type Props = {
   primaryLabel?: string;
   secondaryHref?: string;
   secondaryLabel?: string;
+  locale?: Locale;
 };
 
 const {
@@ -18,12 +21,18 @@ const {
   primaryHref,
   primaryLabel,
   secondaryHref,
-  secondaryLabel
+  secondaryLabel,
+  locale = "en"
 } = Astro.props;
 
-const [titleLead, titleTail] = title.includes(" connected, ")
-  ? title.split(" connected, ")
-  : [title, ""];
+const localizedEyebrow = eyebrow ? translateCopy(locale, eyebrow) : undefined;
+const localizedTitle = translateCopy(locale, title);
+const localizedText = translateCopy(locale, text);
+const localizedPrimaryLabel = primaryLabel ? translateCopy(locale, primaryLabel) : primaryLabel;
+const localizedSecondaryLabel = secondaryLabel ? translateCopy(locale, secondaryLabel) : secondaryLabel;
+const [titleLead, titleTail] = localizedTitle.includes(" connected, ")
+  ? localizedTitle.split(" connected, ")
+  : [localizedTitle, ""];
 
 const accentTitle = titleTail ? `connected, ${titleTail}` : "";
 
@@ -34,35 +43,46 @@ const modules = [
   { key: "crm", title: "CRM", state: "Connected", meta: "Lead flow", icon: "lead", href: "/solutions/automate-lead-processing/" },
   { key: "apis", title: "APIs", state: "Live", meta: "Integrations", icon: "api", href: "/capabilities/wordpress-api-integrations/" },
   { key: "reports", title: "Reports", state: "Updated", meta: "Decisions", icon: "ranking", href: "/solutions/build-data-monitoring-system/" }
-];
+].map((module) => ({
+  ...module,
+  title: translateCopy(locale, module.title),
+  state: translateCopy(locale, module.state),
+  meta: translateCopy(locale, module.meta),
+  href: localizePath(module.href, locale)
+}));
 
 const telemetry = [
   { label: "Capabilities", value: "7 directions", href: "/capabilities/" },
   { label: "Systems", value: "Launchable", href: "/systems/" },
   { label: "Leads", value: "Ready", href: "/start-project/" }
-];
+].map((item) => ({
+  ...item,
+  label: translateCopy(locale, item.label),
+  value: translateCopy(locale, item.value),
+  href: localizePath(item.href, locale)
+}));
 ---
 
 <section class="system-hero" aria-labelledby="system-hero-title">
   <div class="system-hero__copy">
-    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    {localizedEyebrow && <p class="eyebrow">{localizedEyebrow}</p>}
     <h1 id="system-hero-title">
       <span class="system-hero__line">{titleLead}</span>
       {accentTitle && <span class="system-hero__accent">{accentTitle}</span>}
     </h1>
-    <p class="hero-text">{text}</p>
+    <p class="hero-text">{localizedText}</p>
     {(primaryHref || secondaryHref) && (
       <div class="hero-actions">
-        {primaryHref && <a class="button primary" href={primaryHref}>{primaryLabel}</a>}
-        {secondaryHref && <a class="button secondary" href={secondaryHref}>{secondaryLabel}</a>}
+        {primaryHref && <a class="button primary" href={localizePath(primaryHref, locale)}>{localizedPrimaryLabel}</a>}
+        {secondaryHref && <a class="button secondary" href={localizePath(secondaryHref, locale)}>{localizedSecondaryLabel}</a>}
       </div>
     )}
   </div>
 
   <div class="system-map" aria-label="AlfaRank operational system map">
     <div class="system-map__status">
-      <span><i></i>Mission control</span>
-      <small>Client system map / live routing</small>
+      <span><i></i>{translateCopy(locale, "Mission control")}</span>
+      <small>{translateCopy(locale, "Client system map / live routing")}</small>
     </div>
 
     <svg class="system-map__routes" viewBox="0 0 760 560" preserveAspectRatio="none" aria-hidden="true">
@@ -83,9 +103,9 @@ const telemetry = [
 
     <div class="system-map__core">
       <SystemIcon name="product" />
-      <strong>AlfaRank core</strong>
-      <span>Orchestrate. Automate. Scale.</span>
-      <small><i></i>System online</small>
+      <strong>{translateCopy(locale, "AlfaRank core")}</strong>
+      <span>{translateCopy(locale, "Orchestrate. Automate. Scale.")}</span>
+      <small><i></i>{translateCopy(locale, "System online")}</small>
     </div>
 
     {modules.map((module) => (

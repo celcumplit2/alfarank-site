@@ -1,0 +1,142 @@
+---
+import PageHero from "@/components/PageHero.astro";
+import SystemIcon from "@/components/SystemIcon.astro";
+import Layout from "@/layouts/Layout.astro";
+import { getPrivateProjects, privateUi } from "@/data/private-projects";
+import { localizePath } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
+
+type Props = {
+  locale?: Locale;
+  project: ReturnType<typeof getPrivateProjects>[number];
+};
+
+export function getStaticPaths() {
+  return getPrivateProjects("en").map((project) => ({
+    params: { slug: project.slug },
+    props: { project, locale: "en" }
+  }));
+}
+
+const { project, locale = "en" } = Astro.props as Props;
+const ui = privateUi[locale];
+
+const moduleSignals = project.modules.map((module, index) => ({
+  title: module.title,
+  state: module.outputs[0] ?? ui.outputs,
+  icon: module.icon,
+  detail: module.summary,
+  meter: `${72 + index * 4}%`
+}));
+
+const projectVisual = {
+  mode: "private-project",
+  icon: project.icon,
+  label: project.client,
+  state: project.status,
+  output: project.outputs.join(", "),
+  nodes: moduleSignals,
+  metrics: [
+    { value: String(project.modules.length).padStart(2, "0"), label: ui.modules },
+    { value: String(project.outputs.length).padStart(2, "0"), label: ui.outputs },
+    { value: "Pilot", label: ui.pilot }
+  ]
+};
+---
+
+<Layout title={`${project.title} | AlfaRank`} description={project.summary} locale={locale} robots="noindex, nofollow">
+  <div class="private-project-page" data-no-translate>
+    <PageHero
+      eyebrow={project.eyebrow}
+      title={project.title}
+      text={project.summary}
+      primaryHref={`/projects/${project.slug}/${project.modules[0]?.slug ?? ""}/`}
+      primaryLabel={ui.openModule}
+      secondaryHref="/projects/"
+      secondaryLabel={ui.allProjects}
+      locale={locale}
+      visual={projectVisual}
+    />
+
+    <section class="section split-panel private-pitch-split">
+      <article class="glass-panel private-slide-card private-slide-card--lead">
+        <p class="eyebrow">{ui.projectOverview}</p>
+        <h2>{project.thesis.title}</h2>
+        <p>{project.thesis.text}</p>
+      </article>
+      <article class="glass-panel private-slide-card">
+        <p class="eyebrow">{ui.outputs}</p>
+        <div class="tag-grid">
+          {project.outputs.map((output) => <span class="tag">{output}</span>)}
+        </div>
+        <h3>{project.client}</h3>
+        <p>{project.status}</p>
+      </article>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">{ui.projectMap}</p>
+          <h2>{ui.moduleMap}</h2>
+        </div>
+        <p>{project.thesis.text}</p>
+      </div>
+
+      <div class="systems-navigation-console private-module-console ar-system-block">
+        <article class="systems-navigation-console__core ar-system-core">
+          <SystemIcon name={project.icon} />
+          <span>{project.client}</span>
+          <strong>{project.title}</strong>
+          <p>{project.summary}</p>
+        </article>
+
+        {project.modules.map((module, index) => (
+          <a class:list={["systems-navigation-node", "ar-system-node", `systems-navigation-node--${index + 1}`]} href={localizePath(`/projects/${project.slug}/${module.slug}/`, locale)} style={`--ar-level: ${72 + index * 5}%;`}>
+            <SystemIcon name={module.icon} />
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <h3>{module.title}</h3>
+            <p>{module.summary}</p>
+            <b class="ar-metric-bar"></b>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="section split-panel">
+      <article class="glass-panel private-slide-card">
+        <p class="eyebrow">{ui.strategicLayer}</p>
+        <h2>{project.thesis.title}</h2>
+        <ul class="feature-list">
+          {project.thesis.items.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+      <article class="glass-panel private-slide-card">
+        <p class="eyebrow">{ui.guardrails}</p>
+        <h2>{project.guardrail.title}</h2>
+        <p>{project.guardrail.text}</p>
+        <ul class="feature-list">
+          {project.guardrail.items.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">{ui.implementationPlan}</p>
+          <h2>{project.implementation.title}</h2>
+        </div>
+        <p>{project.implementation.text}</p>
+      </div>
+      <ol class="private-step-list">
+        {project.implementation.steps.map((step, index) => (
+          <li>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <p>{step}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+  </div>
+</Layout>

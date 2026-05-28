@@ -2,7 +2,14 @@
 import PageHero from "@/components/PageHero.astro";
 import SystemIcon from "@/components/SystemIcon.astro";
 import Layout from "@/layouts/Layout.astro";
-import { capabilities, industries, solutions, systems } from "@/data/site";
+import { industries } from "@/data/site";
+import { getCapabilities, getSolutions, getSystems, localizePath, translateCopy } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
+
+type Props = {
+  locale?: Locale;
+  item: (typeof industries)[number];
+};
 
 export function getStaticPaths() {
   return industries.map((item) => ({
@@ -11,7 +18,10 @@ export function getStaticPaths() {
   }));
 }
 
-const { item } = Astro.props;
+const { item, locale = "en" } = Astro.props as Props;
+const localizedCapabilities = getCapabilities(locale);
+const localizedSolutions = getSolutions(locale);
+const localizedSystems = getSystems(locale);
 
 const industryMap: Record<string, {
   needs: string[];
@@ -70,15 +80,124 @@ const industryMap: Record<string, {
 };
 
 const profile = industryMap[item.slug] ?? industryMap["service-businesses"];
+const localizedStates = ["Need", "Workflow", "Signal", "Output"].map((state) => translateCopy(locale, state));
+const localeForCase = locale === "ru" ? "ru" : locale === "ro" ? "ro" : "en";
+const lower = (value: string) => value.toLocaleLowerCase(localeForCase);
+
+const ruIndustryProfiles: Record<
+  string,
+  {
+    genitive: string;
+    prepositional: string;
+    segment: string;
+    needs: { title: string; object: string; focus: string }[];
+  }
+> = {
+  "service-businesses": {
+    genitive: "сервисных компаний",
+    prepositional: "сервисных компаниях",
+    segment: "сервисных компаний",
+    needs: [
+      { title: "Захват и маршрутизация заявок", object: "захват и маршрутизацию заявок", focus: "захват заявок" },
+      { title: "Дальнейшая обработка в CRM", object: "дальнейшую обработку в CRM", focus: "обработку в CRM" },
+      {
+        title: "Локальные посадочные страницы услуг",
+        object: "локальные посадочные страницы услуг",
+        focus: "локальные посадочные страницы"
+      },
+      { title: "Операционные панели", object: "операционные панели", focus: "операционные панели" }
+    ]
+  },
+  ecommerce: {
+    genitive: "e-commerce-проектов",
+    prepositional: "e-commerce-проектах",
+    segment: "e-commerce-проектов",
+    needs: [
+      { title: "Качество данных каталога", object: "качество данных каталога", focus: "качество каталога" },
+      { title: "Синхронизация фидов и маркетплейсов", object: "синхронизацию фидов и маркетплейсов", focus: "фиды и маркетплейсы" },
+      { title: "Мониторинг остатков и цен", object: "мониторинг остатков и цен", focus: "остатки и цены" },
+      { title: "Контент товаров и категорий", object: "контент товаров и категорий", focus: "товарный контент" }
+    ]
+  },
+  "media-content-projects": {
+    genitive: "медиа и контентных проектов",
+    prepositional: "медиа и контентных проектах",
+    segment: "медиа и контентных проектов",
+    needs: [
+      { title: "Редакционный процесс", object: "редакционный процесс", focus: "редакционный процесс" },
+      { title: "AI-черновики", object: "AI-черновики", focus: "AI-черновики" },
+      { title: "Подготовка медиа-ассетов", object: "подготовку медиа-ассетов", focus: "медиа-ассеты" },
+      { title: "Публикация и мониторинг", object: "публикацию и мониторинг", focus: "публикация" }
+    ]
+  },
+  travel: {
+    genitive: "туристических проектов",
+    prepositional: "туристических проектах",
+    segment: "туристических проектов",
+    needs: [
+      { title: "Данные направлений", object: "данные направлений", focus: "данные направлений" },
+      { title: "Структуры каталогов и доступности", object: "структуры каталогов и доступности", focus: "каталог и доступность" },
+      { title: "Программные SEO-страницы", object: "программные SEO-страницы", focus: "SEO-страницы" },
+      { title: "Мониторинг и сбор данных", object: "мониторинг и сбор данных", focus: "мониторинг данных" }
+    ]
+  },
+  "local-business": {
+    genitive: "локального бизнеса",
+    prepositional: "локальном бизнесе",
+    segment: "локального бизнеса",
+    needs: [
+      { title: "Локальные посадочные страницы", object: "локальные посадочные страницы", focus: "локальные страницы" },
+      { title: "Маршрут заявки", object: "маршрут заявки", focus: "маршрут заявки" },
+      { title: "Отзывы и сигналы ранжирования", object: "отзывы и сигналы ранжирования", focus: "отзывы и ранжирование" },
+      { title: "Связка сайта и CRM", object: "связку сайта и CRM", focus: "сайт и CRM" }
+    ]
+  },
+  "saas-mvp": {
+    genitive: "SaaS и MVP",
+    prepositional: "SaaS и MVP",
+    segment: "SaaS и MVP",
+    needs: [
+      { title: "Скоуп MVP", object: "скоуп MVP", focus: "скоуп MVP" },
+      { title: "Продуктовый интерфейс", object: "продуктовый интерфейс", focus: "продуктовый интерфейс" },
+      { title: "Панели и админ-инструменты", object: "панели и админ-инструменты", focus: "панели управления" },
+      { title: "Модель данных и интеграций", object: "модель данных и интеграций", focus: "модель данных" }
+    ]
+  },
+  agencies: {
+    genitive: "агентств",
+    prepositional: "агентствах",
+    segment: "агентств",
+    needs: [
+      { title: "White-label отчетность", object: "white-label отчетность", focus: "white-label отчетность" },
+      { title: "Клиентские панели", object: "клиентские панели", focus: "клиентские панели" },
+      { title: "Системы производства контента", object: "системы производства контента", focus: "производство контента" },
+      { title: "Внутренние рабочие инструменты", object: "внутренние рабочие инструменты", focus: "внутренние инструменты" }
+    ]
+  },
+  "data-heavy-businesses": {
+    genitive: "компаний с большим объемом данных",
+    prepositional: "компаниях с большим объемом данных",
+    segment: "компаний с большим объемом данных",
+    needs: [
+      { title: "Сбор данных", object: "сбор данных", focus: "сбор данных" },
+      { title: "Нормализация и скоринг", object: "нормализацию и скоринг", focus: "нормализация и скоринг" },
+      { title: "Мониторинг и алерты", object: "мониторинг и алерты", focus: "мониторинг" },
+      { title: "Отчеты и экспорты", object: "отчеты и экспорты", focus: "отчеты и экспорты" }
+    ]
+  }
+};
+
+const ruIndustry = locale === "ru" ? ruIndustryProfiles[item.slug] : undefined;
+const localizedNeeds = ruIndustry?.needs.map((need) => need.title) ?? profile.needs.map((need) => translateCopy(locale, need));
 const capabilityLinks = profile.capabilitySlugs
-  .map((slug) => capabilities.find((entry) => entry.slug === slug))
-  .filter((entry): entry is (typeof capabilities)[number] => Boolean(entry));
+  .map((slug) => localizedCapabilities.find((entry) => entry.slug === slug))
+  .filter((entry): entry is (typeof localizedCapabilities)[number] => Boolean(entry));
 const solutionLinks = profile.solutionSlugs
-  .map((slug) => solutions.find((entry) => entry.slug === slug))
-  .filter((entry): entry is (typeof solutions)[number] => Boolean(entry));
+  .map((slug) => localizedSolutions.find((entry) => entry.slug === slug))
+  .filter((entry): entry is (typeof localizedSolutions)[number] => Boolean(entry));
 const systemLinks = profile.systemSlugs
-  .map((slug) => systems.find((entry) => entry.slug === slug))
-  .filter((entry): entry is (typeof systems)[number] => Boolean(entry));
+  .map((slug) => localizedSystems.find((entry) => entry.slug === slug))
+  .filter((entry): entry is (typeof localizedSystems)[number] => Boolean(entry));
 
 const visual = {
   mode: "industries",
@@ -86,10 +205,10 @@ const visual = {
   label: item.title,
   state: "Industry fit mapped",
   output: item.summary,
-  nodes: profile.needs.slice(0, 4).map((need, index) => ({
+  nodes: localizedNeeds.slice(0, 4).map((need, index) => ({
     title: need,
     icon: ["lead", "flow", "data", "ranking"][index],
-    state: ["Need", "Workflow", "Signal", "Output"][index],
+    state: localizedStates[index],
     detail: "Industry system",
     meter: `${72 + index * 6}%`
   })),
@@ -100,30 +219,133 @@ const visual = {
   ]
 };
 
+const primaryNeed = lower(localizedNeeds[0]);
+const secondaryNeed = lower(localizedNeeds[1] ?? localizedNeeds[0]);
+const firstThreeNeeds = lower(localizedNeeds.slice(0, 3).join(", "));
+const industryLowerTitle = lower(item.title);
+const industryTextName = ruIndustry?.genitive ?? industryLowerTitle;
+const industrySegmentName = ruIndustry?.segment ?? item.title;
+const primaryNeedText = ruIndustry?.needs[0]?.object ?? primaryNeed;
+const secondaryNeedText = ruIndustry?.needs[1]?.object ?? secondaryNeed;
+const firstThreeNeedsText = ruIndustry?.needs.slice(0, 3).map((need) => need.object).join(", ") ?? firstThreeNeeds;
+const industryIntakeHref = `/start-project/?offer=industry-${item.slug}&landing_page=/industries/${item.slug}/`;
+const industrySystemHref = localizePath(industryIntakeHref, locale);
+const industryCopy = {
+  systemFitTitle:
+    locale === "ru"
+      ? `С чего начинается системная работа для ${industryTextName}`
+      : locale === "ro"
+        ? `Unde incep de obicei sistemele pentru ${industryLowerTitle}`
+        : `Where ${industryLowerTitle} systems usually start`,
+  systemFitText:
+    locale === "ru"
+      ? `Для сегмента ${industrySegmentName} страница должна сразу показать ${primaryNeedText}, ${secondaryNeedText} и первый измеримый операционный слой еще до запроса оценки.`
+      : locale === "ro"
+        ? `Pentru ${item.title}, pagina trebuie sa arate clar ${primaryNeed}, ${secondaryNeed} si primul strat operational masurabil inainte ca vizitatorul sa ceara scope.`
+        : `For ${item.title}, the page needs to make ${primaryNeed}, ${secondaryNeed}, and the first measurable operating layer obvious before a visitor asks for scope.`,
+  coreText:
+    locale === "ru"
+      ? `Начинаем с повторяемого давления в ${ruIndustry?.prepositional ?? industryLowerTitle}, затем превращаем его в процесс, модель данных и маршрут заявки.`
+      : locale === "ro"
+        ? `Pornim de la presiunea repetabila din ${industryLowerTitle}, apoi o transformam intr-un workflow construibil, model de date si traseu de intake.`
+        : `Start with the repeated pressure in ${industryLowerTitle}, then shape it into a buildable workflow, data model, and intake path.`,
+  routeStrong:
+    locale === "ru"
+      ? `${item.title}: путь от давления к системе`
+      : locale === "ro"
+        ? `${item.title}: de la presiune la sistem`
+        : `${item.title} pressure to build path`,
+  routeText:
+    locale === "ru"
+      ? `Переводим ${primaryNeedText} в конкретные возможности, страницы решений и повторно используемые профили, которые подходят этому рынку.`
+      : locale === "ro"
+        ? `Transformam ${primaryNeed} in capabilitati, pagini de solutii si profiluri reutilizabile potrivite pentru aceasta piata.`
+        : `Route ${primaryNeed} into the capabilities, solution pages, and reusable profiles that make sense for this market.`,
+  capabilitiesTitle:
+    locale === "ru"
+      ? `Возможности для ${industryTextName}`
+      : locale === "ro"
+        ? `Capabilitati pentru ${industryLowerTitle}`
+        : `${item.title} capabilities`,
+  solutionsTitle:
+    locale === "ru"
+      ? `Маршруты решений для ${industryTextName}`
+      : locale === "ro"
+        ? `Rute de solutii pentru ${industryLowerTitle}`
+        : `Solution routes for ${industryLowerTitle}`,
+  systemsTitle:
+    locale === "ru"
+      ? `Профили систем для ${industryTextName}`
+      : locale === "ro"
+        ? `Profiluri de sistem pentru ${industryLowerTitle}`
+        : `System profiles for ${industryLowerTitle}`,
+  growthTitle:
+    locale === "ru"
+      ? `Как трафик для ${industryTextName} становится понятным спросом`
+      : locale === "ro"
+        ? `Cum traficul pentru ${industryLowerTitle} devine cerere clara`
+        : `How ${industryLowerTitle} traffic becomes scoped demand`,
+  growthText:
+    locale === "ru"
+      ? `Эта страница должна превращать ${primaryNeedText} и связанные системные маршруты в понятную причину запросить первую рабочую версию, независимо от того, пришел посетитель из рекламы, поиска или прямого контакта.`
+      : locale === "ro"
+        ? `Pagina trebuie sa transforme ${primaryNeed} si rutele de sistem asociate intr-un motiv clar de a cere prima versiune functionala, indiferent daca vizitatorul vine din reclame, cautare sau outreach.`
+        : `This page should turn ${primaryNeed} and related system routes into a clear reason to request the first working version, whether the visitor comes from ads, search, or outreach.`,
+  ctaStrong:
+    locale === "ru"
+      ? `Описать первую систему для ${industryTextName}.`
+      : locale === "ro"
+        ? `Defineste primul sistem pentru ${industryLowerTitle}.`
+        : `Scope the first ${industryLowerTitle} system.`,
+  ctaText:
+    locale === "ru"
+      ? `Опишите текущий процесс, связанный с ${primaryNeedText}, и результат, который должен стать видимым первым.`
+      : locale === "ro"
+        ? `Descrie workflow-ul curent pentru ${primaryNeed} si rezultatul care trebuie sa devina vizibil primul.`
+        : `Describe the current ${primaryNeed} workflow and the result that should become visible first.`
+};
+
+const needScopeText = (need: string, index: number) =>
+  locale === "ru"
+    ? `Показываем направление «${ruIndustry?.needs[index]?.focus ?? need}»: что входит в работу, кто отвечает, что автоматизируется и какой результат измеряется.`
+    : locale === "ro"
+      ? `Fa ${lower(need)} suficient de vizibil pentru a putea fi estimat, asignat, automatizat sau masurat.`
+      : `Make ${lower(need)} visible enough to scope, assign, automate, or measure.`;
+
 const industryLeadPlan = [
   {
     title: "Landing angle",
-    text: `Start from ${profile.needs[0].toLowerCase()} and show how it becomes a managed digital system.`
+    text:
+      locale === "ru"
+        ? `Начинаем с направления «${localizedNeeds[0]}» и показываем путь от запроса до управляемой цифровой системы.`
+        : locale === "ro"
+          ? `Porneste de la ${primaryNeed} si arata cum devine un sistem digital gestionat.`
+          : `Start from ${primaryNeed} and show how it becomes a managed digital system.`
   },
   {
     title: "Offer route",
     text: solutionLinks[0]
-      ? `Use ${solutionLinks[0].title} as the first commercial solution route.`
-      : "Use the strongest repeated workflow as the first commercial solution route."
+      ? locale === "ru"
+        ? `Используйте ${solutionLinks[0].title} как первый коммерческий маршрут решения.`
+        : locale === "ro"
+          ? `Foloseste ${solutionLinks[0].title} ca prima ruta comerciala de solutie.`
+          : `Use ${solutionLinks[0].title} as the first commercial solution route.`
+      : translateCopy(locale, "Use the strongest repeated workflow as the first commercial solution route.")
   },
   {
     title: "Proof signals",
-    text: `Make ${profile.needs.slice(0, 3).join(", ").toLowerCase()} measurable instead of implied.`
+    text:
+      locale === "ru"
+        ? `Показываем, как измеряются ${firstThreeNeedsText}, чтобы посетитель видел не обещание, а рабочий контур.`
+        : locale === "ro"
+          ? `Fa ${firstThreeNeeds} masurabile, nu doar presupuse.`
+          : `Make ${firstThreeNeeds} measurable instead of implied.`
   }
 ];
 
-const industryIntakeHref = `/start-project/?offer=industry-${item.slug}&landing_page=/industries/${item.slug}/`;
-const industryLowerTitle = item.title.toLowerCase();
-const primaryNeed = profile.needs[0].toLowerCase();
-const secondaryNeed = (profile.needs[1] ?? profile.needs[0]).toLowerCase();
 ---
 
-<Layout title={`${item.title} | AlfaRank Industries`} description={item.summary}>
+<Layout title={`${item.title} | AlfaRank Industries`} description={item.summary} locale={locale}>
   <PageHero
     eyebrow="Industry profile"
     title={item.title}
@@ -132,33 +354,34 @@ const secondaryNeed = (profile.needs[1] ?? profile.needs[0]).toLowerCase();
     primaryLabel="Start a Project"
     secondaryHref="/industries/"
     secondaryLabel="All Industries"
+    locale={locale}
     visual={visual}
   />
 
   <section class="section">
     <div class="section-header">
       <div>
-        <p class="eyebrow">System fit</p>
-        <h2>Where {industryLowerTitle} systems usually start</h2>
+        <p class="eyebrow">{translateCopy(locale, "System fit")}</p>
+        <h2>{industryCopy.systemFitTitle}</h2>
       </div>
-      <p>For {item.title}, the page needs to make {primaryNeed}, {secondaryNeed}, and the first measurable operating layer obvious before a visitor asks for scope.</p>
+      <p>{industryCopy.systemFitText}</p>
     </div>
 
     <div class:list={["industry-detail-funnel", "ar-system-block", `industry-detail-funnel--${item.slug}`]}>
       <article class="industry-detail-funnel__core ar-system-core">
         <SystemIcon name={item.icon} />
-        <span>Industry system core</span>
+        <span>{translateCopy(locale, "Industry system core")}</span>
         <strong>{item.title}</strong>
-        <p>Start with the repeated pressure in {industryLowerTitle}, then shape it into a buildable workflow, data model, and intake path.</p>
-        <a class="button secondary" href={industryIntakeHref}>Scope an industry system</a>
+        <p>{industryCopy.coreText}</p>
+        <a class="button secondary" href={industrySystemHref}>{translateCopy(locale, "Scope an industry system")}</a>
       </article>
 
-      {profile.needs.map((need, index) => (
+      {localizedNeeds.map((need, index) => (
         <article class:list={["industry-need-node", "ar-system-node", `industry-need-node--${index + 1}`]} style={`--ar-level: ${72 + index * 6}%;`}>
           <SystemIcon name={["lead", "flow", "data", "ranking"][index] ?? "tools"} />
-          <span>{["Need", "Workflow", "Signal", "Output"][index] ?? "Fit"}</span>
+          <span>{localizedStates[index] ?? translateCopy(locale, "Fit")}</span>
           <h3>{need}</h3>
-          <p>Make {need.toLowerCase()} visible enough to scope, assign, automate, or measure.</p>
+          <p>{needScopeText(need, index)}</p>
           <b class="ar-metric-bar"></b>
         </article>
       ))}
@@ -169,29 +392,29 @@ const secondaryNeed = (profile.needs[1] ?? profile.needs[0]).toLowerCase();
     <div class:list={["industry-route-console", "ar-system-block", `industry-route-console--${item.slug}`]}>
       <article class="industry-route-console__core ar-system-core">
         <SystemIcon name="flow" />
-        <span>Route console</span>
-        <strong>{item.title} pressure to build path</strong>
-        <p>Route {primaryNeed} into the capabilities, solution pages, and reusable profiles that make sense for this market.</p>
+        <span>{translateCopy(locale, "Route console")}</span>
+        <strong>{industryCopy.routeStrong}</strong>
+        <p>{industryCopy.routeText}</p>
       </article>
     <article class="industry-route-panel ar-system-panel">
       <SystemIcon name="tools" />
-      <h2>{item.title} capabilities</h2>
+      <h2>{industryCopy.capabilitiesTitle}</h2>
       <div class="tag-grid">
-        {capabilityLinks.map((entry) => <a class="tag" href={`/capabilities/${entry.slug}/`}>{entry.title}</a>)}
+        {capabilityLinks.map((entry) => <a class="tag" href={localizePath(`/capabilities/${entry.slug}/`, locale)}>{entry.title}</a>)}
       </div>
     </article>
     <article class="industry-route-panel ar-system-panel">
       <SystemIcon name="flow" />
-      <h2>Solution routes for {industryLowerTitle}</h2>
+      <h2>{industryCopy.solutionsTitle}</h2>
       <div class="tag-grid">
-        {solutionLinks.map((entry) => <a class="tag" href={`/solutions/${entry.slug}/`}>{entry.title}</a>)}
+        {solutionLinks.map((entry) => <a class="tag" href={localizePath(`/solutions/${entry.slug}/`, locale)}>{entry.title}</a>)}
       </div>
     </article>
     <article class="industry-route-panel ar-system-panel">
       <SystemIcon name="product" />
-      <h2>System profiles for {industryLowerTitle}</h2>
+      <h2>{industryCopy.systemsTitle}</h2>
       <div class="tag-grid">
-        {systemLinks.map((entry) => <a class="tag" href={`/systems/${entry.slug}/`}>{entry.title}</a>)}
+        {systemLinks.map((entry) => <a class="tag" href={localizePath(`/systems/${entry.slug}/`, locale)}>{entry.title}</a>)}
       </div>
     </article>
     </div>
@@ -200,26 +423,26 @@ const secondaryNeed = (profile.needs[1] ?? profile.needs[0]).toLowerCase();
   <section class="section" aria-labelledby="industry-growth-title">
     <div class="section-header">
       <div>
-        <p class="eyebrow">Landing-page development</p>
-        <h2 id="industry-growth-title">How {industryLowerTitle} traffic becomes scoped demand</h2>
+        <p class="eyebrow">{translateCopy(locale, "Landing-page development")}</p>
+        <h2 id="industry-growth-title">{industryCopy.growthTitle}</h2>
       </div>
-      <p>This page should turn {primaryNeed} and related system routes into a clear reason to request the first working version, whether the visitor comes from ads, search, or outreach.</p>
+      <p>{industryCopy.growthText}</p>
     </div>
     <div class:list={["industry-offer-engine", "ar-system-block", `industry-offer-engine--${item.slug}`]}>
       {industryLeadPlan.map((signal, index) => (
         <article class:list={["industry-offer-signal", "ar-system-node", `industry-offer-signal--${index + 1}`]}>
-          <SystemIcon name={["lens", "flow", "ranking"][index] ?? item.icon} />
-          <span>{signal.title}</span>
-          <h3>{index === 0 ? "Angle" : index === 1 ? "Route" : "Evidence"}</h3>
+        <SystemIcon name={["lens", "flow", "ranking"][index] ?? item.icon} />
+          <span>{translateCopy(locale, signal.title)}</span>
+          <h3>{translateCopy(locale, index === 0 ? "Angle" : index === 1 ? "Route" : "Evidence")}</h3>
           <p>{signal.text}</p>
         </article>
       ))}
       <article class="industry-offer-cta ar-system-core">
         <SystemIcon name={item.icon} />
-        <span>Next conversion step</span>
-        <strong>Scope the first {industryLowerTitle} system.</strong>
-        <p>Describe the current {primaryNeed} workflow and the result that should become visible first.</p>
-        <a class="button primary" href={industryIntakeHref}>Scope Industry System</a>
+        <span>{translateCopy(locale, "Next conversion step")}</span>
+        <strong>{industryCopy.ctaStrong}</strong>
+        <p>{industryCopy.ctaText}</p>
+        <a class="button primary" href={industrySystemHref}>{translateCopy(locale, "Scope Industry System")}</a>
       </article>
     </div>
   </section>

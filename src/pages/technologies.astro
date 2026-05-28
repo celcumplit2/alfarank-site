@@ -2,8 +2,19 @@
 import PageHero from "@/components/PageHero.astro";
 import SystemIcon from "@/components/SystemIcon.astro";
 import Layout from "@/layouts/Layout.astro";
-import { technologies } from "@/data/site";
 import { technologiesHeroVisual } from "@/data/hero";
+import { getTechnologies, localizePath, translateCopy } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
+
+type Props = {
+  locale?: Locale;
+};
+
+const { locale = "en" } = Astro.props;
+const technologies = getTechnologies(locale);
+const baseTechnologies = getTechnologies("en");
+const localizedTechnologyLabel = (tech: string) =>
+  technologies[baseTechnologies.indexOf(tech)] ?? translateCopy(locale, tech);
 
 const technologyMatrix = [
   {
@@ -80,36 +91,45 @@ const technologyIcons: Record<string, string> = {
   "Cloudflare Pages": "product"
 };
 
-const technologyRadar = technologies.slice(0, 12).map((tech, index) => ({
-  tech,
+const technologyRadar = baseTechnologies.slice(0, 12).map((tech, index) => ({
+  tech: localizedTechnologyLabel(tech),
   slot: index + 1,
-  href: technologyLinks[tech] ?? "/technologies/",
+  href: localizePath(technologyLinks[tech] ?? "/technologies/", locale),
   icon: technologyIcons[tech] ?? "api"
+}));
+
+const localizedTechnologyMatrix = technologyMatrix.map((group) => ({
+  ...group,
+  group: translateCopy(locale, group.group),
+  function: translateCopy(locale, group.function),
+  connectsTo: translateCopy(locale, group.connectsTo),
+  tools: group.tools.map((tool) => translateCopy(locale, tool))
 }));
 ---
 
-<Layout title="Technologies | AlfaRank">
+<Layout title="Technologies | AlfaRank" locale={locale}>
   <PageHero
     eyebrow="Technologies"
     title="The implementation layer behind AlfaRank systems."
     text="The stack is selected for practical delivery: clear content models, stable deployment, API integration, automation, data processing, and measurable operations."
     primaryHref="/start-project/"
     primaryLabel="Start a Project"
+    locale={locale}
     visual={technologiesHeroVisual}
   />
 
   <section class="section tech-radar-showcase tech-radar-showcase--page" aria-labelledby="core-stack-title">
     <div class="tech-radar-copy">
-      <h2>Core stack</h2>
-      <p>AlfaRank uses web, CMS, AI, automation, data, and deployment tools as an integrated system layer. The goal is not tool novelty. The goal is reliable implementation that business teams can use and improve.</p>
+      <h2>{translateCopy(locale, "Core stack")}</h2>
+      <p>{translateCopy(locale, "AlfaRank uses web, CMS, AI, automation, data, and deployment tools as an integrated system layer. The goal is not tool novelty. The goal is reliable implementation that business teams can use and improve.")}</p>
     </div>
-    <div class="tech-radar tech-radar--wide" aria-label="Core stack radar">
+    <div class="tech-radar tech-radar--wide" aria-label={translateCopy(locale, "Core stack radar")}>
       <div class="tech-radar__ring tech-radar__ring--outer"></div>
       <div class="tech-radar__ring tech-radar__ring--inner"></div>
       <div class="tech-radar__core">
         <SystemIcon name="product" />
-        <strong id="core-stack-title">Implementation core</strong>
-        <span>Tools orbit the workflow</span>
+        <strong id="core-stack-title">{translateCopy(locale, "Implementation core")}</strong>
+        <span>{translateCopy(locale, "Tools orbit the workflow")}</span>
       </div>
       {technologyRadar.map((item) => (
         <a class:list={["tech-radar__chip", `tech-radar__chip--${item.slot}`]} href={item.href}>
@@ -123,13 +143,13 @@ const technologyRadar = technologies.slice(0, 12).map((tech, index) => ({
   <section class="section">
     <div class="section-header">
       <div>
-        <p class="eyebrow">Technology matrix</p>
-        <h2>Technology is grouped by system function.</h2>
+        <p class="eyebrow">{translateCopy(locale, "Technology matrix")}</p>
+        <h2>{translateCopy(locale, "Technology is grouped by system function.")}</h2>
       </div>
-      <p>Each project combines only the layers needed for the business workflow: frontend, CMS, automation, data, AI, analytics, integrations, and deployment.</p>
+      <p>{translateCopy(locale, "Each project combines only the layers needed for the business workflow: frontend, CMS, automation, data, AI, analytics, integrations, and deployment.")}</p>
     </div>
     <div class="technology-matrix">
-      {technologyMatrix.map((group) => (
+      {localizedTechnologyMatrix.map((group) => (
         <article class="technology-cell">
           <div class="technology-cell__head">
             <SystemIcon name={group.icon} />
@@ -149,16 +169,16 @@ const technologyRadar = technologies.slice(0, 12).map((tech, index) => ({
 
   <section class="section split-panel">
     <div class="glass-panel">
-      <p class="eyebrow">Selection logic</p>
-      <h2>The stack follows the workflow.</h2>
-      <p>AlfaRank does not start with a preferred tool list. The project starts with the business process, then the stack is selected around content models, users, data sources, automation points, integrations, hosting, and measurement.</p>
+      <p class="eyebrow">{translateCopy(locale, "Selection logic")}</p>
+      <h2>{translateCopy(locale, "The stack follows the workflow.")}</h2>
+      <p>{translateCopy(locale, "AlfaRank does not start with a preferred tool list. The project starts with the business process, then the stack is selected around content models, users, data sources, automation points, integrations, hosting, and measurement.")}</p>
     </div>
     <div class="glass-panel">
       <ul class="feature-list">
-        <li>Static-first delivery when speed and reliability matter.</li>
-        <li>CMS-backed publishing when teams need editorial control.</li>
-        <li>API-first integration when business systems need to exchange state.</li>
-        <li>Data and AI layers only when the workflow has clear inputs and review logic.</li>
+        <li>{translateCopy(locale, "Static-first delivery when speed and reliability matter.")}</li>
+        <li>{translateCopy(locale, "CMS-backed publishing when teams need editorial control.")}</li>
+        <li>{translateCopy(locale, "API-first integration when business systems need to exchange state.")}</li>
+        <li>{translateCopy(locale, "Data and AI layers only when the workflow has clear inputs and review logic.")}</li>
       </ul>
     </div>
   </section>

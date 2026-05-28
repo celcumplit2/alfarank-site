@@ -3,6 +3,14 @@ import PageHero from "@/components/PageHero.astro";
 import SystemIcon from "@/components/SystemIcon.astro";
 import Layout from "@/layouts/Layout.astro";
 import { requestReceivedHeroVisual } from "@/data/hero";
+import { localizePath, translateCopy } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
+
+type Props = {
+  locale?: Locale;
+};
+
+const { locale = "en" } = Astro.props;
 
 const nextRoutes = [
   { title: "Capabilities", text: "Review possible build directions", href: "/capabilities/", icon: "tools" },
@@ -11,21 +19,22 @@ const nextRoutes = [
 ];
 
 const reviewStages = [
-  { title: "Received", text: "Request context and source tracking are stored.", icon: "lead" },
-  { title: "Mapped", text: "The workflow, system type, and expected output are reviewed.", icon: "flow" },
-  { title: "Scoped", text: "A first launch path can be shaped from the submitted details.", icon: "ranking" }
+  { title: translateCopy(locale, "Received"), text: translateCopy(locale, "Request context and source tracking are stored."), icon: "lead" },
+  { title: translateCopy(locale, "Mapped"), text: translateCopy(locale, "The workflow, system type, and expected output are reviewed."), icon: "flow" },
+  { title: translateCopy(locale, "Scoped"), text: translateCopy(locale, "A first launch path can be shaped from the submitted details."), icon: "ranking" }
 ];
 ---
 
-<Layout title="Project Request Received | AlfaRank">
+<Layout title="Project Request Received | AlfaRank" locale={locale}>
   <PageHero
-    eyebrow="Request received"
-    title="Your project request has been submitted."
-    text="AlfaRank will review the project type, business problem, current system, and desired result before the next step."
-    primaryHref="/"
-    primaryLabel="Back to Home"
-    secondaryHref="/capabilities/"
-    secondaryLabel="Explore Capabilities"
+    eyebrow={translateCopy(locale, "Request received")}
+    title={translateCopy(locale, "Your project request has been submitted.")}
+    text={translateCopy(locale, "AlfaRank will review the project type, business problem, current system, and desired result before the next step.")}
+    primaryHref={localizePath("/", locale)}
+    primaryLabel={translateCopy(locale, "Back to Home")}
+    secondaryHref={localizePath("/capabilities/", locale)}
+    secondaryLabel={translateCopy(locale, "Explore Capabilities")}
+    locale={locale}
     visual={requestReceivedHeroVisual}
   />
 
@@ -33,9 +42,9 @@ const reviewStages = [
     <div class="request-next-dock ar-system-block">
       <article class="request-next-dock__core ar-system-core">
         <SystemIcon name="monitor" />
-        <span>Request workflow</span>
-        <strong>Review, map, scope.</strong>
-        <p>The request is reviewed against system type, current workflow, feasibility, timeline, and implementation path.</p>
+        <span>{translateCopy(locale, "Request workflow")}</span>
+        <strong>{translateCopy(locale, "Review, map, scope.")}</strong>
+        <p>{translateCopy(locale, "The request is reviewed against system type, current workflow, feasibility, timeline, and implementation path.")}</p>
       </article>
 
       <div class="request-next-dock__timeline">
@@ -50,18 +59,18 @@ const reviewStages = [
       </div>
 
       {nextRoutes.map((route) => (
-        <a class="request-next-route ar-system-node" href={route.href}>
+        <a class="request-next-route ar-system-node" href={localizePath(route.href, locale)}>
           <SystemIcon name={route.icon} />
-          <span>Next route</span>
-          <h3>{route.title}</h3>
-          <p>{route.text}</p>
+          <span>{translateCopy(locale, "Next route")}</span>
+          <h3>{translateCopy(locale, route.title)}</h3>
+          <p>{translateCopy(locale, route.text)}</p>
         </a>
       ))}
 
       <div class="request-next-dock__signals ar-signal-strip">
-        <span class="ar-signal">System type</span>
-        <span class="ar-signal">Existing workflow</span>
-        <span class="ar-signal">First launch scope</span>
+        <span class="ar-signal">{translateCopy(locale, "System type")}</span>
+        <span class="ar-signal">{translateCopy(locale, "Existing workflow")}</span>
+        <span class="ar-signal">{translateCopy(locale, "First launch scope")}</span>
       </div>
     </div>
   </section>

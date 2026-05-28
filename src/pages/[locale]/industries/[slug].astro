@@ -1,0 +1,17 @@
+---
+import IndustryPage from "@/pages/industries/[slug].astro";
+import { getIndustries, translatedLocales } from "@/data/i18n";
+
+export function getStaticPaths() {
+  return translatedLocales.flatMap((locale) =>
+    getIndustries(locale).map((item) => ({
+      params: { locale, slug: item.slug },
+      props: { locale, item }
+    }))
+  );
+}
+
+const { locale, item } = Astro.props;
+---
+
+<IndustryPage locale={locale} item={item} />

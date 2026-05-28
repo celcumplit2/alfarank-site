@@ -1,5 +1,7 @@
 ---
 import SystemIcon from "@/components/SystemIcon.astro";
+import { localizePath, translateCopy } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
 
 type HeroNode = {
   title: string;
@@ -33,6 +35,7 @@ type Props = {
   secondaryHref?: string;
   secondaryLabel?: string;
   visual?: HeroVisual;
+  locale?: Locale;
 };
 
 const {
@@ -43,8 +46,15 @@ const {
   primaryLabel,
   secondaryHref,
   secondaryLabel,
-  visual
+  visual,
+  locale = "en"
 } = Astro.props;
+
+const localizedEyebrow = eyebrow ? translateCopy(locale, eyebrow) : undefined;
+const localizedTitle = translateCopy(locale, title);
+const localizedText = translateCopy(locale, text);
+const localizedPrimaryLabel = primaryLabel ? translateCopy(locale, primaryLabel) : primaryLabel;
+const localizedSecondaryLabel = secondaryLabel ? translateCopy(locale, secondaryLabel) : secondaryLabel;
 
 const heroType = (eyebrow ?? "System").toLowerCase();
 
@@ -180,41 +190,44 @@ const fallbackNodes: HeroNode[] = [
 const stateList = statePresets[heroType] ?? ["Mapped", "Connected", "Active", "Measured", "Ready"];
 
 const nodes = (visual?.nodes?.length ? visual.nodes : fallbackNodes).slice(0, 4).map((node, index) => ({
-  title: compact(node.title),
-  state: node.state ?? stateList[index % stateList.length],
+  title: compact(translateCopy(locale, node.title)),
+  state: translateCopy(locale, node.state ?? stateList[index % stateList.length]),
   icon: node.icon ?? iconFromText(node.title) ?? coreIcon,
-  detail: compact(node.detail ?? stateList[(index + 1) % stateList.length], 32),
+  detail: compact(translateCopy(locale, node.detail ?? stateList[(index + 1) % stateList.length]), 32),
   meter: node.meter ?? `${62 + ((hashString(node.title) + index * 9) % 31)}%`
 }));
 
 const metrics = visual?.metrics?.length
-  ? visual.metrics.slice(0, 3)
+  ? visual.metrics.slice(0, 3).map((metric) => ({
+      value: translateCopy(locale, metric.value),
+      label: translateCopy(locale, metric.label)
+    }))
   : [
-      { value: String(nodes.length), label: "Mapped nodes" },
-      { value: "Live", label: "Flow state" },
-      { value: "1", label: "Output path" }
+      { value: String(nodes.length), label: translateCopy(locale, "Mapped nodes") },
+      { value: translateCopy(locale, "Live"), label: translateCopy(locale, "Flow state") },
+      { value: "1", label: translateCopy(locale, "Output path") }
     ];
 
-const coreLabel = compact(visual?.label ?? eyebrow ?? "System", 28);
-const coreState = visual?.state ?? `${nodes.length} nodes online`;
-const visualOutput = compact(visual?.output ?? text.split(".")[0] ?? "Business output", 42);
+const coreLabel = compact(translateCopy(locale, visual?.label ?? eyebrow ?? "System"), 28);
+const coreState = translateCopy(locale, visual?.state ?? `${nodes.length} nodes online`);
+const visualOutput = compact(translateCopy(locale, visual?.output ?? text.split(".")[0] ?? "Business output"), 42);
 const visualIcon = visual?.icon ?? coreIcon;
 ---
 
 <section class="page-hero" data-variant={variant}>
   <div class="page-hero__copy">
-    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
-    <h1>{title}</h1>
-    <p class="hero-text">{text}</p>
+    {localizedEyebrow && <p class="eyebrow">{localizedEyebrow}</p>}
+    <h1>{localizedTitle}</h1>
+    <p class="hero-text">{localizedText}</p>
     {(primaryHref || secondaryHref) && (
       <div class="hero-actions">
-        {primaryHref && <a class="button primary" href={primaryHref}>{primaryLabel}</a>}
-        {secondaryHref && <a class="button secondary" href={secondaryHref}>{secondaryLabel}</a>}
+        {primaryHref && <a class="button primary" href={localizePath(primaryHref, locale)}>{localizedPrimaryLabel}</a>}
+        {secondaryHref && <a class="button secondary" href={localizePath(secondaryHref, locale)}>{localizedSecondaryLabel}</a>}
       </div>
     )}
   </div>
 
-  <div class="page-system-map" data-layout={routeSet.layout} aria-label={`${title} system map`}>
+  <div class="page-system-map" data-layout={routeSet.layout} aria-label={`${localizedTitle} system map`}>
     <svg class="page-system-map__routes" viewBox="0 0 460 430" preserveAspectRatio="none" aria-hidden="true">
       {routeSet.paths.map((path, index) => (
         <path class={`route ${index % 2 === 0 ? "route--dash" : "route--solid"}`} d={path} />

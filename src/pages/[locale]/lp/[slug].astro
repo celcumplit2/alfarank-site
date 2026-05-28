@@ -1,0 +1,17 @@
+---
+import LandingPage from "@/pages/lp/[slug].astro";
+import { getLandingOffers, translatedLocales } from "@/data/i18n";
+
+export function getStaticPaths() {
+  return translatedLocales.flatMap((locale) =>
+    getLandingOffers(locale).map((offer) => ({
+      params: { locale, slug: offer.slug },
+      props: { locale, offer }
+    }))
+  );
+}
+
+const { locale, offer } = Astro.props;
+---
+
+<LandingPage locale={locale} offer={offer} />

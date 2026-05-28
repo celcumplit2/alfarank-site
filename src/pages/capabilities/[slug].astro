@@ -4,6 +4,13 @@ import SystemIcon from "@/components/SystemIcon.astro";
 import Layout from "@/layouts/Layout.astro";
 import { capabilities } from "@/data/site";
 import { itemHeroVisual } from "@/data/hero";
+import { localizePath, translateCopy } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
+
+type Props = {
+  locale?: Locale;
+  item: (typeof capabilities)[number];
+};
 
 export function getStaticPaths() {
   return capabilities.map((item) => ({
@@ -12,7 +19,7 @@ export function getStaticPaths() {
   }));
 }
 
-const { item } = Astro.props;
+const { item, locale = "en" } = Astro.props as Props;
 const isDataCapability = item.slug === "data-systems-scraping";
 const isAutomationCapability = item.slug === "ai-automation";
 const isMediaCapability = item.slug === "video-media-automation";
@@ -46,40 +53,68 @@ const genericCapabilityModules = (item.modules ?? []).map((module, index) => ({
   level: `${76 + index * 5}%`
 }));
 const capabilitySystemSignals = (item.outputs ?? []).slice(0, 3);
-const capabilityIntakeHref = `/start-project/?offer=capability-${item.slug}&landing_page=/capabilities/${item.slug}/`;
+const capabilityIntakeHref = localizePath(`/start-project/?offer=capability-${item.slug}&landing_page=/capabilities/${item.slug}/`, locale);
 const capabilityLowerTitle = item.title.toLowerCase();
 const primaryOutput = (item.outputs ?? [item.summary])[0];
 const moduleIntro = item.modules?.[0]?.title.toLowerCase() ?? capabilityLowerTitle;
+const capabilityCopy = {
+  systemModules: translateCopy(locale, "System modules"),
+  buildableModules:
+    locale === "en"
+      ? `Buildable modules for ${capabilityLowerTitle}`
+      : `${translateCopy(locale, "Buildable modules")}: ${item.title}`,
+  moduleIntro:
+    locale === "en"
+      ? `This capability becomes useful when ${moduleIntro} connects to real inputs, review states, integrations, and a visible output such as ${primaryOutput.toLowerCase()}.`
+      : translateCopy(locale, "A capability becomes useful when it connects real inputs, review states, integrations, and a visible business output."),
+  implementationTitle:
+    locale === "en"
+      ? `How ${capabilityLowerTitle} becomes a working system`
+      : `${translateCopy(locale, "How the capability becomes a working system")}: ${item.title}`,
+  implementationText:
+    locale === "en"
+      ? `The build starts with the business process behind ${primaryOutput.toLowerCase()}, then chooses the stack, review points, and integrations that make the workflow reliable.`
+      : translateCopy(locale, "The build starts with the business process, then chooses the stack, review points, and integrations that make the workflow reliable."),
+  useCasesTitle:
+    locale === "en"
+      ? `Best-fit use cases for ${capabilityLowerTitle}`
+      : `${translateCopy(locale, "Best-fit use cases")}: ${item.title}`,
+  useCasesText:
+    locale === "en"
+      ? `Look for repeated work around ${moduleIntro}, clear ownership, and output that can be reviewed, routed, published, monitored, or improved.`
+      : translateCopy(locale, "Look for repeated work, clear ownership, and output that can be reviewed, routed, published, monitored, or improved.")
+};
 ---
 
-<Layout title={`${item.title} | AlfaRank`} description={item.summary}>
+<Layout title={`${item.title} | AlfaRank`} description={item.summary} locale={locale}>
   <PageHero
     eyebrow="Capability"
     title={item.title}
     text={item.summary}
     primaryHref={capabilityIntakeHref}
-    primaryLabel="Start a Project"
-    secondaryHref="/solutions/"
-    secondaryLabel="View Solutions"
+    primaryLabel={translateCopy(locale, "Start a Project")}
+    secondaryHref={localizePath("/solutions/", locale)}
+    secondaryLabel={translateCopy(locale, "View Solutions")}
+    locale={locale}
     visual={itemHeroVisual(item, "capability")}
   />
 
   <section class="section split-panel">
     <div class="glass-panel">
-      <h2>What this covers</h2>
+      <h2>{translateCopy(locale, "What this covers")}</h2>
       {item.intro && <p>{item.intro}</p>}
       <ul class="feature-list">
         {(item.details ?? []).map((detail) => <li>{detail}</li>)}
       </ul>
     </div>
     <div class="glass-panel">
-      <h2>Business output</h2>
+      <h2>{translateCopy(locale, "Business output")}</h2>
       <div class="tag-grid">
         {(item.outputs ?? []).map((output) => <span class="tag">{output}</span>)}
       </div>
       {item.related && (
         <>
-          <h3>Related solutions</h3>
+          <h3>{translateCopy(locale, "Related solutions")}</h3>
           <div class="tag-grid">
             {item.related.map((related) => <span class="tag">{related}</span>)}
           </div>
@@ -92,25 +127,25 @@ const moduleIntro = item.modules?.[0]?.title.toLowerCase() ?? capabilityLowerTit
     <section class="section">
       <div class="section-header">
         <div>
-          <p class="eyebrow">System modules</p>
-          <h2>Buildable modules for {capabilityLowerTitle}</h2>
+          <p class="eyebrow">{capabilityCopy.systemModules}</p>
+          <h2>{capabilityCopy.buildableModules}</h2>
         </div>
-        <p>This capability becomes useful when {moduleIntro} connects to real inputs, review states, integrations, and a visible output such as {primaryOutput.toLowerCase()}.</p>
+        <p>{capabilityCopy.moduleIntro}</p>
       </div>
       {isDataCapability ? (
         <div class="data-signal-map">
           <article class="data-signal-map__core">
             <SystemIcon name="data" />
-            <span>Signal processor</span>
-            <strong>Collect. Normalize. Decide.</strong>
-            <p>Raw sources become clean records, matched entities, ranked signals, alerts, reports, and operational dashboards.</p>
+            <span>{translateCopy(locale, "Signal processor")}</span>
+            <strong>{translateCopy(locale, "Collect. Normalize. Decide.")}</strong>
+            <p>{translateCopy(locale, "Raw sources become clean records, matched entities, ranked signals, alerts, reports, and operational dashboards.")}</p>
           </article>
           {dataSignalNodes.map((node, index) => (
             <article class:list={["data-signal-node", `data-signal-node--${index + 1}`]}>
               <SystemIcon name={node.icon} />
-              <span>{node.state}</span>
-              <h3>{node.title}</h3>
-              <p>{node.detail}</p>
+              <span>{translateCopy(locale, node.state)}</span>
+              <h3>{translateCopy(locale, node.title)}</h3>
+              <p>{translateCopy(locale, node.detail)}</p>
             </article>
           ))}
         </div>
@@ -118,18 +153,18 @@ const moduleIntro = item.modules?.[0]?.title.toLowerCase() ?? capabilityLowerTit
         <div class="automation-tower">
           <article class="automation-tower__copy">
             <SystemIcon name="ai" />
-            <span>Automation tower</span>
-            <strong>Build the flow</strong>
-            <p>AI automation becomes valuable when the whole operating path is visible: capture, enrich, score, route, and follow up.</p>
-            <a class="button secondary" href={capabilityIntakeHref}>Start automation scope</a>
+            <span>{translateCopy(locale, "Automation tower")}</span>
+            <strong>{translateCopy(locale, "Build the flow")}</strong>
+            <p>{translateCopy(locale, "AI automation becomes valuable when the whole operating path is visible: capture, enrich, score, route, and follow up.")}</p>
+            <a class="button secondary" href={capabilityIntakeHref}>{translateCopy(locale, "Start automation scope")}</a>
           </article>
           <div class="automation-tower__stack">
             {automationTowerSteps.map((step, index) => (
               <article class:list={["automation-floor", `automation-floor--${index + 1}`]}>
                 <SystemIcon name={step.icon} />
                 <span>{String(index + 1).padStart(2, "0")}</span>
-                <h3>{step.title}</h3>
-                <p>{step.text}</p>
+                <h3>{translateCopy(locale, step.title)}</h3>
+                <p>{translateCopy(locale, step.text)}</p>
               </article>
             ))}
           </div>
@@ -138,26 +173,26 @@ const moduleIntro = item.modules?.[0]?.title.toLowerCase() ?? capabilityLowerTit
         <div class="ai-review-console">
           <article class="ai-review-console__preview">
             <div class="ai-review-console__bar">
-              <span>AI Review Console</span>
-              <small>Batch 04 / Ready for review</small>
+              <span>{translateCopy(locale, "AI Review Console")}</span>
+              <small>{translateCopy(locale, "Batch 04 / Ready for review")}</small>
             </div>
             <div class="ai-review-console__frame">
               <SystemIcon name="media" />
-              <strong>Media workflow preview</strong>
-              <p>Creative production becomes a visible queue: brief, generate, review, render, publish, and learn.</p>
+              <strong>{translateCopy(locale, "Media workflow preview")}</strong>
+              <p>{translateCopy(locale, "Creative production becomes a visible queue: brief, generate, review, render, publish, and learn.")}</p>
             </div>
             <div class="ai-review-console__timeline" aria-label="Review quality checks">
-              {aiReviewMetrics.map((metric) => <span>{metric}</span>)}
+              {aiReviewMetrics.map((metric) => <span>{translateCopy(locale, metric)}</span>)}
             </div>
           </article>
 
           <div class="ai-review-console__queue">
             {aiReviewStages.map((stage, index) => (
-              <a class:list={["ai-review-step", `ai-review-step--${index + 1}`]} href={stage.href}>
+              <a class:list={["ai-review-step", `ai-review-step--${index + 1}`]} href={localizePath(stage.href, locale)}>
                 <SystemIcon name={stage.icon} />
-                <span>{stage.state}</span>
-                <strong>{stage.title}</strong>
-                <p>{stage.detail}</p>
+                <span>{translateCopy(locale, stage.state)}</span>
+                <strong>{translateCopy(locale, stage.title)}</strong>
+                <p>{translateCopy(locale, stage.detail)}</p>
               </a>
             ))}
           </div>
@@ -167,16 +202,16 @@ const moduleIntro = item.modules?.[0]?.title.toLowerCase() ?? capabilityLowerTit
           <div class="ar-connector-field" aria-hidden="true"></div>
           <article class="capability-module-system__core ar-system-core">
             <SystemIcon name={item.icon} />
-            <span>Capability system</span>
+            <span>{translateCopy(locale, "Capability system")}</span>
             <strong>{item.title}</strong>
             <p>{item.summary}</p>
-            <a class="button secondary" href={capabilityIntakeHref}>Scope this capability</a>
+            <a class="button secondary" href={capabilityIntakeHref}>{translateCopy(locale, "Scope this capability")}</a>
           </article>
 
           {genericCapabilityModules.map((module, index) => (
             <article class:list={["capability-module-node", "ar-system-node", `capability-module-node--${index + 1}`]}>
               <SystemIcon name={module.icon} />
-              <span>{module.state}</span>
+              <span>{translateCopy(locale, module.state)}</span>
               <h3>{module.title}</h3>
               <p>{module.text}</p>
               <b class="ar-metric-bar" style={`--ar-level: ${module.level};`}></b>
@@ -193,9 +228,9 @@ const moduleIntro = item.modules?.[0]?.title.toLowerCase() ?? capabilityLowerTit
   {item.workflow && (
     <section class="section split-panel">
       <div class="glass-panel">
-        <p class="eyebrow">Implementation logic</p>
-        <h2>How {capabilityLowerTitle} becomes a working system</h2>
-        <p>The build starts with the business process behind {primaryOutput.toLowerCase()}, then chooses the stack, review points, and integrations that make the workflow reliable.</p>
+        <p class="eyebrow">{translateCopy(locale, "Implementation logic")}</p>
+        <h2>{capabilityCopy.implementationTitle}</h2>
+        <p>{capabilityCopy.implementationText}</p>
       </div>
       <div class="glass-panel">
         <ul class="feature-list">
@@ -209,10 +244,10 @@ const moduleIntro = item.modules?.[0]?.title.toLowerCase() ?? capabilityLowerTit
     <section class="section">
       <div class="section-header">
         <div>
-          <p class="eyebrow">Use cases</p>
-          <h2>Best-fit use cases for {capabilityLowerTitle}</h2>
+          <p class="eyebrow">{translateCopy(locale, "Use cases")}</p>
+          <h2>{capabilityCopy.useCasesTitle}</h2>
         </div>
-        <p>Look for repeated work around {moduleIntro}, clear ownership, and output that can be reviewed, routed, published, monitored, or improved.</p>
+        <p>{capabilityCopy.useCasesText}</p>
       </div>
       <ul class="feature-list">
         {item.useCases.map((useCase) => <li>{useCase}</li>)}

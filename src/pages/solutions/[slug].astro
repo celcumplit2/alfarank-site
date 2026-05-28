@@ -2,8 +2,15 @@
 import PageHero from "@/components/PageHero.astro";
 import SystemIcon from "@/components/SystemIcon.astro";
 import Layout from "@/layouts/Layout.astro";
-import { capabilities, solutions, systems } from "@/data/site";
+import { solutions } from "@/data/site";
 import { itemHeroVisual } from "@/data/hero";
+import { getCapabilities, getSystems, localizePath, translateCopy } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
+
+type Props = {
+  locale?: Locale;
+  item: (typeof solutions)[number];
+};
 
 export function getStaticPaths() {
   return solutions.map((item) => ({
@@ -12,21 +19,23 @@ export function getStaticPaths() {
   }));
 }
 
-const { item } = Astro.props;
+const { item, locale = "en" } = Astro.props as Props;
+const localizedCapabilities = getCapabilities(locale);
+const localizedSystems = getSystems(locale);
 
 const relatedCapabilities = (item.related ?? [])
-  .map((title) => capabilities.find((capability) => capability.title.toLowerCase() === title.toLowerCase()))
-  .filter((capability): capability is (typeof capabilities)[number] => Boolean(capability))
+  .map((title) => localizedCapabilities.find((capability) => capability.title.toLowerCase() === title.toLowerCase()))
+  .filter((capability): capability is (typeof localizedCapabilities)[number] => Boolean(capability))
   .slice(0, 4);
 
-const relatedSystems = systems
+const relatedSystems = localizedSystems
   .filter((system) =>
     (system.related ?? []).some((related) => related.toLowerCase() === item.title.toLowerCase()) ||
     (item.related ?? []).some((related) => system.title.toLowerCase().includes(related.toLowerCase().split(" ")[0]))
   )
   .slice(0, 3);
 
-const fallbackSystems = relatedSystems.length ? relatedSystems : systems.slice(0, 3);
+const fallbackSystems = relatedSystems.length ? relatedSystems : localizedSystems.slice(0, 3);
 const solutionLowerTitle = item.title.toLowerCase();
 const firstOutput = (item.outputs ?? ["workflow output"])[0];
 const firstDetail = item.details?.[0] ?? item.summary;
@@ -85,56 +94,235 @@ const solutionProof = [
 ];
 
 const solutionIntakeHref = `/start-project/?offer=${item.slug}&landing_page=/solutions/${item.slug}/`;
+const localizedSolutionIntakeHref = localizePath(solutionIntakeHref, locale);
+const firstDetailForSentence = locale === "en" ? firstDetail.toLowerCase() : firstDetail;
+const firstOutputForSentence = locale === "en" ? firstOutput.toLowerCase() : firstOutput;
+const solutionCopy = {
+  operatingTitle:
+    locale === "ru"
+      ? `${item.title}: решение как операционная система`
+      : locale === "ro"
+        ? `${item.title}: solutia ca sistem operational`
+        : `${item.title} as an operating system`,
+  operatingText:
+    locale === "ru"
+      ? `Начинаем с первого проблемного слоя: ${firstDetail}. Затем собираем систему, модули, интеграции и доказательства, которые делают результат видимым: ${firstOutput}.`
+      : locale === "ro"
+        ? `Pornim de la primul strat de problema: ${firstDetail}. Apoi construim sistemul, modulele, integrarile si dovezile care fac rezultatul vizibil: ${firstOutput}.`
+        : `Start with ${firstDetailForSentence}, then shape the system, modules, integration points, and proof that make ${firstOutputForSentence} visible.`,
+  pressure: locale === "ru" ? "Давление задачи" : locale === "ro" ? "Presiunea problemei" : "Problem pressure",
+  engine: locale === "ru" ? "Движок решения" : locale === "ro" ? "Motorul solutiei" : "Solution engine",
+  output: locale === "ru" ? "Операционный результат" : locale === "ro" ? "Rezultat operational" : "Operating output",
+  scopeSolution: locale === "ru" ? "Запросить это решение" : locale === "ro" ? "Defineste aceasta solutie" : "Scope this solution",
+  capability: locale === "ru" ? "Возможность" : locale === "ro" ? "Capabilitate" : "Capability",
+  covers: locale === "ru" ? "Что входит в решение" : locale === "ro" ? "Ce acopera solutia" : "What this solution covers",
+  expectedOutput: locale === "ru" ? "Ожидаемый результат" : locale === "ro" ? "Rezultatul asteptat" : "Expected output",
+  relevantCapabilities:
+    locale === "ru" ? "Связанные возможности" : locale === "ro" ? "Capabilitati relevante" : "Relevant capabilities",
+  modulesTitle: locale === "ru" ? "Модули решения" : locale === "ro" ? "Modulele solutiei" : `Modules inside ${solutionLowerTitle}`,
+  modulesText:
+    locale === "ru"
+      ? `Первая версия должна показать входные данные, состояния процесса, интеграции и точки проверки, которые стоят за результатом: ${firstOutput}.`
+      : locale === "ro"
+        ? `Prima versiune trebuie sa arate intrarile, starile procesului, integrarile si punctele de revizie din spatele rezultatului: ${firstOutput}.`
+        : `The first scoped version should expose the inputs, workflow states, integrations, and review points behind ${firstOutputForSentence}.`,
+  buildRail: locale === "ru" ? "Сборочная линия" : locale === "ro" ? "Linie de build" : "Build rail",
+  connectedModules:
+    locale === "ru"
+      ? `${item.modules?.length ?? 0} связанных модулей`
+      : locale === "ro"
+        ? `${item.modules?.length ?? 0} module conectate`
+        : `${item.modules?.length ?? 0} connected modules`,
+  moduleCoreText:
+    locale === "ru"
+      ? "Каждый модуль должен быть рабочей станцией внутри системы, а не пунктом в списке функций."
+      : locale === "ro"
+        ? "Fiecare modul trebuie sa devina o statie utila in sistem, nu doar un element intr-o lista de functii."
+        : `For ${solutionLowerTitle}, every module should become a usable station rather than a loose feature list.`,
+  launchTitle:
+    locale === "ru"
+      ? "Три варианта запуска"
+      : locale === "ro"
+        ? "Trei moduri de lansare"
+        : `Three ways to launch ${solutionLowerTitle}`,
+  launchText:
+    locale === "ru"
+      ? "Запуск может начаться с узкого прототипа, связанного рабочего процесса или полноценного операционного слоя: выбор зависит от зрелости текущего процесса."
+      : locale === "ro"
+        ? "Buildul poate incepe ca prototip ingust, flux conectat sau strat operational complet, in functie de maturitatea procesului curent."
+        : "The build can start as a narrow proof, a connected workflow, or a fuller operating layer depending on how mature the current process is.",
+  proofTitle:
+    locale === "ru"
+      ? "Как страница приводит к заявке"
+      : locale === "ro"
+        ? "Cum pagina castiga un lead"
+        : `How ${solutionLowerTitle} earns a lead`,
+  proofText:
+    locale === "ru"
+      ? "Страница должна ясно показать состояние до и после, чтобы посетитель мог запросить первую версию без расшифровки всего технического стека."
+      : locale === "ro"
+        ? "Pagina trebuie sa arate clar inainte si dupa, astfel incat vizitatorul sa poata cere prima versiune fara sa descifreze tot stackul tehnic."
+        : "The page should make the before-and-after clear enough that a visitor can ask for the first version without decoding the whole technical stack.",
+  proofLabels:
+    locale === "ru"
+      ? ["Триггер", "Обещание", "Доказательство"]
+      : locale === "ro"
+        ? ["Trigger", "Promisiune", "Dovada"]
+        : ["Trigger", "Promise", "Proof"],
+  nextStep: locale === "ru" ? "Следующий шаг конверсии" : locale === "ro" ? "Urmatorul pas de conversie" : "Next conversion step",
+  ctaStrong:
+    locale === "ru"
+      ? "Запросить первую рабочую версию решения."
+      : locale === "ro"
+        ? "Defineste prima versiune functionala a solutiei."
+        : `Scope the first ${solutionLowerTitle} build.`,
+  ctaText:
+    locale === "ru"
+      ? `Отправьте текущий процесс, инструменты и ожидаемый результат: ${firstOutput}. Из этого можно собрать первую рабочую систему.`
+      : locale === "ro"
+        ? `Trimite procesul curent, instrumentele si rezultatul asteptat: ${firstOutput}. Din acestea putem construi primul sistem functional.`
+        : `Send the current process, tools, and expected ${firstOutputForSentence} so this can become a first working system.`,
+  implementationTitle:
+    locale === "ru"
+      ? "Как строится решение"
+      : locale === "ro"
+        ? "Cum este construita solutia"
+        : `How ${solutionLowerTitle} is built`,
+  implementationText:
+    locale === "ru"
+      ? "Работа начинается с карты текущего процесса, а затем превращается в архитектуру, данные, интерфейсы, автоматизацию, интеграции и запуск."
+      : locale === "ro"
+        ? "Lucrul incepe cu maparea procesului curent, apoi il transformam in arhitectura, date, interfete, automatizari, integrari si lansare."
+        : `For ${solutionLowerTitle}, the work starts by mapping the current process and then turning it into architecture, data, interfaces, automations, integrations, and launch workflow.`,
+  useCasesTitle:
+    locale === "ru" ? "Когда это подходит" : locale === "ro" ? "Cand se potriveste" : `When ${solutionLowerTitle} fits`,
+  useCasesText:
+    locale === "ru"
+      ? `Подходит, когда уже есть давление вокруг задачи: ${firstDetail}. Команде нужна структура, автоматизация, видимость или масштаб.`
+      : locale === "ro"
+        ? `Se potriveste cand exista deja presiune in jurul problemei: ${firstDetail}. Echipa are nevoie de structura, automatizare, vizibilitate sau scalare.`
+        : `This fits when ${firstDetailForSentence} already creates pressure and the team needs structure, automation, visibility, or scale.`,
+  relatedSystems: locale === "ru" ? "Связанные системы" : locale === "ro" ? "Sisteme asociate" : "Related systems",
+  relatedSystemsTitle:
+    locale === "ru"
+      ? "Системные профили, которые поддерживают решение"
+      : locale === "ro"
+        ? "Profiluri de sistem care sustin solutia"
+        : `System profiles that support ${solutionLowerTitle}`,
+  relatedSystemsText:
+    locale === "ru"
+      ? `Эти профили превращают решение в конкретную архитектуру: модули, процессы, интеграции и операционный результат вокруг ${firstOutput}.`
+      : locale === "ro"
+        ? `Aceste profiluri transforma solutia in arhitectura concreta: module, procese, integrari si rezultat operational in jurul ${firstOutput}.`
+        : `These profiles turn the solution into concrete architecture: modules, workflow, integrations, and operating output around ${firstOutputForSentence}.`
+};
+
+const localizedImplementationOptions = implementationOptions.map((option, index) => {
+  if (locale === "ru") {
+    return [
+      {
+        title: "Сначала прототип",
+        text: `Проверяем ${item.title} на одном рабочем маршруте: вход, состояние, результат и проверка человеком.`
+      },
+      {
+        title: "Интегрированная сборка",
+        text: `Соединяем слой «${firstOutput}» с сайтом, CMS, CRM, API, базой данных, аналитикой или внутренними инструментами.`
+      },
+      {
+        title: "Операционный слой",
+        text: `Добавляем видимость: панели, уведомления, контроль качества, отчетность, ответственность и цикл улучшения для ежедневной работы.`
+      }
+    ][index];
+  }
+
+  if (locale === "ro") {
+    return [
+      {
+        title: "Prototip mai intai",
+        text: `Validam ${item.title} pe un traseu functional: intrare, stare, rezultat si revizie umana.`
+      },
+      {
+        title: "Build integrat",
+        text: `Conectam stratul "${firstOutput}" la site, CMS, CRM, API-uri, baza de date, analytics sau instrumente interne.`
+      },
+      {
+        title: "Strat operational",
+        text: "Adaugam vizibilitate: dashboarduri, alerte, QA, raportare, ownership si bucle de imbunatatire pentru utilizare zilnica."
+      }
+    ][index];
+  }
+
+  return option;
+});
+
+const proofTitles =
+  locale === "ru"
+    ? ["Триггер кампании", "Обещание страницы", "Что доказываем"]
+    : locale === "ro"
+      ? ["Trigger de campanie", "Promisiunea paginii", "Dovada de colectat"]
+      : ["Campaign trigger", "Landing-page promise", "Proof to collect"];
+
+const localizedSolutionProof = solutionProof.map((signal, index) => ({
+  ...signal,
+  title: proofTitles[index] ?? signal.title,
+  text:
+    locale === "ru" && index === 1
+      ? `Показываем видимый системный результат: ${(item.outputs ?? ["процесс, данные и отчетность"])[0]}.`
+      : locale === "ro" && index === 1
+        ? `Transformam asta intr-un rezultat de sistem vizibil: ${(item.outputs ?? ["workflow, date si raportare"])[0]}.`
+        : signal.text
+}));
 ---
 
-<Layout title={`${item.title} | AlfaRank`} description={item.summary}>
+<Layout title={`${item.title} | AlfaRank`} description={item.summary} locale={locale}>
   <PageHero
     eyebrow="Solution"
     title={item.title}
     text={item.summary}
-    primaryHref={solutionIntakeHref}
-    primaryLabel="Start a Project"
-    secondaryHref="/capabilities/"
-    secondaryLabel="View Capabilities"
+    primaryHref={localizedSolutionIntakeHref}
+    primaryLabel={translateCopy(locale, "Start a Project")}
+    secondaryHref={localizePath("/capabilities/", locale)}
+    secondaryLabel={translateCopy(locale, "View Capabilities")}
+    locale={locale}
     visual={itemHeroVisual(item, "solution")}
   />
 
   <section class="section solution-pattern">
     <div class="section-header">
       <div>
-        <p class="eyebrow">Solution pattern</p>
-        <h2>{item.title} as an operating system</h2>
+        <p class="eyebrow">{translateCopy(locale, "Solution pattern")}</p>
+        <h2>{solutionCopy.operatingTitle}</h2>
       </div>
-      <p>Start with {firstDetail.toLowerCase()}, then shape the system, modules, integration points, and proof that make {firstOutput.toLowerCase()} visible.</p>
+      <p>{solutionCopy.operatingText}</p>
     </div>
 
     <div class:list={["solution-mechanism", "ar-system-block", `solution-mechanism--${item.slug}`]}>
       <article class="solution-mechanism__pressure ar-system-panel">
         <SystemIcon name={solutionPattern[0].icon} />
-        <span>Problem pressure</span>
-        <h3>{solutionPattern[0].title}</h3>
+        <span>{solutionCopy.pressure}</span>
+        <h3>{translateCopy(locale, solutionPattern[0].title)}</h3>
         <p>{solutionPattern[0].text}</p>
       </article>
 
       <article class="solution-mechanism__core ar-system-core">
         <SystemIcon name={item.icon ?? "flow"} />
-        <span>Solution engine</span>
+        <span>{solutionCopy.engine}</span>
         <strong>{item.title}</strong>
         <p>{solutionPattern[1].text}</p>
-        <a class="button secondary" href={solutionIntakeHref}>Scope this solution</a>
+        <a class="button secondary" href={localizedSolutionIntakeHref}>{solutionCopy.scopeSolution}</a>
       </article>
 
       <article class="solution-mechanism__output ar-system-panel">
         <SystemIcon name={solutionPattern[3].icon} />
-        <span>Operating output</span>
-        <h3>{solutionPattern[3].title}</h3>
-        <p>{solutionPattern[3].text}</p>
+        <span>{solutionCopy.output}</span>
+        <h3>{translateCopy(locale, solutionPattern[3].title)}</h3>
+        <p>{translateCopy(locale, solutionPattern[3].text)}</p>
       </article>
 
       <div class="solution-mechanism__routes ar-system-dock">
-        {(relatedCapabilities.length ? relatedCapabilities : capabilities.slice(0, 3)).slice(0, 3).map((capability) => (
-          <a href={`/capabilities/${capability.slug}/`}>
-            <span>Capability</span>
+        {(relatedCapabilities.length ? relatedCapabilities : localizedCapabilities.slice(0, 3)).slice(0, 3).map((capability) => (
+          <a href={localizePath(`/capabilities/${capability.slug}/`, locale)}>
+            <span>{solutionCopy.capability}</span>
             <strong>{capability.title}</strong>
           </a>
         ))}
@@ -144,21 +332,21 @@ const solutionIntakeHref = `/start-project/?offer=${item.slug}&landing_page=/sol
 
   <section class="section split-panel">
     <div class="glass-panel">
-      <h2>What this solution covers</h2>
+      <h2>{solutionCopy.covers}</h2>
       {item.intro && <p>{item.intro}</p>}
       <ul class="feature-list">
         {(item.details ?? []).map((detail) => <li>{detail}</li>)}
       </ul>
     </div>
     <div class="glass-panel">
-      <h2>Expected output</h2>
+      <h2>{solutionCopy.expectedOutput}</h2>
       <div class="tag-grid">
         {(item.outputs ?? []).map((output) => <span class="tag">{output}</span>)}
       </div>
-      <h3>Relevant capabilities</h3>
+      <h3>{solutionCopy.relevantCapabilities}</h3>
       <div class="tag-grid">
-        {(relatedCapabilities.length ? relatedCapabilities : capabilities.slice(0, 4)).map((capability) => (
-          <a class="tag" href={`/capabilities/${capability.slug}/`}>{capability.title}</a>
+        {(relatedCapabilities.length ? relatedCapabilities : localizedCapabilities.slice(0, 4)).map((capability) => (
+          <a class="tag" href={localizePath(`/capabilities/${capability.slug}/`, locale)}>{capability.title}</a>
         ))}
       </div>
     </div>
@@ -168,17 +356,17 @@ const solutionIntakeHref = `/start-project/?offer=${item.slug}&landing_page=/sol
     <section class="section">
       <div class="section-header">
         <div>
-          <p class="eyebrow">System modules</p>
-          <h2>Modules inside {solutionLowerTitle}</h2>
+          <p class="eyebrow">{translateCopy(locale, "System modules")}</p>
+          <h2>{solutionCopy.modulesTitle}</h2>
         </div>
-        <p>The first scoped version should expose the inputs, workflow states, integrations, and review points behind {firstOutput.toLowerCase()}.</p>
+        <p>{solutionCopy.modulesText}</p>
       </div>
       <div class:list={["solution-module-rail", "ar-system-block", `solution-module-rail--${item.slug}`]}>
         <article class="solution-module-rail__core ar-system-core">
           <SystemIcon name={item.icon ?? "tools"} />
-          <span>Build rail</span>
-          <strong>{item.modules.length} connected modules</strong>
-          <p>For {solutionLowerTitle}, every module should become a usable station rather than a loose feature list.</p>
+          <span>{solutionCopy.buildRail}</span>
+          <strong>{solutionCopy.connectedModules}</strong>
+          <p>{solutionCopy.moduleCoreText}</p>
         </article>
         {item.modules.map((module, index) => (
           <div class:list={["solution-module-station", "ar-system-node", `solution-module-station--${index + 1}`]} style={`--ar-level: ${76 + index * 5}%;`}>
@@ -196,13 +384,13 @@ const solutionIntakeHref = `/start-project/?offer=${item.slug}&landing_page=/sol
   <section class="section">
     <div class="section-header">
       <div>
-        <p class="eyebrow">Implementation options</p>
-        <h2>Three ways to launch {solutionLowerTitle}</h2>
+        <p class="eyebrow">{translateCopy(locale, "Implementation options")}</p>
+        <h2>{solutionCopy.launchTitle}</h2>
       </div>
-      <p>The build can start as a narrow proof, a connected workflow, or a fuller operating layer depending on how mature the current process is.</p>
+      <p>{solutionCopy.launchText}</p>
     </div>
     <div class="option-grid">
-      {implementationOptions.map((option, index) => (
+      {localizedImplementationOptions.map((option, index) => (
         <article class="option-card" style={`--option-step: "${String(index + 1).padStart(2, "0")}";`}>
           <h3>{option.title}</h3>
           <p>{option.text}</p>
@@ -214,26 +402,26 @@ const solutionIntakeHref = `/start-project/?offer=${item.slug}&landing_page=/sol
   <section class="section" aria-labelledby="solution-proof-title">
     <div class="section-header">
       <div>
-        <p class="eyebrow">Lead-generation proof</p>
-        <h2 id="solution-proof-title">How {solutionLowerTitle} earns a lead</h2>
+        <p class="eyebrow">{translateCopy(locale, "Lead-generation proof")}</p>
+        <h2 id="solution-proof-title">{solutionCopy.proofTitle}</h2>
       </div>
-      <p>The page should make the before-and-after clear enough that a visitor can ask for the first version without decoding the whole technical stack.</p>
+      <p>{solutionCopy.proofText}</p>
     </div>
     <div class:list={["solution-proof-engine", "ar-system-block", `solution-proof-engine--${item.slug}`]}>
-      {solutionProof.map((signal, index) => (
+      {localizedSolutionProof.map((signal, index) => (
         <article class:list={["solution-proof-node", "ar-system-node", `solution-proof-node--${index + 1}`]}>
           <SystemIcon name={["lens", item.icon ?? "flow", "ranking"][index] ?? "tools"} />
           <span>{signal.title}</span>
-          <h3>{index === 0 ? "Trigger" : index === 1 ? "Promise" : "Proof"}</h3>
+          <h3>{solutionCopy.proofLabels[index]}</h3>
           <p>{signal.text}</p>
         </article>
       ))}
       <article class="solution-proof-cta ar-system-core">
         <SystemIcon name={item.icon ?? "flow"} />
-        <span>Next conversion step</span>
-        <strong>Scope the first {solutionLowerTitle} build.</strong>
-        <p>Send the current process, tools, and expected {firstOutput.toLowerCase()} so this can become a first working system.</p>
-        <a class="button primary" href={solutionIntakeHref}>Scope This Solution</a>
+        <span>{solutionCopy.nextStep}</span>
+        <strong>{solutionCopy.ctaStrong}</strong>
+        <p>{solutionCopy.ctaText}</p>
+        <a class="button primary" href={localizedSolutionIntakeHref}>{solutionCopy.scopeSolution}</a>
       </article>
     </div>
   </section>
@@ -241,9 +429,9 @@ const solutionIntakeHref = `/start-project/?offer=${item.slug}&landing_page=/sol
   {item.workflow && (
     <section class="section split-panel">
       <div class="glass-panel">
-        <p class="eyebrow">Implementation path</p>
-        <h2>How {solutionLowerTitle} is built</h2>
-        <p>For {solutionLowerTitle}, the work starts by mapping the current process and then turning it into architecture, data, interfaces, automations, integrations, and launch workflow.</p>
+        <p class="eyebrow">{translateCopy(locale, "Implementation path")}</p>
+        <h2>{solutionCopy.implementationTitle}</h2>
+        <p>{solutionCopy.implementationText}</p>
       </div>
       <div class="glass-panel">
         <ul class="feature-list">
@@ -257,10 +445,10 @@ const solutionIntakeHref = `/start-project/?offer=${item.slug}&landing_page=/sol
     <section class="section">
       <div class="section-header">
         <div>
-          <p class="eyebrow">Use cases</p>
-          <h2>When {solutionLowerTitle} fits</h2>
+          <p class="eyebrow">{translateCopy(locale, "Use cases")}</p>
+          <h2>{solutionCopy.useCasesTitle}</h2>
         </div>
-        <p>This fits when {firstDetail.toLowerCase()} already creates pressure and the team needs structure, automation, visibility, or scale.</p>
+        <p>{solutionCopy.useCasesText}</p>
       </div>
       <ul class="feature-list">
         {item.useCases.map((useCase) => <li>{useCase}</li>)}
@@ -270,18 +458,18 @@ const solutionIntakeHref = `/start-project/?offer=${item.slug}&landing_page=/sol
 
   <section class="section split-panel">
     <div class="glass-panel">
-      <p class="eyebrow">Related systems</p>
-      <h2>System profiles that support {solutionLowerTitle}</h2>
-      <p>These profiles turn the solution into concrete architecture: modules, workflow, integrations, and operating output around {firstOutput.toLowerCase()}.</p>
+      <p class="eyebrow">{solutionCopy.relatedSystems}</p>
+      <h2>{solutionCopy.relatedSystemsTitle}</h2>
+      <p>{solutionCopy.relatedSystemsText}</p>
     </div>
     <div class="glass-panel">
       <div class="tag-grid">
         {fallbackSystems.map((system) => (
-          <a class="tag" href={`/systems/${system.slug}/`}>{system.title}</a>
+          <a class="tag" href={localizePath(`/systems/${system.slug}/`, locale)}>{system.title}</a>
         ))}
       </div>
       <div class="section-actions" style="margin-top: 18px;">
-        <a class="button primary" href={solutionIntakeHref}>Scope This Solution</a>
+        <a class="button primary" href={localizedSolutionIntakeHref}>{solutionCopy.scopeSolution}</a>
       </div>
     </div>
   </section>

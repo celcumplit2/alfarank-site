@@ -1,0 +1,73 @@
+---
+import PageHero from "@/components/PageHero.astro";
+import SystemIcon from "@/components/SystemIcon.astro";
+import Layout from "@/layouts/Layout.astro";
+import { getPrivateProjects, privateUi } from "@/data/private-projects";
+import { localizePath } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
+
+type Props = {
+  locale?: Locale;
+};
+
+const { locale = "en" } = Astro.props;
+const ui = privateUi[locale];
+const projects = getPrivateProjects(locale);
+
+const projectHeroVisual = {
+  mode: "private-projects",
+  icon: "product",
+  label: ui.projectLibrary,
+  state: `${projects.length} ${ui.projectWorkspace}`,
+  output: projects.map((project) => project.title).join(", "),
+  nodes: projects.map((project) => ({
+    title: project.title,
+    state: project.status,
+    icon: project.icon,
+    detail: project.client,
+    meter: "86%"
+  })),
+  metrics: [
+    { value: String(projects.length).padStart(2, "0"), label: ui.privateProjects },
+    { value: String(projects.reduce((total, project) => total + project.modules.length, 0)).padStart(2, "0"), label: ui.modules },
+    { value: "Lock", label: ui.access }
+  ]
+};
+---
+
+<Layout title={`${ui.privateProjects} | AlfaRank`} description={ui.projectLibrary} locale={locale} robots="noindex, nofollow">
+  <div class="private-project-page" data-no-translate>
+    <PageHero
+      eyebrow={ui.privateProjects}
+      title={ui.projectLibrary}
+      text={ui.projectsHeroText}
+      primaryHref="/projects/grafit/"
+      primaryLabel={ui.openProject}
+      locale={locale}
+      visual={projectHeroVisual}
+    />
+
+    <section class="section private-project-grid">
+      {projects.map((project) => (
+        <article class="glass-panel private-project-card">
+          <div class="private-project-card__head">
+            <SystemIcon name={project.icon} />
+            <div>
+              <p class="eyebrow">{project.eyebrow}</p>
+              <h2>{project.title}</h2>
+            </div>
+          </div>
+          <p>{project.summary}</p>
+          <div class="tag-grid">
+            <span class="tag">{project.client}</span>
+            <span class="tag">{project.status}</span>
+            <span class="tag">{project.modules.length} {ui.modules}</span>
+          </div>
+          <div class="section-actions">
+            <a class="button primary" href={localizePath(`/projects/${project.slug}/`, locale)}>{ui.openProject}</a>
+          </div>
+        </article>
+      ))}
+    </section>
+  </div>
+</Layout>

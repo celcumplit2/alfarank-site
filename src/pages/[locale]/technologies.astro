@@ -1,0 +1,15 @@
+---
+import TechnologiesPage from "@/pages/technologies.astro";
+import { translatedLocales } from "@/data/i18n";
+
+export function getStaticPaths() {
+  return translatedLocales.map((locale) => ({
+    params: { locale },
+    props: { locale }
+  }));
+}
+
+const { locale } = Astro.props;
+---
+
+<TechnologiesPage locale={locale} />

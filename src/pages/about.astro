@@ -3,36 +3,46 @@ import PageHero from "@/components/PageHero.astro";
 import SystemIcon from "@/components/SystemIcon.astro";
 import Layout from "@/layouts/Layout.astro";
 import { aboutHeroVisual } from "@/data/hero";
+import { localizePath, translateCopy } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
 
+type Props = {
+  locale?: Locale;
+};
+
+const { locale = "en" } = Astro.props;
+
+const startProjectHref = localizePath("/start-project/", locale);
 const operatingPrinciples = [
   {
-    title: "Business pressure",
-    state: "Input",
+    title: translateCopy(locale, "Business pressure"),
+    state: translateCopy(locale, "Input"),
     icon: "lens",
-    text: "Projects start from the process that needs to become faster, clearer, measurable, or automated."
+    text: translateCopy(locale, "Projects start from the process that needs to become faster, clearer, measurable, or automated.")
   },
   {
-    title: "System design",
-    state: "Map",
+    title: translateCopy(locale, "System design"),
+    state: translateCopy(locale, "Map"),
     icon: "flow",
-    text: "The work becomes interfaces, content models, automations, APIs, data flows, dashboards, and publishing systems."
+    text: translateCopy(locale, "The work becomes interfaces, content models, automations, APIs, data flows, dashboards, and publishing systems.")
   },
   {
-    title: "Launch output",
-    state: "Operate",
+    title: translateCopy(locale, "Launch output"),
+    state: translateCopy(locale, "Operate"),
     icon: "monitor",
-    text: "The first version must make a practical business output visible enough to improve."
+    text: translateCopy(locale, "The first version must make a practical business output visible enough to improve.")
   }
 ];
 ---
 
-<Layout title="About AlfaRank | Digital Systems Company">
+<Layout title={translateCopy(locale, "About AlfaRank | Digital Systems Company")} locale={locale}>
   <PageHero
-    eyebrow="About AlfaRank"
-    title="Practical system development for business output."
-    text="AlfaRank combines marketing logic, engineering, automation, content infrastructure, and data workflows to build digital systems that work inside real business processes."
-    primaryHref="/start-project/"
-    primaryLabel="Start a Project"
+    eyebrow={translateCopy(locale, "About AlfaRank")}
+    title={translateCopy(locale, "Practical system development for business output.")}
+    text={translateCopy(locale, "AlfaRank combines marketing logic, engineering, automation, content infrastructure, and data workflows to build digital systems that work inside real business processes.")}
+    primaryHref={startProjectHref}
+    primaryLabel={translateCopy(locale, "Start a Project")}
+    locale={locale}
     visual={aboutHeroVisual}
   />
 
@@ -40,10 +50,10 @@ const operatingPrinciples = [
     <div class="about-operating-console ar-system-block">
       <article class="about-operating-console__core ar-system-core">
         <SystemIcon name="product" />
-        <span>Operating principles</span>
-        <strong>Business problem to working system.</strong>
-        <p>Projects move through scope, prototype, implementation, integration, launch, and measurement.</p>
-        <a class="button secondary" href="/start-project/">Start a project</a>
+        <span>{translateCopy(locale, "Operating principles")}</span>
+        <strong>{translateCopy(locale, "Business problem to working system.")}</strong>
+        <p>{translateCopy(locale, "Projects move through scope, prototype, implementation, integration, launch, and measurement.")}</p>
+        <a class="button secondary" href={startProjectHref}>{translateCopy(locale, "Start a project")}</a>
       </article>
 
       {operatingPrinciples.map((principle, index) => (
@@ -56,9 +66,9 @@ const operatingPrinciples = [
       ))}
 
       <div class="about-operating-console__signals ar-signal-strip">
-        <span class="ar-signal">Automation-first</span>
-        <span class="ar-signal">Marketing + engineering</span>
-        <span class="ar-signal">Measurable output</span>
+        <span class="ar-signal">{translateCopy(locale, "Automation-first")}</span>
+        <span class="ar-signal">{translateCopy(locale, "Marketing + engineering")}</span>
+        <span class="ar-signal">{translateCopy(locale, "Measurable output")}</span>
       </div>
     </div>
   </section>

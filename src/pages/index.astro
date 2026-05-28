@@ -2,8 +2,15 @@
 import SystemHero from "@/components/SystemHero.astro";
 import SystemIcon from "@/components/SystemIcon.astro";
 import Layout from "@/layouts/Layout.astro";
-import { landingOffers } from "@/data/landing";
-import { capabilities, home, industries, solutions, systems, technologies } from "@/data/site";
+import { getLocalizedCollections, localizePath, translateCopy } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
+
+type Props = {
+  locale?: Locale;
+};
+
+const { locale = "en" } = Astro.props;
+const { landingOffers, capabilities, home, industries, solutions, systems, technologies } = getLocalizedCollections(locale);
 
 const decisionRoutes = [
   {
@@ -203,35 +210,36 @@ const blueprintStations = [
 ];
 ---
 
-<Layout>
+<Layout locale={locale}>
   <SystemHero
     eyebrow="Digital systems company"
     title={home.heroTitle}
     text={home.heroText}
-    primaryHref="/start-project/"
-    primaryLabel="Start a Project"
-    secondaryHref="/capabilities/"
-    secondaryLabel="Explore Capabilities"
+    primaryHref={localizePath("/start-project/", locale)}
+    primaryLabel={translateCopy(locale, "Start a Project")}
+    secondaryHref={localizePath("/capabilities/", locale)}
+    secondaryLabel={translateCopy(locale, "Explore Capabilities")}
+    locale={locale}
   />
 
   <section class="section home-decision" aria-labelledby="decision-title">
     <div class="section-header">
       <div>
-        <p class="eyebrow">Decision hub</p>
-        <h2 id="decision-title">What system do you need?</h2>
+        <p class="eyebrow">{translateCopy(locale, "Decision hub")}</p>
+        <h2 id="decision-title">{translateCopy(locale, "What system do you need?")}</h2>
       </div>
-      <p>Start from the operational need. Each route points to the most relevant capability, solution, or system profile so the home page works like a map of the company.</p>
+      <p>{translateCopy(locale, "Start from the operational need. Each route points to the most relevant capability, solution, or system profile so the home page works like a map of the company.")}</p>
     </div>
 
     <div class="decision-board">
       <div class="decision-board__core">
         <SystemIcon name="product" />
-        <strong>Need -> System</strong>
-        <p>Choose the pressure point, then follow the route into the section with the right level of detail.</p>
+        <strong>{translateCopy(locale, "Need -> System")}</strong>
+        <p>{translateCopy(locale, "Choose the pressure point, then follow the route into the section with the right level of detail.")}</p>
         <div class="decision-board__stats">
-          <span><b>{capabilities.length}</b> capabilities</span>
-          <span><b>{solutions.length}</b> solutions</span>
-          <span><b>{systems.length}</b> profiles</span>
+          <span><b>{capabilities.length}</b> {translateCopy(locale, "capabilities")}</span>
+          <span><b>{solutions.length}</b> {translateCopy(locale, "solutions")}</span>
+          <span><b>{systems.length}</b> {translateCopy(locale, "profiles")}</span>
         </div>
       </div>
 
@@ -242,15 +250,15 @@ const blueprintStations = [
               <SystemIcon name={route.icon} />
             </div>
             <div class="decision-route__body">
-              <span>{route.signal}</span>
-              <h3>{route.title}</h3>
-              <p>{route.text}</p>
+              <span>{translateCopy(locale, route.signal)}</span>
+              <h3>{translateCopy(locale, route.title)}</h3>
+              <p>{translateCopy(locale, route.text)}</p>
               <div class="decision-route__links">
-                <a href={route.primaryHref}>{route.primaryLabel}</a>
-                <a href={route.secondaryHref}>{route.secondaryLabel}</a>
+                <a href={localizePath(route.primaryHref, locale)}>{translateCopy(locale, route.primaryLabel)}</a>
+                <a href={localizePath(route.secondaryHref, locale)}>{translateCopy(locale, route.secondaryLabel)}</a>
               </div>
             </div>
-            <small>{route.output}</small>
+            <small>{translateCopy(locale, route.output)}</small>
           </article>
         ))}
       </div>
@@ -258,11 +266,11 @@ const blueprintStations = [
 
     <nav class="home-flow" aria-label="Homepage system routes">
       {systemPath.map((step, index) => (
-        <a href={step.href}>
+        <a href={localizePath(step.href, locale)}>
           <span>{String(index + 1).padStart(2, "0")}</span>
           <SystemIcon name={step.icon} />
-          <strong>{step.title}</strong>
-          <small>{step.text}</small>
+          <strong>{translateCopy(locale, step.title)}</strong>
+          <small>{translateCopy(locale, step.text)}</small>
         </a>
       ))}
     </nav>
@@ -271,23 +279,23 @@ const blueprintStations = [
   <section class="section campaign-offers" aria-labelledby="campaign-offers-title">
     <div class="section-header">
       <div>
-        <p class="eyebrow">Campaign landing pages</p>
-        <h2 id="campaign-offers-title">Offer pages built for ads and client leads</h2>
+        <p class="eyebrow">{translateCopy(locale, "Campaign landing pages")}</p>
+        <h2 id="campaign-offers-title">{translateCopy(locale, "Offer pages built for ads and client leads")}</h2>
       </div>
-      <p>These pages translate the broader system catalog into concrete buyer-ready offers with a problem, modules, proof signals, and a tracked intake path.</p>
+      <p>{translateCopy(locale, "These pages translate the broader system catalog into concrete buyer-ready offers with a problem, modules, proof signals, and a tracked intake path.")}</p>
     </div>
 
     <div class="landing-offer-core">
       <article class="landing-offer-core__center">
         <SystemIcon name="lead" />
-        <span>Lead acquisition layer</span>
-        <strong>{landingOffers.length} offer pages</strong>
-        <p>Each campaign page turns one buyer problem into a scoped system request with proof, modules, CTA, and intake tracking.</p>
-        <a class="button secondary" href="/start-project/">Plan campaign route</a>
+        <span>{translateCopy(locale, "Lead acquisition layer")}</span>
+        <strong>{translateCopy(locale, `${landingOffers.length} offer pages`)}</strong>
+        <p>{translateCopy(locale, "Each campaign page turns one buyer problem into a scoped system request with proof, modules, CTA, and intake tracking.")}</p>
+        <a class="button secondary" href={localizePath("/start-project/", locale)}>{translateCopy(locale, "Plan campaign route")}</a>
       </article>
 
       {landingOffers.map((offer, index) => (
-        <a class:list={["landing-offer-node", `landing-offer-node--${index + 1}`]} href={`/lp/${offer.slug}/`}>
+        <a class:list={["landing-offer-node", `landing-offer-node--${index + 1}`]} href={localizePath(`/lp/${offer.slug}/`, locale)}>
           <SystemIcon name={offer.icon} />
           <span>{offer.eyebrow}</span>
           <h3>{offer.title}</h3>
@@ -297,9 +305,9 @@ const blueprintStations = [
       ))}
 
       <div class="landing-offer-core__signals" aria-label="Landing page conversion signals">
-        <span>Ad message</span>
-        <span>Proof layer</span>
-        <span>Tracked intake</span>
+        <span>{translateCopy(locale, "Ad message")}</span>
+        <span>{translateCopy(locale, "Proof layer")}</span>
+        <span>{translateCopy(locale, "Tracked intake")}</span>
       </div>
     </div>
   </section>
@@ -307,8 +315,8 @@ const blueprintStations = [
   <section class="section home-spectrum" aria-labelledby="capability-spectrum-title">
     <div class="section-header">
       <div>
-        <p class="eyebrow">Capabilities</p>
-        <h2 id="capability-spectrum-title">What AlfaRank builds</h2>
+        <p class="eyebrow">{translateCopy(locale, "Capabilities")}</p>
+        <h2 id="capability-spectrum-title">{translateCopy(locale, "What AlfaRank builds")}</h2>
       </div>
       <p>{home.buildText}</p>
     </div>
@@ -317,16 +325,16 @@ const blueprintStations = [
       <div class="command-field__paths" aria-hidden="true"></div>
       <div class="command-core">
         <SystemIcon name="tools" />
-        <span>ALFARANK CORE</span>
-        <strong>{capabilities.length} connected directions</strong>
-        <p>Capabilities are not a menu of services. They are a set of technical forces that can be combined into one operating system.</p>
+        <span>{translateCopy(locale, "ALFARANK CORE")}</span>
+        <strong>{translateCopy(locale, `${capabilities.length} connected directions`)}</strong>
+        <p>{translateCopy(locale, "Capabilities are not a menu of services. They are a set of technical forces that can be combined into one operating system.")}</p>
       </div>
       {commandFieldNodes.map((item) => item.source && (
-        <a class:list={["command-node", `command-node--${item.slot}`]} href={`/capabilities/${item.slug}/`}>
+        <a class:list={["command-node", `command-node--${item.slot}`]} href={localizePath(`/capabilities/${item.slug}/`, locale)}>
           <SystemIcon name={item.source.icon} />
-          <span>{item.state}</span>
-          <h3>{item.title}</h3>
-          <p>{item.detail}</p>
+          <span>{translateCopy(locale, item.state)}</span>
+          <h3>{translateCopy(locale, item.title)}</h3>
+          <p>{translateCopy(locale, item.detail)}</p>
           <small style={`--command-level: ${item.metric};`}></small>
         </a>
       ))}
@@ -336,35 +344,35 @@ const blueprintStations = [
   <section class="section home-solution-field" aria-labelledby="home-solution-title">
     <div class="section-header">
       <div>
-        <p class="eyebrow">Solutions</p>
-        <h2 id="home-solution-title">Business problems mapped to systems</h2>
+        <p class="eyebrow">{translateCopy(locale, "Solutions")}</p>
+        <h2 id="home-solution-title">{translateCopy(locale, "Business problems mapped to systems")}</h2>
       </div>
       <p>{home.solutionsText}</p>
     </div>
 
     <div class="route-engine">
       <div class="route-engine__column">
-        <span class="route-engine__label">Business pressure</span>
+        <span class="route-engine__label">{translateCopy(locale, "Business pressure")}</span>
         {routeEngine.map((item) => (
-          <a class="route-pulse" href={item.inputHref}>
+          <a class="route-pulse" href={localizePath(item.inputHref, locale)}>
             <SystemIcon name={item.icon} />
-            <strong>{item.input}</strong>
+            <strong>{translateCopy(locale, item.input)}</strong>
           </a>
         ))}
       </div>
       <div class="route-engine__core">
         <SystemIcon name="flow" />
-        <span>Route engine</span>
-        <strong>Problem to system</strong>
-        <p>Inputs are converted into scoped implementation paths, then into measurable business outputs.</p>
-        <a class="button secondary" href="/solutions/">View solution routes</a>
+        <span>{translateCopy(locale, "Route engine")}</span>
+        <strong>{translateCopy(locale, "Problem to system")}</strong>
+        <p>{translateCopy(locale, "Inputs are converted into scoped implementation paths, then into measurable business outputs.")}</p>
+        <a class="button secondary" href={localizePath("/solutions/", locale)}>{translateCopy(locale, "View solution routes")}</a>
       </div>
       <div class="route-engine__column route-engine__column--output">
-        <span class="route-engine__label">System output</span>
+        <span class="route-engine__label">{translateCopy(locale, "System output")}</span>
         {routeEngine.map((item) => (
-          <a class="route-output" href={item.outputHref}>
-            <strong>{item.output}</strong>
-            <small>Open route</small>
+          <a class="route-output" href={localizePath(item.outputHref, locale)}>
+            <strong>{translateCopy(locale, item.output)}</strong>
+            <small>{translateCopy(locale, "Open route")}</small>
           </a>
         ))}
       </div>
@@ -374,8 +382,8 @@ const blueprintStations = [
   <section class="section" aria-labelledby="home-blueprint-title">
     <div class="section-header">
       <div>
-        <p class="eyebrow">System blueprint</p>
-        <h2 id="home-blueprint-title">From client workflow to operating system</h2>
+        <p class="eyebrow">{translateCopy(locale, "System blueprint")}</p>
+        <h2 id="home-blueprint-title">{translateCopy(locale, "From client workflow to operating system")}</h2>
       </div>
       <p>{home.systemsText}</p>
     </div>
@@ -387,9 +395,9 @@ const blueprintStations = [
             <SystemIcon name={station.icon} />
           </div>
           <span>{String(index + 1).padStart(2, "0")}</span>
-          <h3>{station.title}</h3>
-          <p>{station.text}</p>
-          <small>{station.stat}</small>
+          <h3>{translateCopy(locale, station.title)}</h3>
+          <p>{translateCopy(locale, station.text)}</p>
+          <small>{translateCopy(locale, station.stat)}</small>
         </article>
       ))}
     </div>
@@ -397,11 +405,11 @@ const blueprintStations = [
 
   <section class="section tech-radar-showcase" aria-labelledby="home-tech-title">
     <div class="tech-radar-copy">
-      <p class="eyebrow">Technology layer</p>
-      <h2 id="home-tech-title">Built with practical, integration-ready technology.</h2>
-      <p>AlfaRank uses established web, automation, AI, data, and CMS technologies to create systems that can be launched, reviewed, integrated, and improved without locking the business into a fragile stack.</p>
+      <p class="eyebrow">{translateCopy(locale, "Technology layer")}</p>
+      <h2 id="home-tech-title">{translateCopy(locale, "Built with practical, integration-ready technology.")}</h2>
+      <p>{translateCopy(locale, "AlfaRank uses established web, automation, AI, data, and CMS technologies to create systems that can be launched, reviewed, integrated, and improved without locking the business into a fragile stack.")}</p>
       <div class="section-actions">
-        <a class="button secondary" href="/technologies/">View Technologies</a>
+        <a class="button secondary" href={localizePath("/technologies/", locale)}>{translateCopy(locale, "View Technologies")}</a>
       </div>
     </div>
     <div class="tech-radar" aria-label="Technology radar">
@@ -409,11 +417,11 @@ const blueprintStations = [
       <div class="tech-radar__ring tech-radar__ring--inner"></div>
       <div class="tech-radar__core">
         <SystemIcon name="api" />
-        <strong>Stack logic</strong>
-        <span>CMS / AI / Data / APIs / Deploy</span>
+        <strong>{translateCopy(locale, "Stack logic")}</strong>
+        <span>{translateCopy(locale, "CMS / AI / Data / APIs / Deploy")}</span>
       </div>
       {technologyRadar.map((item) => (
-        <a class:list={["tech-radar__chip", `tech-radar__chip--${item.slot}`]} href={item.href}>
+        <a class:list={["tech-radar__chip", `tech-radar__chip--${item.slot}`]} href={localizePath(item.href, locale)}>
           <SystemIcon name={item.icon} />
           <span>{item.tech}</span>
         </a>
@@ -424,16 +432,16 @@ const blueprintStations = [
   <section class="section industry-trajectory" aria-labelledby="industry-trajectory-title">
     <div class="section-header">
       <div>
-        <p class="eyebrow">Industries</p>
-        <h2 id="industry-trajectory-title">Where the systems apply</h2>
+        <p class="eyebrow">{translateCopy(locale, "Industries")}</p>
+        <h2 id="industry-trajectory-title">{translateCopy(locale, "Where the systems apply")}</h2>
       </div>
-      <p>The same system approach works across service businesses, e-commerce, media, travel, local businesses, SaaS, agencies, and data-heavy operations.</p>
+      <p>{translateCopy(locale, "The same system approach works across service businesses, e-commerce, media, travel, local businesses, SaaS, agencies, and data-heavy operations.")}</p>
     </div>
 
     <div class="market-trajectory">
       <div class="market-trajectory__line"></div>
       {industries.map((item, index) => (
-        <a class:list={["market-node", `market-node--${index + 1}`]} href={`/industries/${item.slug}/`}>
+        <a class:list={["market-node", `market-node--${index + 1}`]} href={localizePath(`/industries/${item.slug}/`, locale)}>
           <SystemIcon name={item.icon} />
           <span>{String(index + 1).padStart(2, "0")}</span>
           <h3>{item.title}</h3>
@@ -445,11 +453,11 @@ const blueprintStations = [
 
   <section class="section split-panel">
     <div class="glass-panel">
-      <p class="eyebrow">Project flow</p>
-      <h2>How projects start</h2>
-      <p>Every project begins with a concrete operational problem. The first goal is to define the system that should exist, not to force the business into a predefined service package.</p>
+      <p class="eyebrow">{translateCopy(locale, "Project flow")}</p>
+      <h2>{translateCopy(locale, "How projects start")}</h2>
+      <p>{translateCopy(locale, "Every project begins with a concrete operational problem. The first goal is to define the system that should exist, not to force the business into a predefined service package.")}</p>
       <div class="section-actions">
-        <a class="button primary" href="/start-project/">Start a Project</a>
+        <a class="button primary" href={localizePath("/start-project/", locale)}>{translateCopy(locale, "Start a Project")}</a>
       </div>
     </div>
     <div class="glass-panel">

@@ -2,8 +2,17 @@
 import PageHero from "@/components/PageHero.astro";
 import SystemIcon from "@/components/SystemIcon.astro";
 import Layout from "@/layouts/Layout.astro";
-import { capabilities, solutions } from "@/data/site";
 import { collectionHeroVisual } from "@/data/hero";
+import { getCapabilities, getSolutions, localizePath, translateCopy } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
+
+type Props = {
+  locale?: Locale;
+};
+
+const { locale = "en" } = Astro.props;
+const capabilities = getCapabilities(locale);
+const solutions = getSolutions(locale);
 
 const capabilityTags: Record<string, string[]> = {
   "ai-automation": ["AI workflows", "CRM", "Content"],
@@ -17,23 +26,23 @@ const capabilityTags: Record<string, string[]> = {
 
 const capabilityGroups = [
   {
-    title: "Automation and operations",
+    title: translateCopy(locale, "Automation and operations"),
     icon: "ai",
-    text: "Repeated work, lead handling, content production, reporting, routing, and review loops.",
+    text: translateCopy(locale, "Repeated work, lead handling, content production, reporting, routing, and review loops."),
     slugs: ["ai-automation", "wordpress-api-integrations", "web-product-development"],
     solutionSlugs: ["automate-lead-processing", "build-internal-tools"]
   },
   {
-    title: "Content and growth systems",
+    title: translateCopy(locale, "Content and growth systems"),
     icon: "content",
-    text: "Publishing infrastructure, programmatic pages, SEO workflows, media production, and monitoring.",
+    text: translateCopy(locale, "Publishing infrastructure, programmatic pages, SEO workflows, media production, and monitoring."),
     slugs: ["seo-content-infrastructure", "video-media-automation", "ai-automation"],
     solutionSlugs: ["generate-more-content", "scale-seo-infrastructure"]
   },
   {
-    title: "Data and commerce infrastructure",
+    title: translateCopy(locale, "Data and commerce infrastructure"),
     icon: "data",
-    text: "Collection, normalization, scoring, feeds, catalog operations, dashboards, and alerts.",
+    text: translateCopy(locale, "Collection, normalization, scoring, feeds, catalog operations, dashboards, and alerts."),
     slugs: ["data-systems-scraping", "ecommerce-systems", "wordpress-api-integrations"],
     solutionSlugs: ["build-data-monitoring-system", "upgrade-existing-website"]
   }
@@ -44,37 +53,38 @@ const solutionBySlug = new Map(solutions.map((item) => [item.slug, item]));
 
 const serviceZones = capabilities.map((item, index) => ({
   ...item,
-  verb: ["Automate", "Build", "Publish", "Signal", "Operate", "Generate", "Connect"][index] ?? "Create",
+  verb: translateCopy(locale, ["Automate", "Build", "Publish", "Signal", "Operate", "Generate", "Connect"][index] ?? "Create"),
   zone: String(index + 1).padStart(2, "0"),
   level: `${74 + index * 3}%`
 }));
 ---
 
-<Layout title="Capabilities | AlfaRank">
+<Layout title={translateCopy(locale, "Capabilities | AlfaRank")} locale={locale}>
   <PageHero
-    eyebrow="Capabilities"
-    title="Technical directions for building digital systems."
-    text="AlfaRank capabilities are organized around what the company can build, connect, automate, and launch."
-    primaryHref="/start-project/"
-    primaryLabel="Start a Project"
+    eyebrow={translateCopy(locale, "Capabilities")}
+    title={translateCopy(locale, "Technical directions for building digital systems.")}
+    text={translateCopy(locale, "AlfaRank capabilities are organized around what the company can build, connect, automate, and launch.")}
+    primaryHref={localizePath("/start-project/", locale)}
+    primaryLabel={translateCopy(locale, "Start a Project")}
+    locale={locale}
     visual={collectionHeroVisual(capabilities, {
       mode: "capabilities",
       icon: "tools",
-      label: "Capability network",
-      state: "Build directions online",
-      output: "AI, web, content, data, commerce, media, integrations",
-      primaryMetric: "Directions",
-      secondaryMetric: "Build map"
+      label: translateCopy(locale, "Capability network"),
+      state: translateCopy(locale, "Build directions online"),
+      output: translateCopy(locale, "AI, web, content, data, commerce, media, integrations"),
+      primaryMetric: translateCopy(locale, "Directions"),
+      secondaryMetric: translateCopy(locale, "Build map")
     })}
   />
 
   <section class="section capability-foundation">
     <div class="section-header">
       <div>
-        <p class="eyebrow">Capability foundation</p>
-        <h2>Capabilities are grouped by operating layer.</h2>
+        <p class="eyebrow">{translateCopy(locale, "Capability foundation")}</p>
+        <h2>{translateCopy(locale, "Capabilities are grouped by operating layer.")}</h2>
       </div>
-      <p>Each group combines build directions with the solution routes where that capability usually becomes a working system.</p>
+      <p>{translateCopy(locale, "Each group combines build directions with the solution routes where that capability usually becomes a working system.")}</p>
     </div>
 
     <div class="capability-lanes">
@@ -92,9 +102,9 @@ const serviceZones = capabilities.map((item, index) => ({
             {group.slugs.map((slug, index) => {
               const item = capabilityBySlug.get(slug);
               return item && (
-                <a href={`/capabilities/${item.slug}/`} style={`--lane-level: ${72 + index * 8}%;`}>
+                <a href={localizePath(`/capabilities/${item.slug}/`, locale)} style={`--lane-level: ${72 + index * 8}%;`}>
                   <strong>{item.title}</strong>
-                  <span>{capabilityTags[item.slug]?.join(" / ")}</span>
+                  <span>{capabilityTags[item.slug]?.map((tag) => translateCopy(locale, tag)).join(" / ")}</span>
                   <b></b>
                 </a>
               );
@@ -104,7 +114,7 @@ const serviceZones = capabilities.map((item, index) => ({
           <div class="capability-lane__routes">
             {group.solutionSlugs.map((slug) => {
               const item = solutionBySlug.get(slug);
-              return item && <a href={`/solutions/${item.slug}/`}>{item.title}</a>;
+              return item && <a href={localizePath(`/solutions/${item.slug}/`, locale)}>{item.title}</a>;
             })}
           </div>
         </article>
@@ -115,28 +125,28 @@ const serviceZones = capabilities.map((item, index) => ({
   <section class="section">
     <div class="section-header">
       <div>
-        <p class="eyebrow">Catalog</p>
-        <h2>All build directions</h2>
+        <p class="eyebrow">{translateCopy(locale, "Catalog")}</p>
+        <h2>{translateCopy(locale, "All build directions")}</h2>
       </div>
-      <p>Use the full catalog when the system is already clear, or start from the layer groups above when the problem still needs routing.</p>
+      <p>{translateCopy(locale, "Use the full catalog when the system is already clear, or start from the layer groups above when the problem still needs routing.")}</p>
     </div>
     <div class="service-surface">
       <div class="service-surface__axis" aria-hidden="true"></div>
       <article class="service-surface__core">
         <SystemIcon name="tools" />
-        <span>Service navigation surface</span>
-        <strong>Choose the build zone</strong>
-        <p>Each zone opens a capability page with practical modules, workflow use cases, and related system routes.</p>
-        <a class="button secondary" href="/start-project/">Scope the first zone</a>
+        <span>{translateCopy(locale, "Service navigation surface")}</span>
+        <strong>{translateCopy(locale, "Choose the build zone")}</strong>
+        <p>{translateCopy(locale, "Each zone opens a capability page with practical modules, workflow use cases, and related system routes.")}</p>
+        <a class="button secondary" href={localizePath("/start-project/", locale)}>{translateCopy(locale, "Scope the first zone")}</a>
       </article>
       {serviceZones.map((item, index) => (
-        <a class:list={["service-zone", `service-zone--${index + 1}`]} href={`/capabilities/${item.slug}/`}>
+        <a class:list={["service-zone", `service-zone--${index + 1}`]} href={localizePath(`/capabilities/${item.slug}/`, locale)}>
           <span>{item.zone}</span>
           <SystemIcon name={item.icon} />
           <div>
             <small>{item.verb}</small>
             <h3>{item.title}</h3>
-            <p>{capabilityTags[item.slug]?.join(" / ")}</p>
+            <p>{capabilityTags[item.slug]?.map((tag) => translateCopy(locale, tag)).join(" / ")}</p>
             <b style={`--service-level: ${item.level};`}></b>
           </div>
         </a>

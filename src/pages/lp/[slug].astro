@@ -3,6 +3,13 @@ import PageHero from "@/components/PageHero.astro";
 import SystemIcon from "@/components/SystemIcon.astro";
 import Layout from "@/layouts/Layout.astro";
 import { landingOfferHeroVisual, landingOffers } from "@/data/landing";
+import { localizePath, translateCopy } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
+
+type Props = {
+  locale?: Locale;
+  offer: (typeof landingOffers)[number];
+};
 
 export function getStaticPaths() {
   return landingOffers.map((offer) => ({
@@ -11,8 +18,8 @@ export function getStaticPaths() {
   }));
 }
 
-const { offer } = Astro.props;
-const sourcePath = `/lp/${offer.slug}/`;
+const { offer, locale = "en" } = Astro.props as Props;
+const sourcePath = localizePath(`/lp/${offer.slug}/`, locale);
 const title = `${offer.title} | AlfaRank`;
 const isLeadOffer = offer.slug === "automate-lead-processing";
 const isContentOffer = offer.slug === "ai-content-workflow";
@@ -22,6 +29,8 @@ const [beforeSignal, afterSignal, measurableSignal] = offer.proofSignals;
 const offerLowerTitle = offer.title.toLowerCase();
 const offerOutput = offer.desiredOutput.toLowerCase();
 const primaryOutcome = offer.outcomes[0]?.toLowerCase() ?? offerOutput;
+const sendingRequestLabel = translateCopy(locale, "Sending request...");
+const sendingCampaignStatus = translateCopy(locale, "Sending request with campaign context...");
 
 const leadSources = [
   { label: "Website form", icon: "web" },
@@ -64,43 +73,44 @@ const wordpressLayers = [
 ];
 ---
 
-<Layout title={title} description={offer.summary}>
+<Layout title={title} description={offer.summary} locale={locale}>
   <PageHero
     eyebrow={offer.eyebrow}
     title={offer.title}
     text={offer.summary}
     primaryHref="#landing-intake"
-    primaryLabel="Request This System"
-    secondaryHref={offer.relatedLinks[0]?.href ?? "/solutions/"}
-    secondaryLabel={offer.relatedLinks[0]?.label ?? "Related Solution"}
+    primaryLabel={translateCopy(locale, "Request This System")}
+    secondaryHref={localizePath(offer.relatedLinks[0]?.href ?? "/solutions/", locale)}
+    secondaryLabel={offer.relatedLinks[0]?.label ?? translateCopy(locale, "Related Solution")}
+    locale={locale}
     visual={landingOfferHeroVisual(offer)}
   />
 
   <section class="section traffic-brief" aria-labelledby="traffic-brief-title">
     <article class="traffic-brief__promise">
-      <p class="eyebrow">Paid traffic brief</p>
+      <p class="eyebrow">{translateCopy(locale, "Paid traffic brief")}</p>
       <h2 id="traffic-brief-title">{offer.trafficReady.promise}</h2>
       <p>{offer.trafficReady.trigger}</p>
       <div class="section-actions">
-        <a class="button primary" href="#landing-intake">Request this route</a>
-        <a class="button secondary" href={offer.relatedLinks[0]?.href ?? "/solutions/"}>See related route</a>
+        <a class="button primary" href="#landing-intake">{translateCopy(locale, "Request this route")}</a>
+        <a class="button secondary" href={localizePath(offer.relatedLinks[0]?.href ?? "/solutions/", locale)}>{translateCopy(locale, "See related route")}</a>
       </div>
     </article>
 
     <div class="traffic-brief__signals" aria-label="Landing page conversion brief">
       <article>
         <SystemIcon name="tools" />
-        <span>First scope</span>
+        <span>{translateCopy(locale, "First scope")}</span>
         <p>{offer.trafficReady.firstScope}</p>
       </article>
       <article>
         <SystemIcon name="ranking" />
-        <span>Proof metric</span>
+        <span>{translateCopy(locale, "Proof metric")}</span>
         <p>{offer.trafficReady.proofMetric}</p>
       </article>
       <article>
         <SystemIcon name="monitor" />
-        <span>Risk removed</span>
+        <span>{translateCopy(locale, "Risk removed")}</span>
         <p>{offer.trafficReady.riskRemoved}</p>
       </article>
     </div>
@@ -109,8 +119,8 @@ const wordpressLayers = [
   <section class="section landing-problem" aria-labelledby="landing-fit-title">
     <div class="section-header">
       <div>
-        <p class="eyebrow">Campaign fit</p>
-        <h2 id="landing-fit-title">Who this page should convert</h2>
+        <p class="eyebrow">{translateCopy(locale, "Campaign fit")}</p>
+        <h2 id="landing-fit-title">{translateCopy(locale, "Who this page should convert")}</h2>
       </div>
       <p>{offer.audience}</p>
     </div>
@@ -118,24 +128,24 @@ const wordpressLayers = [
     <div class="landing-problem-grid">
       <article>
         <SystemIcon name={offer.icon} />
-        <h3>Buyer pressure</h3>
+        <h3>{translateCopy(locale, "Buyer pressure")}</h3>
         <ul>
           {offer.painPoints.map((point) => <li>{point}</li>)}
         </ul>
       </article>
       <article>
         <SystemIcon name="ranking" />
-        <h3>Expected output</h3>
+        <h3>{translateCopy(locale, "Expected output")}</h3>
         <ul>
           {offer.outcomes.map((outcome) => <li>{outcome}</li>)}
         </ul>
       </article>
       <article>
         <SystemIcon name="flow" />
-        <h3>Best next action</h3>
-        <p>Send the current workflow, traffic source, tools, and the first result you need from {offerOutput}. AlfaRank can scope the smallest useful version from that context.</p>
+        <h3>{translateCopy(locale, "Best next action")}</h3>
+        <p>{locale === "en" ? `Send the current workflow, traffic source, tools, and the first result you need from ${offerOutput}. AlfaRank can scope the smallest useful version from that context.` : translateCopy(locale, "Send the current workflow, traffic source, tools, and the first result you need. AlfaRank can scope the smallest useful version from that context.")}</p>
         <div class="landing-link-stack">
-          {offer.relatedLinks.map((link) => <a href={link.href}>{link.label}</a>)}
+          {offer.relatedLinks.map((link) => <a href={localizePath(link.href, locale)}>{link.label}</a>)}
         </div>
       </article>
     </div>
@@ -144,38 +154,38 @@ const wordpressLayers = [
   <section class="section landing-system" aria-labelledby="landing-system-title">
     <div class="section-header">
       <div>
-        <p class="eyebrow">System offer</p>
-        <h2 id="landing-system-title">What the first {offerOutput} build can include</h2>
+        <p class="eyebrow">{translateCopy(locale, "System offer")}</p>
+        <h2 id="landing-system-title">{locale === "en" ? `What the first ${offerOutput} build can include` : translateCopy(locale, "What the first build can include")}</h2>
       </div>
-      <p>This offer is specific enough for campaign traffic, but still flexible enough to shape around the buyer's current tools, constraints, and {primaryOutcome}.</p>
+      <p>{locale === "en" ? `This offer is specific enough for campaign traffic, but still flexible enough to shape around the buyer's current tools, constraints, and ${primaryOutcome}.` : translateCopy(locale, "This offer is specific enough for campaign traffic, but still flexible enough to shape around the buyer's current tools, constraints, and target outcome.")}</p>
     </div>
 
     {isLeadOffer && (
       <div class="lead-reactor landing-live-block">
         <div class="lead-reactor__sources">
-          <span>Incoming sources</span>
+          <span>{translateCopy(locale, "Incoming sources")}</span>
           {leadSources.map((source) => (
             <a href="#landing-intake">
               <SystemIcon name={source.icon} />
-              <strong>{source.label}</strong>
-              <small>Lead input</small>
+              <strong>{translateCopy(locale, source.label)}</strong>
+              <small>{translateCopy(locale, "Lead input")}</small>
             </a>
           ))}
         </div>
         <article class="lead-reactor__core">
           <SystemIcon name="lead" />
           <span>{offer.formProjectType}</span>
-          <strong>Lead reactor</strong>
+          <strong>{translateCopy(locale, "Lead reactor")}</strong>
           <p>{offer.desiredOutput}</p>
-          <small>Source -> qualify -> route -> respond</small>
+          <small>{translateCopy(locale, "Source -> qualify -> route -> respond")}</small>
         </article>
         <div class="lead-reactor__actions">
-          <span>Activated outputs</span>
+          <span>{translateCopy(locale, "Activated outputs")}</span>
           {leadActions.map((action) => (
             <a href={action.href}>
               <SystemIcon name={action.icon} />
-              <strong>{action.label}</strong>
-              <small>Output</small>
+              <strong>{translateCopy(locale, action.label)}</strong>
+              <small>{translateCopy(locale, "Output")}</small>
             </a>
           ))}
         </div>
@@ -187,15 +197,15 @@ const wordpressLayers = [
         <article class="content-factory__core">
           <SystemIcon name="content" />
           <span>{offer.formProjectType}</span>
-          <strong>Content factory rail</strong>
+          <strong>{translateCopy(locale, "Content factory rail")}</strong>
           <p>{offer.desiredOutput}</p>
         </article>
         <div class="content-factory__rail">
           {contentRail.map((station, index) => (
             <a class="factory-station" href={station.href} style={`--station-index: "${String(index + 1).padStart(2, "0")}";`}>
               <SystemIcon name={station.icon} />
-              <strong>{station.label}</strong>
-              <small>{station.detail}</small>
+              <strong>{translateCopy(locale, station.label)}</strong>
+              <small>{translateCopy(locale, station.detail)}</small>
             </a>
           ))}
         </div>
@@ -207,21 +217,21 @@ const wordpressLayers = [
         <article class="commerce-control__core">
           <SystemIcon name="commerce" />
           <span>{offer.formProjectType}</span>
-          <strong>Commerce control deck</strong>
+          <strong>{translateCopy(locale, "Commerce control deck")}</strong>
           <p>{offer.desiredOutput}</p>
-          <a class="button secondary" href="#landing-intake">Request system plan</a>
+          <a class="button secondary" href="#landing-intake">{translateCopy(locale, "Request system plan")}</a>
           <div class="commerce-control__metrics">
-            <small>Feed status</small>
-            <small>Catalog QA</small>
-            <small>Ops report</small>
+            <small>{translateCopy(locale, "Feed status")}</small>
+            <small>{translateCopy(locale, "Catalog QA")}</small>
+            <small>{translateCopy(locale, "Ops report")}</small>
           </div>
         </article>
         <div class="commerce-control__zones">
           {commerceDeck.map((zone, index) => (
             <a class:list={["commerce-zone", `commerce-zone--${index + 1}`]} href={zone.href}>
               <SystemIcon name={zone.icon} />
-              <strong>{zone.label}</strong>
-              <small>{index % 2 === 0 ? "Sync" : "Monitor"}</small>
+              <strong>{translateCopy(locale, zone.label)}</strong>
+              <small>{translateCopy(locale, index % 2 === 0 ? "Sync" : "Monitor")}</small>
             </a>
           ))}
         </div>
@@ -233,23 +243,23 @@ const wordpressLayers = [
         <article class="platform-blueprint__copy">
           <SystemIcon name="api" />
           <span>{offer.formProjectType}</span>
-          <strong>Platform blueprint</strong>
+          <strong>{translateCopy(locale, "Platform blueprint")}</strong>
           <p>{offer.desiredOutput}</p>
-          <a class="button secondary" href="#landing-intake">Request system plan</a>
+          <a class="button secondary" href="#landing-intake">{translateCopy(locale, "Request system plan")}</a>
         </article>
         <div class="platform-blueprint__layers">
           <article class="platform-blueprint__hub">
             <SystemIcon name="flow" />
-            <span>Integration core</span>
+            <span>{translateCopy(locale, "Integration core")}</span>
             <strong>WordPress + CRM</strong>
-            <p>One platform path for content, forms, lead data, reporting, and launch.</p>
+            <p>{translateCopy(locale, "One platform path for content, forms, lead data, reporting, and launch.")}</p>
           </article>
           {wordpressLayers.map((layer, index) => (
             <a class:list={["blueprint-layer", `blueprint-layer--${index + 1}`]} href={layer.href}>
               <SystemIcon name={layer.icon} />
-              <span>{layer.signal}</span>
-              <strong>{layer.label}</strong>
-              <small>{layer.detail}</small>
+              <span>{translateCopy(locale, layer.signal)}</span>
+              <strong>{translateCopy(locale, layer.label)}</strong>
+              <small>{translateCopy(locale, layer.detail)}</small>
             </a>
           ))}
         </div>
@@ -260,32 +270,32 @@ const wordpressLayers = [
   <section class="section" aria-labelledby="landing-proof-title">
     <div class="section-header">
       <div>
-        <p class="eyebrow">Proof layer</p>
-        <h2 id="landing-proof-title">The page sells the {offerOutput} before and after</h2>
+        <p class="eyebrow">{translateCopy(locale, "Proof layer")}</p>
+        <h2 id="landing-proof-title">{locale === "en" ? `The page sells the ${offerOutput} before and after` : translateCopy(locale, "The page sells the before and after")}</h2>
       </div>
-      <p>For this campaign, the page needs to show what is broken now, what becomes structured, and which signals prove that {primaryOutcome} is improving.</p>
+      <p>{locale === "en" ? `For this campaign, the page needs to show what is broken now, what becomes structured, and which signals prove that ${primaryOutcome} is improving.` : translateCopy(locale, "For this campaign, the page needs to show what is broken now, what becomes structured, and which signals prove that the result is improving.")}</p>
     </div>
 
     <div class="before-after-engine">
       <article class="before-after-panel before-after-panel--before">
         <SystemIcon name="tools" />
         <span>{beforeSignal.title}</span>
-        <h3>Manual pressure</h3>
+        <h3>{translateCopy(locale, "Manual pressure")}</h3>
         <p>{beforeSignal.text}</p>
       </article>
 
       <article class="before-after-engine__core">
         <SystemIcon name={offer.icon} />
         <span>{offer.formProjectType}</span>
-        <strong>System engine</strong>
+        <strong>{translateCopy(locale, "System engine")}</strong>
         <p>{offer.desiredOutput}</p>
-        <a class="button secondary" href="#landing-intake">Scope first build</a>
+        <a class="button secondary" href="#landing-intake">{translateCopy(locale, "Scope first build")}</a>
       </article>
 
       <article class="before-after-panel before-after-panel--after">
         <SystemIcon name="monitor" />
         <span>{afterSignal.title}</span>
-        <h3>Operational output</h3>
+        <h3>{translateCopy(locale, "Operational output")}</h3>
         <p>{afterSignal.text}</p>
       </article>
 
@@ -300,10 +310,10 @@ const wordpressLayers = [
   <section class="section landing-process" aria-labelledby="landing-process-title">
     <div class="section-header">
       <div>
-        <p class="eyebrow">Implementation path</p>
-        <h2 id="landing-process-title">A practical first scope for {offerOutput}</h2>
+        <p class="eyebrow">{translateCopy(locale, "Implementation path")}</p>
+        <h2 id="landing-process-title">{locale === "en" ? `A practical first scope for ${offerOutput}` : translateCopy(locale, "A practical first scope")}</h2>
       </div>
-      <p>This page turns the ad click into a scoped system request: clear inputs, build modules, launch output, and a reason to start with {offerLowerTitle}.</p>
+      <p>{locale === "en" ? `This page turns the ad click into a scoped system request: clear inputs, build modules, launch output, and a reason to start with ${offerLowerTitle}.` : translateCopy(locale, "This page turns the ad click into a scoped system request: clear inputs, build modules, launch output, and a reason to start.")}</p>
     </div>
 
     <div class="landing-process-grid">
@@ -317,7 +327,15 @@ const wordpressLayers = [
   </section>
 
   <section class="section split-panel landing-conversion" id="landing-intake">
-    <form class="glass-panel" method="post" action="/api/start-project" data-track-source data-conversion-form={`lp:${offer.slug}`}>
+    <form
+      class="glass-panel"
+      method="post"
+      action="/api/start-project"
+      data-track-source
+      data-conversion-form={`lp:${offer.slug}`}
+      data-sending-label={sendingRequestLabel}
+      data-sending-status={sendingCampaignStatus}
+    >
       <input type="hidden" name="source_path" value={sourcePath} />
       <input type="hidden" name="landing_page" value={sourcePath} />
       <input type="hidden" name="landing_offer" value={offer.slug} />
@@ -330,55 +348,55 @@ const wordpressLayers = [
       <input type="hidden" name="utm_term" />
       <input type="hidden" name="utm_content" />
       <div class="spam-field" aria-hidden="true">
-        <label for={`company_website_${offer.slug}`}>Company website</label>
+        <label for={`company_website_${offer.slug}`}>{translateCopy(locale, "Company website")}</label>
         <input id={`company_website_${offer.slug}`} name="company_website" tabindex="-1" autocomplete="off" />
       </div>
 
-      <p class="eyebrow">Project intake</p>
-      <h2>Ask for this system</h2>
+      <p class="eyebrow">{translateCopy(locale, "Project intake")}</p>
+      <h2>{translateCopy(locale, "Ask for this system")}</h2>
       <div class="form-grid landing-form-grid">
         <div class="field">
-          <label for={`name_${offer.slug}`}>Name</label>
+          <label for={`name_${offer.slug}`}>{translateCopy(locale, "Name")}</label>
           <input id={`name_${offer.slug}`} name="name" autocomplete="name" required />
         </div>
         <div class="field">
-          <label for={`email_${offer.slug}`}>Email</label>
+          <label for={`email_${offer.slug}`}>{translateCopy(locale, "Email")}</label>
           <input id={`email_${offer.slug}`} name="email" type="email" autocomplete="email" required />
         </div>
         <div class="field full">
-          <label for={`company_${offer.slug}`}>Company optional</label>
+          <label for={`company_${offer.slug}`}>{translateCopy(locale, "Company optional")}</label>
           <input id={`company_${offer.slug}`} name="company" autocomplete="organization" />
         </div>
         <div class="field full">
-          <label for={`current_system_${offer.slug}`}>Current website, system, or tools optional</label>
-          <input id={`current_system_${offer.slug}`} name="current_system" placeholder="URL, CRM, CMS, spreadsheet, workflow, or short context" />
+          <label for={`current_system_${offer.slug}`}>{translateCopy(locale, "Current website, system, or tools optional")}</label>
+          <input id={`current_system_${offer.slug}`} name="current_system" placeholder={translateCopy(locale, "URL, CRM, CMS, spreadsheet, workflow, or short context")} />
         </div>
         <div class="field full">
-          <label for={`problem_${offer.slug}`}>What is happening now?</label>
+          <label for={`problem_${offer.slug}`}>{translateCopy(locale, "What is happening now?")}</label>
           <textarea id={`problem_${offer.slug}`} name="business_problem" required></textarea>
         </div>
         <div class="field full">
-          <label for={`result_${offer.slug}`}>What should the system make visible or faster?</label>
+          <label for={`result_${offer.slug}`}>{translateCopy(locale, "What should the system make visible or faster?")}</label>
           <textarea id={`result_${offer.slug}`} name="desired_result" required></textarea>
         </div>
         <div class="field full">
-          <label for={`timeline_${offer.slug}`}>Timeline optional</label>
+          <label for={`timeline_${offer.slug}`}>{translateCopy(locale, "Timeline optional")}</label>
           <input id={`timeline_${offer.slug}`} name="timeline" />
         </div>
         <div class="field full">
-          <label for={`contact_details_${offer.slug}`}>Contact details optional</label>
-          <textarea id={`contact_details_${offer.slug}`} name="contact_details" placeholder="Preferred contact channel, time zone, or extra decision context"></textarea>
+          <label for={`contact_details_${offer.slug}`}>{translateCopy(locale, "Contact details optional")}</label>
+          <textarea id={`contact_details_${offer.slug}`} name="contact_details" placeholder={translateCopy(locale, "Preferred contact channel, time zone, or extra decision context")}></textarea>
         </div>
       </div>
       <div class="section-actions">
-        <button class="button primary" type="submit">Send Request</button>
+        <button class="button primary" type="submit">{translateCopy(locale, "Send Request")}</button>
       </div>
       <p class="form-status" data-form-status aria-live="polite"></p>
     </form>
 
     <aside class="glass-panel landing-faq">
-      <p class="eyebrow">Buyer questions</p>
-      <h2>Before a lead asks</h2>
+      <p class="eyebrow">{translateCopy(locale, "Buyer questions")}</p>
+      <h2>{translateCopy(locale, "Before a lead asks")}</h2>
       {offer.faq.map((entry) => (
         <details>
           <summary>{entry.question}</summary>
@@ -418,10 +436,10 @@ const wordpressLayers = [
           const status = form.querySelector("[data-form-status]");
           if (button) {
             button.dataset.defaultLabel = button.textContent || "";
-            button.textContent = "Sending request...";
+            button.textContent = form.dataset.sendingLabel || "Sending request...";
             button.disabled = true;
           }
-          if (status) status.textContent = "Sending request with campaign context...";
+          if (status) status.textContent = form.dataset.sendingStatus || "Sending request with campaign context...";
         });
       });
     })();

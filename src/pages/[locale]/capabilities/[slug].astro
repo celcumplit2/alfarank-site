@@ -1,0 +1,17 @@
+---
+import CapabilityPage from "@/pages/capabilities/[slug].astro";
+import { getCapabilities, translatedLocales } from "@/data/i18n";
+
+export function getStaticPaths() {
+  return translatedLocales.flatMap((locale) =>
+    getCapabilities(locale).map((item) => ({
+      params: { locale, slug: item.slug },
+      props: { locale, item }
+    }))
+  );
+}
+
+const { locale, item } = Astro.props;
+---
+
+<CapabilityPage locale={locale} item={item} />
