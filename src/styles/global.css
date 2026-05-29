@@ -761,7 +761,7 @@ select {
 .system-map {
   position: relative;
   min-height: 588px;
-  overflow: hidden;
+  overflow: visible;
   border-radius: var(--radius);
   background:
     radial-gradient(circle at 38% 46%, rgba(56, 189, 248, 0.12), transparent 26%),
@@ -773,7 +773,20 @@ select {
     42px 42px,
     42px 42px,
     100% 100%;
+  transform: perspective(900px) rotateY(-12deg) translateX(18px) scale(0.98);
+  transform-origin: left center;
+  transform-style: preserve-3d;
   contain: layout paint style;
+}
+
+.system-map::before,
+.system-map::after,
+.system-map__routes,
+.system-map__status,
+.system-map__core,
+.system-node,
+.system-map__dock {
+  transform-style: preserve-3d;
 }
 
 .system-map::before {
@@ -1239,7 +1252,9 @@ select {
 .page-system-map {
   position: relative;
   min-height: 470px;
-  overflow: hidden;
+  --system-map-gutter: clamp(20px, 2vw, 30px);
+  --system-map-content-shift: 0px;
+  overflow: visible;
   border: 1px solid rgba(125, 211, 252, 0.2);
   border-radius: var(--radius);
   background:
@@ -1253,11 +1268,28 @@ select {
     100% 100%,
     100% 100%;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 -1px 18px rgba(0, 16, 48, 0.24),
-    0 22px 50px -36px rgba(0, 7, 26, 0.66),
-    0 0 32px rgba(94, 220, 255, 0.04);
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -1px 18px rgba(0, 16, 48, 0.22),
+    32px 34px 68px -46px rgba(0, 7, 26, 0.84),
+    0 0 32px rgba(94, 220, 255, 0.05);
+  transform: perspective(900px) rotateY(-12deg) translateX(18px) scale(0.98);
+  transform-origin: left center;
+  transform-style: preserve-3d;
   contain: layout paint style;
+}
+
+.page-hero[data-variant="private-project"] .page-system-map,
+.page-hero[data-variant="private-module"] .page-system-map {
+  --system-map-content-shift: 8px;
+}
+
+.page-system-map::before,
+.page-system-map::after,
+.page-system-map__routes,
+.page-system-map__core,
+.page-system-node,
+.page-system-map__metrics {
+  transform-style: preserve-3d;
 }
 
 .page-system-map::before {
@@ -1289,6 +1321,7 @@ select {
   z-index: 1;
   width: 100%;
   height: 100%;
+  transform: translateX(var(--system-map-content-shift));
 }
 
 .page-system-map__core,
@@ -1308,7 +1341,7 @@ select {
 
 .page-system-map__core {
   top: 50%;
-  left: 50%;
+  left: calc(50% + var(--system-map-content-shift));
   display: grid;
   width: min(198px, 36%);
   min-height: 170px;
@@ -1485,12 +1518,12 @@ select {
 
 .page-system-map__metrics {
   position: absolute;
-  right: 18px;
-  bottom: 16px;
+  right: calc(var(--system-map-gutter) - var(--system-map-content-shift));
+  bottom: var(--system-map-gutter);
   z-index: 3;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  width: min(310px, calc(100% - 36px));
+  width: min(310px, calc(100% - (var(--system-map-gutter) * 2)));
   gap: 8px;
 }
 
@@ -1527,78 +1560,78 @@ select {
 }
 
 .page-system-map[data-layout="orbit"] .page-system-node--1 {
-  top: 28px;
-  left: 18px;
+  top: var(--system-map-gutter);
+  left: calc(var(--system-map-gutter) + var(--system-map-content-shift));
 }
 
 .page-system-map[data-layout="orbit"] .page-system-node--2 {
-  top: 38px;
-  right: 18px;
+  top: calc(var(--system-map-gutter) + 10px);
+  right: calc(var(--system-map-gutter) - var(--system-map-content-shift));
 }
 
 .page-system-map[data-layout="orbit"] .page-system-node--3 {
   bottom: 92px;
-  left: 18px;
+  left: calc(var(--system-map-gutter) + var(--system-map-content-shift));
 }
 
 .page-system-map[data-layout="orbit"] .page-system-node--4 {
-  right: 18px;
+  right: calc(var(--system-map-gutter) - var(--system-map-content-shift));
   bottom: 104px;
 }
 
 .page-system-map[data-layout="orbit"] .page-system-node--5 {
-  left: 50%;
+  left: calc(50% + var(--system-map-content-shift));
   bottom: 82px;
   transform: translateX(-50%);
 }
 
 .page-system-map[data-layout="relay"] .page-system-node--1 {
-  top: 26px;
-  left: 18px;
+  top: var(--system-map-gutter);
+  left: calc(var(--system-map-gutter) + var(--system-map-content-shift));
 }
 
 .page-system-map[data-layout="relay"] .page-system-node--2 {
   top: 104px;
-  right: 18px;
+  right: calc(var(--system-map-gutter) - var(--system-map-content-shift));
 }
 
 .page-system-map[data-layout="relay"] .page-system-node--3 {
   top: 222px;
-  left: 18px;
+  left: calc(var(--system-map-gutter) + var(--system-map-content-shift));
 }
 
 .page-system-map[data-layout="relay"] .page-system-node--4 {
-  right: 18px;
+  right: calc(var(--system-map-gutter) - var(--system-map-content-shift));
   bottom: 96px;
 }
 
 .page-system-map[data-layout="relay"] .page-system-node--5 {
-  left: 38%;
+  left: calc(38% + var(--system-map-content-shift));
   bottom: 82px;
 }
 
 .page-system-map[data-layout="stack"] .page-system-node--1 {
   top: 34px;
-  left: 18px;
+  left: calc(var(--system-map-gutter) + var(--system-map-content-shift));
 }
 
 .page-system-map[data-layout="stack"] .page-system-node--2 {
   top: 34px;
-  right: 18px;
+  right: calc(var(--system-map-gutter) - var(--system-map-content-shift));
 }
 
 .page-system-map[data-layout="stack"] .page-system-node--3 {
-  left: 22px;
+  left: calc(var(--system-map-gutter) + var(--system-map-content-shift));
   bottom: 142px;
 }
 
 .page-system-map[data-layout="stack"] .page-system-node--4 {
-  right: 22px;
+  right: calc(var(--system-map-gutter) - var(--system-map-content-shift));
   bottom: 142px;
 }
 
 .page-system-map[data-layout="stack"] .page-system-node--5 {
-  left: 50%;
+  left: calc(50% + var(--system-map-content-shift));
   bottom: 82px;
   transform: translateX(-50%);
 }
@@ -7844,6 +7877,8 @@ button:disabled {
 
   .system-map {
     min-height: 560px;
+    overflow: hidden;
+    transform: none;
   }
 
   .page-hero {
@@ -7860,6 +7895,8 @@ button:disabled {
   .page-system-map {
     width: min(100%, 720px);
     min-height: 470px;
+    overflow: hidden;
+    transform: none;
   }
 
   .decision-board {
