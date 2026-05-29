@@ -25,6 +25,24 @@ export function getStaticPaths() {
 const { project, module, locale = "en" } = Astro.props as Props;
 const ui = privateUi[locale];
 const relatedModules = project.modules.filter((entry) => entry.slug !== module.slug).slice(0, 4);
+const cardDescription = (value: string, limit = 160) => {
+  const normalized = value.replace(/\s+/g, " ").trim();
+  if (normalized.length <= limit) {
+    return normalized;
+  }
+
+  const clipped = normalized.slice(0, limit - 3);
+  const lastSpace = clipped.lastIndexOf(" ");
+  return `${clipped.slice(0, lastSpace > 90 ? lastSpace : limit - 3).trim()}...`;
+};
+const moduleCardDescription = (entry: PrivateModule) => {
+  const normalized = entry.positioning.replace(/\s+/g, " ").trim();
+  if (normalized.length >= 145) {
+    return cardDescription(normalized);
+  }
+
+  return cardDescription(`${normalized} ${entry.outputs[0] ?? ""}.`);
+};
 const storyFrame = {
   en: {
     core: "Operating path",
@@ -262,7 +280,7 @@ const moduleVisual = {
           <a class="glass-panel private-related-card" href={localizePath(`/projects/${project.slug}/${entry.slug}/`, locale)}>
             <SystemIcon name={entry.icon} />
             <h3>{entry.title}</h3>
-            <p>{entry.outputs[0] ?? entry.summary}</p>
+            <p>{moduleCardDescription(entry)}</p>
           </a>
         ))}
       </div>

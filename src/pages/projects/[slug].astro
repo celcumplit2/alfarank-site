@@ -20,6 +20,24 @@ export function getStaticPaths() {
 
 const { project, locale = "en" } = Astro.props as Props;
 const ui = privateUi[locale];
+const cardDescription = (value: string, limit = 160) => {
+  const normalized = value.replace(/\s+/g, " ").trim();
+  if (normalized.length <= limit) {
+    return normalized;
+  }
+
+  const clipped = normalized.slice(0, limit - 3);
+  const lastSpace = clipped.lastIndexOf(" ");
+  return `${clipped.slice(0, lastSpace > 90 ? lastSpace : limit - 3).trim()}...`;
+};
+const moduleCardDescription = (module: Props["project"]["modules"][number]) => {
+  const normalized = module.positioning.replace(/\s+/g, " ").trim();
+  if (normalized.length >= 145) {
+    return cardDescription(normalized);
+  }
+
+  return cardDescription(`${normalized} ${module.outputs[0] ?? ""}.`);
+};
 const projectNarrative = {
   en: {
     architecture:
@@ -48,7 +66,7 @@ const moduleSignals = project.modules.map((module, index) => ({
   title: module.title,
   state: module.outputs[0] ?? ui.outputs,
   icon: module.icon,
-  detail: module.outputs[0] ?? module.summary,
+  detail: moduleCardDescription(module),
   meter: `${72 + index * 4}%`
 }));
 
@@ -119,7 +137,7 @@ const projectVisual = {
             <SystemIcon name={module.icon} />
             <span>{String(index + 1).padStart(2, "0")}</span>
             <h3>{module.title}</h3>
-            <p>{module.outputs[0] ?? module.summary}</p>
+            <p>{moduleCardDescription(module)}</p>
             <b class="ar-metric-bar"></b>
           </a>
         ))}
