@@ -9,8 +9,8 @@
   --line-dark: rgba(255, 255, 255, 0.14);
   --glass: rgba(255, 255, 255, 0.1);
   --glass-strong: rgba(255, 255, 255, 0.16);
-  --system-node-surface-bg: rgba(1, 16, 38, 0.48);
-  --system-node-surface-bg-hover: rgba(3, 23, 54, 0.58);
+  --system-node-surface-bg: rgba(1, 16, 38, 0.2);
+  --system-node-surface-bg-hover: rgba(3, 23, 54, 0.3);
   --blue: #e0f7ff;
   --blue-strong: #ffffff;
   --pearl: #d8fbff;
