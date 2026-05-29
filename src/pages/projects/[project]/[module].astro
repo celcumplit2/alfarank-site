@@ -71,12 +71,13 @@ const lowerFirst = (value: string) => value.charAt(0).toLocaleLowerCase(locale) 
 const flowFocus = lowerFirst(module.sections[2]?.title ?? module.outputs[0]);
 const moduleStory = {
   core: `${storyFrame.core}: ${moduleLayerPath}.`,
-  valueHeading: storyFrame.valueHeading,
-  pilotTitle: storyFrame.pilotHeading,
+  valueHeading: module.presentation?.valueTitle ?? module.outputs[0] ?? storyFrame.valueHeading,
+  pilotTitle: module.pilot.title,
   pilotText: `${storyFrame.pilotText}: ${module.pilot.metrics.slice(0, 2).join(" / ")}.`,
   flowText: `${storyFrame.flowText}: ${flowFocus}.`
 };
 const modulePositioningTitle = module.sections[0]?.title ?? ui.moduleBlueprint;
+const moduleFlowTitle = module.presentation?.flowTitle ?? module.sections[2]?.title ?? ui.presentationFlow;
 const relatedIntro = {
   en: `${module.title} stays inside the same intelligence stack; the neighboring modules show which signal, memory, or learning layer can strengthen it next.`,
   ro: `${module.title} ramane in acelasi stack de intelligence; modulele vecine arata ce strat de semnal, memorie sau invatare il poate intari mai departe.`,
@@ -91,13 +92,13 @@ const presentationSlides = [
   },
   {
     eyebrow: ui.pilotStory,
-    title: moduleStory.pilotTitle,
+    title: module.presentation?.pilotSlideTitle ?? moduleStory.pilotTitle,
     text: moduleStory.pilotText,
     items: module.pilot.steps.slice(0, 3)
   },
   {
     eyebrow: ui.proofPoints,
-    title: ui.strategicEffect,
+    title: module.presentation?.proofTitle ?? module.effects[0] ?? ui.strategicEffect,
     text: module.effects.slice(0, 2).join(" / "),
     items: module.pilot.metrics.slice(0, 4)
   }
@@ -194,7 +195,7 @@ const moduleVisual = {
       <div class="section-header">
         <div>
           <p class="eyebrow">{ui.presentationFlow}</p>
-          <h2>{ui.presentationFlow}</h2>
+          <h2>{moduleFlowTitle}</h2>
         </div>
         <p>{moduleStory.flowText}</p>
       </div>
@@ -216,14 +217,14 @@ const moduleVisual = {
     <section class="section split-panel">
       <article class="glass-panel private-slide-card">
         <p class="eyebrow">{ui.dataSources}</p>
-        <h2>{ui.internalSources}</h2>
+        <h2>{module.presentation?.internalSourceTitle ?? ui.internalSources}</h2>
         <div class="tag-grid">
           {module.sources.internal.slice(0, 8).map((source) => <span class="tag">{source}</span>)}
         </div>
       </article>
       <article class="glass-panel private-slide-card">
         <p class="eyebrow">{ui.dataSources}</p>
-        <h2>{ui.externalSources}</h2>
+        <h2>{module.presentation?.externalSourceTitle ?? ui.externalSources}</h2>
         <div class="tag-grid">
           {module.sources.external.slice(0, 8).map((source) => <span class="tag">{source}</span>)}
         </div>
@@ -247,7 +248,7 @@ const moduleVisual = {
         ))}
       </ol>
       <div class="private-metric-panel glass-panel">
-        <h3>{ui.pilotMetrics}</h3>
+        <h3>{module.presentation?.metricTitle ?? ui.pilotMetrics}</h3>
         <div class="tag-grid">
           {module.pilot.metrics.map((metric) => <span class="tag">{metric}</span>)}
         </div>
