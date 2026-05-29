@@ -20,12 +20,35 @@ export function getStaticPaths() {
 
 const { project, locale = "en" } = Astro.props as Props;
 const ui = privateUi[locale];
+const projectNarrative = {
+  en: {
+    architecture:
+      "The modules are separated by role: detect market movement, discover external surplus, build opportunity hypotheses, preserve decision memory, and move learning across verticals.",
+    core:
+      "One route from signal to reviewed opportunity: detect, qualify, remember, and reuse.",
+    valueHeading: "What changes for the trading team"
+  },
+  ro: {
+    architecture:
+      "Modulele sunt separate dupa rol: detecteaza miscarea pietei, gasesc surplus extern, construiesc ipoteze de oportunitate, pastreaza memoria deciziilor si muta invatarea intre verticale.",
+    core:
+      "Un traseu de la semnal la oportunitate verificata: detectare, calificare, memorie si reutilizare.",
+    valueHeading: "Ce se schimba pentru echipa de trading"
+  },
+  ru: {
+    architecture:
+      "Модули разделены по роли: заметить движение рынка, найти внешние товарные возможности, собрать гипотезы, сохранить память решений и перенести опыт между вертикалями.",
+    core:
+      "Один маршрут от сигнала к проверенной возможности: обнаружить, оценить, запомнить и использовать снова.",
+    valueHeading: "Что меняется для торговой команды"
+  }
+}[locale];
 
 const moduleSignals = project.modules.map((module, index) => ({
   title: module.title,
   state: module.outputs[0] ?? ui.outputs,
   icon: module.icon,
-  detail: module.summary,
+  detail: module.outputs[0] ?? module.summary,
   meter: `${72 + index * 4}%`
 }));
 
@@ -80,7 +103,7 @@ const projectVisual = {
           <p class="eyebrow">{ui.projectMap}</p>
           <h2>{ui.moduleMap}</h2>
         </div>
-        <p>{project.thesis.text}</p>
+        <p>{projectNarrative.architecture}</p>
       </div>
 
       <div class="systems-navigation-console private-module-console ar-system-block">
@@ -88,7 +111,7 @@ const projectVisual = {
           <SystemIcon name={project.icon} />
           <span>{project.client}</span>
           <strong>{project.title}</strong>
-          <p>{project.summary}</p>
+          <p>{projectNarrative.core}</p>
         </article>
 
         {project.modules.map((module, index) => (
@@ -96,7 +119,7 @@ const projectVisual = {
             <SystemIcon name={module.icon} />
             <span>{String(index + 1).padStart(2, "0")}</span>
             <h3>{module.title}</h3>
-            <p>{module.summary}</p>
+            <p>{module.outputs[0] ?? module.summary}</p>
             <b class="ar-metric-bar"></b>
           </a>
         ))}
@@ -106,7 +129,7 @@ const projectVisual = {
     <section class="section split-panel">
       <article class="glass-panel private-slide-card">
         <p class="eyebrow">{ui.strategicLayer}</p>
-        <h2>{project.thesis.title}</h2>
+        <h2>{projectNarrative.valueHeading}</h2>
         <ul class="feature-list">
           {project.thesis.items.map((item) => <li>{item}</li>)}
         </ul>
