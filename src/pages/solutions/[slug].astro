@@ -97,13 +97,31 @@ const solutionIntakeHref = `/start-project/?offer=${item.slug}&landing_page=/sol
 const localizedSolutionIntakeHref = localizePath(solutionIntakeHref, locale);
 const firstDetailForSentence = locale === "en" ? firstDetail.toLowerCase() : firstDetail;
 const firstOutputForSentence = locale === "en" ? firstOutput.toLowerCase() : firstOutput;
+const solutionHeadings = {
+  en: {
+    operatingTitle: "Solution as operating system",
+    modulesTitle: "Solution modules",
+    launchTitle: "Three launch paths",
+    proofTitle: "How the page earns a lead",
+    relatedSystemsTitle: "Supporting system profiles"
+  },
+  ro: {
+    operatingTitle: "Solutie operationala",
+    modulesTitle: "Modulele solutiei",
+    launchTitle: "Trei rute de lansare",
+    proofTitle: "Cum pagina castiga un lead",
+    relatedSystemsTitle: "Profiluri de sistem suport"
+  },
+  ru: {
+    operatingTitle: "Решение как система",
+    modulesTitle: "Модули решения",
+    launchTitle: "Три маршрута запуска",
+    proofTitle: "Как страница приводит заявку",
+    relatedSystemsTitle: "Поддерживающие системы"
+  }
+}[locale];
 const solutionCopy = {
-  operatingTitle:
-    locale === "ru"
-      ? `${item.title}: решение как операционная система`
-      : locale === "ro"
-        ? `${item.title}: solutia ca sistem operational`
-        : `${item.title} as an operating system`,
+  operatingTitle: solutionHeadings.operatingTitle,
   operatingText:
     locale === "ru"
       ? `Начинаем с первого проблемного слоя: ${firstDetail}. Затем собираем систему, модули, интеграции и доказательства, которые делают результат видимым: ${firstOutput}.`
@@ -119,7 +137,7 @@ const solutionCopy = {
   expectedOutput: locale === "ru" ? "Ожидаемый результат" : locale === "ro" ? "Rezultatul asteptat" : "Expected output",
   relevantCapabilities:
     locale === "ru" ? "Связанные возможности" : locale === "ro" ? "Capabilitati relevante" : "Relevant capabilities",
-  modulesTitle: locale === "ru" ? "Модули решения" : locale === "ro" ? "Modulele solutiei" : `Modules inside ${solutionLowerTitle}`,
+  modulesTitle: solutionHeadings.modulesTitle,
   modulesText:
     locale === "ru"
       ? `Первая версия должна показать входные данные, состояния процесса, интеграции и точки проверки, которые стоят за результатом: ${firstOutput}.`
@@ -139,24 +157,14 @@ const solutionCopy = {
       : locale === "ro"
         ? "Fiecare modul trebuie sa devina o statie utila in sistem, nu doar un element intr-o lista de functii."
         : `For ${solutionLowerTitle}, every module should become a usable station rather than a loose feature list.`,
-  launchTitle:
-    locale === "ru"
-      ? "Три варианта запуска"
-      : locale === "ro"
-        ? "Trei moduri de lansare"
-        : `Three ways to launch ${solutionLowerTitle}`,
+  launchTitle: solutionHeadings.launchTitle,
   launchText:
     locale === "ru"
       ? "Запуск может начаться с узкого прототипа, связанного рабочего процесса или полноценного операционного слоя: выбор зависит от зрелости текущего процесса."
       : locale === "ro"
         ? "Buildul poate incepe ca prototip ingust, flux conectat sau strat operational complet, in functie de maturitatea procesului curent."
         : "The build can start as a narrow proof, a connected workflow, or a fuller operating layer depending on how mature the current process is.",
-  proofTitle:
-    locale === "ru"
-      ? "Как страница приводит к заявке"
-      : locale === "ro"
-        ? "Cum pagina castiga un lead"
-        : `How ${solutionLowerTitle} earns a lead`,
+  proofTitle: solutionHeadings.proofTitle,
   proofText:
     locale === "ru"
       ? "Страница должна ясно показать состояние до и после, чтобы посетитель мог запросить первую версию без расшифровки всего технического стека."
@@ -203,12 +211,7 @@ const solutionCopy = {
         ? `Se potriveste cand exista deja presiune in jurul problemei: ${firstDetail}. Echipa are nevoie de structura, automatizare, vizibilitate sau scalare.`
         : `This fits when ${firstDetailForSentence} already creates pressure and the team needs structure, automation, visibility, or scale.`,
   relatedSystems: locale === "ru" ? "Связанные системы" : locale === "ro" ? "Sisteme asociate" : "Related systems",
-  relatedSystemsTitle:
-    locale === "ru"
-      ? "Системные профили, которые поддерживают решение"
-      : locale === "ro"
-        ? "Profiluri de sistem care sustin solutia"
-        : `System profiles that support ${solutionLowerTitle}`,
+  relatedSystemsTitle: solutionHeadings.relatedSystemsTitle,
   relatedSystemsText:
     locale === "ru"
       ? `Эти профили превращают решение в конкретную архитектуру: модули, процессы, интеграции и операционный результат вокруг ${firstOutput}.`

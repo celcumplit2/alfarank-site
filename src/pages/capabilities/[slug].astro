@@ -57,28 +57,36 @@ const capabilityIntakeHref = localizePath(`/start-project/?offer=capability-${it
 const capabilityLowerTitle = item.title.toLowerCase();
 const primaryOutput = (item.outputs ?? [item.summary])[0];
 const moduleIntro = item.modules?.[0]?.title.toLowerCase() ?? capabilityLowerTitle;
+const capabilityHeadings = {
+  en: {
+    buildableModules: "Buildable modules",
+    implementationTitle: "Working system logic",
+    useCasesTitle: "Best-fit use cases"
+  },
+  ro: {
+    buildableModules: "Module de build",
+    implementationTitle: "Logica sistemului",
+    useCasesTitle: "Cazuri potrivite"
+  },
+  ru: {
+    buildableModules: "Собираемые модули",
+    implementationTitle: "Логика рабочей системы",
+    useCasesTitle: "Подходящие сценарии"
+  }
+}[locale];
 const capabilityCopy = {
   systemModules: translateCopy(locale, "System modules"),
-  buildableModules:
-    locale === "en"
-      ? `Buildable modules for ${capabilityLowerTitle}`
-      : `${translateCopy(locale, "Buildable modules")}: ${item.title}`,
+  buildableModules: capabilityHeadings.buildableModules,
   moduleIntro:
     locale === "en"
       ? `This capability becomes useful when ${moduleIntro} connects to real inputs, review states, integrations, and a visible output such as ${primaryOutput.toLowerCase()}.`
       : translateCopy(locale, "A capability becomes useful when it connects real inputs, review states, integrations, and a visible business output."),
-  implementationTitle:
-    locale === "en"
-      ? `How ${capabilityLowerTitle} becomes a working system`
-      : `${translateCopy(locale, "How the capability becomes a working system")}: ${item.title}`,
+  implementationTitle: capabilityHeadings.implementationTitle,
   implementationText:
     locale === "en"
       ? `The build starts with the business process behind ${primaryOutput.toLowerCase()}, then chooses the stack, review points, and integrations that make the workflow reliable.`
       : translateCopy(locale, "The build starts with the business process, then chooses the stack, review points, and integrations that make the workflow reliable."),
-  useCasesTitle:
-    locale === "en"
-      ? `Best-fit use cases for ${capabilityLowerTitle}`
-      : `${translateCopy(locale, "Best-fit use cases")}: ${item.title}`,
+  useCasesTitle: capabilityHeadings.useCasesTitle,
   useCasesText:
     locale === "en"
       ? `Look for repeated work around ${moduleIntro}, clear ownership, and output that can be reviewed, routed, published, monitored, or improved.`

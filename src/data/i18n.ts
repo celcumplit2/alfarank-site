@@ -133,6 +133,7 @@ const ruCopy: Dictionary = {
   "AlfaRank designs and launches practical digital systems for companies that need automation, content infrastructure, data workflows, web platforms, and business integrations.":
     "AlfaRank создает практичные цифровые системы для компаний, которым нужны автоматизация, контентная инфраструктура, процессы данных, веб-платформы и бизнес-интеграции.",
   "Digital systems connected, automated, built to perform.": "Цифровые системы, соединенные, автоматизированные и готовые работать.",
+  "Digital systems that connect, automate, and perform.": "Цифровые системы, которые соединяют и автоматизируют.",
   "AlfaRank builds the infrastructure behind modern business workflows: web platforms, AI automation, SEO/content systems, data tools, e-commerce operations, and integrations.":
     "AlfaRank строит инфраструктуру для современных бизнес-процессов: веб-платформы, AI-автоматизацию, SEO и контентные системы, инструменты данных, e-commerce-операции и интеграции.",
   "The company works across connected technical directions. Each direction can be delivered as a standalone system or combined into a broader business platform.":
@@ -450,9 +451,13 @@ const ruCopy: Dictionary = {
   "E-commerce operations landing page": "Посадочная страница e-commerce-операций",
   "WordPress integration landing page": "Посадочная страница WordPress-интеграции",
   "Automate lead processing before good requests go cold.": "Автоматизируйте обработку лидов, пока хорошие заявки не остыли.",
+  "Automate lead intake before requests go cold.": "Автоматизируйте прием заявок до потери интереса.",
   "Build an AI-assisted content workflow with editorial control.": "Соберите AI-процесс производства контента с редакционным контролем.",
+  "Build an AI content workflow with editorial control.": "Соберите AI-процесс контента с редакционным контролем.",
   "Turn product data, feeds, and catalog updates into one system.": "Превратите товарные данные, фиды и обновления каталога в одну систему.",
+  "Unify product data, feeds, and catalog updates.": "Объедините товарные данные, фиды и обновления каталога.",
   "Connect WordPress forms, CRM, APIs, and internal workflow.": "Соедините формы WordPress, CRM, API и внутренний рабочий процесс.",
+  "Connect WordPress, CRM, APIs, and workflows.": "Соедините WordPress, CRM, API и рабочие процессы.",
   "Request This System": "Запросить эту систему",
   "Related Solution": "Связанное решение",
   "Digital systems company": "Компания цифровых систем",
@@ -485,6 +490,7 @@ const ruCopy: Dictionary = {
     "Этот раздел построен вокруг систем, модулей, рабочих процессов, результатов и логики реализации, а не вокруг обычной сетки портфолио.",
   "Digital systems for businesses with operational, content, data, and growth workflows.":
     "Цифровые системы для компаний с операционными, контентными, data- и growth-процессами.",
+  "Digital systems by industry.": "Цифровые системы по отраслям.",
   "AlfaRank systems can be adapted to different industries when the business needs structured web platforms, automation, content infrastructure, integrations, or monitoring.":
     "Системы AlfaRank можно адаптировать под разные индустрии, когда бизнесу нужны структурированные веб-платформы, автоматизация, контентная инфраструктура, интеграции или мониторинг.",
   "The implementation layer behind AlfaRank systems.": "Слой реализации за системами AlfaRank.",
@@ -968,6 +974,7 @@ const roCopy: Dictionary = {
   "AlfaRank designs and launches practical digital systems for companies that need automation, content infrastructure, data workflows, web platforms, and business integrations.":
     "AlfaRank creeaza sisteme digitale practice pentru companii care au nevoie de automatizare, infrastructura de continut, fluxuri de date, platforme web si integrari de business.",
   "Digital systems connected, automated, built to perform.": "Sisteme digitale conectate, automatizate si construite pentru performanta.",
+  "Digital systems that connect, automate, and perform.": "Sisteme digitale conectate si automatizate.",
   "AlfaRank builds the infrastructure behind modern business workflows: web platforms, AI automation, SEO/content systems, data tools, e-commerce operations, and integrations.":
     "AlfaRank construieste infrastructura din spatele fluxurilor moderne de business: platforme web, automatizare AI, sisteme SEO si continut, instrumente de date, operatiuni e-commerce si integrari.",
   "The company works across connected technical directions. Each direction can be delivered as a standalone system or combined into a broader business platform.":
@@ -1073,9 +1080,13 @@ const roCopy: Dictionary = {
   "E-commerce operations landing page": "Landing page pentru operatiuni e-commerce",
   "WordPress integration landing page": "Landing page pentru integrare WordPress",
   "Automate lead processing before good requests go cold.": "Automatizeaza procesarea leadurilor inainte ca solicitarile bune sa se raceasca.",
+  "Automate lead intake before requests go cold.": "Automatizeaza intake-ul de leaduri la timp.",
   "Build an AI-assisted content workflow with editorial control.": "Construieste un workflow de continut asistat de AI, cu control editorial.",
+  "Build an AI content workflow with editorial control.": "Construieste un workflow AI pentru continut.",
   "Turn product data, feeds, and catalog updates into one system.": "Transforma datele de produs, feedurile si actualizarile catalogului intr-un singur sistem.",
+  "Unify product data, feeds, and catalog updates.": "Unifica datele de produs, feedurile si catalogul.",
   "Connect WordPress forms, CRM, APIs, and internal workflow.": "Conecteaza formularele WordPress, CRM-ul, API-urile si workflow-ul intern.",
+  "Connect WordPress, CRM, APIs, and workflows.": "Conecteaza WordPress, CRM, API-uri si workflow-uri.",
   "Request This System": "Solicita acest sistem",
   "Related Solution": "Solutie asociata",
   "Digital systems company": "Companie de sisteme digitale",
@@ -1108,6 +1119,7 @@ const roCopy: Dictionary = {
     "Sectiunea este structurata in jurul sistemelor, modulelor, workflow-urilor, outputurilor si logicii de implementare, nu ca un portofoliu generic.",
   "Digital systems for businesses with operational, content, data, and growth workflows.":
     "Sisteme digitale pentru businessuri cu workflow-uri operationale, de continut, date si crestere.",
+  "Digital systems by industry.": "Sisteme digitale pe industrie.",
   "AlfaRank systems can be adapted to different industries when the business needs structured web platforms, automation, content infrastructure, integrations, or monitoring.":
     "Sistemele AlfaRank pot fi adaptate pentru industrii diferite cand businessul are nevoie de platforme web structurate, automatizare, infrastructura de continut, integrari sau monitorizare.",
   "The implementation layer behind AlfaRank systems.": "Stratul de implementare din spatele sistemelor AlfaRank.",

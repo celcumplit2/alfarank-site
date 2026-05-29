@@ -71,11 +71,12 @@ const lowerFirst = (value: string) => value.charAt(0).toLocaleLowerCase(locale) 
 const flowFocus = lowerFirst(module.sections[2]?.title ?? module.outputs[0]);
 const moduleStory = {
   core: `${storyFrame.core}: ${moduleLayerPath}.`,
-  valueHeading: `${storyFrame.valueHeading}: ${module.effects[0] ?? module.outputs[0]}`,
-  pilotTitle: `${storyFrame.pilotHeading}: ${module.outputs[0] ?? module.pilot.metrics[0]}`,
+  valueHeading: storyFrame.valueHeading,
+  pilotTitle: storyFrame.pilotHeading,
   pilotText: `${storyFrame.pilotText}: ${module.pilot.metrics.slice(0, 2).join(" / ")}.`,
   flowText: `${storyFrame.flowText}: ${flowFocus}.`
 };
+const modulePositioningTitle = module.sections[0]?.title ?? ui.moduleBlueprint;
 const relatedIntro = {
   en: `${module.title} stays inside the same intelligence stack; the neighboring modules show which signal, memory, or learning layer can strengthen it next.`,
   ro: `${module.title} ramane in acelasi stack de intelligence; modulele vecine arata ce strat de semnal, memorie sau invatare il poate intari mai departe.`,
@@ -141,9 +142,9 @@ const moduleVisual = {
       <div class="section-header">
         <div>
           <p class="eyebrow">{ui.moduleBlueprint}</p>
-          <h2>{module.positioning}</h2>
+          <h2>{modulePositioningTitle}</h2>
         </div>
-        <p>{module.sections[0]?.text ?? module.executive}</p>
+        <p>{module.positioning}</p>
       </div>
 
       <div class="system-blueprint-surface private-blueprint ar-system-block ar-system-layer">
@@ -193,7 +194,7 @@ const moduleVisual = {
       <div class="section-header">
         <div>
           <p class="eyebrow">{ui.presentationFlow}</p>
-          <h2>{module.outputs[0] ?? module.title}</h2>
+          <h2>{ui.presentationFlow}</h2>
         </div>
         <p>{moduleStory.flowText}</p>
       </div>

@@ -230,13 +230,22 @@ const secondaryNeedText = ruIndustry?.needs[1]?.object ?? secondaryNeed;
 const firstThreeNeedsText = ruIndustry?.needs.slice(0, 3).map((need) => need.object).join(", ") ?? firstThreeNeeds;
 const industryIntakeHref = `/start-project/?offer=industry-${item.slug}&landing_page=/industries/${item.slug}/`;
 const industrySystemHref = localizePath(industryIntakeHref, locale);
+const industryHeadings = {
+  en: {
+    systemFit: "System fit",
+    growth: "Traffic to scoped demand"
+  },
+  ro: {
+    systemFit: "Potrivire de sistem",
+    growth: "Trafic spre cerere clara"
+  },
+  ru: {
+    systemFit: "Системный маршрут",
+    growth: "Трафик в понятный спрос"
+  }
+}[locale];
 const industryCopy = {
-  systemFitTitle:
-    locale === "ru"
-      ? `С чего начинается системная работа для ${industryTextName}`
-      : locale === "ro"
-        ? `Unde incep de obicei sistemele pentru ${industryLowerTitle}`
-        : `Where ${industryLowerTitle} systems usually start`,
+  systemFitTitle: industryHeadings.systemFit,
   systemFitText:
     locale === "ru"
       ? `Для сегмента ${industrySegmentName} страница должна сразу показать ${primaryNeedText}, ${secondaryNeedText} и первый измеримый операционный слой еще до запроса оценки.`
@@ -279,12 +288,7 @@ const industryCopy = {
       : locale === "ro"
         ? `Profiluri de sistem pentru ${industryLowerTitle}`
         : `System profiles for ${industryLowerTitle}`,
-  growthTitle:
-    locale === "ru"
-      ? `Как трафик для ${industryTextName} становится понятным спросом`
-      : locale === "ro"
-        ? `Cum traficul pentru ${industryLowerTitle} devine cerere clara`
-        : `How ${industryLowerTitle} traffic becomes scoped demand`,
+  growthTitle: industryHeadings.growth,
   growthText:
     locale === "ru"
       ? `Эта страница должна превращать ${primaryNeedText} и связанные системные маршруты в понятную причину запросить первую рабочую версию, независимо от того, пришел посетитель из рекламы, поиска или прямого контакта.`

@@ -31,6 +31,26 @@ const offerOutput = offer.desiredOutput.toLowerCase();
 const primaryOutcome = offer.outcomes[0]?.toLowerCase() ?? offerOutput;
 const sendingRequestLabel = translateCopy(locale, "Sending request...");
 const sendingCampaignStatus = translateCopy(locale, "Sending request with campaign context...");
+const landingHeadings = {
+  en: {
+    traffic: "Campaign promise",
+    firstBuild: "First build scope",
+    proof: "Before and after proof",
+    firstScope: "Practical first scope"
+  },
+  ro: {
+    traffic: "Promisiunea campaniei",
+    firstBuild: "Primul scope de build",
+    proof: "Dovada inainte si dupa",
+    firstScope: "Primul scope practic"
+  },
+  ru: {
+    traffic: "Обещание кампании",
+    firstBuild: "Первый объем сборки",
+    proof: "Доказательство до и после",
+    firstScope: "Практичный первый объем"
+  }
+}[locale];
 
 const leadSources = [
   { label: "Website form", icon: "web" },
@@ -89,7 +109,8 @@ const wordpressLayers = [
   <section class="section traffic-brief" aria-labelledby="traffic-brief-title">
     <article class="traffic-brief__promise">
       <p class="eyebrow">{translateCopy(locale, "Paid traffic brief")}</p>
-      <h2 id="traffic-brief-title">{offer.trafficReady.promise}</h2>
+      <h2 id="traffic-brief-title">{landingHeadings.traffic}</h2>
+      <p>{offer.trafficReady.promise}</p>
       <p>{offer.trafficReady.trigger}</p>
       <div class="section-actions">
         <a class="button primary" href="#landing-intake">{translateCopy(locale, "Request this route")}</a>
@@ -155,7 +176,7 @@ const wordpressLayers = [
     <div class="section-header">
       <div>
         <p class="eyebrow">{translateCopy(locale, "System offer")}</p>
-        <h2 id="landing-system-title">{locale === "en" ? `What the first ${offerOutput} build can include` : translateCopy(locale, "What the first build can include")}</h2>
+        <h2 id="landing-system-title">{landingHeadings.firstBuild}</h2>
       </div>
       <p>{locale === "en" ? `This offer is specific enough for campaign traffic, but still flexible enough to shape around the buyer's current tools, constraints, and ${primaryOutcome}.` : translateCopy(locale, "This offer is specific enough for campaign traffic, but still flexible enough to shape around the buyer's current tools, constraints, and target outcome.")}</p>
     </div>
@@ -271,7 +292,7 @@ const wordpressLayers = [
     <div class="section-header">
       <div>
         <p class="eyebrow">{translateCopy(locale, "Proof layer")}</p>
-        <h2 id="landing-proof-title">{locale === "en" ? `The page sells the ${offerOutput} before and after` : translateCopy(locale, "The page sells the before and after")}</h2>
+        <h2 id="landing-proof-title">{landingHeadings.proof}</h2>
       </div>
       <p>{locale === "en" ? `For this campaign, the page needs to show what is broken now, what becomes structured, and which signals prove that ${primaryOutcome} is improving.` : translateCopy(locale, "For this campaign, the page needs to show what is broken now, what becomes structured, and which signals prove that the result is improving.")}</p>
     </div>
@@ -311,7 +332,7 @@ const wordpressLayers = [
     <div class="section-header">
       <div>
         <p class="eyebrow">{translateCopy(locale, "Implementation path")}</p>
-        <h2 id="landing-process-title">{locale === "en" ? `A practical first scope for ${offerOutput}` : translateCopy(locale, "A practical first scope")}</h2>
+        <h2 id="landing-process-title">{landingHeadings.firstScope}</h2>
       </div>
       <p>{locale === "en" ? `This page turns the ad click into a scoped system request: clear inputs, build modules, launch output, and a reason to start with ${offerLowerTitle}.` : translateCopy(locale, "This page turns the ad click into a scoped system request: clear inputs, build modules, launch output, and a reason to start.")}</p>
     </div>

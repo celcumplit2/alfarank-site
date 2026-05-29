@@ -42,7 +42,7 @@ export const landingOffers: LandingOffer[] = [
   {
     slug: "automate-lead-processing",
     eyebrow: "Lead automation landing page",
-    title: "Automate lead processing before good requests go cold.",
+    title: "Automate lead intake before requests go cold.",
     summary:
       "A focused landing offer for companies that receive website, ad, or referral leads and need faster qualification, routing, follow-up, and source visibility.",
     icon: "lead",
@@ -127,7 +127,7 @@ export const landingOffers: LandingOffer[] = [
   {
     slug: "ai-content-workflow",
     eyebrow: "Content system landing page",
-    title: "Build an AI-assisted content workflow with editorial control.",
+    title: "Build an AI content workflow with editorial control.",
     summary:
       "A landing offer for companies that need more content, product pages, guides, briefs, or media drafts without turning publishing into a quality problem.",
     icon: "content",
@@ -212,7 +212,7 @@ export const landingOffers: LandingOffer[] = [
   {
     slug: "ecommerce-feed-system",
     eyebrow: "E-commerce operations landing page",
-    title: "Turn product data, feeds, and catalog updates into one system.",
+    title: "Unify product data, feeds, and catalog updates.",
     summary:
       "A landing offer for stores and catalog businesses that need cleaner product data, feed workflows, stock or price monitoring, and operational reporting.",
     icon: "commerce",
@@ -297,7 +297,7 @@ export const landingOffers: LandingOffer[] = [
   {
     slug: "wordpress-crm-integration",
     eyebrow: "WordPress integration landing page",
-    title: "Connect WordPress forms, CRM, APIs, and internal workflow.",
+    title: "Connect WordPress, CRM, APIs, and workflows.",
     summary:
       "A landing offer for businesses that rely on WordPress but need it to act like a connected operating layer instead of a fragile plugin stack.",
     icon: "api",

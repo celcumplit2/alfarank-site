@@ -12,7 +12,7 @@
     "db:migrate:local": "wrangler d1 migrations apply DB --local --persist-to .wrangler/state",
     "db:migrate:remote": "wrangler d1 migrations apply DB --remote",
     "db:migrations:remote": "wrangler d1 migrations list DB --remote",
-    "build": "astro build",
+    "build": "astro build && node scripts/validate-heading-copy.mjs",
     "preview": "astro preview --host 127.0.0.1"
   },
   "dependencies": {
