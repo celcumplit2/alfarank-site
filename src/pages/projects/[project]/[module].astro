@@ -74,7 +74,7 @@ const moduleStory = {
   valueHeading: module.presentation?.valueTitle ?? module.outputs[0] ?? storyFrame.valueHeading,
   pilotTitle: module.pilot.title,
   pilotText: `${storyFrame.pilotText}: ${module.pilot.metrics.slice(0, 2).join(" / ")}.`,
-  flowText: `${storyFrame.flowText}: ${flowFocus}.`
+  flowText: module.presentation?.flowText ?? `${storyFrame.flowText}: ${flowFocus}.`
 };
 const modulePositioningTitle = module.sections[0]?.title ?? ui.moduleBlueprint;
 const moduleFlowTitle = module.presentation?.flowTitle ?? module.sections[2]?.title ?? ui.presentationFlow;
@@ -86,20 +86,20 @@ const relatedIntro = {
 const presentationSlides = [
   {
     eyebrow: ui.valuePromise,
-    title: module.sections[1]?.title ?? moduleStory.valueHeading,
-    text: module.sections[1]?.items?.[0] ?? module.positioning,
+    title: module.presentation?.valueTitle ?? module.sections[1]?.title ?? moduleStory.valueHeading,
+    text: module.presentation?.valueText ?? module.sections[1]?.items?.[0] ?? module.positioning,
     items: module.outputs.slice(0, 3)
   },
   {
     eyebrow: ui.pilotStory,
     title: module.presentation?.pilotSlideTitle ?? moduleStory.pilotTitle,
-    text: moduleStory.pilotText,
+    text: module.presentation?.pilotSlideText ?? moduleStory.pilotText,
     items: module.pilot.steps.slice(0, 3)
   },
   {
     eyebrow: ui.proofPoints,
     title: module.presentation?.proofTitle ?? module.effects[0] ?? ui.strategicEffect,
-    text: module.effects.slice(0, 2).join(" / "),
+    text: module.presentation?.proofText ?? module.effects.slice(0, 2).join(" / "),
     items: module.pilot.metrics.slice(0, 4)
   }
 ];
