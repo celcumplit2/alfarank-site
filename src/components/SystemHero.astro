@@ -101,12 +101,12 @@ const telemetry = [
       <circle class="route-dot route-dot--four" cx="380" cy="430" r="5" />
     </svg>
 
-    <div class="system-map__core">
+    <a class="system-map__core" href={localizePath("/systems/", locale)}>
       <SystemIcon name="product" />
       <strong>{translateCopy(locale, "AlfaRank core")}</strong>
       <span>{translateCopy(locale, "Orchestrate. Automate. Scale.")}</span>
       <small><i></i>{translateCopy(locale, "System online")}</small>
-    </div>
+    </a>
 
     {modules.map((module) => (
       <a class={`system-node system-node--${module.key}`} href={module.href}>

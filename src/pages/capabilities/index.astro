@@ -1,4 +1,5 @@
 ---
+import CardGrid from "@/components/CardGrid.astro";
 import PageHero from "@/components/PageHero.astro";
 import SystemIcon from "@/components/SystemIcon.astro";
 import Layout from "@/layouts/Layout.astro";
@@ -50,13 +51,6 @@ const capabilityGroups = [
 
 const capabilityBySlug = new Map(capabilities.map((item) => [item.slug, item]));
 const solutionBySlug = new Map(solutions.map((item) => [item.slug, item]));
-
-const serviceZones = capabilities.map((item, index) => ({
-  ...item,
-  verb: translateCopy(locale, ["Automate", "Build", "Publish", "Signal", "Operate", "Generate", "Connect"][index] ?? "Create"),
-  zone: String(index + 1).padStart(2, "0"),
-  level: `${74 + index * 3}%`
-}));
 ---
 
 <Layout title={translateCopy(locale, "Capabilities | AlfaRank")} locale={locale}>
@@ -130,27 +124,15 @@ const serviceZones = capabilities.map((item, index) => ({
       </div>
       <p>{translateCopy(locale, "Use the full catalog when the system is already clear, or start from the layer groups above when the problem still needs routing.")}</p>
     </div>
-    <div class="service-surface">
-      <div class="service-surface__axis" aria-hidden="true"></div>
-      <article class="service-surface__core">
-        <SystemIcon name="tools" />
-        <span>{translateCopy(locale, "Service navigation surface")}</span>
-        <strong>{translateCopy(locale, "Choose the build zone")}</strong>
-        <p>{translateCopy(locale, "Each zone opens a capability page with practical modules, workflow use cases, and related system routes.")}</p>
-        <a class="button secondary" href={localizePath("/start-project/", locale)}>{translateCopy(locale, "Scope the first zone")}</a>
-      </article>
-      {serviceZones.map((item, index) => (
-        <a class:list={["service-zone", `service-zone--${index + 1}`]} href={localizePath(`/capabilities/${item.slug}/`, locale)}>
-          <span>{item.zone}</span>
-          <SystemIcon name={item.icon} />
-          <div>
-            <small>{item.verb}</small>
-            <h3>{item.title}</h3>
-            <p>{capabilityTags[item.slug]?.map((tag) => translateCopy(locale, tag)).join(" / ")}</p>
-            <b style={`--service-level: ${item.level};`}></b>
-          </div>
-        </a>
-      ))}
-    </div>
+    <CardGrid
+      variant="glyph"
+      items={capabilities.map((item) => ({
+        title: item.title,
+        icon: item.icon,
+        summary: item.summary,
+        tags: capabilityTags[item.slug]?.map((tag) => translateCopy(locale, tag)),
+        href: localizePath(`/capabilities/${item.slug}/`, locale)
+      }))}
+    />
   </section>
 </Layout>

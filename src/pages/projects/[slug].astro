@@ -67,7 +67,8 @@ const moduleSignals = project.modules.map((module, index) => ({
   state: module.outputs[0] ?? ui.outputs,
   icon: module.icon,
   detail: moduleCardDescription(module),
-  meter: `${72 + index * 4}%`
+  meter: `${72 + index * 4}%`,
+  href: `/projects/${project.slug}/${module.slug}/`
 }));
 
 const projectVisual = {
@@ -76,6 +77,7 @@ const projectVisual = {
   label: project.client,
   state: project.status,
   output: project.outputs.join(", "),
+  coreHref: `/projects/${project.slug}/`,
   nodes: moduleSignals,
   metrics: [
     { value: String(project.modules.length).padStart(2, "0"), label: ui.modules },

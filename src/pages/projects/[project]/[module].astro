@@ -110,12 +110,14 @@ const moduleVisual = {
   label: project.client,
   state: module.outputs[0],
   output: module.positioning,
+  coreHref: `/projects/${project.slug}/`,
   nodes: module.layers.map((layer, index) => ({
     title: layer.title,
     state: layer.items[0] ?? ui.modules,
     icon: layer.icon,
     detail: layer.text,
-    meter: `${74 + index * 5}%`
+    meter: `${74 + index * 5}%`,
+    href: "#module-blueprint"
   })),
   metrics: [
     { value: String(module.layers.length).padStart(2, "0"), label: ui.modules },
@@ -139,7 +141,7 @@ const moduleVisual = {
       visual={moduleVisual}
     />
 
-    <section class="section">
+    <section class="section" id="module-blueprint">
       <div class="section-header">
         <div>
           <p class="eyebrow">{ui.moduleBlueprint}</p>

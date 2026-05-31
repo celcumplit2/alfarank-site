@@ -9,6 +9,7 @@ type HeroNode = {
   icon?: string;
   detail?: string;
   meter?: string;
+  href?: string;
 };
 
 type HeroMetric = {
@@ -22,6 +23,7 @@ type HeroVisual = {
   state?: string;
   mode?: string;
   output?: string;
+  coreHref?: string;
   nodes?: HeroNode[];
   metrics?: HeroMetric[];
 };
@@ -188,13 +190,15 @@ const fallbackNodes: HeroNode[] = [
 ];
 
 const stateList = statePresets[heroType] ?? ["Mapped", "Connected", "Active", "Measured", "Ready"];
+const fallbackHeroHref = visual?.coreHref ?? primaryHref ?? secondaryHref ?? "/";
 
 const nodes = (visual?.nodes?.length ? visual.nodes : fallbackNodes).slice(0, 4).map((node, index) => ({
   title: compact(translateCopy(locale, node.title)),
   state: translateCopy(locale, node.state ?? stateList[index % stateList.length]),
   icon: node.icon ?? iconFromText(node.title) ?? coreIcon,
   detail: compact(translateCopy(locale, node.detail ?? stateList[(index + 1) % stateList.length]), 32),
-  meter: node.meter ?? `${62 + ((hashString(node.title) + index * 9) % 31)}%`
+  meter: node.meter ?? `${62 + ((hashString(node.title) + index * 9) % 31)}%`,
+  href: localizePath(node.href ?? fallbackHeroHref, locale)
 }));
 
 const metrics = visual?.metrics?.length
@@ -212,6 +216,7 @@ const coreLabel = compact(translateCopy(locale, visual?.label ?? eyebrow ?? "Sys
 const coreState = translateCopy(locale, visual?.state ?? `${nodes.length} nodes online`);
 const visualOutput = compact(translateCopy(locale, visual?.output ?? text.split(".")[0] ?? "Business output"), 42);
 const visualIcon = visual?.icon ?? coreIcon;
+const coreHref = localizePath(visual?.coreHref ?? primaryHref ?? nodes[0]?.href ?? secondaryHref ?? "/", locale);
 ---
 
 <section class="page-hero" data-variant={variant}>
@@ -237,15 +242,15 @@ const visualIcon = visual?.icon ?? coreIcon;
       ))}
     </svg>
 
-    <div class="page-system-map__core">
+    <a class="page-system-map__core" href={coreHref}>
       <SystemIcon name={visualIcon} />
       <strong>{coreLabel}</strong>
       <span>{visualOutput}</span>
       <small><i></i>{coreState}</small>
-    </div>
+    </a>
 
     {nodes.map((node, index) => (
-      <div class={`page-system-node page-system-node--${index + 1}`} style={`--node-meter: ${node.meter};`}>
+      <a class={`page-system-node page-system-node--${index + 1}`} href={node.href} style={`--node-meter: ${node.meter};`}>
         <SystemIcon name={node.icon} />
         <div class="page-system-node__body">
           <strong>{node.title}</strong>
@@ -253,7 +258,7 @@ const visualIcon = visual?.icon ?? coreIcon;
           <b></b>
         </div>
         <small><i></i>{node.state}</small>
-      </div>
+      </a>
     ))}
 
     <div class="page-system-map__metrics">

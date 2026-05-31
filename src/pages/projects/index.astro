@@ -20,12 +20,14 @@ const projectHeroVisual = {
   label: ui.projectLibrary,
   state: `${projects.length} ${ui.projectWorkspace}`,
   output: projects.map((project) => project.title).join(", "),
+  coreHref: "/projects/",
   nodes: projects.map((project) => ({
     title: project.title,
     state: project.status,
     icon: project.icon,
     detail: project.client,
-    meter: "86%"
+    meter: "86%",
+    href: `/projects/${project.slug}/`
   })),
   metrics: [
     { value: String(projects.length).padStart(2, "0"), label: ui.privateProjects },

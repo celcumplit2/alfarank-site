@@ -6,6 +6,7 @@ type HeroNode = {
   icon?: string;
   detail?: string;
   meter?: string;
+  href?: string;
 };
 
 type HeroMetric = {
@@ -19,6 +20,7 @@ export type HeroVisual = {
   state?: string;
   mode?: string;
   output?: string;
+  coreHref?: string;
   nodes?: HeroNode[];
   metrics?: HeroMetric[];
 };
@@ -86,9 +88,29 @@ const detailByIcon: Record<string, string> = {
   local: "Local layer"
 };
 
+const collectionPathByMode: Record<string, string> = {
+  capabilities: "/capabilities/",
+  solutions: "/solutions/",
+  systems: "/systems/",
+  industries: "/industries/"
+};
+
+const itemPathByMode: Record<string, string> = {
+  capability: "/capabilities/",
+  solution: "/solutions/",
+  "system-profile": "/systems/"
+};
+
+const moduleSectionByMode: Record<string, string> = {
+  capability: "#capability-modules",
+  solution: "#solution-modules",
+  "system-profile": "#system-modules"
+};
+
 const moduleNodes = (item: PageItem, mode: string): HeroNode[] => {
   const states = stateSets[mode] ?? stateSets.capability;
   const modules = item.modules?.slice(0, 5) ?? [];
+  const href = moduleSectionByMode[mode] ?? `${itemPathByMode[mode] ?? "/"}${item.slug}/`;
 
   if (modules.length) {
     return modules.map((module, index) => ({
@@ -96,7 +118,8 @@ const moduleNodes = (item: PageItem, mode: string): HeroNode[] => {
       state: states[index % states.length],
       icon: index === 0 ? item.icon : fallbackIcons[index % fallbackIcons.length],
       detail: shortDetail(item.outputs?.[index % (item.outputs.length || 1)] ?? item.details?.[index]),
-      meter: meterFor(module.title, index)
+      meter: meterFor(module.title, index),
+      href
     }));
   }
 
@@ -105,7 +128,8 @@ const moduleNodes = (item: PageItem, mode: string): HeroNode[] => {
     state: states[index % states.length],
     icon: index === 0 ? item.icon : fallbackIcons[index % fallbackIcons.length],
     detail: shortDetail(item.outputs?.[index % (item.outputs.length || 1)]),
-    meter: meterFor(detail, index)
+    meter: meterFor(detail, index),
+    href
   }));
 };
 
@@ -115,6 +139,7 @@ export const itemHeroVisual = (item: PageItem, mode: "capability" | "solution" |
   label: item.title,
   state: `${item.modules?.length ?? item.details?.length ?? 0} modules mapped`,
   output: item.outputs?.[0] ?? item.summary,
+  coreHref: `${itemPathByMode[mode]}${item.slug}/`,
   nodes: moduleNodes(item, mode),
   metrics: [
     { value: String(item.modules?.length ?? item.details?.length ?? 0).padStart(2, "0"), label: "Modules" },
@@ -132,12 +157,14 @@ export const collectionHeroVisual = (
   label: options.label,
   state: options.state,
   output: options.output,
+  coreHref: collectionPathByMode[options.mode] ?? "/",
   nodes: items.slice(0, 5).map((item, index) => ({
     title: item.title,
     state: (stateSets[options.mode] ?? stateSets.capabilities)[index % 5],
     icon: item.icon,
     detail: detailByIcon[item.icon ?? ""] ?? shortDetail(item.summary),
-    meter: meterFor(item.title, index)
+    meter: meterFor(item.title, index),
+    href: `${collectionPathByMode[options.mode] ?? "/"}${item.slug}/`
   })),
   metrics: [
     { value: String(items.length).padStart(2, "0"), label: options.primaryMetric },
@@ -155,12 +182,13 @@ export const technologiesHeroVisual: HeroVisual = {
   label: "Implementation matrix",
   state: "Stack layers ready",
   output: "Frontend, CMS, AI, data, integrations, deployment",
+  coreHref: "/technologies/",
   nodes: [
-    { title: "Astro / Next.js", state: "Frontend", icon: "web", detail: "Interfaces + routes", meter: "86%" },
-    { title: "WordPress / CMS", state: "Publishing", icon: "api", detail: "Content models", meter: "78%" },
-    { title: "AI + Automation", state: "Workflow", icon: "ai", detail: "Assistants + actions", meter: "91%" },
-    { title: "Scraping + Data", state: "Signals", icon: "data", detail: "Collection + scoring", meter: "83%" },
-    { title: "Cloudflare / GitHub", state: "Deploy", icon: "product", detail: "Launch pipeline", meter: "74%" }
+    { title: "Astro / Next.js", state: "Frontend", icon: "web", detail: "Interfaces + routes", meter: "86%", href: "/capabilities/web-product-development/" },
+    { title: "WordPress / CMS", state: "Publishing", icon: "api", detail: "Content models", meter: "78%", href: "/capabilities/wordpress-api-integrations/" },
+    { title: "AI + Automation", state: "Workflow", icon: "ai", detail: "Assistants + actions", meter: "91%", href: "/capabilities/ai-automation/" },
+    { title: "Scraping + Data", state: "Signals", icon: "data", detail: "Collection + scoring", meter: "83%", href: "/capabilities/data-systems-scraping/" },
+    { title: "Cloudflare / GitHub", state: "Deploy", icon: "product", detail: "Launch pipeline", meter: "74%", href: "/technologies/" }
   ],
   metrics: [
     { value: "13", label: "Tools" },
@@ -175,12 +203,13 @@ export const aboutHeroVisual: HeroVisual = {
   label: "Operating model",
   state: "Execution loop active",
   output: "Marketing logic, engineering, automation, content, data",
+  coreHref: "/about/",
   nodes: [
-    { title: "Scope", state: "Define", icon: "space", detail: "Business output", meter: "72%" },
-    { title: "Prototype", state: "Shape", icon: "product", detail: "Working model", meter: "80%" },
-    { title: "Build", state: "Connect", icon: "tools", detail: "Modules + APIs", meter: "88%" },
-    { title: "Launch", state: "Ship", icon: "web", detail: "Production path", meter: "76%" },
-    { title: "Measure", state: "Improve", icon: "ranking", detail: "Signals + reports", meter: "82%" }
+    { title: "Scope", state: "Define", icon: "space", detail: "Business output", meter: "72%", href: "/start-project/" },
+    { title: "Prototype", state: "Shape", icon: "product", detail: "Working model", meter: "80%", href: "/systems/" },
+    { title: "Build", state: "Connect", icon: "tools", detail: "Modules + APIs", meter: "88%", href: "/capabilities/" },
+    { title: "Launch", state: "Ship", icon: "web", detail: "Production path", meter: "76%", href: "/technologies/" },
+    { title: "Measure", state: "Improve", icon: "ranking", detail: "Signals + reports", meter: "82%", href: "/solutions/" }
   ],
   metrics: [
     { value: "05", label: "Work stages" },
@@ -195,12 +224,13 @@ export const intakeHeroVisual: HeroVisual = {
   label: "Project intake",
   state: "Request path open",
   output: "Type, current system, problem, desired result, timeline",
+  coreHref: "#project-intake",
   nodes: [
-    { title: "Project type", state: "Select", icon: "tools", detail: "System category", meter: "70%" },
-    { title: "Current setup", state: "Map", icon: "web", detail: "Website / workflow", meter: "74%" },
-    { title: "Business problem", state: "Clarify", icon: "flow", detail: "Operational pain", meter: "86%" },
-    { title: "Desired result", state: "Define", icon: "ranking", detail: "Launch output", meter: "91%" },
-    { title: "Follow-up", state: "Route", icon: "lead", detail: "Next step", meter: "78%" }
+    { title: "Project type", state: "Select", icon: "tools", detail: "System category", meter: "70%", href: "#project-intake" },
+    { title: "Current setup", state: "Map", icon: "web", detail: "Website / workflow", meter: "74%", href: "#project-intake" },
+    { title: "Business problem", state: "Clarify", icon: "flow", detail: "Operational pain", meter: "86%", href: "#project-intake" },
+    { title: "Desired result", state: "Define", icon: "ranking", detail: "Launch output", meter: "91%", href: "#project-intake" },
+    { title: "Follow-up", state: "Route", icon: "lead", detail: "Next step", meter: "78%", href: "#project-intake" }
   ],
   metrics: [
     { value: "07", label: "Input fields" },
@@ -215,12 +245,13 @@ export const requestReceivedHeroVisual: HeroVisual = {
   label: "Request received",
   state: "Review queue active",
   output: "Project type, problem, current setup, desired result",
+  coreHref: "/",
   nodes: [
-    { title: "Submission", state: "Stored", icon: "lead", detail: "Project request", meter: "84%" },
-    { title: "Classification", state: "Review", icon: "flow", detail: "System type", meter: "72%" },
-    { title: "Context check", state: "Inspect", icon: "lens", detail: "Current setup", meter: "68%" },
-    { title: "Scope path", state: "Prepare", icon: "space", detail: "Next action", meter: "79%" },
-    { title: "Reply", state: "Next", icon: "api", detail: "Follow-up", meter: "66%" }
+    { title: "Submission", state: "Stored", icon: "lead", detail: "Project request", meter: "84%", href: "/start-project/" },
+    { title: "Classification", state: "Review", icon: "flow", detail: "System type", meter: "72%", href: "/solutions/" },
+    { title: "Context check", state: "Inspect", icon: "lens", detail: "Current setup", meter: "68%", href: "/systems/" },
+    { title: "Scope path", state: "Prepare", icon: "space", detail: "Next action", meter: "79%", href: "/capabilities/" },
+    { title: "Reply", state: "Next", icon: "api", detail: "Follow-up", meter: "66%", href: "/" }
   ],
   metrics: [
     { value: "OK", label: "Status" },

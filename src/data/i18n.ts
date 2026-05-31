@@ -640,8 +640,8 @@ const ruCopy: Dictionary = {
   "View Technologies": "Смотреть технологии",
   "Stack logic": "Логика стека",
   "Where the systems apply": "Где применяются системы",
-  "The same system approach works across service businesses, e-commerce, media, travel, local businesses, SaaS, agencies, and data-heavy operations.":
-    "Один системный подход работает для сервисных компаний, e-commerce, медиа, туризма, локального бизнеса, SaaS, агентств и компаний с большим объемом данных.",
+  "The same system approach works across service businesses, e-commerce, media, travel, local businesses, SaaS, and data-heavy operations.":
+    "Один системный подход работает для сервисных компаний, e-commerce, медиа, туризма, локального бизнеса, SaaS и компаний с большим объемом данных.",
   "Implementation matrix": "Матрица реализации",
   "Stack layers ready": "Слои стека готовы",
   "Frontend": "Фронтенд",
@@ -1250,6 +1250,16 @@ const roCopy: Dictionary = {
   "View solution routes": "Vezi rutele de solutii",
   "System output": "Output de sistem",
   "Open route": "Deschide ruta",
+  "Slow leads": "Leaduri lente",
+  "Manual content": "Productie manuala",
+  "Broken data": "Date deteriorate",
+  "Disconnected tools": "Instrumente separate",
+  "Unclear project scope": "Proiect neclar",
+  "Qualified pipeline": "Pipeline calificat",
+  "Publishing engine": "Motor de publicare",
+  "Live monitoring": "Monitorizare live",
+  "Connected workflow": "Flux conectat",
+  "Scoped implementation route": "Ruta de implementare definita",
   "From client workflow to operating system": "De la workflow-ul clientului la sistem operational",
   "Input": "Input",
   "Rules + AI": "Reguli + AI",
@@ -1269,8 +1279,8 @@ const roCopy: Dictionary = {
   "View Technologies": "Vezi tehnologiile",
   "Stack logic": "Logica stackului",
   "Where the systems apply": "Unde se aplica sistemele",
-  "The same system approach works across service businesses, e-commerce, media, travel, local businesses, SaaS, agencies, and data-heavy operations.":
-    "Aceeasi abordare de sistem functioneaza pentru businessuri de servicii, e-commerce, media, travel, businessuri locale, SaaS, agentii si operatiuni data-heavy.",
+  "The same system approach works across service businesses, e-commerce, media, travel, local businesses, SaaS, and data-heavy operations.":
+    "Aceeasi abordare de sistem functioneaza pentru businessuri de servicii, e-commerce, media, travel, businessuri locale, SaaS si operatiuni data-heavy.",
   "Implementation matrix": "Matrice de implementare",
   "Stack layers ready": "Straturi de stack pregatite",
   "Frontend": "Frontend",

@@ -387,12 +387,14 @@ export const landingOfferHeroVisual = (offer: LandingOffer): HeroVisual => ({
   label: offer.eyebrow,
   state: "Campaign route ready",
   output: offer.desiredOutput,
+  coreHref: "#landing-intake",
   nodes: offer.modules.map((module, index) => ({
     title: module.title,
     state: ["Capture", "Process", "Connect", "Output"][index % 4],
     icon: index === 0 ? offer.icon : ["flow", "tools", "api", "ranking"][index % 4],
     detail: offer.outcomes[index % offer.outcomes.length],
-    meter: `${74 + index * 5}%`
+    meter: `${74 + index * 5}%`,
+    href: offer.relatedLinks[index]?.href ?? "#landing-intake"
   })),
   metrics: [
     { value: String(offer.modules.length).padStart(2, "0"), label: "Modules" },

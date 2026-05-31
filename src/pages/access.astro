@@ -24,10 +24,11 @@ const accessVisual = {
   label: ui.privateProjects,
   state: `${ui.code} ${ui.required}`,
   output: ui.accessHint,
+  coreHref: "/projects/",
   nodes: [
-    { title: ui.accessCode, state: ui.required, icon: "lens", detail: ui.protectedRoute, meter: "78%" },
-    { title: ui.privateWorkspace, state: ui.privateProjects, icon: "product", detail: ui.projectLibrary, meter: "86%" },
-    { title: ui.session, state: ui.cookieSession, icon: "api", detail: ui.access, meter: "72%" }
+    { title: ui.accessCode, state: ui.required, icon: "lens", detail: ui.protectedRoute, meter: "78%", href: "/projects/" },
+    { title: ui.privateWorkspace, state: ui.privateProjects, icon: "product", detail: ui.projectLibrary, meter: "86%", href: "/projects/" },
+    { title: ui.session, state: ui.cookieSession, icon: "api", detail: ui.access, meter: "72%", href: "/projects/" }
   ],
   metrics: [
     { value: "01", label: ui.code },

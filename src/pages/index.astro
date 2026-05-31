@@ -10,7 +10,55 @@ type Props = {
 };
 
 const { locale = "en" } = Astro.props;
-const { landingOffers, capabilities, home, industries, solutions, systems, technologies } = getLocalizedCollections(locale);
+const { capabilities, home, industries, solutions, systems, technologies } = getLocalizedCollections(locale);
+
+const industryRouteCopy: Record<Locale, Record<string, { title: string; text: string }>> = {
+  en: {
+    "service-businesses": { title: "Services", text: "Leads, CRM, sites." },
+    ecommerce: { title: "Catalogs", text: "Feeds, prices, content." },
+    "media-content-projects": { title: "Media", text: "Content and publishing." },
+    travel: { title: "Travel", text: "Availability and SEO." },
+    "local-business": { title: "Local", text: "Landing pages, reviews." },
+    "saas-mvp": { title: "SaaS/MVP", text: "Portals and dashboards." },
+    agencies: { title: "Agencies", text: "Reports and delivery." },
+    "data-heavy-businesses": { title: "Data", text: "Checks, alerts, reports." }
+  },
+  ro: {
+    "service-businesses": { title: "Servicii", text: "Leaduri, CRM, site-uri." },
+    ecommerce: { title: "Cataloguri", text: "Feeduri, preturi, continut." },
+    "media-content-projects": { title: "Media", text: "Continut si publicare." },
+    travel: { title: "Travel", text: "Disponibilitate si SEO." },
+    "local-business": { title: "Local", text: "Landinguri si review-uri." },
+    "saas-mvp": { title: "SaaS/MVP", text: "Portaluri si dashboarduri." },
+    agencies: { title: "Agentii", text: "Rapoarte si livrare." },
+    "data-heavy-businesses": { title: "Date", text: "Verificari, alerte." }
+  },
+  ru: {
+    "service-businesses": { title: "Сервисы", text: "Лиды, CRM, сайты." },
+    ecommerce: { title: "Каталоги", text: "Фиды, цены, контент." },
+    "media-content-projects": { title: "Медиа", text: "Контент, выпуск." },
+    travel: { title: "Туризм", text: "Доступность, SEO." },
+    "local-business": { title: "Локальный", text: "Посадки, заявки, отзывы." },
+    "saas-mvp": { title: "SaaS/MVP", text: "Порталы, панели." },
+    agencies: { title: "Агентства", text: "Отчеты, доставка." },
+    "data-heavy-businesses": { title: "Данные", text: "Сбор, проверки, алерты." }
+  }
+};
+
+const industryTrajectorySlugs = new Set([
+  "service-businesses",
+  "ecommerce",
+  "media-content-projects",
+  "travel",
+  "local-business",
+  "saas-mvp",
+  "data-heavy-businesses"
+]);
+
+const industryTrajectoryItems = industries.filter((item) => industryTrajectorySlugs.has(item.slug)).map((item) => ({
+  ...item,
+  routeCopy: industryRouteCopy[locale][item.slug] ?? { title: item.title, text: item.summary }
+}));
 
 const decisionRoutes = [
   {
@@ -189,16 +237,30 @@ const routeEngine = [
   {
     input: "Manual content",
     inputHref: "/solutions/generate-more-content/",
-    output: "Publish engine",
+    output: "Publishing engine",
     outputHref: "/lp/ai-content-workflow/",
     icon: "content"
   },
   {
     input: "Broken data",
     inputHref: "/solutions/build-data-monitoring-system/",
-    output: "Live dashboards",
+    output: "Live monitoring",
     outputHref: "/capabilities/data-systems-scraping/",
     icon: "data"
+  },
+  {
+    input: "Disconnected tools",
+    inputHref: "/solutions/build-internal-tools/",
+    output: "Connected workflow",
+    outputHref: "/capabilities/wordpress-api-integrations/",
+    icon: "api"
+  },
+  {
+    input: "Unclear project scope",
+    inputHref: "/start-project/",
+    output: "Scoped implementation route",
+    outputHref: "/solutions/",
+    icon: "flow"
   }
 ];
 
@@ -245,8 +307,8 @@ const blueprintStations = [
 
       <div class="decision-grid">
         {decisionRoutes.map((route) => (
-          <article class="decision-route">
-            <div class="decision-route__icon">
+          <article class="decision-route decision-route--glyph">
+            <div class="card-glyph decision-route__glyph" aria-hidden="true">
               <SystemIcon name={route.icon} />
             </div>
             <div class="decision-route__body">
@@ -267,49 +329,12 @@ const blueprintStations = [
     <nav class="home-flow" aria-label="Homepage system routes">
       {systemPath.map((step, index) => (
         <a href={localizePath(step.href, locale)}>
-          <span>{String(index + 1).padStart(2, "0")}</span>
-          <SystemIcon name={step.icon} />
+          <span>{index + 1}</span>
           <strong>{translateCopy(locale, step.title)}</strong>
           <small>{translateCopy(locale, step.text)}</small>
         </a>
       ))}
     </nav>
-  </section>
-
-  <section class="section campaign-offers" aria-labelledby="campaign-offers-title">
-    <div class="section-header">
-      <div>
-        <p class="eyebrow">{translateCopy(locale, "Campaign landing pages")}</p>
-        <h2 id="campaign-offers-title">{translateCopy(locale, "Offer pages built for ads and client leads")}</h2>
-      </div>
-      <p>{translateCopy(locale, "These pages translate the broader system catalog into concrete buyer-ready offers with a problem, modules, proof signals, and a tracked intake path.")}</p>
-    </div>
-
-    <div class="landing-offer-core">
-      <article class="landing-offer-core__center">
-        <SystemIcon name="lead" />
-        <span>{translateCopy(locale, "Lead acquisition layer")}</span>
-        <strong>{translateCopy(locale, `${landingOffers.length} offer pages`)}</strong>
-        <p>{translateCopy(locale, "Each campaign page turns one buyer problem into a scoped system request with proof, modules, CTA, and intake tracking.")}</p>
-        <a class="button secondary" href={localizePath("/start-project/", locale)}>{translateCopy(locale, "Plan campaign route")}</a>
-      </article>
-
-      {landingOffers.map((offer, index) => (
-        <a class:list={["landing-offer-node", `landing-offer-node--${index + 1}`]} href={localizePath(`/lp/${offer.slug}/`, locale)}>
-          <SystemIcon name={offer.icon} />
-          <span>{offer.eyebrow}</span>
-          <h3>{offer.title}</h3>
-          <p>{offer.summary}</p>
-          <small>{offer.desiredOutput}</small>
-        </a>
-      ))}
-
-      <div class="landing-offer-core__signals" aria-label="Landing page conversion signals">
-        <span>{translateCopy(locale, "Ad message")}</span>
-        <span>{translateCopy(locale, "Proof layer")}</span>
-        <span>{translateCopy(locale, "Tracked intake")}</span>
-      </div>
-    </div>
   </section>
 
   <section class="section home-spectrum" aria-labelledby="capability-spectrum-title">
@@ -341,7 +366,7 @@ const blueprintStations = [
     </div>
   </section>
 
-  <section class="section home-solution-field" aria-labelledby="home-solution-title">
+  <section class="section home-solution-field" id="solution-routes" aria-labelledby="home-solution-title">
     <div class="section-header">
       <div>
         <p class="eyebrow">{translateCopy(locale, "Solutions")}</p>
@@ -351,10 +376,15 @@ const blueprintStations = [
     </div>
 
     <div class="route-engine">
+      <div class="route-engine__links" aria-hidden="true">
+        {routeEngine.map((_, index) => (
+          <span class:list={["route-engine__link", `route-engine__link--${index + 1}`]}></span>
+        ))}
+      </div>
       <div class="route-engine__column">
         <span class="route-engine__label">{translateCopy(locale, "Business pressure")}</span>
-        {routeEngine.map((item) => (
-          <a class="route-pulse" href={localizePath(item.inputHref, locale)}>
+        {routeEngine.map((item, index) => (
+          <a class="route-pulse" data-route-pair={index + 1} href={localizePath(item.inputHref, locale)}>
             <SystemIcon name={item.icon} />
             <strong>{translateCopy(locale, item.input)}</strong>
           </a>
@@ -369,8 +399,8 @@ const blueprintStations = [
       </div>
       <div class="route-engine__column route-engine__column--output">
         <span class="route-engine__label">{translateCopy(locale, "System output")}</span>
-        {routeEngine.map((item) => (
-          <a class="route-output" href={localizePath(item.outputHref, locale)}>
+        {routeEngine.map((item, index) => (
+          <a class="route-output" data-route-pair={index + 1} href={localizePath(item.outputHref, locale)}>
             <strong>{translateCopy(locale, item.output)}</strong>
             <small>{translateCopy(locale, "Open route")}</small>
           </a>
@@ -435,17 +465,16 @@ const blueprintStations = [
         <p class="eyebrow">{translateCopy(locale, "Industries")}</p>
         <h2 id="industry-trajectory-title">{translateCopy(locale, "Where the systems apply")}</h2>
       </div>
-      <p>{translateCopy(locale, "The same system approach works across service businesses, e-commerce, media, travel, local businesses, SaaS, agencies, and data-heavy operations.")}</p>
+      <p>{translateCopy(locale, "The same system approach works across service businesses, e-commerce, media, travel, local businesses, SaaS, and data-heavy operations.")}</p>
     </div>
 
     <div class="market-trajectory">
       <div class="market-trajectory__line"></div>
-      {industries.map((item, index) => (
+      {industryTrajectoryItems.map((item, index) => (
         <a class:list={["market-node", `market-node--${index + 1}`]} href={localizePath(`/industries/${item.slug}/`, locale)}>
           <SystemIcon name={item.icon} />
-          <span>{String(index + 1).padStart(2, "0")}</span>
-          <h3>{item.title}</h3>
-          <p>{item.summary}</p>
+          <h3>{item.routeCopy.title}</h3>
+          <p>{item.routeCopy.text}</p>
         </a>
       ))}
     </div>
