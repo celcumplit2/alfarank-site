@@ -355,7 +355,7 @@ DB
   включить Cloudflare Turnstile на публичных формах; для автоматического smoke
   POST можно передать `LEAD_SMOKE_TURNSTILE_TOKEN` в preview/test окружении;
 - выбрать и включить production-аналитику через build variables:
-  `PUBLIC_GTM_ID`, `PUBLIC_GA_ID` или `PUBLIC_PLAUSIBLE_DOMAIN`;
+  `PUBLIC_GTM_ID`, `PUBLIC_GA_ID`, `PUBLIC_GA_MEASUREMENT_ID` или `PUBLIC_PLAUSIBLE_DOMAIN`;
 - задать быстрые контактные каналы через build variables, если они должны
   отображаться на сайте: `PUBLIC_CONTACT_EMAIL`,
   `PUBLIC_CONTACT_TELEGRAM_URL`, `PUBLIC_CONTACT_WHATSAPP_URL`.

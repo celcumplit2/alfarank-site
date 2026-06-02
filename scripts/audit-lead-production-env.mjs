@@ -175,7 +175,7 @@ const contactChannels = [
   "PUBLIC_CONTACT_TELEGRAM_URL",
   "PUBLIC_CONTACT_WHATSAPP_URL"
 ];
-const analyticsChannels = ["PUBLIC_GTM_ID", "PUBLIC_GA_ID", "PUBLIC_PLAUSIBLE_DOMAIN"];
+const analyticsChannels = ["PUBLIC_GTM_ID", "PUBLIC_GA_ID", "PUBLIC_GA_MEASUREMENT_ID", "PUBLIC_PLAUSIBLE_DOMAIN"];
 const turnstilePublic = has(env, "PUBLIC_TURNSTILE_SITE_KEY");
 const turnstileSecret = has(env, "TURNSTILE_SECRET_KEY");
 const notificationChannels = [

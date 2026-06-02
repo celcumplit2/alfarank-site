@@ -574,6 +574,7 @@ checkIncludes("src/layouts/Layout.astro", "layout emits first-party lead analyti
   "thank_you_view",
   "PUBLIC_GTM_ID",
   "PUBLIC_GA_ID",
+  "PUBLIC_GA_MEASUREMENT_ID",
   "PUBLIC_PLAUSIBLE_DOMAIN"
 ]);
 
@@ -782,6 +783,7 @@ const productionEnv = [
   "PUBLIC_CONTACT_WHATSAPP_URL",
   "PUBLIC_GTM_ID",
   "PUBLIC_GA_ID",
+  "PUBLIC_GA_MEASUREMENT_ID",
   "PUBLIC_PLAUSIBLE_DOMAIN",
   "PUBLIC_TURNSTILE_SITE_KEY",
   "TURNSTILE_SECRET_KEY"

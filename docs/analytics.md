@@ -33,7 +33,7 @@ these build-time environment variables are present:
 
 - `PUBLIC_GTM_ID`: injects Google Tag Manager and pushes events to
   `window.dataLayer`.
-- `PUBLIC_GA_ID`: injects GA4 `gtag` with automatic page views disabled, so the
+- `PUBLIC_GA_ID` or `PUBLIC_GA_MEASUREMENT_ID`: injects GA4 `gtag` with automatic page views disabled, so the
   site's own `page_view` event remains the source of truth.
 - `PUBLIC_PLAUSIBLE_DOMAIN`: injects Plausible.
 - `PUBLIC_PLAUSIBLE_SRC`: optional Plausible script URL override. Defaults to

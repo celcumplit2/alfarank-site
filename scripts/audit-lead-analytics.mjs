@@ -100,6 +100,7 @@ checkIncludes("src/layouts/Layout.astro", "layout forwards events to first-party
   "window.plausible(eventName, { props: payload.alfarank })",
   "PUBLIC_GTM_ID",
   "PUBLIC_GA_ID",
+  "PUBLIC_GA_MEASUREMENT_ID",
   "PUBLIC_PLAUSIBLE_DOMAIN"
 ]);
 

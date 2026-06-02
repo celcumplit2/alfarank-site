@@ -233,7 +233,12 @@ async function main() {
     "PUBLIC_CONTACT_TELEGRAM_URL",
     "PUBLIC_CONTACT_WHATSAPP_URL"
   ]);
-  const analyticsReady = any(envVarNames, ["PUBLIC_GTM_ID", "PUBLIC_GA_ID", "PUBLIC_PLAUSIBLE_DOMAIN"]);
+  const analyticsReady = any(envVarNames, [
+    "PUBLIC_GTM_ID",
+    "PUBLIC_GA_ID",
+    "PUBLIC_GA_MEASUREMENT_ID",
+    "PUBLIC_PLAUSIBLE_DOMAIN"
+  ]);
   const hasTurnstilePublic = envVarNames.has("PUBLIC_TURNSTILE_SITE_KEY");
   const hasTurnstileSecret = envVarNames.has("TURNSTILE_SECRET_KEY");
 
@@ -256,7 +261,7 @@ async function main() {
     {
       label: `${environment} analytics adapter exists`,
       condition: analyticsReady,
-      failure: `${environment} analytics adapter is missing. Set PUBLIC_GTM_ID, PUBLIC_GA_ID, or PUBLIC_PLAUSIBLE_DOMAIN.`
+      failure: `${environment} analytics adapter is missing. Set PUBLIC_GTM_ID, PUBLIC_GA_ID, PUBLIC_GA_MEASUREMENT_ID, or PUBLIC_PLAUSIBLE_DOMAIN.`
     },
     {
       label: `${environment} Turnstile keys are consistent`,

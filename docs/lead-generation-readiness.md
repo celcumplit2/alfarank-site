@@ -161,7 +161,7 @@
   status и browser back/forward cache reset работают для каждого
   `form[data-conversion-form]`.
 - Аналитический vendor-слой можно включить через build env:
-  `PUBLIC_GTM_ID`, `PUBLIC_GA_ID`, `PUBLIC_PLAUSIBLE_DOMAIN`.
+  `PUBLIC_GTM_ID`, `PUBLIC_GA_ID`, `PUBLIC_GA_MEASUREMENT_ID`, `PUBLIC_PLAUSIBLE_DOMAIN`.
 - Быстрые контактные каналы подготовлены как build-time конфиг:
   `PUBLIC_CONTACT_EMAIL`, `PUBLIC_CONTACT_TELEGRAM_URL`,
   `PUBLIC_CONTACT_WHATSAPP_URL`. Без значений они не выводятся на сайт.

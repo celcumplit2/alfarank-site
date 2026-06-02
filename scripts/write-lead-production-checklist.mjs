@@ -115,7 +115,7 @@ function main() {
     checklistItem(false, `Open \`${leadEnvFile}\` and fill one notification route.`),
     checklistItem(false, "Use either `LEAD_WEBHOOK_URL` plus optional `LEAD_WEBHOOK_TOKEN`, or `LEAD_TELEGRAM_BOT_TOKEN` plus `LEAD_TELEGRAM_CHAT_ID`."),
     checklistItem(false, "Fill at least one quick contact channel: `PUBLIC_CONTACT_EMAIL`, `PUBLIC_CONTACT_TELEGRAM_URL`, or `PUBLIC_CONTACT_WHATSAPP_URL`."),
-    checklistItem(false, "Fill one analytics adapter: `PUBLIC_GTM_ID`, `PUBLIC_GA_ID`, or `PUBLIC_PLAUSIBLE_DOMAIN`."),
+    checklistItem(false, "Fill one analytics adapter: `PUBLIC_GTM_ID`, `PUBLIC_GA_ID`, `PUBLIC_GA_MEASUREMENT_ID`, or `PUBLIC_PLAUSIBLE_DOMAIN`."),
     checklistItem(false, "Optional: set both `PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY`, or leave both empty."),
     "",
     ...commandBlock([`npm run qa:lead-env -- --env-file ${leadEnvFile}`]),
