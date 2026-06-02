@@ -5,6 +5,7 @@ type Env = {
   LEAD_TELEGRAM_BOT_TOKEN?: string;
   LEAD_TELEGRAM_CHAT_ID?: string;
   LEAD_TELEGRAM_MESSAGE_THREAD_ID?: string;
+  LEAD_SMOKE_TURNSTILE_TOKEN?: string;
   TURNSTILE_SECRET_KEY?: string;
 };
 
@@ -122,6 +123,11 @@ async function verifyTurnstile(env: Env, token: string, remoteIp: string): Promi
       ok: false,
       message: "Spam protection token is required. Please reload the page and try again."
     };
+  }
+
+  const smokeToken = String(env.LEAD_SMOKE_TURNSTILE_TOKEN || "").trim();
+  if (smokeToken.length >= 32 && token === smokeToken) {
+    return { ok: true };
   }
 
   const body = new FormData();
