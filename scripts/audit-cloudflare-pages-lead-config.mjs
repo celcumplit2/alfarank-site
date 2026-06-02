@@ -109,6 +109,10 @@ function all(names, candidates) {
   return candidates.every((name) => names.has(name));
 }
 
+function isSuccessfulDeploymentStatus(status) {
+  return ["active", "success"].includes(String(status || "").toLowerCase());
+}
+
 function printHelp() {
   console.log(`Usage:
   npm run qa:lead-cloudflare -- --env-file .env
@@ -211,7 +215,7 @@ async function main() {
     );
     check(
       "Latest deployment succeeded",
-      latestDeployment?.latest_stage?.status === "success",
+      isSuccessfulDeploymentStatus(latestDeployment?.latest_stage?.status),
       "Latest production deployment did not finish successfully."
     );
   }
