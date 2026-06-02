@@ -14,6 +14,35 @@ Events are pushed to:
 
 No external analytics vendor is required for the site to run.
 
+## QA Gate
+
+Run the analytics audit before preview or production traffic:
+
+```bash
+npm run qa:lead-analytics
+```
+
+The command builds the site and verifies the event inventory, shared conversion
+context, form attribution fields, optional vendor forwarding hooks, localized
+thank-you pages, and partner-program attribution in the generated output.
+
+## Optional Vendor Scripts
+
+The first-party event layer can forward events to production analytics when
+these build-time environment variables are present:
+
+- `PUBLIC_GTM_ID`: injects Google Tag Manager and pushes events to
+  `window.dataLayer`.
+- `PUBLIC_GA_ID`: injects GA4 `gtag` with automatic page views disabled, so the
+  site's own `page_view` event remains the source of truth.
+- `PUBLIC_PLAUSIBLE_DOMAIN`: injects Plausible.
+- `PUBLIC_PLAUSIBLE_SRC`: optional Plausible script URL override. Defaults to
+  `https://plausible.io/js/script.js`.
+
+The site still works without these variables. In that case events remain
+available through `window.dataLayer` and the `alfarank:analytics` browser event
+for QA.
+
 ## Current Events
 
 - `page_view`
@@ -23,15 +52,22 @@ No external analytics vendor is required for the site to run.
 - `form_submit_click`
 - `form_submit_attempt`
 - `thank_you_view`
+- `quick_contact_click`
 
 ## Shared Properties
 
 Each event includes an `alfarank` object with:
 
 - `path`
+- `lead_id`
 - `source_path`
 - `landing_page`
 - `landing_offer`
+- `form_variant`
+- `locale`
+- `referrer`
+- `lead_channel`
+- `partner_ref`
 - `utm_source`
 - `utm_medium`
 - `utm_campaign`
@@ -41,8 +77,16 @@ Each event includes an `alfarank` object with:
 Form events also include:
 
 - `form`
+- `form_variant`
 - `project_type`
 - `desired_output`
+
+Quick contact events also include:
+
+- `channel`
+- `label`
+- `href`
+- `location`
 
 ## Conversion Reading
 
@@ -50,17 +94,30 @@ Primary conversion:
 
 - `thank_you_view`
 
+On successful project request submissions, the thank-you redirect preserves
+non-PII conversion context in the URL: `lead_id`, `source_path`,
+`landing_page`, `landing_offer`, `form_variant`, `locale`, `lead_channel`,
+`partner_ref`, and UTM parameters. This lets the `thank_you_view` event tie the
+conversion back to the originating page, campaign, form, language, and
+partner/referral code without exposing the submitter's name, email, referrer,
+or project details in the URL.
+
 Supporting funnel events:
 
 - `cta_click`
 - `form_start`
 - `form_validation_error`
 - `form_submit_attempt`
+- `quick_contact_click`
 
 Recommended reporting dimensions:
 
 - landing page;
 - landing offer;
+- form variant;
+- locale;
+- lead channel;
+- partner/referral code;
 - UTM source / medium / campaign;
 - CTA label and destination;
 - form type;

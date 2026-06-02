@@ -1,0 +1,79 @@
+---
+import SystemIcon from "@/components/SystemIcon.astro";
+import { localizePath, translateCopy } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
+
+type Props = {
+  locale?: Locale;
+  ctaHref?: string;
+};
+
+const { locale = "en", ctaHref = "/start-project/" } = Astro.props;
+
+const proofPatterns = [
+  {
+    icon: "lead",
+    title: translateCopy(locale, "Lead intake system"),
+    pressure: translateCopy(locale, "Requests arrive from forms, ads, referrals, email, and messengers with no single owner or next action."),
+    firstBuild: translateCopy(locale, "One tracked intake path with source context, priority, owner, status, and next action."),
+    proof: translateCopy(locale, "Stored lead source, response state, routing bucket, and follow-up queue.")
+  },
+  {
+    icon: "content",
+    title: translateCopy(locale, "Content operation"),
+    pressure: translateCopy(locale, "Topics, briefs, drafts, approvals, publishing, and SEO checks live in separate manual steps."),
+    firstBuild: translateCopy(locale, "A controlled publishing workflow with templates, review states, CMS handoff, and reporting points."),
+    proof: translateCopy(locale, "Visible queue, approval status, publishing output, indexation or performance signals.")
+  },
+  {
+    icon: "data",
+    title: translateCopy(locale, "Data and commerce control"),
+    pressure: translateCopy(locale, "Catalog, prices, stock, competitors, or operational data are checked by hand and become stale quickly."),
+    firstBuild: translateCopy(locale, "A normalized data layer with checks, alerts, dashboard output, and an action list."),
+    proof: translateCopy(locale, "Freshness checks, missing-field reports, alerts, data coverage, and completed actions.")
+  }
+];
+---
+
+<section class="section lead-proof-patterns" aria-labelledby="lead-proof-patterns-title">
+  <div class="section-header">
+    <div>
+      <p class="eyebrow">{translateCopy(locale, "Proof assets")}</p>
+      <h2 id="lead-proof-patterns-title">{translateCopy(locale, "Example first-stage proof")}</h2>
+    </div>
+    <p>{translateCopy(locale, "A lead converts more easily when the first build has a visible proof target. These patterns show what can be validated before a larger system is expanded.")}</p>
+  </div>
+
+  <div class="lead-proof-patterns__grid">
+    {proofPatterns.map((pattern, index) => (
+      <article class:list={["lead-proof-card", `lead-proof-card--${index + 1}`]}>
+        <div class="lead-proof-card__header">
+          <SystemIcon name={pattern.icon} />
+          <div>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <h3>{pattern.title}</h3>
+          </div>
+        </div>
+        <dl>
+          <div>
+            <dt>{translateCopy(locale, "Pressure")}</dt>
+            <dd>{pattern.pressure}</dd>
+          </div>
+          <div>
+            <dt>{translateCopy(locale, "First useful build")}</dt>
+            <dd>{pattern.firstBuild}</dd>
+          </div>
+          <div>
+            <dt>{translateCopy(locale, "Proof signal")}</dt>
+            <dd>{pattern.proof}</dd>
+          </div>
+        </dl>
+      </article>
+    ))}
+  </div>
+
+  <div class="lead-proof-patterns__footer">
+    <p>{translateCopy(locale, "The proof target is selected from the submitted workflow, not forced into a generic service package.")}</p>
+    <a class="button secondary" href={localizePath(ctaHref, locale)}>{translateCopy(locale, "Scope a proof path")}</a>
+  </div>
+</section>

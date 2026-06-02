@@ -1,4 +1,5 @@
 ---
+import ContactChannels from "@/components/ContactChannels.astro";
 import { localizePath, t } from "@/data/i18n";
 import type { Locale } from "@/data/i18n";
 
@@ -20,6 +21,8 @@ const year = new Date().getFullYear();
     <a href={localizePath("/solutions/", locale)}>{t(locale, "solutions")}</a>
     <a href={localizePath("/systems/", locale)}>{t(locale, "systems")}</a>
     <a href={localizePath("/start-project/", locale)}>{t(locale, "startProject")}</a>
+    <a href={localizePath("/partner-program/", locale)}>{t(locale, "partnerProgram")}</a>
   </div>
+  <ContactChannels locale={locale} variant="footer" />
   <span class="footer-meta">&copy; {year} AlfaRank</span>
 </footer>

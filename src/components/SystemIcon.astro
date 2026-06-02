@@ -26,6 +26,15 @@ const common = {
       </g>
     )}
 
+    {name === "chip" && (
+      <g class="icon-lines" {...common}>
+        <rect x="22" y="22" width="20" height="20" rx="3" />
+        <path d="M28 32h8M32 28v8" />
+        <path d="M18 25h4M18 32h4M18 39h4M42 25h4M42 32h4M42 39h4" />
+        <path d="M25 18v4M32 18v4M39 18v4M25 42v4M32 42v4M39 42v4" />
+      </g>
+    )}
+
     {name === "web" && (
       <g class="icon-lines" {...common}>
         <rect x="16" y="18" width="32" height="26" rx="2" />
@@ -73,6 +82,13 @@ const common = {
         <rect x="16" y="20" width="14" height="14" rx="2" />
         <rect x="34" y="30" width="14" height="14" rx="2" />
         <path d="M30 27h8M34 37h-8M23 20v-6M41 44v6" />
+      </g>
+    )}
+
+    {name === "puzzle" && (
+      <g class="icon-lines" {...common}>
+        <path d="M18 24h10c0-5 8-5 8 0h10v10c-5 0-5 8 0 8v8H18v-8c5 0 5-8 0-8z" />
+        <path d="M28 24v8M36 24v8M28 42v8" opacity="0.55" />
       </g>
     )}
 
@@ -156,6 +172,31 @@ const common = {
       </g>
     )}
 
+    {name === "target" && (
+      <g class="icon-lines" {...common}>
+        <circle cx="30" cy="34" r="15" />
+        <circle cx="30" cy="34" r="8" />
+        <circle cx="30" cy="34" r="2" />
+        <path d="M30 19v-7M30 49v-4M15 34h-5M45 34h7" />
+        <path d="M38 26l10-10M45 16h3v3" />
+      </g>
+    )}
+
+    {name === "shield" && (
+      <g class="icon-lines" {...common}>
+        <path d="M32 14l15 6v11c0 10-6 17-15 21-9-4-15-11-15-21V20z" />
+        <path d="M25 33l5 5 10-12" />
+      </g>
+    )}
+
+    {name === "lock" && (
+      <g class="icon-lines" {...common}>
+        <rect x="18" y="29" width="28" height="21" rx="3" />
+        <path d="M24 29v-7a8 8 0 0 1 16 0v7" />
+        <path d="M32 38v5" />
+      </g>
+    )}
+
     {name === "local" && (
       <g class="icon-lines" {...common}>
         <path d="M20 29c0-8 6-13 12-13s12 5 12 13c0 9-12 20-12 20S20 38 20 29Z" />
@@ -166,12 +207,14 @@ const common = {
 
     {![
       "ai",
+      "chip",
       "web",
       "content",
       "data",
       "commerce",
       "media",
       "api",
+      "puzzle",
       "lead",
       "tools",
       "product",
@@ -182,6 +225,9 @@ const common = {
       "flow",
       "ranking",
       "map",
+      "target",
+      "shield",
+      "lock",
       "local"
     ].includes(name) && (
       <g class="icon-lines" {...common}>

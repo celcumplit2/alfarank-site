@@ -1,0 +1,56 @@
+---
+import { translateCopy } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
+
+type Props = {
+  locale?: Locale;
+  variant?: "panel" | "footer";
+};
+
+const { locale = "en", variant = "panel" } = Astro.props;
+
+const contactEmail = String(import.meta.env.PUBLIC_CONTACT_EMAIL ?? "").trim();
+const telegramUrl = String(import.meta.env.PUBLIC_CONTACT_TELEGRAM_URL ?? "").trim();
+const whatsappUrl = String(import.meta.env.PUBLIC_CONTACT_WHATSAPP_URL ?? "").trim();
+
+const channels = [
+  contactEmail && {
+    channel: "email",
+    label: translateCopy(locale, "Email"),
+    href: contactEmail.startsWith("mailto:") ? contactEmail : `mailto:${contactEmail}`
+  },
+  telegramUrl && {
+    channel: "telegram",
+    label: translateCopy(locale, "Telegram"),
+    href: telegramUrl
+  },
+  whatsappUrl && {
+    channel: "whatsapp",
+    label: translateCopy(locale, "WhatsApp"),
+    href: whatsappUrl
+  }
+].filter(Boolean) as Array<{ channel: string; label: string; href: string }>;
+---
+
+{channels.length > 0 && (
+  <aside class:list={["contact-channels", `contact-channels--${variant}`]}>
+    <div class="contact-channels__copy">
+      <strong>{translateCopy(locale, "Direct channels")}</strong>
+      <span>{translateCopy(locale, "Use a direct channel if the request is urgent.")}</span>
+    </div>
+    <div class="contact-channels__links">
+      {channels.map((item) => (
+        <a
+          class="contact-channels__link"
+          href={item.href}
+          data-contact-channel={item.channel}
+          rel={item.href.startsWith("http") ? "noreferrer" : undefined}
+          target={item.href.startsWith("http") ? "_blank" : undefined}
+        >
+          <span aria-hidden="true"></span>
+          {item.label}
+        </a>
+      ))}
+    </div>
+  </aside>
+)}

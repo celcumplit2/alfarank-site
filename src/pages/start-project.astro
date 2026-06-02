@@ -1,6 +1,10 @@
 ---
 import PageHero from "@/components/PageHero.astro";
+import ContactChannels from "@/components/ContactChannels.astro";
+import LeadAssurance from "@/components/LeadAssurance.astro";
+import LeadProofPatterns from "@/components/LeadProofPatterns.astro";
 import SystemIcon from "@/components/SystemIcon.astro";
+import TurnstileField from "@/components/TurnstileField.astro";
 import Layout from "@/layouts/Layout.astro";
 import { intakeHeroVisual } from "@/data/hero";
 import { translateCopy } from "@/data/i18n";
@@ -46,7 +50,67 @@ const sendingSourceStatus = translateCopy(locale, "Sending request with source c
 
   <section class="section" id="project-intake">
     <div class="intake-reactor ar-system-block">
+    <article class="glass-panel intake-reactor__quick quick-intake">
+      <div class="quick-intake__copy">
+        <p class="eyebrow">{translateCopy(locale, "Quick project signal")}</p>
+        <h2>{translateCopy(locale, "Send a short request first.")}</h2>
+        <p>{translateCopy(locale, "If the full brief feels early, send the pressure point and contact. The first reply can turn it into scope.")}</p>
+      </div>
+      <form
+        class="quick-intake__form"
+        method="post"
+        action="/api/start-project"
+        data-track-source
+        data-conversion-form="quick-intake"
+        data-sending-label={sendingRequestLabel}
+        data-sending-status={sendingSourceStatus}
+      >
+        <input type="hidden" name="source_path" value="/start-project/" />
+        <input type="hidden" name="landing_page" />
+        <input type="hidden" name="landing_offer" value="quick-intake" />
+        <input type="hidden" name="form_variant" value="quick-intake" />
+        <input type="hidden" name="locale" value={locale} />
+        <input type="hidden" name="referrer" />
+        <input type="hidden" name="lead_channel" />
+        <input type="hidden" name="partner_ref" />
+        <input type="hidden" name="project_type" value="Quick diagnostic request" />
+        <input type="hidden" name="desired_output" value="First project conversation" />
+        <input type="hidden" name="desired_result" value="Define the first useful step from a short request." />
+        <input type="hidden" name="utm_source" />
+        <input type="hidden" name="utm_medium" />
+        <input type="hidden" name="utm_campaign" />
+        <input type="hidden" name="utm_term" />
+        <input type="hidden" name="utm_content" />
+        <div class="spam-field" aria-hidden="true">
+          <label for="company_website_quick">{translateCopy(locale, "Company website")}</label>
+          <input id="company_website_quick" name="company_website" tabindex="-1" autocomplete="off" />
+        </div>
+        <div class="quick-intake__fields">
+          <div class="field">
+            <label for="quick-name">{translateCopy(locale, "Name")}</label>
+            <input id="quick-name" name="name" autocomplete="name" required />
+          </div>
+          <div class="field">
+            <label for="quick-email">{translateCopy(locale, "Email")}</label>
+            <input id="quick-email" name="email" type="email" autocomplete="email" required />
+          </div>
+          <div class="field quick-intake__problem">
+            <label for="quick-problem">{translateCopy(locale, "What should become faster or clearer?")}</label>
+            <input id="quick-problem" name="business_problem" required />
+          </div>
+        </div>
+        <TurnstileField />
+        <div class="quick-intake__actions">
+          <button class="button primary" type="submit">{translateCopy(locale, "Send Quick Request")}</button>
+          <a class="button secondary" href="#full-project-brief">{translateCopy(locale, "Open full brief")}</a>
+        </div>
+        <ContactChannels locale={locale} />
+        <p class="form-status" data-form-status aria-live="polite"></p>
+      </form>
+    </article>
+
     <form
+      id="full-project-brief"
       class="glass-panel intake-reactor__form"
       method="post"
       action="/api/start-project"
@@ -58,6 +122,11 @@ const sendingSourceStatus = translateCopy(locale, "Sending request with source c
       <input type="hidden" name="source_path" value="/start-project/" />
       <input type="hidden" name="landing_page" />
       <input type="hidden" name="landing_offer" />
+      <input type="hidden" name="form_variant" value="start-project" />
+      <input type="hidden" name="locale" value={locale} />
+      <input type="hidden" name="referrer" />
+      <input type="hidden" name="lead_channel" />
+      <input type="hidden" name="partner_ref" />
       <input type="hidden" name="utm_source" />
       <input type="hidden" name="utm_medium" />
       <input type="hidden" name="utm_campaign" />
@@ -132,6 +201,7 @@ const sendingSourceStatus = translateCopy(locale, "Sending request with source c
           <textarea id="contact-details" name="contact_details" placeholder={translateCopy(locale, "Preferred contact channel, time zone, or extra context")}></textarea>
         </div>
       </div>
+      <TurnstileField />
       <div class="section-actions" style="margin-top: 18px;">
         <button class="button primary" type="submit">{translateCopy(locale, "Send Project Request")}</button>
       </div>
@@ -160,6 +230,8 @@ const sendingSourceStatus = translateCopy(locale, "Sending request with source c
         ))}
       </div>
 
+      <LeadAssurance locale={locale} />
+
       <aside class="glass-panel intake-reactor__guide">
         <h2>{translateCopy(locale, "Good project inputs")}</h2>
         <ul class="feature-list">
@@ -173,40 +245,45 @@ const sendingSourceStatus = translateCopy(locale, "Sending request with source c
     </div>
   </section>
 
+  <LeadProofPatterns locale={locale} ctaHref="#project-intake" />
+
   <script is:inline>
     (() => {
       const params = new URLSearchParams(window.location.search);
       const aliases = {
         landing_page: ["landing_page", "lp"],
         landing_offer: ["landing_offer", "offer"],
+        partner_ref: ["partner_ref", "partner", "ref", "affiliate", "affiliate_id"],
         utm_source: ["utm_source"],
         utm_medium: ["utm_medium"],
         utm_campaign: ["utm_campaign"],
         utm_term: ["utm_term"],
         utm_content: ["utm_content"]
       };
+      const firstParam = (keys) => keys.map((key) => params.get(key)).find(Boolean) || "";
+      const inferLeadChannel = () => {
+        if (firstParam(aliases.partner_ref) || params.get("offer") === "partner-program") return "partner";
+        const medium = (params.get("utm_medium") || "").toLowerCase();
+        if (["cpc", "ppc", "paid", "paid-search", "paid-social", "display"].includes(medium)) return "paid";
+        if (params.get("utm_source")) return "campaign";
+        if (document.referrer) return "referral";
+        return "direct";
+      };
 
       document.querySelectorAll("form[data-track-source]").forEach((form) => {
         const source = form.querySelector("[name='source_path']");
         if (source) source.value = `${window.location.pathname}${window.location.search}`;
+        const referrer = form.querySelector("[name='referrer']");
+        if (referrer) referrer.value = document.referrer || "";
+        const leadChannel = form.querySelector("[name='lead_channel']");
+        if (leadChannel) leadChannel.value = inferLeadChannel();
 
         Object.entries(aliases).forEach(([name, keys]) => {
           const input = form.querySelector(`[name='${name}']`);
           if (!input) return;
-          const value = keys.map((key) => params.get(key)).find(Boolean);
+          const value = firstParam(keys);
           if (value) input.value = value;
           if (name === "landing_page" && !input.value) input.value = window.location.pathname;
-        });
-
-        form.addEventListener("submit", () => {
-          const button = form.querySelector("button[type='submit']");
-          const status = form.querySelector("[data-form-status]");
-          if (button) {
-            button.dataset.defaultLabel = button.textContent || "";
-            button.textContent = form.dataset.sendingLabel || "Sending request...";
-            button.disabled = true;
-          }
-          if (status) status.textContent = form.dataset.sendingStatus || "Sending request with source context...";
         });
       });
     })();

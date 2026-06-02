@@ -1,5 +1,11 @@
 type Env = {
   DB: D1Database;
+  LEAD_WEBHOOK_URL?: string;
+  LEAD_WEBHOOK_TOKEN?: string;
+  LEAD_TELEGRAM_BOT_TOKEN?: string;
+  LEAD_TELEGRAM_CHAT_ID?: string;
+  LEAD_TELEGRAM_MESSAGE_THREAD_ID?: string;
+  TURNSTILE_SECRET_KEY?: string;
 };
 
 type ProjectRequest = {
@@ -18,6 +24,11 @@ type ProjectRequest = {
   source_path: string;
   landing_page: string;
   landing_offer: string;
+  form_variant: string;
+  locale: string;
+  referrer: string;
+  lead_channel: string;
+  partner_ref: string;
   utm_source: string;
   utm_medium: string;
   utm_campaign: string;
@@ -27,7 +38,34 @@ type ProjectRequest = {
   ip_address: string;
 };
 
+type LeadRouting = {
+  lead_score: number;
+  lead_priority: "low" | "medium" | "high";
+  routing_bucket: string;
+  next_action: string;
+};
+
+type TurnstileResult = {
+  success?: boolean;
+  "error-codes"?: string[];
+};
+
+type TelegramResult = {
+  ok?: boolean;
+  description?: string;
+};
+
+type NotificationChannel = "webhook" | "telegram";
+type NotificationDelivery = {
+  channel: NotificationChannel;
+  status: "skipped" | "delivered" | "failed";
+  status_code: number | null;
+  error_message: string | null;
+};
+
 const MAX_FIELD_LENGTH = 6000;
+const MAX_NOTIFICATION_ERROR_LENGTH = 500;
+const TELEGRAM_MESSAGE_LIMIT = 3900;
 
 function clean(value: FormDataEntryValue | null): string {
   return String(value ?? "").trim().slice(0, MAX_FIELD_LENGTH);
@@ -46,8 +84,487 @@ function htmlResponse(message: string, status = 400): Response {
   });
 }
 
-async function parseRequest(request: Request): Promise<ProjectRequest & { honeypot: string }> {
+function compact(value: string, maxLength = 180): string {
+  const normalized = value.replace(/\s+/g, " ").trim();
+  if (normalized.length <= maxLength) return normalized;
+  return `${normalized.slice(0, Math.max(0, maxLength - 1)).trimEnd()}…`;
+}
+
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function safeUrl(path: string, requestUrl: string): string {
+  try {
+    return new URL(path || "/", requestUrl).toString();
+  } catch {
+    return "";
+  }
+}
+
+function telegramLine(label: string, value: string, maxLength = 180): string {
+  const text = compact(value, maxLength);
+  if (!text) return "";
+  return `<b>${escapeHtml(label)}:</b> ${escapeHtml(text)}`;
+}
+
+async function verifyTurnstile(env: Env, token: string, remoteIp: string): Promise<{ ok: boolean; message?: string }> {
+  if (!env.TURNSTILE_SECRET_KEY) {
+    return { ok: true };
+  }
+
+  if (!token) {
+    return {
+      ok: false,
+      message: "Spam protection token is required. Please reload the page and try again."
+    };
+  }
+
+  const body = new FormData();
+  body.set("secret", env.TURNSTILE_SECRET_KEY);
+  body.set("response", token);
+  if (remoteIp) body.set("remoteip", remoteIp);
+
+  try {
+    const response = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      body
+    });
+
+    if (!response.ok) {
+      console.error("Turnstile verification request failed", response.status, await response.text());
+      return { ok: false, message: "Spam protection could not be verified. Please try again." };
+    }
+
+    const result = (await response.json()) as TurnstileResult;
+    if (!result.success) {
+      console.error("Turnstile verification failed", result["error-codes"] || []);
+      return { ok: false, message: "Spam protection check failed. Please try again." };
+    }
+
+    return { ok: true };
+  } catch (error) {
+    console.error("Turnstile verification failed", error);
+    return { ok: false, message: "Spam protection could not be verified. Please try again." };
+  }
+}
+
+function thankYouPath(payload: Pick<ProjectRequest, "source_path" | "landing_page">): string {
+  const source = payload.source_path || payload.landing_page || "";
+  const locale = source.match(/^\/(ru|ro)(?=\/|$)/)?.[1];
+  return locale ? `/${locale}/start-project/thank-you/` : "/start-project/thank-you/";
+}
+
+function localeFromPath(path: string): string {
+  return path.match(/^\/(ru|ro)(?=\/|$)/)?.[1] || "en";
+}
+
+function normalizeLeadChannel(value: string): string {
+  return ["direct", "referral", "campaign", "paid", "partner"].includes(value) ? value : "";
+}
+
+function leadChannel(payload: Pick<ProjectRequest, "lead_channel" | "partner_ref" | "landing_offer" | "utm_source" | "utm_medium" | "referrer">): string {
+  const channel = normalizeLeadChannel(payload.lead_channel);
+  if (channel) return channel;
+  if (payload.partner_ref || payload.landing_offer === "partner-program") return "partner";
+
+  const medium = payload.utm_medium.toLowerCase();
+  if (["cpc", "ppc", "paid", "paid-search", "paid-social", "display"].includes(medium)) return "paid";
+  if (payload.utm_source) return "campaign";
+  if (payload.referrer) return "referral";
+
+  return "direct";
+}
+
+function normalizeFormVariant(value: string): string {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9:_-]+/g, "-")
+    .replace(/-+/g, "-")
+    .slice(0, 120);
+}
+
+function inferFormVariant(
+  rawValue: string,
+  payload: Pick<ProjectRequest, "source_path" | "landing_page" | "landing_offer" | "lead_channel">
+): string {
+  const explicit = normalizeFormVariant(rawValue);
+  if (explicit) return explicit;
+
+  if (payload.landing_offer === "quick-intake") return "quick-intake";
+  if (payload.landing_offer === "partner-program" || payload.lead_channel === "partner") return "partner-program";
+  if (payload.landing_offer) return `lp:${normalizeFormVariant(payload.landing_offer)}`;
+
+  const source = `${payload.source_path} ${payload.landing_page}`.toLowerCase();
+  if (source.includes("/lp/")) return "lp:unknown";
+
+  return "start-project";
+}
+
+function containsAny(value: string, keywords: string[]): boolean {
+  return keywords.some((keyword) => value.includes(keyword));
+}
+
+function leadRouting(payload: ProjectRequest): LeadRouting {
+  const sourceText = [
+    payload.project_type,
+    payload.current_system,
+    payload.business_problem,
+    payload.desired_result,
+    payload.desired_output,
+    payload.integrations,
+    payload.landing_offer
+  ]
+    .join(" ")
+    .toLowerCase();
+
+  let score = 20;
+
+  if (payload.lead_channel === "partner") score += 22;
+  if (payload.lead_channel === "paid") score += 18;
+  if (payload.lead_channel === "campaign") score += 12;
+  if (payload.lead_channel === "referral") score += 8;
+  if (payload.landing_offer && payload.landing_offer !== "quick-intake") score += 10;
+  if (payload.company) score += 8;
+  if (payload.current_system) score += 8;
+  if (payload.desired_output) score += 8;
+  if (payload.integrations) score += 8;
+  if (payload.contact_details) score += 6;
+  if (payload.budget) score += 6;
+  if (payload.timeline) score += 6;
+
+  const lead_priority = score >= 70 ? "high" : score >= 45 ? "medium" : "low";
+
+  let routing_bucket = "project-scope";
+
+  if (payload.lead_channel === "partner") {
+    routing_bucket = "partner";
+  } else if (containsAny(sourceText, ["lead", "crm", "automation", "автомат", "лид", "ai", "ии"])) {
+    routing_bucket = "automation";
+  } else if (containsAny(sourceText, ["content", "seo", "media", "publication", "контент", "публикац", "медиа"])) {
+    routing_bucket = "content-seo";
+  } else if (containsAny(sourceText, ["data", "monitor", "scrap", "parser", "dashboard", "report", "данн", "монитор", "парс", "отчет"])) {
+    routing_bucket = "data-monitoring";
+  } else if (containsAny(sourceText, ["ecommerce", "e-commerce", "catalog", "feed", "commerce", "каталог", "товар", "фид"])) {
+    routing_bucket = "ecommerce";
+  } else if (containsAny(sourceText, ["web", "website", "platform", "wordpress", "api", "site", "сайт", "платформ"])) {
+    routing_bucket = "web-platform";
+  } else if (payload.landing_offer === "quick-intake") {
+    routing_bucket = "quick-diagnostic";
+  }
+
+  let next_action = "review_project_request";
+
+  if (routing_bucket === "partner") {
+    next_action = "qualify_partner_source";
+  } else if (lead_priority === "high") {
+    next_action = "prepare_scope_response";
+  } else if (routing_bucket === "quick-diagnostic") {
+    next_action = "request_missing_context";
+  } else if (payload.lead_channel === "paid" || payload.lead_channel === "campaign") {
+    next_action = "fast_campaign_follow_up";
+  }
+
+  return {
+    lead_score: Math.min(score, 100),
+    lead_priority,
+    routing_bucket,
+    next_action
+  };
+}
+
+function thankYouUrl(payload: ProjectRequest, requestUrl: string, leadId?: string): URL {
+  const url = new URL(thankYouPath(payload), requestUrl);
+  const conversionParams: Record<string, string | undefined> = {
+    lead_id: leadId,
+    source_path: payload.source_path,
+    landing_page: payload.landing_page,
+    landing_offer: payload.landing_offer,
+    form_variant: payload.form_variant,
+    locale: payload.locale,
+    lead_channel: payload.lead_channel,
+    partner_ref: payload.partner_ref,
+    utm_source: payload.utm_source,
+    utm_medium: payload.utm_medium,
+    utm_campaign: payload.utm_campaign,
+    utm_term: payload.utm_term,
+    utm_content: payload.utm_content
+  };
+
+  Object.entries(conversionParams).forEach(([key, value]) => {
+    if (value) url.searchParams.set(key, value);
+  });
+
+  return url;
+}
+
+async function notifyLead(
+  env: Env,
+  id: string,
+  createdAt: string,
+  payload: ProjectRequest,
+  routing: LeadRouting,
+  requestUrl: string
+): Promise<void> {
+  const deliveries = await Promise.all([
+    notifyWebhook(env, id, createdAt, payload, routing, requestUrl),
+    notifyTelegram(env, id, createdAt, payload, routing, requestUrl)
+  ]);
+  await recordNotificationEvents(env, id, "project_request.created", deliveries);
+}
+
+async function notifyWebhook(
+  env: Env,
+  id: string,
+  createdAt: string,
+  payload: ProjectRequest,
+  routing: LeadRouting,
+  requestUrl: string
+): Promise<NotificationDelivery> {
+  if (!env.LEAD_WEBHOOK_URL) return notificationSkipped("webhook");
+
+  const headers: Record<string, string> = {
+    "content-type": "application/json"
+  };
+
+  if (env.LEAD_WEBHOOK_TOKEN) {
+    headers.authorization = `Bearer ${env.LEAD_WEBHOOK_TOKEN}`;
+  }
+
+  try {
+    const response = await fetch(env.LEAD_WEBHOOK_URL, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        event: "project_request.created",
+        id,
+        created_at: createdAt,
+        routing,
+        lead_desk_url: safeUrl("/lead-desk/", requestUrl),
+        lead: {
+          name: payload.name,
+          email: payload.email,
+          company: payload.company,
+          project_type: payload.project_type,
+          current_system: payload.current_system,
+          business_problem: payload.business_problem,
+          desired_result: payload.desired_result,
+          desired_output: payload.desired_output,
+          integrations: payload.integrations,
+          budget: payload.budget,
+          timeline: payload.timeline,
+          contact_details: payload.contact_details,
+          source_path: payload.source_path,
+          landing_page: payload.landing_page,
+          landing_offer: payload.landing_offer,
+          form_variant: payload.form_variant,
+          locale: payload.locale,
+          referrer: payload.referrer,
+          lead_channel: payload.lead_channel,
+          partner_ref: payload.partner_ref,
+          utm_source: payload.utm_source,
+          utm_medium: payload.utm_medium,
+          utm_campaign: payload.utm_campaign,
+          utm_term: payload.utm_term,
+          utm_content: payload.utm_content,
+          lead_score: routing.lead_score,
+          lead_priority: routing.lead_priority,
+          routing_bucket: routing.routing_bucket,
+          next_action: routing.next_action
+        }
+      })
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Lead notification webhook failed", response.status, errorText);
+      return notificationFailed("webhook", response.status, errorText);
+    }
+
+    return notificationDelivered("webhook", response.status);
+  } catch (error) {
+    console.error("Lead notification webhook failed", error);
+    return notificationFailed("webhook", null, error);
+  }
+}
+
+function telegramLeadMessage(
+  id: string,
+  createdAt: string,
+  payload: ProjectRequest,
+  routing: LeadRouting,
+  requestUrl: string
+): string {
+  const leadDeskUrl = safeUrl("/lead-desk/", requestUrl);
+  const sourceUrl = safeUrl(payload.source_path || payload.landing_page || "/", requestUrl);
+  const headline = routing.lead_priority === "high" ? "New high-priority AlfaRank lead" : "New AlfaRank lead";
+  const lines = [
+    `<b>${escapeHtml(headline)}</b>`,
+    telegramLine("Priority", `${routing.lead_priority} / ${routing.lead_score}`),
+    telegramLine("Route", `${routing.routing_bucket} -> ${routing.next_action}`),
+    telegramLine("Lead", [payload.name, payload.company].filter(Boolean).join(" / ")),
+    telegramLine("Email", payload.email),
+    telegramLine("Channel", payload.lead_channel),
+    telegramLine("Form", payload.form_variant),
+    telegramLine("Offer", payload.landing_offer || payload.project_type),
+    telegramLine("Partner", payload.partner_ref),
+    telegramLine("Problem", payload.business_problem, 360),
+    telegramLine("Desired result", payload.desired_result, 360),
+    telegramLine("Source", sourceUrl, 260),
+    telegramLine("UTM", [payload.utm_source, payload.utm_medium, payload.utm_campaign].filter(Boolean).join(" / "), 220),
+    telegramLine("Created", createdAt),
+    telegramLine("Lead ID", id, 80),
+    leadDeskUrl ? `<a href="${escapeHtml(leadDeskUrl)}">Open Lead Desk</a>` : ""
+  ].filter(Boolean);
+
+  const message = lines.join("\n");
+  return message.length <= TELEGRAM_MESSAGE_LIMIT
+    ? message
+    : `${message.slice(0, TELEGRAM_MESSAGE_LIMIT - 1).trimEnd()}…`;
+}
+
+async function notifyTelegram(
+  env: Env,
+  id: string,
+  createdAt: string,
+  payload: ProjectRequest,
+  routing: LeadRouting,
+  requestUrl: string
+): Promise<NotificationDelivery> {
+  if (!env.LEAD_TELEGRAM_BOT_TOKEN || !env.LEAD_TELEGRAM_CHAT_ID) return notificationSkipped("telegram");
+
+  const body: Record<string, string | number | boolean> = {
+    chat_id: env.LEAD_TELEGRAM_CHAT_ID,
+    text: telegramLeadMessage(id, createdAt, payload, routing, requestUrl),
+    parse_mode: "HTML",
+    disable_web_page_preview: true
+  };
+
+  const threadId = Number(env.LEAD_TELEGRAM_MESSAGE_THREAD_ID || "");
+  if (Number.isInteger(threadId) && threadId > 0) {
+    body.message_thread_id = threadId;
+  }
+
+  try {
+    const response = await fetch(`https://api.telegram.org/bot${env.LEAD_TELEGRAM_BOT_TOKEN}/sendMessage`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify(body)
+    });
+
+    const result = (await response.json().catch(() => ({}))) as TelegramResult;
+    if (!response.ok || !result.ok) {
+      console.error("Lead Telegram notification failed", response.status, result.description || "");
+      return notificationFailed("telegram", response.status, result.description || "Telegram API returned an error.");
+    }
+
+    return notificationDelivered("telegram", response.status);
+  } catch (error) {
+    console.error("Lead Telegram notification failed", error);
+    return notificationFailed("telegram", null, error);
+  }
+}
+
+function notificationSkipped(channel: NotificationChannel): NotificationDelivery {
+  return {
+    channel,
+    status: "skipped",
+    status_code: null,
+    error_message: null
+  };
+}
+
+function notificationDelivered(channel: NotificationChannel, statusCode: number): NotificationDelivery {
+  return {
+    channel,
+    status: "delivered",
+    status_code: statusCode,
+    error_message: null
+  };
+}
+
+function notificationFailed(channel: NotificationChannel, statusCode: number | null, error: unknown): NotificationDelivery {
+  return {
+    channel,
+    status: "failed",
+    status_code: statusCode,
+    error_message: compact(error instanceof Error ? error.message : String(error ?? "Notification delivery failed."), MAX_NOTIFICATION_ERROR_LENGTH)
+  };
+}
+
+async function recordNotificationEvents(
+  env: Env,
+  leadId: string,
+  eventType: string,
+  deliveries: NotificationDelivery[]
+): Promise<void> {
+  const attemptedDeliveries = deliveries.filter((delivery) => delivery.status !== "skipped");
+  if (!attemptedDeliveries.length) return;
+
+  try {
+    await env.DB.batch(
+      attemptedDeliveries.map((delivery) =>
+        env.DB.prepare(
+          `INSERT INTO project_request_notification_events (
+            id,
+            lead_id,
+            event_type,
+            channel,
+            status,
+            status_code,
+            error_message,
+            created_at
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+        ).bind(
+          crypto.randomUUID(),
+          leadId,
+          eventType,
+          delivery.channel,
+          delivery.status,
+          delivery.status_code,
+          delivery.error_message,
+          new Date().toISOString()
+        )
+      )
+    );
+  } catch (error) {
+    console.error("Failed to record lead notification delivery events", error);
+  }
+}
+
+async function parseRequest(request: Request): Promise<ProjectRequest & { honeypot: string; turnstile_token: string }> {
   const form = await request.formData();
+  const sourcePath = clean(form.get("source_path"));
+  const landingPage = clean(form.get("landing_page"));
+  const landingOffer = clean(form.get("landing_offer"));
+  const referrer = clean(form.get("referrer"));
+  const partnerRef = clean(form.get("partner_ref"));
+  const utmSource = clean(form.get("utm_source"));
+  const utmMedium = clean(form.get("utm_medium"));
+  const basePayload = {
+    source_path: sourcePath,
+    landing_page: landingPage,
+    landing_offer: landingOffer,
+    referrer,
+    partner_ref: partnerRef,
+    utm_source: utmSource,
+    utm_medium: utmMedium,
+    lead_channel: clean(form.get("lead_channel"))
+  };
+  const normalizedLeadChannel = leadChannel(basePayload);
+  const formVariant = inferFormVariant(clean(form.get("form_variant")), {
+    source_path: sourcePath,
+    landing_page: landingPage,
+    landing_offer: landingOffer,
+    lead_channel: normalizedLeadChannel
+  });
 
   return {
     name: clean(form.get("name")),
@@ -62,17 +579,23 @@ async function parseRequest(request: Request): Promise<ProjectRequest & { honeyp
     budget: clean(form.get("budget")),
     timeline: clean(form.get("timeline")),
     contact_details: clean(form.get("contact_details")),
-    source_path: clean(form.get("source_path")),
-    landing_page: clean(form.get("landing_page")),
-    landing_offer: clean(form.get("landing_offer")),
-    utm_source: clean(form.get("utm_source")),
-    utm_medium: clean(form.get("utm_medium")),
+    source_path: sourcePath,
+    landing_page: landingPage,
+    landing_offer: landingOffer,
+    form_variant: formVariant,
+    locale: clean(form.get("locale")) || localeFromPath(sourcePath || landingPage),
+    referrer,
+    lead_channel: normalizedLeadChannel,
+    partner_ref: partnerRef,
+    utm_source: utmSource,
+    utm_medium: utmMedium,
     utm_campaign: clean(form.get("utm_campaign")),
     utm_term: clean(form.get("utm_term")),
     utm_content: clean(form.get("utm_content")),
     user_agent: request.headers.get("user-agent") ?? "",
     ip_address: request.headers.get("cf-connecting-ip") ?? "",
-    honeypot: clean(form.get("company_website"))
+    honeypot: clean(form.get("company_website")),
+    turnstile_token: clean(form.get("cf-turnstile-response"))
   };
 }
 
@@ -84,7 +607,12 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const payload = await parseRequest(request);
 
   if (payload.honeypot) {
-    return Response.redirect(new URL("/start-project/thank-you/", request.url), 303);
+    return Response.redirect(thankYouUrl(payload, request.url), 303);
+  }
+
+  const turnstile = await verifyTurnstile(env, payload.turnstile_token, payload.ip_address);
+  if (!turnstile.ok) {
+    return htmlResponse(turnstile.message || "Spam protection check failed. Please try again.");
   }
 
   if (!payload.name || !payload.email || !payload.business_problem || !payload.desired_result) {
@@ -97,6 +625,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
   const id = crypto.randomUUID();
   const createdAt = new Date().toISOString();
+  const routing = leadRouting(payload);
 
   try {
     await env.DB.prepare(
@@ -117,6 +646,11 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
         source_path,
         landing_page,
         landing_offer,
+        form_variant,
+        locale,
+        referrer,
+        lead_channel,
+        partner_ref,
         utm_source,
         utm_medium,
         utm_campaign,
@@ -124,9 +658,13 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
         utm_content,
         user_agent,
         ip_address,
+        lead_score,
+        lead_priority,
+        routing_bucket,
+        next_action,
         status,
         created_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'new', ?)`
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'new', ?)`
     )
       .bind(
         id,
@@ -145,6 +683,11 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
         payload.source_path,
         payload.landing_page,
         payload.landing_offer,
+        payload.form_variant,
+        payload.locale,
+        payload.referrer,
+        payload.lead_channel,
+        payload.partner_ref,
         payload.utm_source,
         payload.utm_medium,
         payload.utm_campaign,
@@ -152,6 +695,10 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
         payload.utm_content,
         payload.user_agent,
         payload.ip_address,
+        routing.lead_score,
+        routing.lead_priority,
+        routing.routing_bucket,
+        routing.next_action,
         createdAt
       )
       .run();
@@ -160,7 +707,9 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     return htmlResponse("Project request could not be stored. Please try again or contact AlfaRank directly.", 500);
   }
 
-  return Response.redirect(new URL("/start-project/thank-you/", request.url), 303);
+  await notifyLead(env, id, createdAt, payload, routing, request.url);
+
+  return Response.redirect(thankYouUrl(payload, request.url, id), 303);
 };
 
 export const onRequestGet: PagesFunction = async () => {

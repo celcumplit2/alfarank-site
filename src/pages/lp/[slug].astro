@@ -1,6 +1,10 @@
 ---
 import PageHero from "@/components/PageHero.astro";
+import ContactChannels from "@/components/ContactChannels.astro";
+import LeadAssurance from "@/components/LeadAssurance.astro";
+import LeadProofPatterns from "@/components/LeadProofPatterns.astro";
 import SystemIcon from "@/components/SystemIcon.astro";
+import TurnstileField from "@/components/TurnstileField.astro";
 import Layout from "@/layouts/Layout.astro";
 import { landingOfferHeroVisual, landingOffers } from "@/data/landing";
 import { localizePath, translateCopy } from "@/data/i18n";
@@ -29,6 +33,8 @@ const [beforeSignal, afterSignal, measurableSignal] = offer.proofSignals;
 const offerLowerTitle = offer.title.toLowerCase();
 const offerOutput = offer.desiredOutput.toLowerCase();
 const primaryOutcome = offer.outcomes[0]?.toLowerCase() ?? offerOutput;
+const landingFullVariant = `lp:${offer.slug}`;
+const landingQuickVariant = `lp:${offer.slug}:quick`;
 const sendingRequestLabel = translateCopy(locale, "Sending request...");
 const sendingCampaignStatus = translateCopy(locale, "Sending request with campaign context...");
 const landingHeadings = {
@@ -347,77 +353,149 @@ const wordpressLayers = [
     </div>
   </section>
 
-  <section class="section split-panel landing-conversion" id="landing-intake">
-    <form
-      class="glass-panel"
-      method="post"
-      action="/api/start-project"
-      data-track-source
-      data-conversion-form={`lp:${offer.slug}`}
-      data-sending-label={sendingRequestLabel}
-      data-sending-status={sendingCampaignStatus}
-    >
-      <input type="hidden" name="source_path" value={sourcePath} />
-      <input type="hidden" name="landing_page" value={sourcePath} />
-      <input type="hidden" name="landing_offer" value={offer.slug} />
-      <input type="hidden" name="project_type" value={offer.formProjectType} />
-      <input type="hidden" name="desired_output" value={offer.desiredOutput} />
-      <input type="hidden" name="integrations" value={offer.integrations} />
-      <input type="hidden" name="utm_source" />
-      <input type="hidden" name="utm_medium" />
-      <input type="hidden" name="utm_campaign" />
-      <input type="hidden" name="utm_term" />
-      <input type="hidden" name="utm_content" />
-      <div class="spam-field" aria-hidden="true">
-        <label for={`company_website_${offer.slug}`}>{translateCopy(locale, "Company website")}</label>
-        <input id={`company_website_${offer.slug}`} name="company_website" tabindex="-1" autocomplete="off" />
-      </div>
+  <LeadProofPatterns locale={locale} ctaHref="#landing-intake" />
 
-      <p class="eyebrow">{translateCopy(locale, "Project intake")}</p>
-      <h2>{translateCopy(locale, "Ask for this system")}</h2>
-      <div class="form-grid landing-form-grid">
-        <div class="field">
-          <label for={`name_${offer.slug}`}>{translateCopy(locale, "Name")}</label>
-          <input id={`name_${offer.slug}`} name="name" autocomplete="name" required />
+  <section class="section split-panel landing-conversion" id="landing-intake">
+    <div class="landing-conversion__forms">
+      <article class="glass-panel landing-quick-intake quick-intake">
+        <div class="quick-intake__copy">
+          <p class="eyebrow">{translateCopy(locale, "Quick project signal")}</p>
+          <h2>{translateCopy(locale, "Send a short request first.")}</h2>
+          <p>{translateCopy(locale, "If the full brief feels early, send the pressure point and contact. The first reply can turn it into scope.")}</p>
         </div>
-        <div class="field">
-          <label for={`email_${offer.slug}`}>{translateCopy(locale, "Email")}</label>
-          <input id={`email_${offer.slug}`} name="email" type="email" autocomplete="email" required />
+        <form
+          class="quick-intake__form"
+          method="post"
+          action="/api/start-project"
+          data-track-source
+          data-conversion-form={landingQuickVariant}
+          data-sending-label={sendingRequestLabel}
+          data-sending-status={sendingCampaignStatus}
+        >
+          <input type="hidden" name="source_path" value={sourcePath} />
+          <input type="hidden" name="landing_page" value={sourcePath} />
+          <input type="hidden" name="landing_offer" value={offer.slug} />
+          <input type="hidden" name="form_variant" value={landingQuickVariant} />
+          <input type="hidden" name="locale" value={locale} />
+          <input type="hidden" name="referrer" />
+          <input type="hidden" name="lead_channel" />
+          <input type="hidden" name="partner_ref" />
+          <input type="hidden" name="project_type" value={offer.formProjectType} />
+          <input type="hidden" name="desired_output" value={offer.desiredOutput} />
+          <input type="hidden" name="desired_result" value={offer.trafficReady.firstScope} />
+          <input type="hidden" name="integrations" value={offer.integrations} />
+          <input type="hidden" name="utm_source" />
+          <input type="hidden" name="utm_medium" />
+          <input type="hidden" name="utm_campaign" />
+          <input type="hidden" name="utm_term" />
+          <input type="hidden" name="utm_content" />
+          <div class="spam-field" aria-hidden="true">
+            <label for={`company_website_quick_${offer.slug}`}>{translateCopy(locale, "Company website")}</label>
+            <input id={`company_website_quick_${offer.slug}`} name="company_website" tabindex="-1" autocomplete="off" />
+          </div>
+          <div class="quick-intake__fields">
+            <div class="field">
+              <label for={`quick_name_${offer.slug}`}>{translateCopy(locale, "Name")}</label>
+              <input id={`quick_name_${offer.slug}`} name="name" autocomplete="name" required />
+            </div>
+            <div class="field">
+              <label for={`quick_email_${offer.slug}`}>{translateCopy(locale, "Email")}</label>
+              <input id={`quick_email_${offer.slug}`} name="email" type="email" autocomplete="email" required />
+            </div>
+            <div class="field quick-intake__problem">
+              <label for={`quick_problem_${offer.slug}`}>{translateCopy(locale, "What should become faster or clearer?")}</label>
+              <input id={`quick_problem_${offer.slug}`} name="business_problem" required />
+            </div>
+          </div>
+          <TurnstileField />
+          <div class="quick-intake__actions">
+            <button class="button primary" type="submit">{translateCopy(locale, "Send Quick Request")}</button>
+            <a class="button secondary" href="#landing-full-brief">{translateCopy(locale, "Open full brief")}</a>
+          </div>
+          <ContactChannels locale={locale} />
+          <p class="form-status" data-form-status aria-live="polite"></p>
+        </form>
+      </article>
+
+      <form
+        id="landing-full-brief"
+        class="glass-panel"
+        method="post"
+        action="/api/start-project"
+        data-track-source
+        data-conversion-form={landingFullVariant}
+        data-sending-label={sendingRequestLabel}
+        data-sending-status={sendingCampaignStatus}
+      >
+        <input type="hidden" name="source_path" value={sourcePath} />
+        <input type="hidden" name="landing_page" value={sourcePath} />
+        <input type="hidden" name="landing_offer" value={offer.slug} />
+        <input type="hidden" name="form_variant" value={landingFullVariant} />
+        <input type="hidden" name="locale" value={locale} />
+        <input type="hidden" name="referrer" />
+        <input type="hidden" name="lead_channel" />
+        <input type="hidden" name="partner_ref" />
+        <input type="hidden" name="project_type" value={offer.formProjectType} />
+        <input type="hidden" name="desired_output" value={offer.desiredOutput} />
+        <input type="hidden" name="integrations" value={offer.integrations} />
+        <input type="hidden" name="utm_source" />
+        <input type="hidden" name="utm_medium" />
+        <input type="hidden" name="utm_campaign" />
+        <input type="hidden" name="utm_term" />
+        <input type="hidden" name="utm_content" />
+        <div class="spam-field" aria-hidden="true">
+          <label for={`company_website_${offer.slug}`}>{translateCopy(locale, "Company website")}</label>
+          <input id={`company_website_${offer.slug}`} name="company_website" tabindex="-1" autocomplete="off" />
         </div>
-        <div class="field full">
-          <label for={`company_${offer.slug}`}>{translateCopy(locale, "Company optional")}</label>
-          <input id={`company_${offer.slug}`} name="company" autocomplete="organization" />
+
+        <p class="eyebrow">{translateCopy(locale, "Project intake")}</p>
+        <h2>{translateCopy(locale, "Ask for this system")}</h2>
+        <div class="form-grid landing-form-grid">
+          <div class="field">
+            <label for={`name_${offer.slug}`}>{translateCopy(locale, "Name")}</label>
+            <input id={`name_${offer.slug}`} name="name" autocomplete="name" required />
+          </div>
+          <div class="field">
+            <label for={`email_${offer.slug}`}>{translateCopy(locale, "Email")}</label>
+            <input id={`email_${offer.slug}`} name="email" type="email" autocomplete="email" required />
+          </div>
+          <div class="field full">
+            <label for={`company_${offer.slug}`}>{translateCopy(locale, "Company optional")}</label>
+            <input id={`company_${offer.slug}`} name="company" autocomplete="organization" />
+          </div>
+          <div class="field full">
+            <label for={`current_system_${offer.slug}`}>{translateCopy(locale, "Current website, system, or tools optional")}</label>
+            <input id={`current_system_${offer.slug}`} name="current_system" placeholder={translateCopy(locale, "URL, CRM, CMS, spreadsheet, workflow, or short context")} />
+          </div>
+          <div class="field full">
+            <label for={`problem_${offer.slug}`}>{translateCopy(locale, "What is happening now?")}</label>
+            <textarea id={`problem_${offer.slug}`} name="business_problem" required></textarea>
+          </div>
+          <div class="field full">
+            <label for={`result_${offer.slug}`}>{translateCopy(locale, "What should the system make visible or faster?")}</label>
+            <textarea id={`result_${offer.slug}`} name="desired_result" required></textarea>
+          </div>
+          <div class="field full">
+            <label for={`timeline_${offer.slug}`}>{translateCopy(locale, "Timeline optional")}</label>
+            <input id={`timeline_${offer.slug}`} name="timeline" />
+          </div>
+          <div class="field full">
+            <label for={`contact_details_${offer.slug}`}>{translateCopy(locale, "Contact details optional")}</label>
+            <textarea id={`contact_details_${offer.slug}`} name="contact_details" placeholder={translateCopy(locale, "Preferred contact channel, time zone, or extra decision context")}></textarea>
+          </div>
         </div>
-        <div class="field full">
-          <label for={`current_system_${offer.slug}`}>{translateCopy(locale, "Current website, system, or tools optional")}</label>
-          <input id={`current_system_${offer.slug}`} name="current_system" placeholder={translateCopy(locale, "URL, CRM, CMS, spreadsheet, workflow, or short context")} />
+        <TurnstileField />
+        <div class="section-actions">
+          <button class="button primary" type="submit">{translateCopy(locale, "Send Request")}</button>
         </div>
-        <div class="field full">
-          <label for={`problem_${offer.slug}`}>{translateCopy(locale, "What is happening now?")}</label>
-          <textarea id={`problem_${offer.slug}`} name="business_problem" required></textarea>
-        </div>
-        <div class="field full">
-          <label for={`result_${offer.slug}`}>{translateCopy(locale, "What should the system make visible or faster?")}</label>
-          <textarea id={`result_${offer.slug}`} name="desired_result" required></textarea>
-        </div>
-        <div class="field full">
-          <label for={`timeline_${offer.slug}`}>{translateCopy(locale, "Timeline optional")}</label>
-          <input id={`timeline_${offer.slug}`} name="timeline" />
-        </div>
-        <div class="field full">
-          <label for={`contact_details_${offer.slug}`}>{translateCopy(locale, "Contact details optional")}</label>
-          <textarea id={`contact_details_${offer.slug}`} name="contact_details" placeholder={translateCopy(locale, "Preferred contact channel, time zone, or extra decision context")}></textarea>
-        </div>
-      </div>
-      <div class="section-actions">
-        <button class="button primary" type="submit">{translateCopy(locale, "Send Request")}</button>
-      </div>
-      <p class="form-status" data-form-status aria-live="polite"></p>
-    </form>
+        <p class="form-status" data-form-status aria-live="polite"></p>
+      </form>
+    </div>
 
     <aside class="glass-panel landing-faq">
       <p class="eyebrow">{translateCopy(locale, "Buyer questions")}</p>
       <h2>{translateCopy(locale, "Before a lead asks")}</h2>
+      <LeadAssurance locale={locale} variant="embedded" />
       {offer.faq.map((entry) => (
         <details>
           <summary>{entry.question}</summary>
@@ -433,34 +511,37 @@ const wordpressLayers = [
       const aliases = {
         landing_page: ["landing_page", "lp"],
         landing_offer: ["landing_offer", "offer"],
+        partner_ref: ["partner_ref", "partner", "ref", "affiliate", "affiliate_id"],
         utm_source: ["utm_source"],
         utm_medium: ["utm_medium"],
         utm_campaign: ["utm_campaign"],
         utm_term: ["utm_term"],
         utm_content: ["utm_content"]
       };
+      const firstParam = (keys) => keys.map((key) => params.get(key)).find(Boolean) || "";
+      const inferLeadChannel = () => {
+        if (firstParam(aliases.partner_ref) || params.get("offer") === "partner-program") return "partner";
+        const medium = (params.get("utm_medium") || "").toLowerCase();
+        if (["cpc", "ppc", "paid", "paid-search", "paid-social", "display"].includes(medium)) return "paid";
+        if (params.get("utm_source")) return "campaign";
+        if (document.referrer) return "referral";
+        return "direct";
+      };
 
       document.querySelectorAll("form[data-track-source]").forEach((form) => {
         const source = form.querySelector("[name='source_path']");
         if (source) source.value = `${window.location.pathname}${window.location.search}`;
+        const referrer = form.querySelector("[name='referrer']");
+        if (referrer) referrer.value = document.referrer || "";
+        const leadChannel = form.querySelector("[name='lead_channel']");
+        if (leadChannel) leadChannel.value = inferLeadChannel();
 
         Object.entries(aliases).forEach(([name, keys]) => {
           const input = form.querySelector(`[name='${name}']`);
           if (!input) return;
-          const value = keys.map((key) => params.get(key)).find(Boolean);
+          const value = firstParam(keys);
           if (value) input.value = value;
           if (name === "landing_page" && !input.value) input.value = window.location.pathname;
-        });
-
-        form.addEventListener("submit", () => {
-          const button = form.querySelector("button[type='submit']");
-          const status = form.querySelector("[data-form-status]");
-          if (button) {
-            button.dataset.defaultLabel = button.textContent || "";
-            button.textContent = form.dataset.sendingLabel || "Sending request...";
-            button.disabled = true;
-          }
-          if (status) status.textContent = form.dataset.sendingStatus || "Sending request with campaign context...";
         });
       });
     })();

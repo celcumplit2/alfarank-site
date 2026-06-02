@@ -1,0 +1,107 @@
+{
+  "name": "alfa",
+  "targetRoot": "D:/ALFA",
+  "baseUrl": "http://127.0.0.1:4321",
+  "figma": {
+    "fileKey": "",
+    "sourceMode": "local-cache",
+    "allowedSourceModes": ["mcp", "local-fig", "local-cache"],
+    "localProjectDir": "D:/ALFA/docs/figma-parity/local-fig",
+    "localFigFile": "D:/ALFA/docs/figma-parity/alfa.fig",
+    "jsonDir": "docs/figma-parity/templates/json",
+    "assetDir": "docs/figma-parity/templates/assets",
+    "imageFillDir": "public/images/figma-local",
+    "extractedImageFillDir": "public/images/figma-extracted",
+    "useReferenceImageCropsForTransformed": true
+  },
+  "library": {
+    "projectMap": "docs/figma-parity/fido/alfa.components.json",
+    "sharedLibrary": "docs/figma-parity/fido/shared.components.json",
+    "minInstancesForCandidate": 2
+  },
+  "checks": {
+    "typecheck": "npm run build",
+    "domAudit": "",
+    "interactionAudit": "",
+    "pixelAudit": ""
+  },
+  "routes": [
+    {
+      "name": "home",
+      "route": "/",
+      "desktopSlug": "home-desktop-light",
+      "reference": "docs/figma-parity/templates/assets/home-desktop-light.png",
+      "implementation": "native-dom"
+    },
+    {
+      "name": "capabilities",
+      "route": "/capabilities",
+      "desktopSlug": "capabilities-desktop-light",
+      "reference": "docs/figma-parity/templates/assets/capabilities-desktop-light.png",
+      "implementation": "native-dom"
+    },
+    {
+      "name": "industries",
+      "route": "/industries",
+      "desktopSlug": "industries-desktop-light",
+      "reference": "docs/figma-parity/templates/assets/industries-desktop-light.png",
+      "implementation": "native-dom"
+    },
+    {
+      "name": "solutions",
+      "route": "/solutions",
+      "desktopSlug": "solutions-desktop-light",
+      "reference": "docs/figma-parity/templates/assets/solutions-desktop-light.png",
+      "implementation": "native-dom"
+    },
+    {
+      "name": "systems",
+      "route": "/systems",
+      "desktopSlug": "systems-desktop-light",
+      "reference": "docs/figma-parity/templates/assets/systems-desktop-light.png",
+      "implementation": "native-dom"
+    },
+    {
+      "name": "projects",
+      "route": "/projects",
+      "desktopSlug": "projects-desktop-light",
+      "reference": "docs/figma-parity/templates/assets/projects-desktop-light.png",
+      "implementation": "native-dom"
+    },
+    {
+      "name": "technologies",
+      "route": "/technologies",
+      "desktopSlug": "technologies-desktop-light",
+      "reference": "docs/figma-parity/templates/assets/technologies-desktop-light.png",
+      "implementation": "native-dom"
+    },
+    {
+      "name": "start-project",
+      "route": "/start-project",
+      "desktopSlug": "start-project-desktop-light",
+      "reference": "docs/figma-parity/templates/assets/start-project-desktop-light.png",
+      "implementation": "native-dom"
+    },
+    {
+      "name": "about",
+      "route": "/about",
+      "desktopSlug": "about-desktop-light",
+      "reference": "docs/figma-parity/templates/assets/about-desktop-light.png",
+      "implementation": "native-dom"
+    }
+  ],
+  "rules": {
+    "forbidRasterWithoutImageFill": true,
+    "requireSelectableText": true,
+    "requireHoverFocusStates": true,
+    "routePixelChangedPercentTarget": 1,
+    "blockPixelChangedPercentTarget": 0.5
+  },
+  "fidoDiff": {
+    "outputDir": "artifacts/fido-diff",
+    "limit": 90,
+    "thresholdDelta8": 15,
+    "ignoreNames": ["FAQ", "Footer", "Navigation bar", "Navigation bar - Desktop"],
+    "ignoreKinds": []
+  }
+}

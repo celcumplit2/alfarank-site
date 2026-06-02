@@ -110,6 +110,7 @@ export const staticBaseRoutes = [
   "/industries/",
   "/about/",
   "/start-project/",
+  "/partner-program/",
   "/start-project/thank-you/"
 ];
 
@@ -133,7 +134,7 @@ const ruCopy: Dictionary = {
   "AlfaRank designs and launches practical digital systems for companies that need automation, content infrastructure, data workflows, web platforms, and business integrations.":
     "AlfaRank создает практичные цифровые системы для компаний, которым нужны автоматизация, контентная инфраструктура, процессы данных, веб-платформы и бизнес-интеграции.",
   "Digital systems connected, automated, built to perform.": "Цифровые системы, соединенные, автоматизированные и готовые работать.",
-  "Digital systems that connect, automate, and perform.": "Цифровые системы, которые соединяют и автоматизируют.",
+  "Digital systems that connect, automate, and perform.": "Цифровые системы соединяют и автоматизируют.",
   "AlfaRank builds the infrastructure behind modern business workflows: web platforms, AI automation, SEO/content systems, data tools, e-commerce operations, and integrations.":
     "AlfaRank строит инфраструктуру для современных бизнес-процессов: веб-платформы, AI-автоматизацию, SEO и контентные системы, инструменты данных, e-commerce-операции и интеграции.",
   "The company works across connected technical directions. Each direction can be delivered as a standalone system or combined into a broader business platform.":
@@ -568,6 +569,66 @@ const ruCopy: Dictionary = {
   "Business problem to working system.": "От бизнес-проблемы к рабочей системе.",
   "Project intake": "Вводные по проекту",
   "Good project inputs": "Хорошие вводные по проекту",
+  "Quick project signal": "Быстрый сигнал по проекту",
+  "Send a short request first.": "Сначала отправьте короткую заявку.",
+  "If the full brief feels early, send the pressure point and contact. The first reply can turn it into scope.":
+    "Если полный бриф пока рано заполнять, отправьте точку давления и контакт. Первый ответ превратит это в объем работ.",
+  "Direct channels": "Прямые каналы",
+  "Use a direct channel if the request is urgent.": "Если запрос срочный, используйте прямой канал.",
+  "Telegram": "Telegram",
+  "WhatsApp": "WhatsApp",
+  "What should become faster or clearer?": "Что должно стать быстрее или понятнее?",
+  "Send Quick Request": "Отправить короткую заявку",
+  "Open full brief": "Открыть полный бриф",
+  "After the request": "После заявки",
+  "What happens next": "Что будет дальше",
+  "Response target": "Цель по ответу",
+  "1 business day": "1 рабочий день",
+  "The first reply confirms the pressure point, missing context, and the smallest useful next step.":
+    "Первый ответ подтвердит точку давления, недостающий контекст и самый полезный следующий шаг.",
+  "Routed request": "Маршрутизированная заявка",
+  "Score, route, next action": "Оценка, маршрут, действие",
+  "Source, offer, priority, and next action stay attached to the lead.":
+    "Источник, оффер, приоритет и следующее действие остаются привязаны к лиду.",
+  "Clear first scope": "Понятный первый объем",
+  "Implementation boundary": "Граница реализации",
+  "The first step is shaped as a useful build boundary, not a vague discovery call.":
+    "Первый шаг оформляется как полезная граница сборки, а не как размытый созвон.",
+  "Human review": "Проверка человеком",
+  "No pressure loop": "Без давления",
+  "If the request is early, the answer asks for missing context instead of forcing a sales call.":
+    "Если запрос еще сырой, ответ запросит недостающий контекст вместо навязанного продажного звонка.",
+  "Proof assets": "Доказательные активы",
+  "Example first-stage proof": "Примеры доказательств первого этапа",
+  "A lead converts more easily when the first build has a visible proof target. These patterns show what can be validated before a larger system is expanded.":
+    "Лиду проще конвертироваться, когда у первой сборки есть видимая цель доказательства. Эти паттерны показывают, что можно проверить до расширения системы.",
+  "Lead intake system": "Система приема лидов",
+  "Requests arrive from forms, ads, referrals, email, and messengers with no single owner or next action.":
+    "Заявки приходят из форм, рекламы, рекомендаций, email и мессенджеров без единого владельца и следующего действия.",
+  "One tracked intake path with source context, priority, owner, status, and next action.":
+    "Один отслеживаемый путь приема с источником, приоритетом, владельцем, статусом и следующим действием.",
+  "Stored lead source, response state, routing bucket, and follow-up queue.":
+    "Сохраненный источник лида, состояние ответа, маршрут обработки и очередь follow-up.",
+  "Content operation": "Контентная операция",
+  "Topics, briefs, drafts, approvals, publishing, and SEO checks live in separate manual steps.":
+    "Темы, брифы, черновики, согласования, публикация и SEO-проверки живут отдельными ручными шагами.",
+  "A controlled publishing workflow with templates, review states, CMS handoff, and reporting points.":
+    "Контролируемый publishing-процесс с шаблонами, статусами проверки, передачей в CMS и точками отчетности.",
+  "Visible queue, approval status, publishing output, indexation or performance signals.":
+    "Видимая очередь, статус согласования, опубликованный результат, сигналы индексации или эффективности.",
+  "Data and commerce control": "Контроль данных и commerce",
+  "Catalog, prices, stock, competitors, or operational data are checked by hand and become stale quickly.":
+    "Каталог, цены, остатки, конкуренты или операционные данные проверяются вручную и быстро устаревают.",
+  "A normalized data layer with checks, alerts, dashboard output, and an action list.":
+    "Нормализованный слой данных с проверками, алертами, dashboard-выводом и списком действий.",
+  "Freshness checks, missing-field reports, alerts, data coverage, and completed actions.":
+    "Проверки свежести, отчеты по пропущенным полям, алерты, покрытие данных и закрытые действия.",
+  "Pressure": "Давление",
+  "First useful build": "Первая полезная сборка",
+  "Proof signal": "Сигнал доказательства",
+  "The proof target is selected from the submitted workflow, not forced into a generic service package.":
+    "Цель доказательства выбирается из отправленного процесса, а не втискивается в общий пакет услуг.",
+  "Scope a proof path": "Описать путь доказательства",
   "Send Project Request": "Отправить заявку",
   "Project type": "Тип проекта",
   "Business problem": "Бизнес-проблема",
@@ -580,6 +641,27 @@ const ruCopy: Dictionary = {
   "Budget optional": "Бюджет, опционально",
   "Timeline optional": "Сроки, опционально",
   "Decision hub": "Центр выбора",
+  "From business problem": "От бизнес-проблемы",
+  "To an operational system": "К операционной системе",
+  "Choose the pressure point. Follow the route to solutions and system.":
+    "Выберите точку давления. Следуйте маршруту к решениям и системе.",
+  "Pressure point": "Точка давления",
+  "A business need becomes a working system with measurable output.":
+    "Бизнес-потребность превращается в рабочую систему с измеримым результатом.",
+  "Orbit automation": "Автоматизация",
+  "Orbit web platform": "Веб-платформа",
+  "Orbit content SEO": "Контент / SEO",
+  "Orbit data": "Данные",
+  "Orbit ecommerce": "E-commerce",
+  "Orbit integrations": "Интеграции",
+  "Clear routes": "Ясные маршруты",
+  "From problem to solution": "От проблемы к решению",
+  "Proven solutions": "Проверенные решения",
+  "Ready modules and practices": "Готовые модули и практики",
+  "Measurable result": "Измеримый результат",
+  "Transparency and control": "Прозрачность и контроль",
+  "Secure and scalable": "Безопасность и масштабируемость",
+  "Reliable platform for growth": "Надежная платформа для роста",
   "What system do you need?": "Какая система нужна?",
   "Start from the operational need. Each route points to the most relevant capability, solution, or system profile so the home page works like a map of the company.":
     "Начинайте с операционной потребности. Каждый маршрут ведет к релевантной возможности, решению или профилю системы, чтобы главная работала как карта компании.",
@@ -615,7 +697,7 @@ const ruCopy: Dictionary = {
   "Capture. Process. Route. Deliver.": "Захватить. Обработать. Направить. Доставить.",
   "Scope a route": "Описать маршрут",
   "Route engine": "Маршрутный движок",
-  "Problem to system": "Проблема -> система",
+  "Problem to system": "Проблема в систему",
   "Inputs are converted into scoped implementation paths, then into measurable business outputs.":
     "Вводные превращаются в понятные пути реализации, а затем в измеримые бизнес-результаты.",
   "View solution routes": "Смотреть маршруты решений",
@@ -1197,6 +1279,66 @@ const roCopy: Dictionary = {
   "Business problem to working system.": "De la problema de business la sistem functional.",
   "Project intake": "Introducere proiect",
   "Good project inputs": "Inputuri bune pentru proiect",
+  "Quick project signal": "Semnal rapid de proiect",
+  "Send a short request first.": "Trimite mai intai o solicitare scurta.",
+  "If the full brief feels early, send the pressure point and contact. The first reply can turn it into scope.":
+    "Daca brief-ul complet este prea devreme, trimite punctul de presiune si contactul. Primul raspuns il poate transforma in scope.",
+  "Direct channels": "Canale directe",
+  "Use a direct channel if the request is urgent.": "Daca solicitarea este urgenta, foloseste un canal direct.",
+  "Telegram": "Telegram",
+  "WhatsApp": "WhatsApp",
+  "What should become faster or clearer?": "Ce trebuie sa devina mai rapid sau mai clar?",
+  "Send Quick Request": "Trimite solicitare rapida",
+  "Open full brief": "Deschide brief-ul complet",
+  "After the request": "Dupa solicitare",
+  "What happens next": "Ce urmeaza",
+  "Response target": "Tinta de raspuns",
+  "1 business day": "1 zi lucratoare",
+  "The first reply confirms the pressure point, missing context, and the smallest useful next step.":
+    "Primul raspuns confirma punctul de presiune, contextul lipsa si cel mai util pas urmator.",
+  "Routed request": "Cerere rutata",
+  "Score, route, next action": "Scor, ruta, actiune",
+  "Source, offer, priority, and next action stay attached to the lead.":
+    "Sursa, oferta, prioritatea si urmatoarea actiune raman atasate leadului.",
+  "Clear first scope": "Primul scope clar",
+  "Implementation boundary": "Limita de implementare",
+  "The first step is shaped as a useful build boundary, not a vague discovery call.":
+    "Primul pas este definit ca o limita utila de build, nu ca un apel vag de discovery.",
+  "Human review": "Revizie umana",
+  "No pressure loop": "Fara presiune",
+  "If the request is early, the answer asks for missing context instead of forcing a sales call.":
+    "Daca solicitarea este timpurie, raspunsul cere contextul lipsa in loc sa forteze un apel de vanzare.",
+  "Proof assets": "Active de dovada",
+  "Example first-stage proof": "Exemple de dovada pentru primul stadiu",
+  "A lead converts more easily when the first build has a visible proof target. These patterns show what can be validated before a larger system is expanded.":
+    "Un lead converteste mai usor cand prima constructie are o tinta vizibila de dovada. Aceste modele arata ce poate fi validat inainte ca sistemul sa fie extins.",
+  "Lead intake system": "Sistem de intake pentru leaduri",
+  "Requests arrive from forms, ads, referrals, email, and messengers with no single owner or next action.":
+    "Solicitarile vin din formulare, reclame, recomandari, email si mesagerie fara un singur responsabil sau urmatoarea actiune clara.",
+  "One tracked intake path with source context, priority, owner, status, and next action.":
+    "Un singur traseu de intake urmarit, cu sursa, prioritate, responsabil, status si urmatoarea actiune.",
+  "Stored lead source, response state, routing bucket, and follow-up queue.":
+    "Sursa leadului, starea raspunsului, ruta de procesare si coada de follow-up sunt salvate.",
+  "Content operation": "Operatiune de continut",
+  "Topics, briefs, drafts, approvals, publishing, and SEO checks live in separate manual steps.":
+    "Topicurile, briefurile, drafturile, aprobarile, publicarea si verificarile SEO stau in pasi manuali separati.",
+  "A controlled publishing workflow with templates, review states, CMS handoff, and reporting points.":
+    "Un flux controlat de publicare cu template-uri, stari de review, predare catre CMS si puncte de raportare.",
+  "Visible queue, approval status, publishing output, indexation or performance signals.":
+    "Coada vizibila, status de aprobare, output publicat, semnale de indexare sau performanta.",
+  "Data and commerce control": "Control pentru date si commerce",
+  "Catalog, prices, stock, competitors, or operational data are checked by hand and become stale quickly.":
+    "Catalogul, preturile, stocurile, competitorii sau datele operationale sunt verificate manual si devin rapid invechite.",
+  "A normalized data layer with checks, alerts, dashboard output, and an action list.":
+    "Un strat de date normalizat, cu verificari, alerte, dashboard si lista de actiuni.",
+  "Freshness checks, missing-field reports, alerts, data coverage, and completed actions.":
+    "Verificari de prospetime, rapoarte pentru campuri lipsa, alerte, acoperire de date si actiuni finalizate.",
+  "Pressure": "Presiune",
+  "First useful build": "Prima constructie utila",
+  "Proof signal": "Semnal de dovada",
+  "The proof target is selected from the submitted workflow, not forced into a generic service package.":
+    "Tinta de dovada este aleasa din fluxul trimis, nu fortata intr-un pachet generic de servicii.",
+  "Scope a proof path": "Defineste ruta de dovada",
   "Send Project Request": "Trimite solicitarea",
   "Project type": "Tip proiect",
   "Business problem": "Problema de business",
@@ -1209,6 +1351,27 @@ const roCopy: Dictionary = {
   "Budget optional": "Buget, optional",
   "Timeline optional": "Termen, optional",
   "Decision hub": "Centru de decizie",
+  "From business problem": "De la problema de business",
+  "To an operational system": "La sistem operational",
+  "Choose the pressure point. Follow the route to solutions and system.":
+    "Alege punctul de presiune. Urmeaza ruta catre solutii si sistem.",
+  "Pressure point": "Punct de presiune",
+  "A business need becomes a working system with measurable output.":
+    "Nevoia de business devine un sistem functional cu rezultat masurabil.",
+  "Orbit automation": "Automatizare",
+  "Orbit web platform": "Platforma web",
+  "Orbit content SEO": "Continut / SEO",
+  "Orbit data": "Date",
+  "Orbit ecommerce": "E-commerce",
+  "Orbit integrations": "Integrari",
+  "Clear routes": "Rute clare",
+  "From problem to solution": "De la problema la solutie",
+  "Proven solutions": "Solutii verificate",
+  "Ready modules and practices": "Module si practici pregatite",
+  "Measurable result": "Rezultat masurabil",
+  "Transparency and control": "Transparenta si control",
+  "Secure and scalable": "Sigur si scalabil",
+  "Reliable platform for growth": "Platforma fiabila pentru crestere",
   "What system do you need?": "Ce sistem iti trebuie?",
   "Start from the operational need. Each route points to the most relevant capability, solution, or system profile so the home page works like a map of the company.":
     "Porneste de la nevoia operationala. Fiecare ruta duce catre capabilitatea, solutia sau profilul de sistem relevant, astfel incat pagina principala functioneaza ca o harta a companiei.",
@@ -1244,7 +1407,7 @@ const roCopy: Dictionary = {
   "Capture. Process. Route. Deliver.": "Captureaza. Proceseaza. Ruteaza. Livreaza.",
   "Scope a route": "Defineste ruta",
   "Route engine": "Motor de ruta",
-  "Problem to system": "Problema -> sistem",
+  "Problem to system": "Problema in sistem",
   "Inputs are converted into scoped implementation paths, then into measurable business outputs.":
     "Inputurile sunt convertite in rute de implementare clare, apoi in rezultate de business masurabile.",
   "View solution routes": "Vezi rutele de solutii",
@@ -2142,6 +2305,7 @@ export const getClientTranslations = (locale: Locale): Dictionary => {
 
 export const ui = {
   en: {
+    partnerProgram: "Partner Program",
     primaryNavigation: "Primary navigation",
     mobileNavigation: "Mobile navigation",
     homeAria: "AlfaRank home",
@@ -2166,6 +2330,7 @@ export const ui = {
     exploreCapabilities: "Explore Capabilities"
   },
   ro: {
+    partnerProgram: "Program de parteneri",
     primaryNavigation: "Navigatie principala",
     mobileNavigation: "Navigatie mobila",
     homeAria: "Pagina principala AlfaRank",
@@ -2190,6 +2355,7 @@ export const ui = {
     exploreCapabilities: "Exploreaza capabilitatile"
   },
   ru: {
+    partnerProgram: "Партнерская программа",
     primaryNavigation: "Основная навигация",
     mobileNavigation: "Мобильная навигация",
     homeAria: "Главная AlfaRank",

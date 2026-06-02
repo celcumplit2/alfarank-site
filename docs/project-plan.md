@@ -18,6 +18,7 @@ When a phase is completed, update its status and add a short note.
 - Current branch state at plan creation: `main`, ahead of `origin/main`.
 - Latest documented checkpoint: lead-generation landing page system checkpoint.
 - Local preview target used during the checkpoint: `http://127.0.0.1:4323/`.
+- Active lead-generation task: `docs/lead-generation-readiness.md`.
 
 ## Readiness Baseline - 2026-05-27
 
@@ -93,6 +94,12 @@ Required work:
   buyer problem, why now, system mechanism, modules, proof, related routes,
   CTA, and intake context.
 - Add missing proof/credibility sections where pages are still only descriptive.
+- Add a first-response assurance block near conversion forms. Status:
+  implemented on `/start-project/` and LP intake forms through
+  `LeadAssurance`.
+- Add case-style proof patterns that explain the first useful build and proof
+  signal without claiming fake client results. Status: implemented on
+  `/start-project/` and LP pages through `LeadProofPatterns`.
 - Ensure every CTA points to `/start-project/` with meaningful `offer` and
   `landing_page` parameters.
 - Add stronger internal routes between capability, solution, system, industry,
@@ -136,15 +143,71 @@ Required work:
 - Test every form route from LP, solution, system, industry, and direct intake
   links.
 - Confirm hidden fields capture `source_path`, `landing_page`,
-  `landing_offer`, `offer`, and UTM values.
-- Improve validation, error copy, loading state, and success routing.
-- Add spam protection that does not hurt legitimate leads.
-- Add notification delivery or a reliable export path for new leads.
+  `landing_offer`, `form_variant`, `offer`, `locale`, `lead_channel`,
+  `partner_ref`, and UTM values.
+- Confirm API-derived routing fields are stored: `lead_score`,
+  `lead_priority`, `routing_bucket`, and `next_action`.
+- Confirm lifecycle fields can be updated after submission: `status`,
+  `lead_owner`, `lead_follow_up_note`, and `lead_status_updated_at`. Status:
+  local implementation added through migration `0006`, `/api/lead-status`,
+  `/api/lead-report`, and `npm run qa:lead-flow`; remote migration applied,
+  Pages deploy still pending.
+- Confirm lifecycle status changes leave an audit trail. Status: migration
+  `0007_project_request_status_events.sql`, `/api/lead-status` `status_event`,
+  `/api/lead-report` `status_events`, Lead Desk status events, and smoke
+  checks are implemented locally; remote migration applied, deploy pending.
+- Forward lifecycle status changes to the same operator notification layer used
+  for new leads. Status: `/api/lead-status` now emits optional
+  `project_request.status_updated` webhook/Telegram notifications after the D1
+  status update and event-history insert succeed; production destinations still
+  need to be configured and verified.
+- Track notification delivery attempts so webhook/Telegram failures are visible
+  to operators. Status: migration `0008_project_request_notification_events.sql`,
+  API delivery-event writes, `/api/lead-report` `notification_events`, Lead Desk
+  notification events, and local smoke coverage are implemented; remote
+  migration is applied, deploy verification still pending.
+- Track which public form produced the lead. Status: migration
+  `0009_project_request_form_variant.sql`, hidden `form_variant` fields,
+  `/api/lead-report` breakdown/filter, `/api/lead-export` column/filter,
+  Lead Desk filter, analytics context, and smoke coverage are implemented;
+  remote migration is applied, deploy verification still pending.
+- Improve validation, error copy, loading state, and success routing. Status:
+  shared submit-state handling implemented for every public
+  `form[data-conversion-form]`; duplicate submit protection, `aria-busy`,
+  pending status text, validation status text, and BFCache reset are handled in
+  `src/layouts/Layout.astro`.
+- Add spam protection that does not hurt legitimate leads. Status: optional
+  Cloudflare Turnstile implemented through `PUBLIC_TURNSTILE_SITE_KEY` and
+  `TURNSTILE_SECRET_KEY`; honeypot remains as the always-on baseline.
+- Add notification delivery or a reliable export path for new leads. Status:
+  optional webhook and Telegram delivery are implemented after D1 storage;
+  production destinations still need to be configured and verified.
+- Provide protected CSV export for lead handoff before a CRM is connected.
+  Status: implemented at `/api/lead-export`; production token/deploy still
+  pending.
+- Add a minimal internal lead operations UI before CRM integration. Status:
+  implemented at `/lead-desk/`; it uses `LEAD_REPORT_TOKEN` with bearer
+  requests to `/api/lead-report`, `/api/lead-status`, and `/api/lead-export`.
 - Test against the production Pages Function and remote D1 database.
+- Add a quick cold-lead intake path that keeps the full project brief available.
+  Status: implemented on `/start-project/` and on campaign LP pages as
+  `lp:<slug>:quick`, while full LP forms remain available as `lp:<slug>`.
+- Add optional quick contact channels near intake and footer. Status:
+  implemented through `PUBLIC_CONTACT_EMAIL`, `PUBLIC_CONTACT_TELEGRAM_URL`,
+  `PUBLIC_CONTACT_WHATSAPP_URL` near start-project quick intake, LP quick
+  intake, partner intake, and footer; tracked as `quick_contact_click`;
+  production values still pending.
+- Add the final partner-program intake channel. Status: implemented at
+  `/partner-program/`, `/ru/partner-program/`, and `/ro/partner-program/` with
+  `landing_offer=partner-program`, `form_variant=partner-program`,
+  `lead_channel=partner`, partner/ref capture, UTM capture,
+  Turnstile/honeypot protection, footer access, and partner performance
+  reporting in `/api/lead-report` plus `/lead-desk/`.
 
 Completion check:
 
 - A real production submission is stored with all campaign context.
+- The stored lead and webhook payload include priority and routing data.
 - Failures are visible and recoverable.
 - Leads can be acted on without manually inspecting the database.
 
@@ -166,6 +229,7 @@ Completion check:
 - Every indexable page has unique metadata and a deliberate search/social
   preview.
 - Sitemap, robots, canonical, and structured data validate cleanly.
+- The public partner-program route is included in localized sitemap coverage.
 
 ### 7. Analytics and Lead Measurement: 35-45% -> 100%
 
@@ -174,26 +238,68 @@ Required work:
 - Choose the analytics stack and document it in the project.
 - Define event taxonomy:
   page view, CTA click, LP CTA click, form start, form validation error,
-  form submit success, thank-you view, and lead source.
+  form submit attempt, thank-you view, quick contact click, and lead source.
+  Status: first-party event layer implemented and guarded by
+  `npm run qa:lead-analytics`.
 - Persist campaign attribution from URL to form submission and analytics event.
+  Status: implemented for source path, landing page, landing offer, locale,
+  form variant, lead channel, partner/ref, and UTM fields; analytics audit
+  verifies source and built output coverage.
 - Add conversion events on thank-you and successful form submission.
+  Status: `thank_you_view` and `form_submit_attempt` implemented; analytics
+  audit verifies localized thank-you routes and conversion context.
 - Build a simple reporting view or dashboard specification:
-  traffic source, landing page, offer, CTA, submission, lead quality.
-- Verify analytics events in production preview before public launch.
+  traffic source, landing page, offer, CTA, submission, lead quality. Status:
+  protected JSON lead report endpoint implemented at `/api/lead-report` with
+  status/form-variant/SLA breakdowns, response-SLA filtering, response
+  deadline fields, follow-up SLA filtering, owner/next-action gap filters,
+  locale filtering/breakdowns, UTM source/medium/campaign filters,
+  source performance rows for channel/offer/form/UTM campaign quality,
+  created date-range filters for campaign review windows, and action queue;
+  internal `/lead-desk/` UI implemented with operator focus shortcuts,
+  response due/remaining time, stale follow-up focus, owner and no-next-action
+  focus, locale queue controls, UTM controls, created date-range controls,
+  shareable URL-backed views, follow-up context, mailto links, and
+  copy-summary actions for day-to-day review.
+- Add a simple export path for campaign/source review and CRM import. Status:
+  protected CSV export implemented at `/api/lead-export` with matching
+  locale, UTM, and created date-range filters.
+- Verify analytics events in production preview before public launch. Status:
+  local/build analytics audit implemented; live vendor verification still
+  requires production analytics variables.
 
 Completion check:
 
 - Paid traffic can be evaluated by offer and source.
-- Lead submissions can be tied back to page, CTA, and campaign.
+- Lead submissions can be tied back to page, form, CTA, and campaign.
+- Partner leads can be separated from direct traffic by `lead_channel=partner`,
+  `landing_offer=partner-program`, and partner/ref parameters.
+- Campaign quick leads can be separated from full LP briefs by
+  `form_variant=lp:<slug>:quick` versus `form_variant=lp:<slug>`.
+- EN/RU/RO demand can be reviewed independently through report/export locale
+  filters and the Lead Desk locale breakdown.
+- Campaign traffic can be reviewed by exact UTM source, medium, or campaign in
+  report/export and Lead Desk, not only through aggregate breakdowns.
 
 ### 8. Production Deploy Readiness: 50-60% -> 100%
 
 Required work:
 
-- Confirm remote D1 migrations are applied and match the local schema.
+- Confirm remote D1 migrations are applied and match the local schema. Status:
+  remote `0001`-`0009` applied; production smoke still pending.
 - Verify Cloudflare Pages environment variables and API token handling.
 - Run production-preview form submissions against remote infrastructure.
+- Use `npm run qa:lead-flow` with `LEAD_SMOKE_BASE_URL` for repeatable EN/RU/RO
+  lead submissions and optional report verification.
+- Use `npm run qa:lead-flow:local` before preview/production smoke to start
+  local Pages runtime, local D1 persistence, report token, lifecycle update, and
+  local webhook delivery, notification-event history, and CSV export
+  verification in one command.
 - Run final build, Astro check, TypeScript check, and diff whitespace check.
+- Run `npm run qa:lead-readiness` before preview/production handoff to catch
+  broken lead routes, hidden attribution fields, partner intake, sitemap
+  coverage, Lead Desk wiring, API endpoints, migrations, and missing env
+  configuration.
 - Deploy to a preview URL and run route smoke tests.
 - Connect or verify the production domain.
 - Document rollback, migration, and post-deploy verification steps.

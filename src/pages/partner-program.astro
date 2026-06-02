@@ -1,0 +1,358 @@
+---
+import ContactChannels from "@/components/ContactChannels.astro";
+import SystemIcon from "@/components/SystemIcon.astro";
+import TurnstileField from "@/components/TurnstileField.astro";
+import Layout from "@/layouts/Layout.astro";
+import type { Locale } from "@/data/i18n";
+
+type Props = {
+  locale?: Locale;
+};
+
+const { locale = "en" } = Astro.props;
+
+const copyByLocale = {
+  en: {
+    meta: "AlfaRank partner program for agencies, consultants, developers, SEO specialists, and niche channels that can refer companies needing digital systems.",
+    eyebrow: "Partner program",
+    title: "Refer clients who need a digital system.",
+    intro:
+      "AlfaRank takes qualified business pressure and turns it into scoped automation, web platforms, content/SEO systems, data workflows, and integrations.",
+    note: "Partner leads keep source attribution, campaign context, and the next action visible from the first request.",
+    formEyebrow: "Partner intake",
+    formTitle: "Send a partner signal.",
+    name: "Name",
+    email: "Email",
+    company: "Company or channel",
+    partnerType: "Partner type / audience",
+    partnerTypePlaceholder: "Agency, consultant, developer, SEO, community, niche media",
+    businessProblem: "What kind of clients can you refer?",
+    businessProblemPlaceholder: "Describe the client pressure, sector, budget level, or repeated request you see.",
+    desiredResult: "How should the partnership work?",
+    desiredResultPlaceholder: "Referrals, shared delivery, white label, technical backup, or another model.",
+    contactDetails: "Preferred contact details",
+    contactDetailsPlaceholder: "Telegram, WhatsApp, phone, time zone, or extra context.",
+    submit: "Send Partner Request",
+    sending: "Sending partner request...",
+    sendingStatus: "Sending partner request with source context...",
+    typesTitle: "Good partner sources",
+    routeTitle: "How partner leads are handled",
+    attributionTitle: "Attribution rules",
+    attributionText:
+      "Partner traffic is tracked through partner_ref, partner, ref, affiliate, affiliate_id and UTM parameters. The form also sets offer=partner-program.",
+    contactTitle: "Prefer a direct first message?",
+    partnerTypes: [
+      ["Agencies", "Clients need systems beyond campaigns, design, or content delivery.", "flow"],
+      ["Developers", "You see business scope that needs product direction and operational UX.", "api"],
+      ["SEO specialists", "Growth work needs content infrastructure, feeds, monitoring, or publishing workflows.", "lens"],
+      ["Consultants", "A business process is clear, but the technical system is not shaped yet.", "target"],
+      ["Niche channels", "Your audience regularly asks for automation, dashboards, CRM, or platform help.", "lead"]
+    ],
+    steps: [
+      ["01", "Source captured", "Partner/ref code, UTM, locale, landing page, and offer are stored with the lead.", "data"],
+      ["02", "Fit qualified", "The request is routed as partner traffic and scored for urgency and scope clarity.", "chip"],
+      ["03", "Scope opened", "AlfaRank turns the request into a route: automation, web platform, SEO/content, data, or integration.", "map"]
+    ],
+    metrics: [
+      ["Partner source", "Saved"],
+      ["Offer", "partner-program"],
+      ["Routing", "partner"]
+    ]
+  },
+  ro: {
+    meta: "Programul de parteneri AlfaRank pentru agentii, consultanti, dezvoltatori, specialisti SEO si canale de nisa care pot recomanda companii ce au nevoie de sisteme digitale.",
+    eyebrow: "Program de parteneri",
+    title: "Recomanda clienti care au nevoie de un sistem digital.",
+    intro:
+      "AlfaRank preia presiunea de business calificata si o transforma in automatizari, platforme web, sisteme content/SEO, fluxuri de date si integrari.",
+    note: "Leadurile de partener pastreaza sursa, contextul campaniei si urmatoarea actiune chiar din prima cerere.",
+    formEyebrow: "Intake partener",
+    formTitle: "Trimite un semnal de partener.",
+    name: "Nume",
+    email: "Email",
+    company: "Companie sau canal",
+    partnerType: "Tip de partener / audienta",
+    partnerTypePlaceholder: "Agentie, consultant, dezvoltator, SEO, comunitate, media de nisa",
+    businessProblem: "Ce tip de clienti poti recomanda?",
+    businessProblemPlaceholder: "Descrie presiunea clientului, sectorul, nivelul bugetului sau cererea repetata pe care o vezi.",
+    desiredResult: "Cum ar trebui sa functioneze parteneriatul?",
+    desiredResultPlaceholder: "Recomandari, livrare comuna, white label, suport tehnic sau alt model.",
+    contactDetails: "Date de contact preferate",
+    contactDetailsPlaceholder: "Telegram, WhatsApp, telefon, fus orar sau context suplimentar.",
+    submit: "Trimite cerere de partener",
+    sending: "Se trimite cererea de partener...",
+    sendingStatus: "Se trimite cererea cu contextul sursei...",
+    typesTitle: "Surse bune de parteneri",
+    routeTitle: "Cum sunt procesate leadurile de partener",
+    attributionTitle: "Reguli de atribuire",
+    attributionText:
+      "Traficul de partener este urmarit prin partner_ref, partner, ref, affiliate, affiliate_id si parametri UTM. Formularul seteaza si offer=partner-program.",
+    contactTitle: "Preferi un mesaj direct?",
+    partnerTypes: [
+      ["Agentii", "Clientii au nevoie de sisteme dincolo de campanii, design sau continut.", "flow"],
+      ["Dezvoltatori", "Vezi scope de business care are nevoie de directie de produs si UX operational.", "api"],
+      ["Specialisti SEO", "Cresterea are nevoie de infrastructura de continut, feeduri, monitorizare sau publicare.", "lens"],
+      ["Consultanti", "Procesul de business este clar, dar sistemul tehnic nu este inca format.", "target"],
+      ["Canale de nisa", "Audienta cere des automatizari, dashboarduri, CRM sau platforme.", "lead"]
+    ],
+    steps: [
+      ["01", "Sursa capturata", "Codul partner/ref, UTM, limba, pagina si oferta sunt salvate cu leadul.", "data"],
+      ["02", "Fit calificat", "Cererea este rutata ca trafic de partener si scorata dupa urgenta si claritatea scope-ului.", "chip"],
+      ["03", "Scope deschis", "AlfaRank transforma cererea intr-un traseu: automatizare, platforma, SEO/content, date sau integrare.", "map"]
+    ],
+    metrics: [
+      ["Sursa partener", "Salvata"],
+      ["Oferta", "partner-program"],
+      ["Rutare", "partner"]
+    ]
+  },
+  ru: {
+    meta: "Партнерская программа AlfaRank для агентств, консультантов, разработчиков, SEO-специалистов и нишевых каналов, которые могут передавать компании с потребностью в цифровых системах.",
+    eyebrow: "Партнерская программа",
+    title: "Передавайте клиентов, которым нужна цифровая система.",
+    intro:
+      "AlfaRank берет квалифицированную бизнес-потребность и превращает ее в автоматизацию, веб-платформу, content/SEO-систему, процессы данных или интеграции.",
+    note: "Партнерские лиды сразу сохраняют источник, campaign-контекст и понятное следующее действие.",
+    formEyebrow: "Партнерский intake",
+    formTitle: "Отправьте партнерский сигнал.",
+    name: "Имя",
+    email: "Email",
+    company: "Компания или канал",
+    partnerType: "Тип партнера / аудитория",
+    partnerTypePlaceholder: "Агентство, консультант, разработчик, SEO, комьюнити, нишевое медиа",
+    businessProblem: "Каких клиентов вы можете передавать?",
+    businessProblemPlaceholder: "Опишите задачу клиента, нишу, уровень бюджета или повторяющийся запрос, который вы видите.",
+    desiredResult: "Как должно работать партнерство?",
+    desiredResultPlaceholder: "Реферальные заявки, совместная поставка, white label, техническая поддержка или другая модель.",
+    contactDetails: "Предпочтительный контакт",
+    contactDetailsPlaceholder: "Telegram, WhatsApp, телефон, часовой пояс или дополнительный контекст.",
+    submit: "Отправить партнерскую заявку",
+    sending: "Отправляем партнерскую заявку...",
+    sendingStatus: "Отправляем заявку с контекстом источника...",
+    typesTitle: "Подходящие партнерские источники",
+    routeTitle: "Как обрабатывается партнерский лид",
+    attributionTitle: "Правила атрибуции",
+    attributionText:
+      "Партнерский трафик отслеживается через partner_ref, partner, ref, affiliate, affiliate_id и UTM-параметры. Форма также фиксирует offer=partner-program.",
+    contactTitle: "Удобнее написать напрямую?",
+    partnerTypes: [
+      ["Агентства", "Клиенту нужен системный слой шире кампаний, дизайна или контента.", "flow"],
+      ["Разработчики", "Вы видите бизнес-scope, которому нужны продуктовая логика и операционный UX.", "api"],
+      ["SEO-специалисты", "Рост требует контентной инфраструктуры, фидов, мониторинга или publishing-процессов.", "lens"],
+      ["Консультанты", "Бизнес-процесс понятен, но техническая система еще не собрана в форму.", "target"],
+      ["Нишевые каналы", "Аудитория часто спрашивает про автоматизацию, панели, CRM или платформы.", "lead"]
+    ],
+    steps: [
+      ["01", "Источник сохранен", "Partner/ref-код, UTM, язык, страница и оффер сохраняются вместе с лидом.", "data"],
+      ["02", "Fit квалифицирован", "Заявка маршрутизируется как партнерский трафик и получает оценку срочности и ясности scope.", "chip"],
+      ["03", "Scope открыт", "AlfaRank превращает запрос в маршрут: автоматизация, платформа, SEO/content, данные или интеграция.", "map"]
+    ],
+    metrics: [
+      ["Источник партнера", "Сохранен"],
+      ["Оффер", "partner-program"],
+      ["Маршрут", "partner"]
+    ]
+  }
+} as const;
+
+const copy = copyByLocale[locale];
+---
+
+<Layout title={`${copy.eyebrow} | AlfaRank`} description={copy.meta} locale={locale}>
+  <section class="section partner-program" id="partner-intake">
+    <div class="partner-program__shell ar-system-block">
+      <div class="partner-program__intro">
+        <p class="eyebrow">{copy.eyebrow}</p>
+        <h1>{copy.title}</h1>
+        <p class="hero-text">{copy.intro}</p>
+        <p class="partner-program__note">{copy.note}</p>
+
+        <div class="partner-program__metrics" aria-label={copy.attributionTitle}>
+          {copy.metrics.map(([label, value]) => (
+            <span>
+              <strong>{value}</strong>
+              {label}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <form
+        class="glass-panel partner-program__form"
+        method="post"
+        action="/api/start-project"
+        data-track-source
+        data-partner-intake
+        data-conversion-form="partner-program"
+        data-sending-label={copy.sending}
+        data-sending-status={copy.sendingStatus}
+      >
+        <p class="eyebrow">{copy.formEyebrow}</p>
+        <h2>{copy.formTitle}</h2>
+        <input type="hidden" name="source_path" value="/partner-program/" />
+        <input type="hidden" name="landing_page" value="/partner-program/" />
+        <input type="hidden" name="landing_offer" value="partner-program" />
+        <input type="hidden" name="form_variant" value="partner-program" />
+        <input type="hidden" name="locale" value={locale} />
+        <input type="hidden" name="referrer" />
+        <input type="hidden" name="lead_channel" value="partner" />
+        <input type="hidden" name="partner_ref" />
+        <input type="hidden" name="project_type" value="Partner referral" />
+        <input type="hidden" name="desired_output" value="Partner qualification route" />
+        <input type="hidden" name="integrations" value="Partner referral tracking, source attribution, lead routing" />
+        <input type="hidden" name="utm_source" />
+        <input type="hidden" name="utm_medium" />
+        <input type="hidden" name="utm_campaign" />
+        <input type="hidden" name="utm_term" />
+        <input type="hidden" name="utm_content" />
+        <div class="spam-field" aria-hidden="true">
+          <label for={`partner-company-website-${locale}`}>Company website</label>
+          <input id={`partner-company-website-${locale}`} name="company_website" tabindex="-1" autocomplete="off" />
+        </div>
+        <div class="form-grid">
+          <div class="field">
+            <label for={`partner-name-${locale}`}>{copy.name}</label>
+            <input id={`partner-name-${locale}`} name="name" autocomplete="name" required />
+          </div>
+          <div class="field">
+            <label for={`partner-email-${locale}`}>{copy.email}</label>
+            <input id={`partner-email-${locale}`} name="email" type="email" autocomplete="email" required />
+          </div>
+          <div class="field">
+            <label for={`partner-company-${locale}`}>{copy.company}</label>
+            <input id={`partner-company-${locale}`} name="company" autocomplete="organization" />
+          </div>
+          <div class="field">
+            <label for={`partner-type-${locale}`}>{copy.partnerType}</label>
+            <input
+              id={`partner-type-${locale}`}
+              name="current_system"
+              placeholder={copy.partnerTypePlaceholder}
+              required
+            />
+          </div>
+          <div class="field full">
+            <label for={`partner-problem-${locale}`}>{copy.businessProblem}</label>
+            <textarea
+              id={`partner-problem-${locale}`}
+              name="business_problem"
+              placeholder={copy.businessProblemPlaceholder}
+              required
+            ></textarea>
+          </div>
+          <div class="field full">
+            <label for={`partner-result-${locale}`}>{copy.desiredResult}</label>
+            <textarea
+              id={`partner-result-${locale}`}
+              name="desired_result"
+              placeholder={copy.desiredResultPlaceholder}
+              required
+            ></textarea>
+          </div>
+          <div class="field full">
+            <label for={`partner-contact-${locale}`}>{copy.contactDetails}</label>
+            <textarea
+              id={`partner-contact-${locale}`}
+              name="contact_details"
+              placeholder={copy.contactDetailsPlaceholder}
+            ></textarea>
+          </div>
+        </div>
+        <TurnstileField />
+        <div class="section-actions">
+          <button class="button primary" type="submit">{copy.submit}</button>
+        </div>
+        <p class="form-status" data-form-status aria-live="polite"></p>
+      </form>
+
+      <div class="partner-program__network" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">{copy.eyebrow}</p>
+        <h2>{copy.typesTitle}</h2>
+      </div>
+      <p>{copy.attributionText}</p>
+    </div>
+    <div class="partner-type-grid">
+      {copy.partnerTypes.map(([title, text, icon]) => (
+        <article class="partner-type-card">
+          <SystemIcon name={icon} />
+          <h3>{title}</h3>
+          <p>{text}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="partner-route ar-system-block">
+      <div class="partner-route__header">
+        <p class="eyebrow">{copy.eyebrow}</p>
+        <h2>{copy.routeTitle}</h2>
+      </div>
+      <div class="partner-route__steps">
+        {copy.steps.map(([number, title, text, icon]) => (
+          <article class="partner-route__step">
+            <SystemIcon name={icon} />
+            <span>{number}</span>
+            <h3>{title}</h3>
+            <p>{text}</p>
+          </article>
+        ))}
+      </div>
+      <aside class="partner-route__attribution">
+        <h3>{copy.attributionTitle}</h3>
+        <p>{copy.attributionText}</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section partner-program__contact">
+    <div class="glass-panel">
+      <p class="eyebrow">{copy.contactTitle}</p>
+      <h2>{copy.contactTitle}</h2>
+      <ContactChannels locale={locale} />
+    </div>
+  </section>
+
+  <script is:inline>
+    (() => {
+      const params = new URLSearchParams(window.location.search);
+      const aliases = {
+        partner_ref: ["partner_ref", "partner", "ref", "affiliate", "affiliate_id"],
+        utm_source: ["utm_source"],
+        utm_medium: ["utm_medium"],
+        utm_campaign: ["utm_campaign"],
+        utm_term: ["utm_term"],
+        utm_content: ["utm_content"]
+      };
+      const firstParam = (keys) => keys.map((key) => params.get(key)).find(Boolean) || "";
+
+      document.querySelectorAll("form[data-partner-intake]").forEach((form) => {
+        const setValue = (name, value) => {
+          const input = form.querySelector(`[name='${name}']`);
+          if (input) input.value = value;
+        };
+
+        setValue("source_path", `${window.location.pathname}${window.location.search}`);
+        setValue("landing_page", window.location.pathname);
+        setValue("landing_offer", "partner-program");
+        setValue("lead_channel", "partner");
+        setValue("referrer", document.referrer || "");
+
+        Object.entries(aliases).forEach(([name, keys]) => {
+          const value = firstParam(keys);
+          if (value) setValue(name, value);
+        });
+      });
+    })();
+  </script>
+</Layout>

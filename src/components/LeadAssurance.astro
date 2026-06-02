@@ -1,0 +1,58 @@
+---
+import SystemIcon from "@/components/SystemIcon.astro";
+import { translateCopy } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
+
+type Props = {
+  locale?: Locale;
+  variant?: "panel" | "embedded";
+};
+
+const { locale = "en", variant = "panel" } = Astro.props;
+
+const items = [
+  {
+    icon: "monitor",
+    title: translateCopy(locale, "Response target"),
+    metric: translateCopy(locale, "1 business day"),
+    text: translateCopy(locale, "The first reply confirms the pressure point, missing context, and the smallest useful next step.")
+  },
+  {
+    icon: "flow",
+    title: translateCopy(locale, "Routed request"),
+    metric: translateCopy(locale, "Score, route, next action"),
+    text: translateCopy(locale, "Source, offer, priority, and next action stay attached to the lead.")
+  },
+  {
+    icon: "product",
+    title: translateCopy(locale, "Clear first scope"),
+    metric: translateCopy(locale, "Implementation boundary"),
+    text: translateCopy(locale, "The first step is shaped as a useful build boundary, not a vague discovery call.")
+  },
+  {
+    icon: "lead",
+    title: translateCopy(locale, "Human review"),
+    metric: translateCopy(locale, "No pressure loop"),
+    text: translateCopy(locale, "If the request is early, the answer asks for missing context instead of forcing a sales call.")
+  }
+];
+---
+
+<aside class:list={["lead-assurance", `lead-assurance--${variant}`, variant === "panel" && "glass-panel"]}>
+  <div class="lead-assurance__intro">
+    <p class="eyebrow">{translateCopy(locale, "After the request")}</p>
+    <h2>{translateCopy(locale, "What happens next")}</h2>
+  </div>
+  <div class="lead-assurance__grid">
+    {items.map((item) => (
+      <article class="lead-assurance__item">
+        <SystemIcon name={item.icon} />
+        <div>
+          <span>{item.title}</span>
+          <strong>{item.metric}</strong>
+          <p>{item.text}</p>
+        </div>
+      </article>
+    ))}
+  </div>
+</aside>

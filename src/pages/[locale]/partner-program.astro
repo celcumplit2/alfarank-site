@@ -1,0 +1,12 @@
+---
+import PartnerProgramPage from "@/pages/partner-program.astro";
+import { translatedLocales } from "@/data/i18n";
+
+export function getStaticPaths() {
+  return translatedLocales.map((locale) => ({ params: { locale }, props: { locale } }));
+}
+
+const { locale } = Astro.props;
+---
+
+<PartnerProgramPage locale={locale} />

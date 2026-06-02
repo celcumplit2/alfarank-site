@@ -1,0 +1,1382 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import SystemIcon from "@/components/SystemIcon.astro";
+import { landingOffers } from "@/data/landing";
+
+const statuses = ["new", "reviewed", "contacted", "qualified", "proposal", "won", "lost", "spam", "archived"];
+const channels = ["direct", "referral", "campaign", "paid", "partner"];
+const locales = ["en", "ru", "ro"];
+const priorities = ["low", "medium", "high"];
+const responseSlas = ["overdue", "due_soon", "on_track", "touched", "closed"];
+const followUpSlas = ["stale", "due_soon", "on_track", "not_started", "closed"];
+const buckets = ["automation", "content-seo", "data-monitoring", "ecommerce", "web-platform", "quick-diagnostic", "partner", "project-scope"];
+const landingFormVariants = landingOffers.flatMap((offer) => [`lp:${offer.slug}`, `lp:${offer.slug}:quick`]);
+const formVariants = ["quick-intake", "start-project", "partner-program", ...landingFormVariants];
+---
+
+<Layout
+  title="Lead Desk | AlfaRank"
+  description="Internal lead operations desk for AlfaRank."
+  robots="noindex, nofollow"
+  locale="en"
+>
+  <section class="section lead-desk" data-lead-desk data-no-translate>
+    <div class="lead-desk__hero">
+      <div>
+        <span class="eyebrow">Internal operations</span>
+        <h1>Lead Desk</h1>
+        <p>
+          Review incoming requests, route the active queue, update status, and
+          export a clean CSV handoff without opening the D1 console.
+        </p>
+      </div>
+      <div class="lead-desk__signal" aria-hidden="true">
+        <SystemIcon name="lead" />
+        <span>Token protected</span>
+      </div>
+    </div>
+
+    <form class="lead-desk__auth glass-panel" data-lead-auth>
+      <label class="field">
+        <span>Report token</span>
+        <input type="password" name="token" autocomplete="off" placeholder="LEAD_REPORT_TOKEN" />
+      </label>
+      <button class="button primary" type="submit">Open desk</button>
+      <p class="form-status" data-lead-auth-status>Enter the Cloudflare `LEAD_REPORT_TOKEN` to load live data.</p>
+    </form>
+
+    <div class="lead-desk__toolbar glass-panel">
+      <label class="field">
+        <span>Rows</span>
+        <select name="limit" data-lead-limit>
+          <option value="20">20</option>
+          <option value="50">50</option>
+        </select>
+      </label>
+
+      <label class="lead-desk__check">
+        <input type="checkbox" data-lead-include-test />
+        <span>Include smoke leads</span>
+      </label>
+
+      <label class="field">
+        <span>Created from</span>
+        <input type="date" name="created_from" data-lead-filter-created-from />
+      </label>
+
+      <label class="field">
+        <span>Created to</span>
+        <input type="date" name="created_to" data-lead-filter-created-to />
+      </label>
+
+      <label class="field">
+        <span>Status</span>
+        <select name="status" data-lead-filter-status>
+          <option value="">All statuses</option>
+          {statuses.map((status) => <option value={status}>{status}</option>)}
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Channel</span>
+        <select name="channel" data-lead-filter-channel>
+          <option value="">All channels</option>
+          {channels.map((channel) => <option value={channel}>{channel}</option>)}
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Locale</span>
+        <select name="locale" data-lead-filter-locale>
+          <option value="">All locales</option>
+          {locales.map((locale) => <option value={locale}>{locale.toUpperCase()}</option>)}
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Priority</span>
+        <select name="priority" data-lead-filter-priority>
+          <option value="">All priorities</option>
+          {priorities.map((priority) => <option value={priority}>{priority}</option>)}
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Response SLA</span>
+        <select name="response_sla" data-lead-filter-sla>
+          <option value="">All SLA states</option>
+          {responseSlas.map((responseSla) => <option value={responseSla}>{responseSla}</option>)}
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Follow-up SLA</span>
+        <select name="follow_up_sla" data-lead-filter-follow-up-sla>
+          <option value="">All follow-up states</option>
+          {followUpSlas.map((followUpSla) => <option value={followUpSla}>{followUpSla}</option>)}
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Bucket</span>
+        <select name="bucket" data-lead-filter-bucket>
+          <option value="">All buckets</option>
+          {buckets.map((bucket) => <option value={bucket}>{bucket}</option>)}
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Offer</span>
+        <input name="offer" data-lead-filter-offer placeholder="Any offer" />
+      </label>
+
+      <label class="field">
+        <span>UTM source</span>
+        <input name="utm_source" data-lead-filter-utm-source placeholder="Any source" />
+      </label>
+
+      <label class="field">
+        <span>UTM medium</span>
+        <input name="utm_medium" data-lead-filter-utm-medium placeholder="Any medium" />
+      </label>
+
+      <label class="field">
+        <span>UTM campaign</span>
+        <input name="utm_campaign" data-lead-filter-utm-campaign placeholder="Any campaign" />
+      </label>
+
+      <label class="field">
+        <span>Form variant</span>
+        <select name="form_variant" data-lead-filter-form-variant>
+          <option value="">All forms</option>
+          {formVariants.map((formVariant) => <option value={formVariant}>{formVariant}</option>)}
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Partner ref</span>
+        <input name="partner_ref" data-lead-filter-partner data-lead-export-partner placeholder="Any partner" />
+      </label>
+
+      <label class="field">
+        <span>Owner</span>
+        <input name="owner" data-lead-filter-owner placeholder="Any owner" />
+      </label>
+
+      <label class="lead-desk__check">
+        <input type="checkbox" data-lead-filter-needs-owner />
+        <span>Needs owner</span>
+      </label>
+
+      <label class="lead-desk__check">
+        <input type="checkbox" data-lead-filter-needs-next-action />
+        <span>Needs next action</span>
+      </label>
+
+      <div class="lead-desk__toolbar-actions">
+        <button class="button secondary" type="button" data-lead-refresh>Refresh</button>
+        <button class="button secondary" type="button" data-lead-export>Export CSV</button>
+        <button class="button secondary" type="button" data-lead-copy-view>Copy view link</button>
+      </div>
+    </div>
+
+    <div class="lead-desk__quick-filters glass-panel" data-lead-quick-filters aria-label="Lead queue shortcuts">
+      <button class="button secondary" type="button" data-lead-quick-filter="response_sla:overdue">Overdue</button>
+      <button class="button secondary" type="button" data-lead-quick-filter="response_sla:due_soon">Due soon</button>
+      <button class="button secondary" type="button" data-lead-quick-filter="follow_up_sla:stale">Stale follow-up</button>
+      <button class="button secondary" type="button" data-lead-quick-filter="follow_up_sla:due_soon">Follow-up due soon</button>
+      <button class="button secondary" type="button" data-lead-date-range="7">Last 7 days</button>
+      <button class="button secondary" type="button" data-lead-date-range="30">Last 30 days</button>
+      <button class="button secondary" type="button" data-lead-quick-filter="status:new">New leads</button>
+      <button class="button secondary" type="button" data-lead-quick-filter="needs_owner:1">Needs owner</button>
+      <button class="button secondary" type="button" data-lead-quick-filter="needs_next_action:1">Needs next action</button>
+      <button class="button secondary" type="button" data-lead-quick-filter="channel:partner">Partner leads</button>
+      <button class="button secondary" type="button" data-lead-quick-filter="locale:en">EN leads</button>
+      <button class="button secondary" type="button" data-lead-quick-filter="locale:ru">RU leads</button>
+      <button class="button secondary" type="button" data-lead-quick-filter="locale:ro">RO leads</button>
+      <button class="button secondary" type="button" data-lead-quick-filter="clear:">Clear filters</button>
+    </div>
+
+    <div class="lead-desk__metrics" data-lead-metrics>
+      <article class="glass-card">
+        <span>Total leads</span>
+        <strong>-</strong>
+      </article>
+      <article class="glass-card">
+        <span>New leads</span>
+        <strong>-</strong>
+      </article>
+      <article class="glass-card">
+        <span>Overdue</span>
+        <strong>-</strong>
+      </article>
+      <article class="glass-card">
+        <span>Due soon</span>
+        <strong>-</strong>
+      </article>
+      <article class="glass-card">
+        <span>Active</span>
+        <strong>-</strong>
+      </article>
+      <article class="glass-card">
+        <span>Qualified+</span>
+        <strong>-</strong>
+      </article>
+      <article class="glass-card">
+        <span>Win rate</span>
+        <strong>-</strong>
+      </article>
+      <article class="glass-card">
+        <span>Average score</span>
+        <strong>-</strong>
+      </article>
+    </div>
+
+    <section class="lead-desk__ops glass-panel">
+      <div class="lead-desk__panel-header">
+        <div>
+          <span class="eyebrow">Operator focus</span>
+          <h2>Conversion queue</h2>
+        </div>
+        <p data-lead-ops-copy>Load the protected report to see what needs attention.</p>
+      </div>
+      <div class="lead-desk__ops-grid" data-lead-ops-summary></div>
+    </section>
+
+    <div class="lead-desk__grid">
+      <section class="lead-desk__queue glass-panel">
+        <div class="lead-desk__panel-header">
+          <div>
+            <span class="eyebrow">Action queue</span>
+            <h2>Next leads to handle</h2>
+          </div>
+          <p data-lead-generated>Not loaded yet.</p>
+        </div>
+        <div class="lead-desk__lead-list" data-lead-queue>
+          <article class="lead-desk__empty">Load the protected report to see the active queue.</article>
+        </div>
+      </section>
+
+      <aside class="lead-desk__side">
+        <section class="glass-panel">
+          <div class="lead-desk__panel-header">
+            <div>
+              <span class="eyebrow">Breakdowns</span>
+              <h2>Source mix</h2>
+            </div>
+          </div>
+          <div class="lead-desk__breakdowns" data-lead-breakdowns></div>
+        </section>
+
+        <section class="glass-panel">
+          <div class="lead-desk__panel-header">
+            <div>
+              <span class="eyebrow">Lead quality</span>
+              <h2>Source performance</h2>
+            </div>
+          </div>
+          <div class="lead-desk__source-performance" data-lead-source-performance></div>
+        </section>
+
+        <section class="glass-panel">
+          <div class="lead-desk__panel-header">
+            <div>
+              <span class="eyebrow">Partner program</span>
+              <h2>Partner performance</h2>
+            </div>
+          </div>
+          <div class="lead-desk__partner-performance" data-lead-partners></div>
+        </section>
+
+        <section class="glass-panel">
+          <div class="lead-desk__panel-header">
+            <div>
+              <span class="eyebrow">Recent</span>
+              <h2>Latest submissions</h2>
+            </div>
+          </div>
+          <div class="lead-desk__recent" data-lead-recent></div>
+        </section>
+
+        <section class="glass-panel">
+          <div class="lead-desk__panel-header">
+            <div>
+              <span class="eyebrow">Lifecycle</span>
+              <h2>Status events</h2>
+            </div>
+          </div>
+          <div class="lead-desk__events" data-lead-events></div>
+        </section>
+
+        <section class="glass-panel">
+          <div class="lead-desk__panel-header">
+            <div>
+              <span class="eyebrow">Delivery</span>
+              <h2>Notification events</h2>
+            </div>
+          </div>
+          <div class="lead-desk__events" data-lead-notifications></div>
+        </section>
+      </aside>
+    </div>
+  </section>
+
+  <script is:inline>
+    (() => {
+      const root = document.querySelector("[data-lead-desk]");
+      if (!root) return;
+
+      const statusOptions = ["new", "reviewed", "contacted", "qualified", "proposal", "won", "lost", "spam", "archived"];
+      const state = {
+        token: "",
+        loading: false,
+        report: null
+      };
+
+      const elements = {
+        authForm: root.querySelector("[data-lead-auth]"),
+        tokenInput: root.querySelector("input[name='token']"),
+        authStatus: root.querySelector("[data-lead-auth-status]"),
+        limit: root.querySelector("[data-lead-limit]"),
+        includeTest: root.querySelector("[data-lead-include-test]"),
+        filterCreatedFrom: root.querySelector("[data-lead-filter-created-from]"),
+        filterCreatedTo: root.querySelector("[data-lead-filter-created-to]"),
+        filterStatus: root.querySelector("[data-lead-filter-status]"),
+        filterChannel: root.querySelector("[data-lead-filter-channel]"),
+        filterLocale: root.querySelector("[data-lead-filter-locale]"),
+        filterPriority: root.querySelector("[data-lead-filter-priority]"),
+        filterSla: root.querySelector("[data-lead-filter-sla]"),
+        filterFollowUpSla: root.querySelector("[data-lead-filter-follow-up-sla]"),
+        filterBucket: root.querySelector("[data-lead-filter-bucket]"),
+        filterOffer: root.querySelector("[data-lead-filter-offer]"),
+        filterUtmSource: root.querySelector("[data-lead-filter-utm-source]"),
+        filterUtmMedium: root.querySelector("[data-lead-filter-utm-medium]"),
+        filterUtmCampaign: root.querySelector("[data-lead-filter-utm-campaign]"),
+        filterFormVariant: root.querySelector("[data-lead-filter-form-variant]"),
+        filterPartner: root.querySelector("[data-lead-filter-partner]"),
+        filterOwner: root.querySelector("[data-lead-filter-owner]"),
+        filterNeedsOwner: root.querySelector("[data-lead-filter-needs-owner]"),
+        filterNeedsNextAction: root.querySelector("[data-lead-filter-needs-next-action]"),
+        quickFilters: root.querySelector("[data-lead-quick-filters]"),
+        refresh: root.querySelector("[data-lead-refresh]"),
+        exportButton: root.querySelector("[data-lead-export]"),
+        copyViewButton: root.querySelector("[data-lead-copy-view]"),
+        metrics: root.querySelector("[data-lead-metrics]"),
+        opsCopy: root.querySelector("[data-lead-ops-copy]"),
+        opsSummary: root.querySelector("[data-lead-ops-summary]"),
+        generated: root.querySelector("[data-lead-generated]"),
+        queue: root.querySelector("[data-lead-queue]"),
+        breakdowns: root.querySelector("[data-lead-breakdowns]"),
+        sourcePerformance: root.querySelector("[data-lead-source-performance]"),
+        partners: root.querySelector("[data-lead-partners]"),
+        recent: root.querySelector("[data-lead-recent]"),
+        events: root.querySelector("[data-lead-events]"),
+        notifications: root.querySelector("[data-lead-notifications]")
+      };
+
+      const escapeHtml = (value) =>
+        String(value ?? "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+
+      const compactDate = (value) => {
+        if (!value) return "-";
+        const date = new Date(String(value));
+        if (Number.isNaN(date.getTime())) return escapeHtml(value);
+        return date.toLocaleString("en-GB", {
+          month: "short",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit"
+        });
+      };
+
+      const dateInputValue = (date) => date.toISOString().slice(0, 10);
+
+      const applyDateRange = (days) => {
+        if (!elements.filterCreatedFrom || !elements.filterCreatedTo) return;
+
+        const numericDays = Number(days);
+        if (!Number.isFinite(numericDays) || numericDays <= 0) {
+          elements.filterCreatedFrom.value = "";
+          elements.filterCreatedTo.value = "";
+          return;
+        }
+
+        const today = new Date();
+        const start = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()));
+        start.setUTCDate(start.getUTCDate() - (Math.floor(numericDays) - 1));
+
+        elements.filterCreatedFrom.value = dateInputValue(start);
+        elements.filterCreatedTo.value = dateInputValue(today);
+      };
+
+      const setStatus = (message, mode = "neutral") => {
+        if (!elements.authStatus) return;
+        elements.authStatus.textContent = message;
+        elements.authStatus.dataset.mode = mode;
+      };
+
+      const saveToken = (token) => {
+        state.token = token.trim();
+        try {
+          if (state.token) {
+            window.sessionStorage.setItem("alfarank_lead_token", state.token);
+          } else {
+            window.sessionStorage.removeItem("alfarank_lead_token");
+          }
+        } catch {
+          // Session storage can be unavailable in strict browser modes.
+        }
+      };
+
+      const loadSavedToken = () => {
+        try {
+          return window.sessionStorage.getItem("alfarank_lead_token") || "";
+        } catch {
+          return "";
+        }
+      };
+
+      const headers = () => ({
+        Authorization: `Bearer ${state.token}`
+      });
+
+      const endpointUrl = (path, params = {}) => {
+        const url = new URL(path, window.location.origin);
+        Object.entries(params).forEach(([key, value]) => {
+          if (value !== "" && value !== null && value !== undefined && value !== false) {
+            url.searchParams.set(key, String(value));
+          }
+        });
+        return `${url.pathname}${url.search}`;
+      };
+
+      const readJson = async (response) => {
+        const text = await response.text();
+        let payload = {};
+        try {
+          payload = text ? JSON.parse(text) : {};
+        } catch {
+          payload = { error: text || response.statusText };
+        }
+
+        if (!response.ok) {
+          throw new Error(payload.error || response.statusText || "Request failed");
+        }
+
+        return payload;
+      };
+
+      const viewParamNames = [
+        "limit",
+        "include_test",
+        "created_from",
+        "created_to",
+        "status",
+        "channel",
+        "locale",
+        "priority",
+        "response_sla",
+        "follow_up_sla",
+        "bucket",
+        "offer",
+        "utm_source",
+        "utm_medium",
+        "utm_campaign",
+        "form_variant",
+        "partner_ref",
+        "owner",
+        "needs_owner",
+        "needs_next_action"
+      ];
+      const defaultViewParams = {
+        limit: "20"
+      };
+
+      const selectedReportParams = () => ({
+        limit: elements.limit?.value || "20",
+        include_test: elements.includeTest?.checked ? "1" : "",
+        created_from: elements.filterCreatedFrom?.value || "",
+        created_to: elements.filterCreatedTo?.value || "",
+        status: elements.filterStatus?.value || "",
+        channel: elements.filterChannel?.value || "",
+        locale: elements.filterLocale?.value || "",
+        priority: elements.filterPriority?.value || "",
+        response_sla: elements.filterSla?.value || "",
+        follow_up_sla: elements.filterFollowUpSla?.value || "",
+        bucket: elements.filterBucket?.value || "",
+        offer: elements.filterOffer?.value || "",
+        utm_source: elements.filterUtmSource?.value || "",
+        utm_medium: elements.filterUtmMedium?.value || "",
+        utm_campaign: elements.filterUtmCampaign?.value || "",
+        form_variant: elements.filterFormVariant?.value || "",
+        partner_ref: elements.filterPartner?.value || "",
+        owner: elements.filterOwner?.value || "",
+        needs_owner: elements.filterNeedsOwner?.checked ? "1" : "",
+        needs_next_action: elements.filterNeedsNextAction?.checked ? "1" : ""
+      });
+
+      const selectedExportParams = () => ({
+        limit: "500",
+        include_test: elements.includeTest?.checked ? "1" : "",
+        created_from: elements.filterCreatedFrom?.value || "",
+        created_to: elements.filterCreatedTo?.value || "",
+        status: elements.filterStatus?.value || "",
+        channel: elements.filterChannel?.value || "",
+        locale: elements.filterLocale?.value || "",
+        priority: elements.filterPriority?.value || "",
+        response_sla: elements.filterSla?.value || "",
+        follow_up_sla: elements.filterFollowUpSla?.value || "",
+        bucket: elements.filterBucket?.value || "",
+        offer: elements.filterOffer?.value || "",
+        utm_source: elements.filterUtmSource?.value || "",
+        utm_medium: elements.filterUtmMedium?.value || "",
+        utm_campaign: elements.filterUtmCampaign?.value || "",
+        form_variant: elements.filterFormVariant?.value || "",
+        partner_ref: elements.filterPartner?.value || "",
+        owner: elements.filterOwner?.value || "",
+        needs_owner: elements.filterNeedsOwner?.checked ? "1" : "",
+        needs_next_action: elements.filterNeedsNextAction?.checked ? "1" : ""
+      });
+
+      const setControlValue = (element, value) => {
+        if (!element || value === null) return;
+        element.value = value;
+      };
+
+      const setControlChecked = (element, value) => {
+        if (!element || value === null) return;
+        element.checked = ["1", "true", "yes"].includes(String(value).toLowerCase());
+      };
+
+      const applyViewParamsFromUrl = () => {
+        const params = new URLSearchParams(window.location.search);
+        const value = (name) => (params.has(name) ? params.get(name) || "" : null);
+
+        setControlValue(elements.limit, value("limit"));
+        setControlChecked(elements.includeTest, value("include_test"));
+        setControlValue(elements.filterCreatedFrom, value("created_from"));
+        setControlValue(elements.filterCreatedTo, value("created_to"));
+        setControlValue(elements.filterStatus, value("status"));
+        setControlValue(elements.filterChannel, value("channel"));
+        setControlValue(elements.filterLocale, value("locale"));
+        setControlValue(elements.filterPriority, value("priority"));
+        setControlValue(elements.filterSla, value("response_sla"));
+        setControlValue(elements.filterFollowUpSla, value("follow_up_sla"));
+        setControlValue(elements.filterBucket, value("bucket"));
+        setControlValue(elements.filterOffer, value("offer"));
+        setControlValue(elements.filterUtmSource, value("utm_source"));
+        setControlValue(elements.filterUtmMedium, value("utm_medium"));
+        setControlValue(elements.filterUtmCampaign, value("utm_campaign"));
+        setControlValue(elements.filterFormVariant, value("form_variant"));
+        setControlValue(elements.filterPartner, value("partner_ref"));
+        setControlValue(elements.filterOwner, value("owner"));
+        setControlChecked(elements.filterNeedsOwner, value("needs_owner"));
+        setControlChecked(elements.filterNeedsNextAction, value("needs_next_action"));
+      };
+
+      const syncViewUrl = () => {
+        const url = new URL(window.location.href);
+        const params = selectedReportParams();
+
+        url.searchParams.delete("token");
+        viewParamNames.forEach((name) => url.searchParams.delete(name));
+        Object.entries(params).forEach(([key, value]) => {
+          if (!viewParamNames.includes(key)) return;
+          if (!value || defaultViewParams[key] === value) return;
+          url.searchParams.set(key, String(value));
+        });
+
+        window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
+      };
+
+      const copyViewLink = async () => {
+        syncViewUrl();
+
+        try {
+          await navigator.clipboard.writeText(window.location.href);
+          setStatus("Lead Desk view link copied without the report token.", "success");
+        } catch {
+          setStatus("Could not copy the view link in this browser mode.", "error");
+        }
+      };
+
+      const filterChanged = () => {
+        syncViewUrl();
+        if (state.report) loadReport();
+      };
+
+      const renderMetrics = (totals = {}) => {
+        const total = Number(totals.total || 0);
+        const newCount = Number(totals.new_count || 0);
+        const overdueCount = Number(totals.overdue_count || 0);
+        const dueSoonCount = Number(totals.due_soon_count || 0);
+        const followUpStaleCount = Number(totals.follow_up_stale_count || 0);
+        const followUpDueSoonCount = Number(totals.follow_up_due_soon_count || 0);
+        const activeCount = Number(totals.active_count || 0);
+        const contactedCount = Number(totals.contacted_count || 0);
+        const qualifiedOrBetterCount = Number(totals.qualified_or_better_count || 0);
+        const wonCount = Number(totals.won_count || 0);
+        const needsOwnerCount = Number(totals.needs_owner_count || 0);
+        const needsNextActionCount = Number(totals.needs_next_action_count || 0);
+        const pipelineRate = total ? `${Math.round((qualifiedOrBetterCount / total) * 100)}%` : "-";
+        const winRate = total ? `${Math.round((wonCount / total) * 100)}%` : "-";
+        const average = totals.average_score === null || totals.average_score === undefined
+          ? "-"
+          : Math.round(Number(totals.average_score || 0));
+
+        elements.metrics.innerHTML = [
+          ["Total leads", total],
+          ["New leads", newCount],
+          ["Overdue", overdueCount],
+          ["Due soon", dueSoonCount],
+          ["Stale follow-up", followUpStaleCount],
+          ["Follow-up due soon", followUpDueSoonCount],
+          ["Active", activeCount],
+          ["Needs owner", needsOwnerCount],
+          ["Needs next action", needsNextActionCount],
+          ["Contacted", contactedCount],
+          ["Qualified+", qualifiedOrBetterCount],
+          ["Pipeline %", pipelineRate],
+          ["Won", wonCount],
+          ["Win rate", winRate],
+          ["Average score", average]
+        ]
+          .map(
+            ([label, value]) => `
+              <article class="glass-card">
+                <span>${escapeHtml(label)}</span>
+                <strong>${escapeHtml(value)}</strong>
+              </article>
+            `
+          )
+          .join("");
+      };
+
+      const renderOpsSummary = (report = {}) => {
+        const totals = report.totals || {};
+        const partnerTotals = report.partner_performance?.totals || {};
+        const overdue = Number(totals.overdue_count || 0);
+        const dueSoon = Number(totals.due_soon_count || 0);
+        const followUpStale = Number(totals.follow_up_stale_count || 0);
+        const followUpDueSoon = Number(totals.follow_up_due_soon_count || 0);
+        const active = Number(totals.active_count || 0);
+        const newCount = Number(totals.new_count || 0);
+        const contacted = Number(totals.contacted_count || 0);
+        const qualified = Number(totals.qualified_or_better_count || 0);
+        const needsOwner = Number(totals.needs_owner_count || 0);
+        const needsNextAction = Number(totals.needs_next_action_count || 0);
+        const partnerActive = Number(partnerTotals.active_count || 0);
+
+        const focusCopy = overdue
+          ? `${overdue} lead${overdue === 1 ? "" : "s"} need first response now.`
+          : dueSoon
+            ? `${dueSoon} lead${dueSoon === 1 ? "" : "s"} are close to the SLA limit.`
+            : followUpStale
+              ? `${followUpStale} touched lead${followUpStale === 1 ? "" : "s"} need follow-up now.`
+              : followUpDueSoon
+                ? `${followUpDueSoon} touched lead${followUpDueSoon === 1 ? "" : "s"} are close to follow-up delay.`
+                : needsOwner
+                  ? `${needsOwner} active lead${needsOwner === 1 ? "" : "s"} need an owner.`
+                  : needsNextAction
+                    ? `${needsNextAction} active lead${needsNextAction === 1 ? "" : "s"} need a next action.`
+                    : active
+                      ? `${active} active lead${active === 1 ? "" : "s"} are in the working queue.`
+                      : "No active leads in the current filter.";
+
+        if (elements.opsCopy) elements.opsCopy.textContent = focusCopy;
+        if (!elements.opsSummary) return;
+
+        const cards = [
+          ["Overdue", overdue, "response_sla:overdue"],
+          ["Due soon", dueSoon, "response_sla:due_soon"],
+          ["Stale follow-up", followUpStale, "follow_up_sla:stale"],
+          ["Follow-up due soon", followUpDueSoon, "follow_up_sla:due_soon"],
+          ["New", newCount, "status:new"],
+          ["Needs owner", needsOwner, "needs_owner:1"],
+          ["Needs next action", needsNextAction, "needs_next_action:1"],
+          ["Contacted", contacted, "status:contacted"],
+          ["Qualified+", qualified, "status:qualified"],
+          ["Active partners", partnerActive, "channel:partner"]
+        ];
+
+        elements.opsSummary.innerHTML = cards
+          .map(
+            ([label, value, shortcut]) => `
+              <button class="lead-desk__ops-card" type="button" data-lead-quick-filter="${escapeHtml(shortcut)}">
+                <span>${escapeHtml(label)}</span>
+                <strong>${escapeHtml(value)}</strong>
+              </button>
+            `
+          )
+          .join("");
+      };
+
+      const breakdownGroup = (title, rows, labelKey) => {
+        const items = Array.isArray(rows) && rows.length ? rows : [];
+        if (!items.length) {
+          return `
+            <article>
+              <h3>${escapeHtml(title)}</h3>
+              <p>No data yet.</p>
+            </article>
+          `;
+        }
+
+        const max = Math.max(...items.map((row) => Number(row.total || 0)), 1);
+        return `
+          <article>
+            <h3>${escapeHtml(title)}</h3>
+            ${items
+              .map((row) => {
+                const total = Number(row.total || 0);
+                const width = Math.max(6, Math.round((total / max) * 100));
+                return `
+                  <div class="lead-desk__bar">
+                    <span>${escapeHtml(row[labelKey] || "unknown")}</span>
+                    <strong>${escapeHtml(total)}</strong>
+                    <i style="width: ${width}%"></i>
+                  </div>
+                `;
+              })
+              .join("")}
+          </article>
+        `;
+      };
+
+      const renderBreakdowns = (breakdowns = {}) => {
+        elements.breakdowns.innerHTML = [
+          breakdownGroup("Status", breakdowns.by_status, "status"),
+          breakdownGroup("Channel", breakdowns.by_channel, "lead_channel"),
+          breakdownGroup("Locale", breakdowns.by_locale, "locale"),
+          breakdownGroup("Priority", breakdowns.by_priority, "lead_priority"),
+          breakdownGroup("Bucket", breakdowns.by_bucket, "routing_bucket"),
+          breakdownGroup("Offer", breakdowns.by_offer, "landing_offer"),
+          breakdownGroup("Form variant", breakdowns.by_form_variant, "form_variant"),
+          breakdownGroup("UTM source", breakdowns.by_utm_source, "utm_source"),
+          breakdownGroup("UTM medium", breakdowns.by_utm_medium, "utm_medium"),
+          breakdownGroup("UTM campaign", breakdowns.by_utm_campaign, "utm_campaign"),
+          breakdownGroup("Partner refs", breakdowns.by_partner, "partner_ref"),
+          breakdownGroup("Response SLA", breakdowns.by_sla, "response_sla"),
+          breakdownGroup("Follow-up SLA", breakdowns.by_follow_up_sla, "follow_up_sla")
+        ].join("");
+      };
+
+      const performanceGroup = (title, rows, labelKey) => {
+        const items = Array.isArray(rows) && rows.length ? rows : [];
+        if (!items.length) return "";
+
+        return `
+          <article class="lead-desk__partner-card">
+            <h3>${escapeHtml(title)}</h3>
+            ${items
+              .map((row) => {
+                const total = Number(row.total || 0);
+                const active = Number(row.active_count || 0);
+                const contacted = Number(row.contacted_count || 0);
+                const qualified = Number(row.qualified_or_better_count || 0);
+                const proposal = Number(row.proposal_count || 0);
+                const won = Number(row.won_count || 0);
+                const lost = Number(row.lost_count || 0);
+                const average = row.average_score === null || row.average_score === undefined
+                  ? "-"
+                  : Math.round(Number(row.average_score || 0));
+                const qualifiedRate = total ? `${Math.round((qualified / total) * 100)}%` : "-";
+
+                return `
+                  <div class="lead-desk__partner-source">
+                    <div>
+                      <strong>${escapeHtml(row[labelKey] || "unknown")}</strong>
+                      <span>${escapeHtml(total)} leads / ${escapeHtml(active)} active / ${escapeHtml(contacted)} contacted</span>
+                    </div>
+                    <time>${compactDate(row.latest_created_at)}</time>
+                    <p>${escapeHtml(qualified)} qualified+ (${escapeHtml(qualifiedRate)}) / ${escapeHtml(proposal)} proposal / ${escapeHtml(won)} won / ${escapeHtml(lost)} lost / avg ${escapeHtml(average)}</p>
+                  </div>
+                `;
+              })
+              .join("")}
+          </article>
+        `;
+      };
+
+      const renderSourcePerformance = (performance = {}) => {
+        const groups = [
+          performanceGroup("Channels", performance.channels, "lead_channel"),
+          performanceGroup("Offers", performance.offers, "landing_offer"),
+          performanceGroup("Form variants", performance.form_variants, "form_variant"),
+          performanceGroup("UTM sources", performance.utm_sources, "utm_source"),
+          performanceGroup("UTM campaigns", performance.utm_campaigns, "utm_campaign")
+        ].filter(Boolean);
+
+        elements.sourcePerformance.innerHTML = groups.length
+          ? groups.join("")
+          : `<article class="lead-desk__empty">No source performance data in the current filter.</article>`;
+      };
+
+      const renderPartnerPerformance = (performance = {}) => {
+        const totals = performance.totals || {};
+        const sources = Array.isArray(performance.sources) ? performance.sources : [];
+        const total = Number(totals.total || 0);
+        const active = Number(totals.active_count || 0);
+        const qualified = Number(totals.qualified_or_better_count || 0);
+        const won = Number(totals.won_count || 0);
+        const lost = Number(totals.lost_count || 0);
+        const unknown = Number(totals.unknown_ref_count || 0);
+        const average = totals.average_score === null || totals.average_score === undefined
+          ? "-"
+          : Math.round(Number(totals.average_score || 0));
+
+        if (!total && !sources.length) {
+          elements.partners.innerHTML = `<article class="lead-desk__empty">No partner leads in the current filter.</article>`;
+          return;
+        }
+
+        elements.partners.innerHTML = `
+          <article class="lead-desk__partner-card">
+            <div class="lead-desk__partner-summary">
+              <span><strong>${escapeHtml(total)}</strong> total</span>
+              <span><strong>${escapeHtml(active)}</strong> active</span>
+              <span><strong>${escapeHtml(qualified)}</strong> qualified+</span>
+              <span><strong>${escapeHtml(won)}</strong> won</span>
+              <span><strong>${escapeHtml(lost)}</strong> lost</span>
+              <span><strong>${escapeHtml(average)}</strong> avg score</span>
+            </div>
+            ${unknown ? `<p>${escapeHtml(unknown)} partner leads need a partner_ref before attribution is clean.</p>` : ""}
+          </article>
+          ${sources
+            .map((source) => {
+              const sourceTotal = Number(source.total || 0);
+              const sourceActive = Number(source.active_count || 0);
+              const sourceQualified = Number(source.qualified_or_better_count || 0);
+              const sourceWon = Number(source.won_count || 0);
+              const sourceAverage = source.average_score === null || source.average_score === undefined
+                ? "-"
+                : Math.round(Number(source.average_score || 0));
+
+              return `
+                <article class="lead-desk__partner-source">
+                  <div>
+                    <strong>${escapeHtml(source.partner_ref || "unknown")}</strong>
+                    <span>${escapeHtml(sourceTotal)} leads / ${escapeHtml(sourceActive)} active</span>
+                  </div>
+                  <time>${compactDate(source.latest_created_at)}</time>
+                  <p>${escapeHtml(sourceQualified)} qualified+ / ${escapeHtml(sourceWon)} won / avg ${escapeHtml(sourceAverage)}</p>
+                </article>
+              `;
+            })
+            .join("")}
+        `;
+      };
+
+      const responseMeta = (lead) => {
+        if (!lead.response_sla) return "";
+        const age = Number(lead.response_age_hours || 0);
+        const due = Number(lead.response_due_hours || 0);
+        const remaining = Number(lead.response_remaining_hours || 0);
+        const dueAt = lead.response_due_at ? compactDate(lead.response_due_at) : "";
+        const timing = remaining < 0
+          ? `${Math.abs(remaining)}h overdue`
+          : `${remaining}h remaining`;
+        const dueCopy = dueAt ? `due ${dueAt}` : `due in ${due}h`;
+        return `${lead.response_sla}: ${timing} / ${dueCopy} / age ${age}h`;
+      };
+
+      const followUpMeta = (lead) => {
+        if (!lead.follow_up_sla || lead.follow_up_sla === "not_started") return "";
+        const age = lead.follow_up_age_hours === null || lead.follow_up_age_hours === undefined
+          ? ""
+          : `${Number(lead.follow_up_age_hours || 0)}h since touch`;
+        return [lead.follow_up_sla, age].filter(Boolean).join(": ");
+      };
+
+      const leadMeta = (lead) =>
+        [
+          lead.lead_priority && `priority: ${lead.lead_priority}`,
+          lead.routing_bucket && `bucket: ${lead.routing_bucket}`,
+          lead.lead_channel && `channel: ${lead.lead_channel}`,
+          lead.form_variant && `form: ${lead.form_variant}`,
+          lead.landing_offer && `offer: ${lead.landing_offer}`,
+          lead.partner_ref && `partner: ${lead.partner_ref}`,
+          lead.lead_owner && `owner: ${lead.lead_owner}`,
+          lead.locale && `locale: ${lead.locale}`
+        ]
+          .filter(Boolean)
+          .map((item) => `<span>${escapeHtml(item)}</span>`)
+          .join("");
+
+      const compactText = (value, maxLength = 180) => {
+        const normalized = String(value ?? "").replace(/\s+/g, " ").trim();
+        if (!normalized || normalized.length <= maxLength) return normalized;
+        return `${normalized.slice(0, Math.max(0, maxLength - 3)).trimEnd()}...`;
+      };
+
+      const leadContextRows = (lead) =>
+        [
+          ["Problem", lead.business_problem],
+          ["Desired result", lead.desired_result],
+          ["Output", lead.desired_output],
+          ["Current system", lead.current_system],
+          ["Integrations", lead.integrations],
+          ["Budget / timeline", [lead.budget, lead.timeline].filter(Boolean).join(" / ")],
+          ["Contact details", lead.contact_details]
+        ].filter(([, value]) => String(value || "").trim());
+
+      const renderLeadContext = (lead) => {
+        const rows = leadContextRows(lead);
+        if (!rows.length) return "";
+
+        return `
+          <div class="lead-desk__context">
+            <span class="lead-desk__context-title">Lead context</span>
+            ${rows
+              .map(
+                ([label, value]) => `
+                  <p>
+                    <span>${escapeHtml(label)}</span>
+                    <strong>${escapeHtml(compactText(value, 220))}</strong>
+                  </p>
+                `
+              )
+              .join("")}
+          </div>
+        `;
+      };
+
+      const leadSummary = (lead) =>
+        [
+          `Lead: ${[lead.name, lead.company].filter(Boolean).join(" / ") || "Unnamed lead"}`,
+          lead.email && `Email: ${lead.email}`,
+          lead.lead_priority && `Priority: ${lead.lead_priority} / score ${lead.lead_score ?? "-"}`,
+          lead.routing_bucket && `Route: ${lead.routing_bucket}`,
+          lead.next_action && `Next action: ${lead.next_action}`,
+          lead.lead_owner && `Owner: ${lead.lead_owner}`,
+          lead.business_problem && `Problem: ${lead.business_problem}`,
+          lead.desired_result && `Desired result: ${lead.desired_result}`,
+          lead.desired_output && `Output: ${lead.desired_output}`,
+          lead.contact_details && `Contact details: ${lead.contact_details}`,
+          lead.landing_offer && `Offer: ${lead.landing_offer}`,
+          lead.partner_ref && `Partner: ${lead.partner_ref}`
+        ].filter(Boolean).join("\n");
+
+      const leadActions = (lead) => {
+        const summary = leadSummary(lead);
+        const email = String(lead.email || "").trim();
+        const subject = encodeURIComponent(`AlfaRank follow-up${lead.company ? `: ${lead.company}` : ""}`);
+        const mailto = email ? `mailto:${email}?subject=${subject}` : "";
+
+        return `
+          <div class="lead-desk__lead-actions">
+            ${mailto ? `<a class="button secondary" href="${escapeHtml(mailto)}">Email lead</a>` : ""}
+            ${summary ? `<button class="button secondary" type="button" data-lead-copy-summary data-summary="${escapeHtml(summary)}">Copy summary</button>` : ""}
+          </div>
+        `;
+      };
+
+      const renderStatusSelect = (current) =>
+        statusOptions
+          .map((status) => `<option value="${status}"${status === current ? " selected" : ""}>${status}</option>`)
+          .join("");
+
+      const slaLabel = (sla) => ({
+        overdue: "Overdue first response",
+        due_soon: "Due soon",
+        on_track: "On track",
+        touched: "Touched",
+        closed: "Closed"
+      })[sla] || "";
+
+      const followUpLabel = (sla) => ({
+        stale: "Stale follow-up",
+        due_soon: "Follow-up due soon",
+        on_track: "Follow-up on track",
+        not_started: "No first touch yet",
+        closed: "Closed"
+      })[sla] || "";
+
+      const renderQueueLead = (lead) => `
+        <article class="lead-desk__lead" data-lead-id="${escapeHtml(lead.id)}" data-response-sla="${escapeHtml(lead.response_sla || "")}">
+          <div class="lead-desk__lead-top">
+            <div>
+              <div class="lead-desk__lead-tags">
+                <span class="lead-desk__status">${escapeHtml(lead.status || "new")}</span>
+                ${lead.response_sla ? `<span class="lead-desk__sla lead-desk__sla--${escapeHtml(String(lead.response_sla).replace(/[^a-z_]/g, ""))}">${escapeHtml(slaLabel(lead.response_sla) || lead.response_sla)}</span>` : ""}
+                ${lead.follow_up_sla && lead.follow_up_sla !== "not_started" ? `<span class="lead-desk__sla lead-desk__sla--follow-up-${escapeHtml(String(lead.follow_up_sla).replace(/[^a-z_]/g, ""))}">${escapeHtml(followUpLabel(lead.follow_up_sla) || lead.follow_up_sla)}</span>` : ""}
+              </div>
+              <h3>${escapeHtml(lead.name || "Unnamed lead")}</h3>
+              <p>${escapeHtml([lead.company, lead.email].filter(Boolean).join(" / ") || "No contact details")}</p>
+            </div>
+            <strong>${escapeHtml(lead.lead_score ?? "-")}</strong>
+          </div>
+          ${responseMeta(lead) ? `<p class="lead-desk__sla-note">${escapeHtml(responseMeta(lead))}</p>` : ""}
+          ${followUpMeta(lead) ? `<p class="lead-desk__sla-note">${escapeHtml(followUpMeta(lead))}</p>` : ""}
+          <div class="lead-desk__meta">${leadMeta(lead)}</div>
+          ${renderLeadContext(lead)}
+          ${leadActions(lead)}
+          <p class="lead-desk__next">${escapeHtml(lead.next_action || "No suggested next action.")}</p>
+          ${lead.needs_owner || lead.needs_next_action ? `
+            <p class="lead-desk__ops-warning">
+              ${lead.needs_owner ? "Needs owner" : ""}
+              ${lead.needs_owner && lead.needs_next_action ? " / " : ""}
+              ${lead.needs_next_action ? "Needs next action" : ""}
+            </p>
+          ` : ""}
+          <form class="lead-desk__update" data-lead-status-form data-lead-id="${escapeHtml(lead.id)}">
+            <label class="field">
+              <span>Status</span>
+              <select name="status">${renderStatusSelect(lead.status || "new")}</select>
+            </label>
+            <label class="field">
+              <span>Owner</span>
+              <input name="owner" value="${escapeHtml(lead.lead_owner || "")}" placeholder="sales / owner" />
+            </label>
+            <label class="field lead-desk__wide">
+              <span>Next action</span>
+              <input name="next_action" value="${escapeHtml(lead.next_action || "")}" placeholder="schedule discovery call" />
+            </label>
+            <label class="field lead-desk__wide">
+              <span>Note</span>
+              <textarea name="note" placeholder="Follow-up note">${escapeHtml(lead.lead_follow_up_note || "")}</textarea>
+            </label>
+            <button class="button secondary" type="submit">Update lead</button>
+          </form>
+        </article>
+      `;
+
+      const renderQueue = (leads = []) => {
+        if (!leads.length) {
+          elements.queue.innerHTML = `<article class="lead-desk__empty">No active leads in the current queue.</article>`;
+          return;
+        }
+
+        elements.queue.innerHTML = leads.map(renderQueueLead).join("");
+      };
+
+      const renderRecent = (leads = []) => {
+        if (!leads.length) {
+          elements.recent.innerHTML = `<article class="lead-desk__empty">No recent leads loaded.</article>`;
+          return;
+        }
+
+        elements.recent.innerHTML = leads
+          .map(
+            (lead) => `
+              <article class="lead-desk__recent-item">
+                <div>
+                  <strong>${escapeHtml(lead.name || lead.email || "Unnamed lead")}</strong>
+                  <span>${escapeHtml(lead.form_variant || lead.landing_offer || lead.routing_bucket || "general")}</span>
+                  ${lead.business_problem ? `<p>${escapeHtml(compactText(lead.business_problem, 130))}</p>` : ""}
+                </div>
+                <time>${compactDate(lead.created_at)}</time>
+              </article>
+            `
+          )
+          .join("");
+      };
+
+      const renderEvents = (events = []) => {
+        if (!events.length) {
+          elements.events.innerHTML = `<article class="lead-desk__empty">No lifecycle events loaded.</article>`;
+          return;
+        }
+
+        elements.events.innerHTML = events
+          .map((event) => {
+            const transition = [event.previous_status || "new", event.status || "unknown"].join(" -> ");
+            const details = [
+              event.owner && `owner: ${event.owner}`,
+              event.next_action && `next: ${event.next_action}`,
+              event.form_variant && `form: ${event.form_variant}`,
+              event.landing_offer && `offer: ${event.landing_offer}`
+            ].filter(Boolean);
+
+            return `
+              <article class="lead-desk__event">
+                <div>
+                  <strong>${escapeHtml(transition)}</strong>
+                  <span>${escapeHtml(event.name || event.email || event.lead_id || "Unknown lead")}</span>
+                </div>
+                <time>${compactDate(event.created_at)}</time>
+                ${details.length ? `<p>${details.map(escapeHtml).join(" / ")}</p>` : ""}
+                ${event.note ? `<p>${escapeHtml(event.note)}</p>` : ""}
+              </article>
+            `;
+          })
+          .join("");
+      };
+
+      const renderNotifications = (events = []) => {
+        if (!events.length) {
+          elements.notifications.innerHTML = `<article class="lead-desk__empty">No notification events loaded.</article>`;
+          return;
+        }
+
+        elements.notifications.innerHTML = events
+          .map((event) => {
+            const details = [
+              event.channel && `channel: ${event.channel}`,
+              event.status_code && `status: ${event.status_code}`,
+              event.form_variant && `form: ${event.form_variant}`,
+              event.landing_offer && `offer: ${event.landing_offer}`
+            ].filter(Boolean);
+
+            return `
+              <article class="lead-desk__event">
+                <div>
+                  <strong>${escapeHtml(event.status || "unknown")}</strong>
+                  <span>${escapeHtml(event.event_type || "notification")}</span>
+                </div>
+                <time>${compactDate(event.created_at)}</time>
+                ${details.length ? `<p>${details.map(escapeHtml).join(" / ")}</p>` : ""}
+                ${event.error_message ? `<p>${escapeHtml(event.error_message)}</p>` : ""}
+              </article>
+            `;
+          })
+          .join("");
+      };
+
+      const renderReport = () => {
+        const report = state.report || {};
+        renderMetrics(report.totals);
+        renderOpsSummary(report);
+        renderBreakdowns(report.breakdowns);
+        renderSourcePerformance(report.source_performance);
+        renderPartnerPerformance(report.partner_performance);
+        renderQueue(report.action_queue || []);
+        renderRecent(report.recent_leads || []);
+        renderEvents(report.status_events || []);
+        renderNotifications(report.notification_events || []);
+        elements.generated.textContent = report.generated_at
+          ? `Generated ${compactDate(report.generated_at)}`
+          : "Not loaded yet.";
+      };
+
+      const loadReport = async () => {
+        if (!state.token) {
+          setStatus("Add the report token first.", "error");
+          return;
+        }
+
+        state.loading = true;
+        syncViewUrl();
+        setStatus("Loading live lead report...", "neutral");
+        elements.refresh.disabled = true;
+
+        try {
+          const response = await fetch(endpointUrl("/api/lead-report", selectedReportParams()), {
+            headers: headers(),
+            cache: "no-store"
+          });
+          state.report = await readJson(response);
+          renderReport();
+          setStatus("Lead report loaded.", "success");
+        } catch (error) {
+          setStatus(error.message || "Could not load lead report.", "error");
+        } finally {
+          state.loading = false;
+          elements.refresh.disabled = false;
+        }
+      };
+
+      const updateLead = async (form) => {
+        if (!state.token) {
+          setStatus("Add the report token first.", "error");
+          return;
+        }
+
+        const submitButton = form.querySelector("button[type='submit']");
+        const payload = {
+          id: form.dataset.leadId,
+          status: form.elements.status.value,
+          owner: form.elements.owner.value,
+          next_action: form.elements.next_action.value,
+          note: form.elements.note.value
+        };
+
+        submitButton.disabled = true;
+        setStatus(`Updating lead ${payload.id}...`, "neutral");
+
+        try {
+          const response = await fetch("/api/lead-status", {
+            method: "POST",
+            headers: {
+              ...headers(),
+              "content-type": "application/json"
+            },
+            body: JSON.stringify(payload)
+          });
+          await readJson(response);
+          setStatus("Lead status updated.", "success");
+          await loadReport();
+        } catch (error) {
+          setStatus(error.message || "Could not update lead.", "error");
+        } finally {
+          submitButton.disabled = false;
+        }
+      };
+
+      const exportCsv = async () => {
+        if (!state.token) {
+          setStatus("Add the report token first.", "error");
+          return;
+        }
+
+        elements.exportButton.disabled = true;
+        setStatus("Preparing CSV export...", "neutral");
+
+        try {
+          const response = await fetch(endpointUrl("/api/lead-export", selectedExportParams()), {
+            headers: headers(),
+            cache: "no-store"
+          });
+
+          if (!response.ok) {
+            throw new Error(await response.text());
+          }
+
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = `alfarank-leads-${new Date().toISOString().slice(0, 10)}.csv`;
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+          window.URL.revokeObjectURL(url);
+          setStatus("CSV export downloaded.", "success");
+        } catch (error) {
+          setStatus(error.message || "Could not export CSV.", "error");
+        } finally {
+          elements.exportButton.disabled = false;
+        }
+      };
+
+      elements.authForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        saveToken(elements.tokenInput.value);
+        loadReport();
+      });
+
+      elements.refresh.addEventListener("click", loadReport);
+      elements.exportButton.addEventListener("click", exportCsv);
+      elements.copyViewButton.addEventListener("click", copyViewLink);
+      elements.limit.addEventListener("change", filterChanged);
+      elements.includeTest.addEventListener("change", filterChanged);
+      [
+        elements.filterStatus,
+        elements.filterChannel,
+        elements.filterLocale,
+        elements.filterPriority,
+        elements.filterCreatedFrom,
+        elements.filterCreatedTo,
+        elements.filterSla,
+        elements.filterFollowUpSla,
+        elements.filterBucket,
+        elements.filterOffer,
+        elements.filterUtmSource,
+        elements.filterUtmMedium,
+        elements.filterUtmCampaign,
+        elements.filterFormVariant,
+        elements.filterPartner,
+        elements.filterOwner,
+        elements.filterNeedsOwner,
+        elements.filterNeedsNextAction
+      ].forEach((element) => {
+        element?.addEventListener("change", filterChanged);
+        element?.addEventListener("input", filterChanged);
+      });
+
+      root.addEventListener("submit", (event) => {
+        const form = event.target.closest("[data-lead-status-form]");
+        if (!form) return;
+        event.preventDefault();
+        updateLead(form);
+      });
+
+      root.addEventListener("click", (event) => {
+        const rangeButton = event.target.closest("[data-lead-date-range]");
+        if (rangeButton) {
+          applyDateRange(rangeButton.dataset.leadDateRange || "");
+          filterChanged();
+          return;
+        }
+
+        const button = event.target.closest("[data-lead-quick-filter]");
+        if (!button) return;
+
+        const [key, value = ""] = String(button.dataset.leadQuickFilter || "").split(":");
+        if (key === "clear") {
+          [
+            elements.filterStatus,
+            elements.filterChannel,
+            elements.filterLocale,
+            elements.filterPriority,
+            elements.filterCreatedFrom,
+            elements.filterCreatedTo,
+            elements.filterSla,
+            elements.filterFollowUpSla,
+            elements.filterBucket,
+            elements.filterOffer,
+            elements.filterUtmSource,
+            elements.filterUtmMedium,
+            elements.filterUtmCampaign,
+            elements.filterFormVariant,
+            elements.filterPartner,
+            elements.filterOwner
+          ].forEach((element) => {
+            if (element) element.value = "";
+          });
+          [elements.filterNeedsOwner, elements.filterNeedsNextAction].forEach((element) => {
+            if (element) element.checked = false;
+          });
+        } else if (key === "status" && elements.filterStatus) {
+          elements.filterStatus.value = value;
+        } else if (key === "channel" && elements.filterChannel) {
+          elements.filterChannel.value = value;
+        } else if (key === "locale" && elements.filterLocale) {
+          elements.filterLocale.value = value;
+        } else if (key === "response_sla" && elements.filterSla) {
+          elements.filterSla.value = value;
+        } else if (key === "follow_up_sla" && elements.filterFollowUpSla) {
+          elements.filterFollowUpSla.value = value;
+        } else if (key === "needs_owner" && elements.filterNeedsOwner) {
+          elements.filterNeedsOwner.checked = value === "1";
+        } else if (key === "needs_next_action" && elements.filterNeedsNextAction) {
+          elements.filterNeedsNextAction.checked = value === "1";
+        }
+
+        filterChanged();
+      });
+
+      root.addEventListener("click", async (event) => {
+        const button = event.target.closest("[data-lead-copy-summary]");
+        if (!button) return;
+
+        const summary = button.dataset.summary || "";
+        if (!summary) return;
+
+        try {
+          await navigator.clipboard.writeText(summary);
+          setStatus("Lead summary copied.", "success");
+        } catch {
+          setStatus("Could not copy summary in this browser mode.", "error");
+        }
+      });
+
+      const savedToken = loadSavedToken();
+      applyViewParamsFromUrl();
+      syncViewUrl();
+
+      if (savedToken) {
+        saveToken(savedToken);
+        elements.tokenInput.value = savedToken;
+        setStatus("Saved session token found. Refresh to load live data.", "neutral");
+      }
+
+      renderReport();
+    })();
+  </script>
+</Layout>

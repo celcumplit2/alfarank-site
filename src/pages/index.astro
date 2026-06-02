@@ -63,9 +63,10 @@ const industryTrajectoryItems = industries.filter((item) => industryTrajectorySl
 const decisionRoutes = [
   {
     title: "Automate repeated work",
-    icon: "ai",
+    icon: "chip",
     signal: "Manual workflow",
     text: "AI, rules, review states, and connected actions for content, leads, reports, or internal operations.",
+    orbitLabel: "Orbit automation",
     primaryLabel: "AI Automation",
     primaryHref: "/capabilities/ai-automation/",
     secondaryLabel: "Lead Processing",
@@ -77,6 +78,7 @@ const decisionRoutes = [
     icon: "web",
     signal: "Website / product layer",
     text: "Structured pages, product interfaces, dashboards, portals, MVPs, and integration-ready frontend systems.",
+    orbitLabel: "Orbit web platform",
     primaryLabel: "Web Development",
     primaryHref: "/capabilities/web-product-development/",
     secondaryLabel: "Upgrade Website",
@@ -85,9 +87,10 @@ const decisionRoutes = [
   },
   {
     title: "Scale content or SEO",
-    icon: "content",
+    icon: "lens",
     signal: "Publishing engine",
     text: "Topic data, templates, editorial QA, metadata, CMS publishing, and performance monitoring.",
+    orbitLabel: "Orbit content SEO",
     primaryLabel: "Content Infrastructure",
     primaryHref: "/capabilities/seo-content-infrastructure/",
     secondaryLabel: "Generate Content",
@@ -99,6 +102,7 @@ const decisionRoutes = [
     icon: "data",
     signal: "Market signal",
     text: "Scraping, APIs, normalization, scoring, dashboards, alerts, exports, and recurring reports.",
+    orbitLabel: "Orbit data",
     primaryLabel: "Data Systems",
     primaryHref: "/capabilities/data-systems-scraping/",
     secondaryLabel: "Monitoring System",
@@ -110,6 +114,7 @@ const decisionRoutes = [
     icon: "commerce",
     signal: "Catalog operations",
     text: "Product data, feeds, stock and price monitoring, catalog content, marketplaces, and analytics.",
+    orbitLabel: "Orbit ecommerce",
     primaryLabel: "E-commerce Systems",
     primaryHref: "/capabilities/ecommerce-systems/",
     secondaryLabel: "E-commerce Profile",
@@ -118,9 +123,10 @@ const decisionRoutes = [
   },
   {
     title: "Connect WordPress, APIs, and tools",
-    icon: "api",
+    icon: "puzzle",
     signal: "Integration layer",
     text: "Custom CMS structures, CRM connections, publishing workflows, business automations, and admin tools.",
+    orbitLabel: "Orbit integrations",
     primaryLabel: "WordPress & APIs",
     primaryHref: "/capabilities/wordpress-api-integrations/",
     secondaryLabel: "WordPress Tools",
@@ -285,44 +291,89 @@ const blueprintStations = [
   />
 
   <section class="section home-decision" aria-labelledby="decision-title">
-    <div class="section-header">
-      <div>
-        <p class="eyebrow">{translateCopy(locale, "Decision hub")}</p>
-        <h2 id="decision-title">{translateCopy(locale, "What system do you need?")}</h2>
-      </div>
-      <p>{translateCopy(locale, "Start from the operational need. Each route points to the most relevant capability, solution, or system profile so the home page works like a map of the company.")}</p>
-    </div>
-
-    <div class="decision-board">
-      <div class="decision-board__core">
-        <SystemIcon name="product" />
-        <strong>{translateCopy(locale, "Need -> System")}</strong>
-        <p>{translateCopy(locale, "Choose the pressure point, then follow the route into the section with the right level of detail.")}</p>
-        <div class="decision-board__stats">
-          <span><b>{capabilities.length}</b> {translateCopy(locale, "capabilities")}</span>
-          <span><b>{solutions.length}</b> {translateCopy(locale, "solutions")}</span>
-          <span><b>{systems.length}</b> {translateCopy(locale, "profiles")}</span>
+    <div class="decision-orbit-router">
+      <header class="decision-orbit-router__header">
+        <div>
+          <p class="eyebrow">{translateCopy(locale, "From business problem")}</p>
+          <h2 id="decision-title">{translateCopy(locale, "To an operational system")}</h2>
         </div>
+        <p>{translateCopy(locale, "Choose the pressure point. Follow the route to solutions and system.")}</p>
+      </header>
+
+      <div class="decision-orbit-router__field" aria-hidden="true">
+        <svg class="decision-orbit-router__orbits" viewBox="0 0 1000 620" preserveAspectRatio="none" role="presentation">
+          <ellipse class="decision-orbit-router__path decision-orbit-router__path--outer" cx="500" cy="352" rx="452" ry="188"></ellipse>
+          <ellipse class="decision-orbit-router__path decision-orbit-router__path--middle" cx="535" cy="344" rx="366" ry="150"></ellipse>
+          <ellipse class="decision-orbit-router__path decision-orbit-router__path--inner" cx="270" cy="302" rx="155" ry="155"></ellipse>
+          <path class="decision-orbit-router__axis decision-orbit-router__axis--1" d="M362 260 C460 185 558 162 738 176"></path>
+          <path class="decision-orbit-router__axis decision-orbit-router__axis--2" d="M370 304 C520 268 640 256 828 276"></path>
+          <path class="decision-orbit-router__axis decision-orbit-router__axis--3" d="M370 336 C506 362 594 374 744 356"></path>
+          <path class="decision-orbit-router__axis decision-orbit-router__axis--4" d="M350 382 C468 448 570 474 748 434"></path>
+          <path class="decision-orbit-router__axis decision-orbit-router__axis--5" d="M286 462 C380 548 580 532 772 446"></path>
+          <path class="decision-orbit-router__axis decision-orbit-router__axis--6" d="M140 438 C194 520 298 526 430 456"></path>
+        </svg>
+        <span class="decision-orbit-router__beacon decision-orbit-router__beacon--1"></span>
+        <span class="decision-orbit-router__beacon decision-orbit-router__beacon--2"></span>
+        <span class="decision-orbit-router__beacon decision-orbit-router__beacon--3"></span>
+        <span class="decision-orbit-router__beacon decision-orbit-router__beacon--4"></span>
       </div>
 
-      <div class="decision-grid">
-        {decisionRoutes.map((route) => (
-          <article class="decision-route decision-route--glyph">
-            <div class="card-glyph decision-route__glyph" aria-hidden="true">
+      <div class="decision-orbit-core">
+        <div class="decision-orbit-core__rings" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <span class="decision-orbit-core__label">{translateCopy(locale, "Pressure point")}</span>
+        <strong class="decision-orbit-core__title" aria-label={translateCopy(locale, "Need -> System")}>
+          <span>{translateCopy(locale, "Need")}</span>
+          <span class="decision-orbit-core__transfer" aria-hidden="true">
+            <i></i>
+            <i></i>
+          </span>
+          <span>{translateCopy(locale, "System")}</span>
+        </strong>
+        <p>{translateCopy(locale, "A business need becomes a working system with measurable output.")}</p>
+      </div>
+
+      <div class="decision-orbit-modules">
+        {decisionRoutes.map((route, index) => (
+          <a class:list={["decision-orbit-module", `decision-orbit-module--${index + 1}`]} href={localizePath(route.primaryHref, locale)}>
+            <span class="decision-orbit-module__icon" aria-hidden="true">
               <SystemIcon name={route.icon} />
-            </div>
-            <div class="decision-route__body">
-              <span>{translateCopy(locale, route.signal)}</span>
-              <h3>{translateCopy(locale, route.title)}</h3>
-              <p>{translateCopy(locale, route.text)}</p>
-              <div class="decision-route__links">
-                <a href={localizePath(route.primaryHref, locale)}>{translateCopy(locale, route.primaryLabel)}</a>
-                <a href={localizePath(route.secondaryHref, locale)}>{translateCopy(locale, route.secondaryLabel)}</a>
-              </div>
-            </div>
-            <small>{translateCopy(locale, route.output)}</small>
-          </article>
+            </span>
+            <span class="decision-orbit-module__copy">
+              <small>{String(index + 1).padStart(2, "0")}</small>
+              <strong>{translateCopy(locale, route.orbitLabel)}</strong>
+              <em>{translateCopy(locale, "Open route")}</em>
+            </span>
+            <span class="decision-orbit-module__arrow" aria-hidden="true"></span>
+          </a>
         ))}
+      </div>
+
+      <div class="decision-orbit-benefits">
+        <span>
+          <SystemIcon name="target" />
+          <strong>{translateCopy(locale, "Clear routes")}</strong>
+          <small>{translateCopy(locale, "From problem to solution")}</small>
+        </span>
+        <span>
+          <SystemIcon name="shield" />
+          <strong>{translateCopy(locale, "Proven solutions")}</strong>
+          <small>{translateCopy(locale, "Ready modules and practices")}</small>
+        </span>
+        <span>
+          <SystemIcon name="ranking" />
+          <strong>{translateCopy(locale, "Measurable result")}</strong>
+          <small>{translateCopy(locale, "Transparency and control")}</small>
+        </span>
+        <span>
+          <SystemIcon name="lock" />
+          <strong>{translateCopy(locale, "Secure and scalable")}</strong>
+          <small>{translateCopy(locale, "Reliable platform for growth")}</small>
+        </span>
       </div>
     </div>
 
@@ -393,7 +444,15 @@ const blueprintStations = [
       <div class="route-engine__core">
         <SystemIcon name="flow" />
         <span>{translateCopy(locale, "Route engine")}</span>
-        <strong>{translateCopy(locale, "Problem to system")}</strong>
+        <strong class="route-engine__conversion" aria-label={translateCopy(locale, "Problem to system")}>
+          <span>{translateCopy(locale, "Problem")}</span>
+          <span class="route-engine__chevrons" aria-hidden="true">
+            <i></i>
+            <i></i>
+            <i></i>
+          </span>
+          <span>{translateCopy(locale, "System")}</span>
+        </strong>
         <p>{translateCopy(locale, "Inputs are converted into scoped implementation paths, then into measurable business outputs.")}</p>
         <a class="button secondary" href={localizePath("/solutions/", locale)}>{translateCopy(locale, "View solution routes")}</a>
       </div>
@@ -428,6 +487,13 @@ const blueprintStations = [
           <h3>{translateCopy(locale, station.title)}</h3>
           <p>{translateCopy(locale, station.text)}</p>
           <small>{translateCopy(locale, station.stat)}</small>
+          {index < blueprintStations.length - 1 && (
+            <span class="client-blueprint__connector" aria-hidden="true">
+              <i></i>
+              <i></i>
+              <i></i>
+            </span>
+          )}
         </article>
       ))}
     </div>

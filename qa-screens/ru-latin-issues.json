@@ -1,0 +1,2814 @@
+﻿[
+    {
+        "Text":  "A working intake flow that captures source, request type, missing context, owner, and next action.",
+        "Latin":  "working, intake, flow, that, captures, source, request, type, missing, context, owner, and, next, action"
+    },
+    {
+        "Text":  "Add context, entities, rules, metadata, and missing fields.",
+        "Latin":  "Add, context, entities, rules, metadata, and, missing, fields"
+    },
+    {
+        "Text":  "Add technical QA, metadata, internal linking, and monitoring.",
+        "Latin":  "Add, technical, metadata, internal, linking, and, monitoring"
+    },
+    {
+        "Text":  "Add проверка, approval, and correction stages.",
+        "Latin":  "Add, approval, and, correction, stages"
+    },
+    {
+        "Text":  "Add проверка, QA, and approval logic.",
+        "Latin":  "Add, and, approval, logic"
+    },
+    {
+        "Text":  "Admin tools + процессы",
+        "Latin":  "Admin, tools"
+    },
+    {
+        "Text":  "Admin tools and процессы",
+        "Latin":  "Admin, tools, and"
+    },
+    {
+        "Text":  "Ads",
+        "Latin":  "Ads"
+    },
+    {
+        "Text":  "AI + Auto",
+        "Latin":  "Auto"
+    },
+    {
+        "Text":  "AI and automation",
+        "Latin":  "and, automation"
+    },
+    {
+        "Text":  "AI assist",
+        "Latin":  "assist"
+    },
+    {
+        "Text":  "AI automation",
+        "Latin":  "automation"
+    },
+    {
+        "Text":  "AI automation at AlfaRank is not a layer of isolated prompts. It is a way to design controlled процессы where AI models, business rules, data sources, CMS tools, CRMs, and human проверка work together. The result is a system that can produce, classify, enrich, monitor, or route work with less manual effort and more consistency.",
+        "Latin":  "automation, not, layer, isolated, prompts, way, design, controlled, where, models, business, rules, data, sources, tools, CRMs, and, human, work, together, The, result, system, that, can, produce, classify, enrich, monitor, route, work, with, less, manual, effort, and, more, consistency"
+    },
+    {
+        "Text":  "AI draft, обогащение, + процесс...",
+        "Latin":  "draft"
+    },
+    {
+        "Text":  "AI draft, обогащение, and процесс проверки",
+        "Latin":  "draft, and"
+    },
+    {
+        "Text":  "AI models",
+        "Latin":  "models"
+    },
+    {
+        "Text":  "AI output is useful but inconsistent without templates, QA, and human approval.",
+        "Latin":  "output, useful, but, inconsistent, without, templates, and, human, approval"
+    },
+    {
+        "Text":  "AI output stops being an uncontrolled prompt habit and becomes a проверкаed публикация system.",
+        "Latin":  "output, stops, being, uncontrolled, prompt, habit, and, becomes, system"
+    },
+    {
+        "Text":  "AI, web, content, data, commerce, media,...",
+        "Latin":  "web, content, data, commerce, media"
+    },
+    {
+        "Text":  "AI-поддерживаемый blog or guide процессы.",
+        "Latin":  "blog, guide"
+    },
+    {
+        "Text":  "AI-поддерживаемый drafts, outlines, metadata, internal links, media prompts, structured sections, and formatting.",
+        "Latin":  "drafts, outlines, metadata, internal, links, media, prompts, structured, sections, and, formatting"
+    },
+    {
+        "Text":  "AI-поддерживаемый generation",
+        "Latin":  "generation"
+    },
+    {
+        "Text":  "AI-поддерживаемый generation pi...",
+        "Latin":  "generation"
+    },
+    {
+        "Text":  "AI-поддерживаемый generation pipeline",
+        "Latin":  "generation"
+    },
+    {
+        "Text":  "AI-поддерживаемый operating processes",
+        "Latin":  "operating, processes"
+    },
+    {
+        "Text":  "AI-поддерживаемый ops",
+        "Latin":  "ops"
+    },
+    {
+        "Text":  "AI-поддерживаемый steps for drafts, scenes, captions, media variations, thumbnails, metadata, or structured производство ассетов.",
+        "Latin":  "steps, for, drafts, scenes, captions, media, variations, thumbnails, metadata, structured"
+    },
+    {
+        "Text":  "Alert",
+        "Latin":  "Alert"
+    },
+    {
+        "Text":  "AlfaRank does not start with a preferred tool list. The project starts with the business process, then the stack is selected around content models, users, data sources, automation points, integrations, hosting, and measurement.",
+        "Latin":  "does, not, start, with, preferred, tool, list, The, project, starts, with, the, business, process, then, the, stack, selected, around, content, models, users, data, sources, automation, points, integrations, hosting, and, measurement"
+    },
+    {
+        "Text":  "ALFARANK ROUTING ENGINE",
+        "Latin":  "ROUTING, ENGINE"
+    },
+    {
+        "Text":  "AlfaRank uses web, CMS, AI, automation, data, and deployment tools as an integrated system layer. The goal is not tool novelty. The goal is reliable implementation that business teams can use and improve.",
+        "Latin":  "uses, web, automation, data, and, deployment, tools, integrated, system, layer, The, goal, not, tool, novelty, The, goal, reliable, implementation, that, business, teams, can, use, and, improve"
+    },
+    {
+        "Text":  "AlfaRank использует проверенные веб-, automation-, AI-, data- и CMS-технологии, чтобы создавать системы, которые можно запускать, проверять, интегрировать и улучшать без хрупкой привязки к стеку.",
+        "Latin":  "automation-, data-"
+    },
+    {
+        "Text":  "Analytics",
+        "Latin":  "Analytics"
+    },
+    {
+        "Text":  "Analytics and integrations",
+        "Latin":  "Analytics, and, integrations"
+    },
+    {
+        "Text":  "Analytics and operational панели",
+        "Latin":  "Analytics, and, operational"
+    },
+    {
+        "Text":  "API + automation layer",
+        "Latin":  "automation, layer"
+    },
+    {
+        "Text":  "API + CRM integrations",
+        "Latin":  "integrations"
+    },
+    {
+        "Text":  "API and automation layer",
+        "Latin":  "and, automation, layer"
+    },
+    {
+        "Text":  "API and CRM integrations",
+        "Latin":  "and, integrations"
+    },
+    {
+        "Text":  "API integrations",
+        "Latin":  "integrations"
+    },
+    {
+        "Text":  "API integrations with external systems",
+        "Latin":  "integrations, with, external, systems"
+    },
+    {
+        "Text":  "API-first integration when business systems need to exchange state.",
+        "Latin":  "first, integration, when, business, systems, need, exchange, state"
+    },
+    {
+        "Text":  "APIs and integrations",
+        "Latin":  "and, integrations"
+    },
+    {
+        "Text":  "Asset preparation and обогащение",
+        "Latin":  "Asset, preparation, and"
+    },
+    {
+        "Text":  "Assets are exported into ready formats for публикация channels.",
+        "Latin":  "Assets, are, exported, into, ready, formats, for, channels"
+    },
+    {
+        "Text":  "Audit + оценка logic",
+        "Latin":  "Audit, logic"
+    },
+    {
+        "Text":  "Audit + ранжирование",
+        "Latin":  "Audit"
+    },
+    {
+        "Text":  "Audit and оценка logic",
+        "Latin":  "Audit, and, logic"
+    },
+    {
+        "Text":  "Audit and ранжирование logic",
+        "Latin":  "Audit, and, logic"
+    },
+    {
+        "Text":  "Audit and ранжирование systems",
+        "Latin":  "Audit, and, systems"
+    },
+    {
+        "Text":  "Audit and ранжирование tools",
+        "Latin":  "Audit, and, tools"
+    },
+    {
+        "Text":  "Audit the current catalog, product data, CMS, store platform, feeds, and integrations.",
+        "Latin":  "Audit, the, current, catalog, product, data, store, platform, feeds, and, integrations"
+    },
+    {
+        "Text":  "Audit the current product data, feeds, store platform, and update процесс.",
+        "Latin":  "Audit, the, current, product, data, feeds, store, platform, and, update"
+    },
+    {
+        "Text":  "Audit the current store, catalog, CMS, product data, and integrations.",
+        "Latin":  "Audit, the, current, store, catalog, product, data, and, integrations"
+    },
+    {
+        "Text":  "Audit the current website, CMS, content structure, performance, and integrations.",
+        "Latin":  "Audit, the, current, website, content, structure, performance, and, integrations"
+    },
+    {
+        "Text":  "Audit the current WordPress setup, plugins, content model, and integrations.",
+        "Latin":  "Audit, the, current, setup, plugins, content, model, and, integrations"
+    },
+    {
+        "Text":  "Audit the current WordPress setup, plugins, forms, and CRM path.",
+        "Latin":  "Audit, the, current, setup, plugins, forms, and, path"
+    },
+    {
+        "Text":  "Audit the current WordPress structure, plugins, data model, forms, and integrations.",
+        "Latin":  "Audit, the, current, structure, plugins, data, model, forms, and, integrations"
+    },
+    {
+        "Text":  "Audit, оценка, + reporting",
+        "Latin":  "Audit, reporting"
+    },
+    {
+        "Text":  "Automate",
+        "Latin":  "Automate"
+    },
+    {
+        "Text":  "Automate captions, thumbnails, metadata, file preparation, or exports.",
+        "Latin":  "Automate, captions, thumbnails, metadata, file, preparation, exports"
+    },
+    {
+        "Text":  "Automate lead processing",
+        "Latin":  "Automate, lead, processing"
+    },
+    {
+        "Text":  "Automated процессы",
+        "Latin":  "Automated"
+    },
+    {
+        "Text":  "Automation between websites, CRMs, forms, and databases",
+        "Latin":  "Automation, between, websites, CRMs, forms, and, databases"
+    },
+    {
+        "Text":  "Automation tools",
+        "Latin":  "Automation, tools"
+    },
+    {
+        "Text":  "Automation процесс",
+        "Latin":  "Automation"
+    },
+    {
+        "Text":  "Better leads. More opportunities.",
+        "Latin":  "Better, leads, More, opportunities"
+    },
+    {
+        "Text":  "Brand fit",
+        "Latin":  "Brand, fit"
+    },
+    {
+        "Text":  "Bridge",
+        "Latin":  "Bridge"
+    },
+    {
+        "Text":  "Brief",
+        "Latin":  "Brief"
+    },
+    {
+        "Text":  "Brief quality, draft throughput, approval status, публикация queue, indexation, and content gap coverage.",
+        "Latin":  "Brief, quality, draft, throughput, approval, status, queue, indexation, and, content, gap, coverage"
+    },
+    {
+        "Text":  "Broken data",
+        "Latin":  "Broken, data"
+    },
+    {
+        "Text":  "Build a client portal for requests, files, reports, панели, or процессы.",
+        "Latin":  "Build, client, portal, for, requests, files, reports"
+    },
+    {
+        "Text":  "Build a product MVP or client portal around a specific business процесс.",
+        "Latin":  "Build, product, client, portal, around, specific, business"
+    },
+    {
+        "Text":  "Build a programmatic процесс публикации from data sources and templates.",
+        "Latin":  "Build, programmatic, from, data, sources, and, templates"
+    },
+    {
+        "Text":  "Build AI-поддерживаемый content процессы with editorial control.",
+        "Latin":  "Build, content, with, editorial, control"
+    },
+    {
+        "Text":  "Build an audit system for websites, pages, products, listings, or campaigns.",
+        "Latin":  "Build, audit, system, for, websites, products, listings, campaigns"
+    },
+    {
+        "Text":  "Build approval systems for публикация, media, reports, or client work.",
+        "Latin":  "Build, approval, systems, for, media, reports, client, work"
+    },
+    {
+        "Text":  "Build audit systems for websites, pages, products, listings, or campaigns.",
+        "Latin":  "Build, audit, systems, for, websites, products, listings, campaigns"
+    },
+    {
+        "Text":  "Build collection, normalization, оценка, and storage logic.",
+        "Latin":  "Build, collection, normalization, and, storage, logic"
+    },
+    {
+        "Text":  "Build collection, validation, normalization, and storage logic.",
+        "Latin":  "Build, collection, validation, normalization, and, storage, logic"
+    },
+    {
+        "Text":  "Build feed, content, monitoring, and automation modules.",
+        "Latin":  "Build, feed, content, monitoring, and, automation, modules"
+    },
+    {
+        "Text":  "Build generation, обогащение, QA, and публикация handoff.",
+        "Latin":  "Build, generation, and, handoff"
+    },
+    {
+        "Text":  "Build internal tools",
+        "Latin":  "Build, internal, tools"
+    },
+    {
+        "Text":  "Build internal tools for проверкаing, approving, and tracking media output.",
+        "Latin":  "Build, internal, tools, for, ing, approving, and, tracking, media, output"
+    },
+    {
+        "Text":  "Build or connect the required tools, панели, CMS structures, and API процессы.",
+        "Latin":  "Build, connect, the, required, tools, structures, and"
+    },
+    {
+        "Text":  "Build technical, CMS, automation, and integration improvements.",
+        "Latin":  "Build, technical, automation, and, integration, improvements"
+    },
+    {
+        "Text":  "Build the feed, validation, панель, or reporting modules.",
+        "Latin":  "Build, the, feed, validation, reporting, modules"
+    },
+    {
+        "Text":  "Build the first launchable version with deployment and процесс проверки.",
+        "Latin":  "Build, the, first, launchable, version, with, deployment, and"
+    },
+    {
+        "Text":  "Build the first usable version and connect required data sources.",
+        "Latin":  "Build, the, first, usable, version, and, connect, required, data, sources"
+    },
+    {
+        "Text":  "Build the interface, backend logic, and required админ-инструменты.",
+        "Latin":  "Build, the, interface, backend, logic, and, required"
+    },
+    {
+        "Text":  "Build the tools and connect automation or процесс публикацииs.",
+        "Latin":  "Build, the, tools, and, connect, automation"
+    },
+    {
+        "Text":  "Build the topic/data input system.",
+        "Latin":  "Build, the, topic, data, input, system"
+    },
+    {
+        "Text":  "Build the кастомные tool, integration, or automation layer.",
+        "Latin":  "Build, the, tool, integration, automation, layer"
+    },
+    {
+        "Text":  "Build the производственный процесс for content creation, проверка, and публикация.",
+        "Latin":  "Build, the, for, content, creation, and"
+    },
+    {
+        "Text":  "Build админ-инструменты and панели around a new digital product.",
+        "Latin":  "Build, and, around, new, digital, product"
+    },
+    {
+        "Text":  "Build кастомные админ-инструменты for internal процессы.",
+        "Latin":  "Build, for, internal"
+    },
+    {
+        "Text":  "Build маршрутизация, оценка, and последующие действия automation.",
+        "Latin":  "Build, and, automation"
+    },
+    {
+        "Text":  "Build процесс публикацииs and CMS/static-site structures.",
+        "Latin":  "Build, and, static-site, structures"
+    },
+    {
+        "Text":  "Build, test, and connect the required components.",
+        "Latin":  "Build, test, and, connect, the, required, components"
+    },
+    {
+        "Text":  "Business needs translated into operating...",
+        "Latin":  "Business, needs, translated, into, operating"
+    },
+    {
+        "Text":  "Business pressure routed into system output.",
+        "Latin":  "Business, pressure, routed, into, system, output"
+    },
+    {
+        "Text":  "Campaign route ready",
+        "Latin":  "Campaign, route, ready"
+    },
+    {
+        "Text":  "Can AI help qualify leads?",
+        "Latin":  "Can, help, qualify, leads"
+    },
+    {
+        "Text":  "Can editors stay in control?",
+        "Latin":  "Can, editors, stay, control"
+    },
+    {
+        "Text":  "Can it monitor competitors?",
+        "Latin":  "Can, monitor, competitors"
+    },
+    {
+        "Text":  "Can it reduce plugin fragility?",
+        "Latin":  "Can, reduce, plugin, fragility"
+    },
+    {
+        "Text":  "Can it support programmatic SEO?",
+        "Latin":  "Can, support, programmatic"
+    },
+    {
+        "Text":  "Can this avoid replacing the whole website?",
+        "Latin":  "Can, this, avoid, replacing, the, whole, website"
+    },
+    {
+        "Text":  "Can this connect to an existing store?",
+        "Latin":  "Can, this, connect, existing, store"
+    },
+    {
+        "Text":  "Can this include content процессы?",
+        "Latin":  "Can, this, include, content"
+    },
+    {
+        "Text":  "Can this work without a full CRM rebuild?",
+        "Latin":  "Can, this, work, without, full, rebuild"
+    },
+    {
+        "Text":  "Capability network",
+        "Latin":  "Capability, network"
+    },
+    {
+        "Text":  "Capture + normalize",
+        "Latin":  "Capture, normalize"
+    },
+    {
+        "Text":  "Capture. Process. Route. Deliver.",
+        "Latin":  "Capture, Process, Route, Deliver"
+    },
+    {
+        "Text":  "Catalog + product data structure",
+        "Latin":  "Catalog, product, data, structure"
+    },
+    {
+        "Text":  "Catalog and product data structure",
+        "Latin":  "Catalog, and, product, data, structure"
+    },
+    {
+        "Text":  "Catalog data model",
+        "Latin":  "Catalog, data, model"
+    },
+    {
+        "Text":  "Catalog infra",
+        "Latin":  "Catalog, infra"
+    },
+    {
+        "Text":  "Catalog infrastructure",
+        "Latin":  "Catalog, infrastructure"
+    },
+    {
+        "Text":  "Catalog quality and operational issues are noticed late.",
+        "Latin":  "Catalog, quality, and, operational, issues, are, noticed, late"
+    },
+    {
+        "Text":  "Catalog quality checks + monito...",
+        "Latin":  "Catalog, quality, checks, monito"
+    },
+    {
+        "Text":  "Catalog quality checks and monitoring",
+        "Latin":  "Catalog, quality, checks, and, monitoring"
+    },
+    {
+        "Text":  "Checks for indexation, metadata, schema, internal links, duplicate patterns, content completeness, and page quality.",
+        "Latin":  "Checks, for, indexation, metadata, schema, internal, links, duplicate, patterns, content, completeness, and, page, quality"
+    },
+    {
+        "Text":  "Choose the first content type and the inputs behind it.",
+        "Latin":  "Choose, the, first, content, type, and, the, inputs, behind"
+    },
+    {
+        "Text":  "Clarify",
+        "Latin":  "Clarify"
+    },
+    {
+        "Text":  "Classification",
+        "Latin":  "Classification"
+    },
+    {
+        "Text":  "Classify + score",
+        "Latin":  "Classify, score"
+    },
+    {
+        "Text":  "Classify and route incoming leads by project type or urgency.",
+        "Latin":  "Classify, and, route, incoming, leads, project, type, urgency"
+    },
+    {
+        "Text":  "Classify fit, urgency, confidence, risk, or priority.",
+        "Latin":  "Classify, fit, urgency, confidence, risk, priority"
+    },
+    {
+        "Text":  "Classify project requests by service type, urgency, or business fit.",
+        "Latin":  "Classify, project, requests, service, type, urgency, business, fit"
+    },
+    {
+        "Text":  "Clean",
+        "Latin":  "Clean"
+    },
+    {
+        "Text":  "Clean up and restructure product catalogs for easier management.",
+        "Latin":  "Clean, and, restructure, product, catalogs, for, easier, management"
+    },
+    {
+        "Text":  "Cleaner intake, публикация, or reporting process",
+        "Latin":  "Cleaner, intake, reporting, process"
+    },
+    {
+        "Text":  "Cleaner intake, публикация, or...",
+        "Latin":  "Cleaner, intake"
+    },
+    {
+        "Text":  "Cleaning, deduplication, entity matching, field mapping, tagging, grouping, historical storage, and data quality checks.",
+        "Latin":  "Cleaning, deduplication, entity, matching, field, mapping, tagging, grouping, historical, storage, and, data, quality, checks"
+    },
+    {
+        "Text":  "Cleaning, matching, deduplication, normalization, оценка, historical storage, and structured access to collected data.",
+        "Latin":  "Cleaning, matching, deduplication, normalization, historical, storage, and, structured, access, collected, data"
+    },
+    {
+        "Text":  "CMS + monitoring",
+        "Latin":  "monitoring"
+    },
+    {
+        "Text":  "CMS and publishing",
+        "Latin":  "and, publishing"
+    },
+    {
+        "Text":  "CMS ready",
+        "Latin":  "ready"
+    },
+    {
+        "Text":  "CMS публикация and content monitoring.",
+        "Latin":  "and, content, monitoring"
+    },
+    {
+        "Text":  "CMS публикация and editorial процессы",
+        "Latin":  "and, editorial"
+    },
+    {
+        "Text":  "CMS публикация and monitoring",
+        "Latin":  "and, monitoring"
+    },
+    {
+        "Text":  "CMS публикация, scheduled releases, indexation checks, ранжирование monitoring, update queues, and performance проверка.",
+        "Latin":  "scheduled, releases, indexation, checks, monitoring, update, queues, and, performance"
+    },
+    {
+        "Text":  "CMS, analytics, forms, APIs",
+        "Latin":  "analytics, forms"
+    },
+    {
+        "Text":  "CMS, CRM, internal tools, data",
+        "Latin":  "internal, tools, data"
+    },
+    {
+        "Text":  "CMS-backed publishing when teams need editorial control.",
+        "Latin":  "backed, publishing, when, teams, need, editorial, control"
+    },
+    {
+        "Text":  "CMS-ready публикация + monitori...",
+        "Latin":  "ready, monitori"
+    },
+    {
+        "Text":  "CMS-ready публикация and monitoring layer",
+        "Latin":  "ready, and, monitoring, layer"
+    },
+    {
+        "Text":  "Collect market data from public sources and turn it into панели.",
+        "Latin":  "Collect, market, data, from, public, sources, and, turn, into"
+    },
+    {
+        "Text":  "Collect requests, prompts, records, source data, or tasks.",
+        "Latin":  "Collect, requests, prompts, records, source, data, tasks"
+    },
+    {
+        "Text":  "Collection, normalization, monitoring, scoring, reports, exports, and alerts.",
+        "Latin":  "Collection, normalization, monitoring, scoring, reports, exports, and, alerts"
+    },
+    {
+        "Text":  "Commerce-операции",
+        "Latin":  "Commerce-"
+    },
+    {
+        "Text":  "Company website",
+        "Latin":  "Company, website"
+    },
+    {
+        "Text":  "Connect AI actions with WordPress, CRMs, databases, spreadsheets, and APIs.",
+        "Latin":  "Connect, actions, with, CRMs, databases, spreadsheets, and"
+    },
+    {
+        "Text":  "Connect AI/media tools, storage, CMS, публикация channels, or панели.",
+        "Latin":  "Connect, media, tools, storage, channels"
+    },
+    {
+        "Text":  "Connect analytics, automation, CMS, CRM, or API layers where needed.",
+        "Latin":  "Connect, analytics, automation, layers, where, needed"
+    },
+    {
+        "Text":  "Connect CRM, email, панели, sheets, or notifications.",
+        "Latin":  "Connect, sheets, notifications"
+    },
+    {
+        "Text":  "Connect e-commerce operations with CRM, analytics, automation, or reporting systems.",
+        "Latin":  "Connect, operations, with, analytics, automation, reporting, systems"
+    },
+    {
+        "Text":  "Connect forms, CRM, analytics, and automation процессы.",
+        "Latin":  "Connect, forms, analytics, and, automation"
+    },
+    {
+        "Text":  "Connect forms, CRM, email, analytics, databases, and third-party APIs.",
+        "Latin":  "Connect, forms, analytics, databases, and, third-party"
+    },
+    {
+        "Text":  "Connect internal processes with CRM, CMS, APIs, or databases.",
+        "Latin":  "Connect, internal, processes, with, databases"
+    },
+    {
+        "Text":  "Connect media generation with CMS or публикация systems.",
+        "Latin":  "Connect, media, generation, with, systems"
+    },
+    {
+        "Text":  "Connect required APIs, analytics, CRM, marketplace, or reporting tools.",
+        "Latin":  "Connect, required, analytics, marketplace, reporting, tools"
+    },
+    {
+        "Text":  "Connect the flow to the systems where the work actually happens.",
+        "Latin":  "Connect, the, flow, the, systems, where, the, work, actually, happens"
+    },
+    {
+        "Text":  "Connect website forms, CRM, notifications, and обогащение tools.",
+        "Latin":  "Connect, website, forms, notifications, and, tools"
+    },
+    {
+        "Text":  "Connected CRM",
+        "Latin":  "Connected"
+    },
+    {
+        "Text":  "Connected CRM, CMS, and database actions",
+        "Latin":  "Connected, and, database, actions"
+    },
+    {
+        "Text":  "Connected публикация systems",
+        "Latin":  "Connected, systems"
+    },
+    {
+        "Text":  "Connections between websites, forms, CRMs, databases, CMS layers, and external platforms.",
+        "Latin":  "Connections, between, websites, forms, CRMs, databases, layers, and, external, platforms"
+    },
+    {
+        "Text":  "Connections between WordPress, CRMs, forms, payment tools, databases, analytics, third-party APIs, and automation platforms.",
+        "Latin":  "Connections, between, CRMs, forms, payment, tools, databases, analytics, third-party, and, automation, platforms"
+    },
+    {
+        "Text":  "Connections with CRMs, forms, analytics, external APIs, databases, AI процессы, notifications, and automation tools.",
+        "Latin":  "Connections, with, CRMs, forms, analytics, external, databases, notifications, and, automation, tools"
+    },
+    {
+        "Text":  "Connect-ready architecture",
+        "Latin":  "Connect-ready, architecture"
+    },
+    {
+        "Text":  "Content + SEO infrastructure",
+        "Latin":  "Content, infrastructure"
+    },
+    {
+        "Text":  "Content + SEO layer",
+        "Latin":  "Content, layer"
+    },
+    {
+        "Text":  "Content + процесс публикацииs",
+        "Latin":  "Content"
+    },
+    {
+        "Text":  "Content and feed процессы",
+        "Latin":  "Content, and, feed"
+    },
+    {
+        "Text":  "Content and SEO infrastructure",
+        "Latin":  "Content, and, infrastructure"
+    },
+    {
+        "Text":  "Content and SEO layer",
+        "Latin":  "Content, and, layer"
+    },
+    {
+        "Text":  "Content architecture",
+        "Latin":  "Content, architecture"
+    },
+    {
+        "Text":  "Content at scale. Always on.",
+        "Latin":  "Content, scale, Always"
+    },
+    {
+        "Text":  "Content databases and template systems",
+        "Latin":  "Content, databases, and, template, systems"
+    },
+    {
+        "Text":  "Content generation and процесс проверкиs",
+        "Latin":  "Content, generation, and"
+    },
+    {
+        "Text":  "Content hub",
+        "Latin":  "Content, hub"
+    },
+    {
+        "Text":  "Content ideas, briefs, drafts, metadata, проверка, and публикация активная in separate tools.",
+        "Latin":  "Content, ideas, briefs, drafts, metadata, and, separate, tools"
+    },
+    {
+        "Text":  "Content infra",
+        "Latin":  "Content, infra"
+    },
+    {
+        "Text":  "Content infrastructure",
+        "Latin":  "Content, infrastructure"
+    },
+    {
+        "Text":  "Content models, custom fields, editorial workflows, templates, and publishing operations.",
+        "Latin":  "Content, models, custom, fields, editorial, workflows, templates, and, publishing, operations"
+    },
+    {
+        "Text":  "Content performance layer",
+        "Latin":  "Content, performance, layer"
+    },
+    {
+        "Text":  "Content teams, SEO projects, media operators, e-commerce catalogs, and agencies that need repeatable output with проверка and публикация control.",
+        "Latin":  "Content, teams, projects, media, operators, catalogs, and, agencies, that, need, repeatable, output, with, and, control"
+    },
+    {
+        "Text":  "Content types, taxonomies, fields, templates, admin screens, editorial logic, and content models designed around business operations.",
+        "Latin":  "Content, types, taxonomies, fields, templates, admin, screens, editorial, logic, and, content, models, designed, around, business, operations"
+    },
+    {
+        "Text":  "Content Workflow",
+        "Latin":  "Content, Workflow"
+    },
+    {
+        "Text":  "Content производство pipelines",
+        "Latin":  "Content, pipelines"
+    },
+    {
+        "Text":  "Content/публикация system",
+        "Latin":  "Content, system"
+    },
+    {
+        "Text":  "Content-to-video процессы.",
+        "Latin":  "Content-to-video"
+    },
+    {
+        "Text":  "Context check",
+        "Latin":  "Context, check"
+    },
+    {
+        "Text":  "Controlled WordPress процесс with API handoff, status, and visible output.",
+        "Latin":  "Controlled, with, handoff, status, and, visible, output"
+    },
+    {
+        "Text":  "Controlled проверка process",
+        "Latin":  "Controlled, process"
+    },
+    {
+        "Text":  "Controlled процесс публикации",
+        "Latin":  "Controlled"
+    },
+    {
+        "Text":  "Convert content ideas and data into a repeatable AI-поддерживаемый производственный процесс with human проверка built in.",
+        "Latin":  "Convert, content, ideas, and, data, into, repeatable, with, human, built"
+    },
+    {
+        "Text":  "Core stack",
+        "Latin":  "Core, stack"
+    },
+    {
+        "Text":  "Corporate web platforms",
+        "Latin":  "Corporate, web, platforms"
+    },
+    {
+        "Text":  "Corporate websites with structured content systems",
+        "Latin":  "Corporate, websites, with, structured, content, systems"
+    },
+    {
+        "Text":  "Create a prototype that is technically strong enough to become the real product.",
+        "Latin":  "Create, prototype, that, technically, strong, enough, become, the, real, product"
+    },
+    {
+        "Text":  "Create AI-поддерживаемый generation and обогащение steps.",
+        "Latin":  "Create, generation, and, steps"
+    },
+    {
+        "Text":  "Create alerts for operational changes or data quality issues.",
+        "Latin":  "Create, alerts, for, operational, changes, data, quality, issues"
+    },
+    {
+        "Text":  "Create generation templates, prompts, and ассет rules.",
+        "Latin":  "Create, generation, templates, prompts, and, rules"
+    },
+    {
+        "Text":  "Create monitoring for content quality, ранжированиеs, indexation, and technical issues.",
+        "Latin":  "Create, monitoring, for, content, quality, indexation, and, technical, issues"
+    },
+    {
+        "Text":  "Create programmatic SEO or content публикация structures.",
+        "Latin":  "Create, programmatic, content, structures"
+    },
+    {
+        "Text":  "Create programmatic SEO pages from structured data.",
+        "Latin":  "Create, programmatic, from, structured, data"
+    },
+    {
+        "Text":  "Create repeatable media производственный процессs for content teams.",
+        "Latin":  "Create, repeatable, media, for, content, teams"
+    },
+    {
+        "Text":  "Create reporting and alerting tools for managers or operators.",
+        "Latin":  "Create, reporting, and, alerting, tools, for, managers, operators"
+    },
+    {
+        "Text":  "Create scalable product and category content процессы.",
+        "Latin":  "Create, scalable, product, and, category, content"
+    },
+    {
+        "Text":  "Create scalable посадочная страница structures for services, locations, products, or categories.",
+        "Latin":  "Create, scalable, structures, for, services, locations, products, categories"
+    },
+    {
+        "Text":  "Create systems that track competitors, prices, ранжированиеs, catalogs, content, SERPs, or operational signals.",
+        "Latin":  "Create, systems, that, track, competitors, prices, catalogs, content, operational, signals"
+    },
+    {
+        "Text":  "Create templates, metadata patterns, internal linking rules, and CMS structures.",
+        "Latin":  "Create, templates, metadata, patterns, internal, linking, rules, and, structures"
+    },
+    {
+        "Text":  "Create templates, prompts, ассет rules, metadata patterns, and QA steps.",
+        "Latin":  "Create, templates, prompts, rules, metadata, patterns, and, steps"
+    },
+    {
+        "Text":  "Create панели for content, leads, projects, products, or процессы данных.",
+        "Latin":  "Create, for, content, leads, projects, products"
+    },
+    {
+        "Text":  "Create панели for monitoring content, leads, products, data, or operations.",
+        "Latin":  "Create, for, monitoring, content, leads, products, data, operations"
+    },
+    {
+        "Text":  "Create панели, alerts, exports, ранжирование logic, or audit reports.",
+        "Latin":  "Create, alerts, exports, logic, audit, reports"
+    },
+    {
+        "Text":  "Create панели, alerts, reports, or ранжирование/оценка views.",
+        "Latin":  "Create, alerts, reports, views"
+    },
+    {
+        "Text":  "Create панели, exports, alerts, or recurring reports.",
+        "Latin":  "Create, exports, alerts, recurring, reports"
+    },
+    {
+        "Text":  "Create ранжирование or оценка systems for entities, pages, products, or locations.",
+        "Latin":  "Create, systems, for, entities, products, locations"
+    },
+    {
+        "Text":  "Critical operations stop depending on manual exports, duplicate entry, and plugin-chain uncertainty.",
+        "Latin":  "Critical, operations, stop, depending, manual, exports, duplicate, entry, and, plugin-chain, uncertainty"
+    },
+    {
+        "Text":  "CRM + API handoff",
+        "Latin":  "handoff"
+    },
+    {
+        "Text":  "CRM integrations",
+        "Latin":  "integrations"
+    },
+    {
+        "Text":  "CRM, email, sheet, or панель ha...",
+        "Latin":  "sheet"
+    },
+    {
+        "Text":  "CRM, email, sheet, or панель handoff",
+        "Latin":  "sheet, handoff"
+    },
+    {
+        "Text":  "CRM, form, API, or database integrations.",
+        "Latin":  "form, database, integrations"
+    },
+    {
+        "Text":  "CRM/API integration + automatio...",
+        "Latin":  "integration, automatio"
+    },
+    {
+        "Text":  "CRM/API integration and automation logic",
+        "Latin":  "integration, and, automation, logic"
+    },
+    {
+        "Text":  "CSV, exports, sheets",
+        "Latin":  "exports, sheets"
+    },
+    {
+        "Text":  "Current system",
+        "Latin":  "Current, system"
+    },
+    {
+        "Text":  "Current website, system, or tools optional",
+        "Latin":  "Current, website, system, tools, optional"
+    },
+    {
+        "Text":  "Custom WordPress architecture",
+        "Latin":  "Custom, architecture"
+    },
+    {
+        "Text":  "Custom WordPress structures and tools",
+        "Latin":  "Custom, structures, and, tools"
+    },
+    {
+        "Text":  "Custom WordPress админ-инструменты.",
+        "Latin":  "Custom"
+    },
+    {
+        "Text":  "Custom WordPress процесс or adm...",
+        "Latin":  "Custom, adm"
+    },
+    {
+        "Text":  "Custom WordPress процесс or admin tool",
+        "Latin":  "Custom, admin, tool"
+    },
+    {
+        "Text":  "Custom админ-инструменты, панели, import/export flows, monitoring utilities, internal процессы, and plugin-style business features.",
+        "Latin":  "Custom, import, export, flows, monitoring, utilities, internal, and, plugin-style, business, features"
+    },
+    {
+        "Text":  "Custom панели, import/export tools, проверка screens, bulk actions, editorial tools, and internal operating views.",
+        "Latin":  "Custom, import, export, tools, screens, bulk, actions, editorial, tools, and, internal, operating, views"
+    },
+    {
+        "Text":  "Dashboard or internal tool",
+        "Latin":  "Dashboard, internal, tool"
+    },
+    {
+        "Text":  "Dashboards",
+        "Latin":  "Dashboards"
+    },
+    {
+        "Text":  "Dashboards + internal tools",
+        "Latin":  "Dashboards, internal, tools"
+    },
+    {
+        "Text":  "Dashboards and alerts for stock, prices, доступность, catalog issues, content gaps, performance signals, and operational changes.",
+        "Latin":  "Dashboards, and, alerts, for, stock, prices, catalog, issues, content, gaps, performance, signals, and, operational, changes"
+    },
+    {
+        "Text":  "Dashboards and alerts for stock, цены, доступность, catalog quality, content gaps, technical issues, and key commercial signals.",
+        "Latin":  "Dashboards, and, alerts, for, stock, catalog, quality, content, gaps, technical, issues, and, key, commercial, signals"
+    },
+    {
+        "Text":  "Dashboards and exports",
+        "Latin":  "Dashboards, and, exports"
+    },
+    {
+        "Text":  "Dashboards and internal tools",
+        "Latin":  "Dashboards, and, internal, tools"
+    },
+    {
+        "Text":  "Dashboards, alerts, exports, and reporting",
+        "Latin":  "Dashboards, alerts, exports, and, reporting"
+    },
+    {
+        "Text":  "Dashboards, audits, rankings, feeds",
+        "Latin":  "Dashboards, audits, rankings, feeds"
+    },
+    {
+        "Text":  "Dashboards, portals, and internal tools",
+        "Latin":  "Dashboards, portals, and, internal, tools"
+    },
+    {
+        "Text":  "Data and AI layers only when the workflow has clear inputs and review logic.",
+        "Latin":  "Data, and, layers, only, when, the, workflow, has, clear, inputs, and, review, logic"
+    },
+    {
+        "Text":  "Data and scraping",
+        "Latin":  "Data, and, scraping"
+    },
+    {
+        "Text":  "Data collection layer",
+        "Latin":  "Data, collection, layer"
+    },
+    {
+        "Text":  "Data monitoring/reporting system",
+        "Latin":  "Data, monitoring, reporting, system"
+    },
+    {
+        "Text":  "Data or monitoring system",
+        "Latin":  "Data, monitoring, system"
+    },
+    {
+        "Text":  "Data pipelines",
+        "Latin":  "Data, pipelines"
+    },
+    {
+        "Text":  "Data processing",
+        "Latin":  "Data, processing"
+    },
+    {
+        "Text":  "Data quality панели and issue reports.",
+        "Latin":  "Data, quality, and, issue, reports"
+    },
+    {
+        "Text":  "Data systems and scraping work is focused on turning external or internal information into structured business signals. AlfaRank designs systems that collect data, clean it, store it, monitor changes, score entities, generate reports, and trigger actions.",
+        "Latin":  "Data, systems, and, scraping, work, focused, turning, external, internal, information, into, structured, business, signals, designs, systems, that, collect, data, clean, store, monitor, changes, score, entities, generate, reports, and, trigger, actions"
+    },
+    {
+        "Text":  "Define content types, templates, and target публикация volume.",
+        "Latin":  "Define, content, types, templates, and, target, volume"
+    },
+    {
+        "Text":  "Define product fields, transformations, rules, and monitoring needs.",
+        "Latin":  "Define, product, fields, transformations, rules, and, monitoring, needs"
+    },
+    {
+        "Text":  "Define qualification rules, statuses, owners, and response logic.",
+        "Latin":  "Define, qualification, rules, statuses, owners, and, response, logic"
+    },
+    {
+        "Text":  "Define the business процесс, user roles, and required output.",
+        "Latin":  "Define, the, business, user, roles, and, required, output"
+    },
+    {
+        "Text":  "Define the data model, statuses, users, permissions, and actions.",
+        "Latin":  "Define, the, data, model, statuses, users, permissions, and, actions"
+    },
+    {
+        "Text":  "Define the intake fields, маршрутизация logic, and qualification rules.",
+        "Latin":  "Define, the, intake, fields, logic, and, qualification, rules"
+    },
+    {
+        "Text":  "Define the product goal, users, процесс, and first launch scope.",
+        "Latin":  "Define, the, product, goal, users, and, first, launch, scope"
+    },
+    {
+        "Text":  "Define the repeatable media output and source inputs.",
+        "Latin":  "Define, the, repeatable, media, output, and, source, inputs"
+    },
+    {
+        "Text":  "Define the repeatable media output and the input structure behind it.",
+        "Latin":  "Define, the, repeatable, media, output, and, the, input, structure, behind"
+    },
+    {
+        "Text":  "Define the target operating model for product updates, content, цены, stock, and reporting.",
+        "Latin":  "Define, the, target, operating, model, for, product, updates, content, stock, and, reporting"
+    },
+    {
+        "Text":  "Define the органический рост model and target page groups.",
+        "Latin":  "Define, the, model, and, target, page, groups"
+    },
+    {
+        "Text":  "Define the органический рост model and the page types required.",
+        "Latin":  "Define, the, model, and, the, page, types, required"
+    },
+    {
+        "Text":  "Define the процесс objects, fields, validation, and API handoff.",
+        "Latin":  "Define, the, objects, fields, validation, and, handoff"
+    },
+    {
+        "Text":  "Define what business процесс WordPress should support.",
+        "Latin":  "Define, what, business, should, support"
+    },
+    {
+        "Text":  "Define what data matters and what decisions it should support.",
+        "Latin":  "Define, what, data, matters, and, what, decisions, should, support"
+    },
+    {
+        "Text":  "Define what needs to be evaluated, monitored, ranked, or audited.",
+        "Latin":  "Define, what, needs, evaluated, monitored, ranked, audited"
+    },
+    {
+        "Text":  "Define what should be monitored and why it matters.",
+        "Latin":  "Define, what, should, monitored, and, why, matters"
+    },
+    {
+        "Text":  "Define what the upgraded site should support operationally.",
+        "Latin":  "Define, what, the, upgraded, site, should, support, operationally"
+    },
+    {
+        "Text":  "Define what процесс WordPress needs to support.",
+        "Latin":  "Define, what, needs, support"
+    },
+    {
+        "Text":  "Definition of the data sources, entities, metrics, fields, update frequency, reliability requirements, and business decisions the system should support.",
+        "Latin":  "Definition, the, data, sources, entities, metrics, fields, update, frequency, reliability, requirements, and, business, decisions, the, system, should, support"
+    },
+    {
+        "Text":  "Deploy the first usable version and connect analytics or feedback flows.",
+        "Latin":  "Deploy, the, first, usable, version, and, connect, analytics, feedback, flows"
+    },
+    {
+        "Text":  "Deployment, version control, performance, observability, and production review workflows.",
+        "Latin":  "Deployment, version, control, performance, observability, and, production, review, workflows"
+    },
+    {
+        "Text":  "Design collection, normalization, storage, and update logic.",
+        "Latin":  "Design, collection, normalization, storage, and, update, logic"
+    },
+    {
+        "Text":  "Design product структуры данных, feed rules, automation points, and monitoring logic.",
+        "Latin":  "Design, product, feed, rules, automation, points, and, monitoring, logic"
+    },
+    {
+        "Text":  "Design templates, prompt structure, fields, and проверка states.",
+        "Latin":  "Design, templates, prompt, structure, fields, and, states"
+    },
+    {
+        "Text":  "Design the automation flow with states, validation, проверка, and fallback logic.",
+        "Latin":  "Design, the, automation, flow, with, states, validation, and, fallback, logic"
+    },
+    {
+        "Text":  "Design the information architecture and core interface flows.",
+        "Latin":  "Design, the, information, architecture, and, core, interface, flows"
+    },
+    {
+        "Text":  "Design the interface around real team процессы.",
+        "Latin":  "Design, the, interface, around, real, team"
+    },
+    {
+        "Text":  "Design the product data model and operating процесс.",
+        "Latin":  "Design, the, product, data, model, and, operating"
+    },
+    {
+        "Text":  "Design кастомные content models, API connections, админ-инструменты, and automation points.",
+        "Latin":  "Design, content, models, connections, and, automation, points"
+    },
+    {
+        "Text":  "Design кастомные content structures, админ-инструменты, and API connections.",
+        "Latin":  "Design, content, structures, and, connections"
+    },
+    {
+        "Text":  "Document the system and prepare it for ongoing content or business operations.",
+        "Latin":  "Document, the, system, and, prepare, for, ongoing, content, business, operations"
+    },
+    {
+        "Text":  "Document the процесс and prepare the system for ongoing content or operational use.",
+        "Latin":  "Document, the, and, prepare, the, system, for, ongoing, content, operational, use"
+    },
+    {
+        "Text":  "Draft",
+        "Latin":  "Draft"
+    },
+    {
+        "Text":  "Each project combines only the layers needed for the business workflow: frontend, CMS, automation, data, AI, analytics, integrations, and deployment.",
+        "Latin":  "Each, project, combines, only, the, layers, needed, for, the, business, workflow, automation, data, analytics, integrations, and, deployment"
+    },
+    {
+        "Text":  "Each solution starts from an operational problem and turns it into a path for content, leads, data, products, teams, or growth systems.",
+        "Latin":  "Each, solution, starts, from, operational, problem, and, turns, into, path, for, content, leads, data, products, teams, growth, systems"
+    },
+    {
+        "Text":  "E-commerce automation",
+        "Latin":  "automation"
+    },
+    {
+        "Text":  "E-commerce infrastructure",
+        "Latin":  "infrastructure"
+    },
+    {
+        "Text":  "E-commerce monitoring",
+        "Latin":  "monitoring"
+    },
+    {
+        "Text":  "E-commerce profile",
+        "Latin":  "profile"
+    },
+    {
+        "Text":  "E-commerce System is a profile for the operational infrastructure behind online stores and product catalogs. The system connects product data, content, feeds, цены, доступность, integrations, monitoring, and reporting into a more manageable процесс.",
+        "Latin":  "System, profile, for, the, operational, infrastructure, behind, online, stores, and, product, catalogs, The, system, connects, product, data, content, feeds, integrations, monitoring, and, reporting, into, more, manageable"
+    },
+    {
+        "Text":  "E-commerce systems",
+        "Latin":  "systems"
+    },
+    {
+        "Text":  "E-commerce systems at AlfaRank are focused on the operational layer behind online sales: product data, catalogs, feeds, content, stock, цены, integrations, analytics, and repeatable процессы. The goal is to make the store easier to manage, scale, monitor, and connect with other business systems.",
+        "Latin":  "systems, are, focused, the, operational, layer, behind, online, sales, product, data, catalogs, feeds, content, stock, integrations, analytics, and, repeatable, The, goal, make, the, store, easier, manage, scale, monitor, and, connect, with, other, business, systems"
+    },
+    {
+        "Text":  "E-commerce teams, catalog businesses, marketplace operators, and product-heavy companies with repeated product data work.",
+        "Latin":  "teams, catalog, businesses, marketplace, operators, and, product-heavy, companies, with, repeated, product, data, work"
+    },
+    {
+        "Text":  "E-commerce панель and reporting systems.",
+        "Latin":  "and, reporting, systems"
+    },
+    {
+        "Text":  "Editorial QA",
+        "Latin":  "Editorial"
+    },
+    {
+        "Text":  "Editorial процесс automation.",
+        "Latin":  "Editorial, automation"
+    },
+    {
+        "Text":  "Enrich",
+        "Latin":  "Enrich"
+    },
+    {
+        "Text":  "Enrich leads with website, company, source, or campaign data.",
+        "Latin":  "Enrich, leads, with, website, company, source, campaign, data"
+    },
+    {
+        "Text":  "Events, sync, validation",
+        "Latin":  "Events, sync, validation"
+    },
+    {
+        "Text":  "Feed + integration процесс",
+        "Latin":  "Feed, integration"
+    },
+    {
+        "Text":  "Feed and integration процесс",
+        "Latin":  "Feed, and, integration"
+    },
+    {
+        "Text":  "Feed generation",
+        "Latin":  "Feed, generation"
+    },
+    {
+        "Text":  "Feed generation and integrations",
+        "Latin":  "Feed, generation, and, integrations"
+    },
+    {
+        "Text":  "Feed status, missing fields, stock or price changes, catalog coverage, and action-list completion.",
+        "Latin":  "Feed, status, missing, fields, stock, price, changes, catalog, coverage, and, action-list, completion"
+    },
+    {
+        "Text":  "Feed systems",
+        "Latin":  "Feed, systems"
+    },
+    {
+        "Text":  "Feeds + integrations",
+        "Latin":  "Feeds, integrations"
+    },
+    {
+        "Text":  "Feeds and integrations",
+        "Latin":  "Feeds, and, integrations"
+    },
+    {
+        "Text":  "Files",
+        "Latin":  "Files"
+    },
+    {
+        "Text":  "Follow-up в CRM",
+        "Latin":  "Follow-up"
+    },
+    {
+        "Text":  "Follow-up-процессы и отслеживание статусов",
+        "Latin":  "Follow-up-"
+    },
+    {
+        "Text":  "Forms, plugins, CRM, email, content, and reporting are connected loosely or not at all.",
+        "Latin":  "Forms, plugins, content, and, reporting, are, connected, loosely, not, all"
+    },
+    {
+        "Text":  "Forms, portal, панели",
+        "Latin":  "Forms, portal"
+    },
+    {
+        "Text":  "Frontend and backend structures designed to connect with CRMs, CMS platforms, APIs, databases, automation tools, and analytics.",
+        "Latin":  "and, backend, structures, designed, connect, with, CRMs, platforms, databases, automation, tools, and, analytics"
+    },
+    {
+        "Text":  "Frontend, CMS, AI, data, integrations, de...",
+        "Latin":  "data, integrations"
+    },
+    {
+        "Text":  "Gate",
+        "Latin":  "Gate"
+    },
+    {
+        "Text":  "Generate",
+        "Latin":  "Generate"
+    },
+    {
+        "Text":  "Generate and проверка content for large процесс публикацииs.",
+        "Latin":  "Generate, and, content, for, large"
+    },
+    {
+        "Text":  "Generate content",
+        "Latin":  "Generate, content"
+    },
+    {
+        "Text":  "Generate more content",
+        "Latin":  "Generate, more, content"
+    },
+    {
+        "Text":  "Generate product feeds for marketplaces, ads, affiliates, or internal tools.",
+        "Latin":  "Generate, product, feeds, for, marketplaces, ads, affiliates, internal, tools"
+    },
+    {
+        "Text":  "Generate recurring business reports from external and internal data.",
+        "Latin":  "Generate, recurring, business, reports, from, external, and, internal, data"
+    },
+    {
+        "Text":  "Generate recurring reports from scraped, API, or internal data.",
+        "Latin":  "Generate, recurring, reports, from, scraped, internal, data"
+    },
+    {
+        "Text":  "Generate video drafts from articles, product data, scripts, or structured briefs.",
+        "Latin":  "Generate, video, drafts, from, articles, product, data, scripts, structured, briefs"
+    },
+    {
+        "Text":  "Generation and проверка stages",
+        "Latin":  "Generation, and, stages"
+    },
+    {
+        "Text":  "Generation pipeline",
+        "Latin":  "Generation"
+    },
+    {
+        "Text":  "Generation pipelines",
+        "Latin":  "Generation, pipelines"
+    },
+    {
+        "Text":  "Generation, classification, enrichment, routing, review support, and repeatable actions.",
+        "Latin":  "Generation, classification, enrichment, routing, review, support, and, repeatable, actions"
+    },
+    {
+        "Text":  "Good leads no longer disappear inside inboxes, spreadsheets, plugin emails, or unclear ownership.",
+        "Latin":  "Good, leads, longer, disappear, inside, inboxes, spreadsheets, plugin, emails, unclear, ownership"
+    },
+    {
+        "Text":  "Hosting and operations",
+        "Latin":  "Hosting, and, operations"
+    },
+    {
+        "Text":  "Hosting, QA, handover",
+        "Latin":  "Hosting, handover"
+    },
+    {
+        "Text":  "Human checks approve quality, facts, tone, rights, and brand fit.",
+        "Latin":  "Human, checks, approve, quality, facts, tone, rights, and, brand, fit"
+    },
+    {
+        "Text":  "Human gate",
+        "Latin":  "Human, gate"
+    },
+    {
+        "Text":  "Human проверка stages, quality checks, status tracking, corrections, approvals, and content readiness signals.",
+        "Latin":  "Human, stages, quality, checks, status, tracking, corrections, approvals, and, content, readiness, signals"
+    },
+    {
+        "Text":  "Human-in-the-loop automation for controlled output",
+        "Latin":  "Human-in-the-loop, automation, for, controlled, output"
+    },
+    {
+        "Text":  "Human-in-the-loop control",
+        "Latin":  "Human-in-the-loop, control"
+    },
+    {
+        "Text":  "Identify repeated manual work and define what output should be automated.",
+        "Latin":  "Identify, repeated, manual, work, and, define, what, output, should, automated"
+    },
+    {
+        "Text":  "Identify the repeated internal process and current pain points.",
+        "Latin":  "Identify, the, repeated, internal, process, and, current, pain, points"
+    },
+    {
+        "Text":  "Implementation core",
+        "Latin":  "Implementation, core"
+    },
+    {
+        "Text":  "Imports, exports, transformations, marketplace feeds, advertising feeds, CRM connections, warehouse data, and API synchronization.",
+        "Latin":  "Imports, exports, transformations, marketplace, feeds, advertising, feeds, connections, warehouse, data, and, synchronization"
+    },
+    {
+        "Text":  "Improve a WordPress site with кастомные content models and integrations.",
+        "Latin":  "Improve, site, with, content, models, and, integrations"
+    },
+    {
+        "Text":  "Improve an existing site architecture before производство контента scales.",
+        "Latin":  "Improve, existing, site, architecture, before, scales"
+    },
+    {
+        "Text":  "Improve based on actual daily use.",
+        "Latin":  "Improve, based, actual, daily, use"
+    },
+    {
+        "Text":  "Improve source coverage, data quality, and business usefulness.",
+        "Latin":  "Improve, source, coverage, data, quality, and, business, usefulness"
+    },
+    {
+        "Text":  "Improve the product based on real usage and business priorities.",
+        "Latin":  "Improve, the, product, based, real, usage, and, business, priorities"
+    },
+    {
+        "Text":  "Input + brief structure",
+        "Latin":  "Input, brief, structure"
+    },
+    {
+        "Text":  "Input and brief structure",
+        "Latin":  "Input, and, brief, structure"
+    },
+    {
+        "Text":  "Inputs clean",
+        "Latin":  "Inputs, clean"
+    },
+    {
+        "Text":  "Inspect",
+        "Latin":  "Inspect"
+    },
+    {
+        "Text":  "Integration-ready architecture",
+        "Latin":  "Integration-ready, architecture"
+    },
+    {
+        "Text":  "Integration-ready frontends and admin surfaces",
+        "Latin":  "Integration-ready, frontends, and, admin, surfaces"
+    },
+    {
+        "Text":  "Intent map",
+        "Latin":  "Intent, map"
+    },
+    {
+        "Text":  "Interfaces for validating digital products, SaaS concepts, client portals, процесс tools, and business-facing product ideas.",
+        "Latin":  "Interfaces, for, validating, digital, products, concepts, client, portals, tools, and, business-facing, product, ideas"
+    },
+    {
+        "Text":  "Interfaces, reports, exports, alerting rules, issue lists, and monitoring views for business users.",
+        "Latin":  "Interfaces, reports, exports, alerting, rules, issue, lists, and, monitoring, views, for, business, users"
+    },
+    {
+        "Text":  "Internal business tool",
+        "Latin":  "Internal, business, tool"
+    },
+    {
+        "Text":  "Is this just AI text generation?",
+        "Latin":  "this, just, text, generation"
+    },
+    {
+        "Text":  "Keyword groups, entities, products, services, locations, briefs, source data, and templates that define what should be produced.",
+        "Latin":  "Keyword, groups, entities, products, services, locations, briefs, source, data, and, templates, that, define, what, should, produced"
+    },
+    {
+        "Text":  "Landing-page development",
+        "Latin":  "Landing-page, development"
+    },
+    {
+        "Text":  "Launch a digital product",
+        "Latin":  "Launch, digital, product"
+    },
+    {
+        "Text":  "Launch a SaaS MVP or productized service interface.",
+        "Latin":  "Launch, productized, service, interface"
+    },
+    {
+        "Text":  "Launch a structured corporate site with strong navigation and content architecture.",
+        "Latin":  "Launch, structured, corporate, site, with, strong, navigation, and, content, architecture"
+    },
+    {
+        "Text":  "Launch the first процесс and проверка lead quality after real submissions.",
+        "Latin":  "Launch, the, first, and, lead, quality, after, real, submissions"
+    },
+    {
+        "Text":  "Launch the system, validate data quality, and improve based on operational use.",
+        "Latin":  "Launch, the, system, validate, data, quality, and, improve, based, operational, use"
+    },
+    {
+        "Text":  "Launch the upgraded site and monitor structure, performance, and маршруты конверсии.",
+        "Latin":  "Launch, the, upgraded, site, and, monitor, structure, performance, and"
+    },
+    {
+        "Text":  "Launch with real product data and tune for operational use.",
+        "Latin":  "Launch, with, real, product, data, and, tune, for, operational, use"
+    },
+    {
+        "Text":  "Launch, measurement, iteration",
+        "Latin":  "Launch, measurement, iteration"
+    },
+    {
+        "Text":  "Lead + CRM automation",
+        "Latin":  "Lead, automation"
+    },
+    {
+        "Text":  "Lead page",
+        "Latin":  "Lead, page"
+    },
+    {
+        "Text":  "Lead quality, source, status, and последующие действия speed are hard to measure.",
+        "Latin":  "Lead, quality, source, status, and, speed, are, hard, measure"
+    },
+    {
+        "Text":  "Lead routing, project intake, operations",
+        "Latin":  "Lead, routing, project, intake, operations"
+    },
+    {
+        "Text":  "Lead source, status, owner, response time, qualification score, next step.",
+        "Latin":  "Lead, source, status, owner, response, time, qualification, score, next, step"
+    },
+    {
+        "Text":  "Lead status, source, + последую...",
+        "Latin":  "Lead, status, source"
+    },
+    {
+        "Text":  "Lead status, source, and последующие действия reporting",
+        "Latin":  "Lead, status, source, and, reporting"
+    },
+    {
+        "Text":  "Lead обогащение, маршрутизация, and последующие действия logic",
+        "Latin":  "Lead, and, logic"
+    },
+    {
+        "Text":  "Leads leak. Growth stays flat.",
+        "Latin":  "Leads, leak, Growth, stays, flat"
+    },
+    {
+        "Text":  "Live dashboards",
+        "Latin":  "Live, dashboards"
+    },
+    {
+        "Text":  "Loop",
+        "Latin":  "Loop"
+    },
+    {
+        "Text":  "Loop back",
+        "Latin":  "Loop, back"
+    },
+    {
+        "Text":  "Manual content",
+        "Latin":  "Manual, content"
+    },
+    {
+        "Text":  "Manual product updates, fragile feeds, late issue discovery, unclear catalog quality.",
+        "Latin":  "Manual, product, updates, fragile, feeds, late, issue, discovery, unclear, catalog, quality"
+    },
+    {
+        "Text":  "Manual проверка, slow handoff, scattered lead context, unclear campaign quality.",
+        "Latin":  "Manual, slow, handoff, scattered, lead, context, unclear, campaign, quality"
+    },
+    {
+        "Text":  "Map",
+        "Latin":  "Map"
+    },
+    {
+        "Text":  "Map all lead sources and current handling process.",
+        "Latin":  "Map, all, lead, sources, and, current, handling, process"
+    },
+    {
+        "Text":  "Map available sources: websites, APIs, feeds, files, SERPs, catalogs, or internal records.",
+        "Latin":  "Map, available, sources, websites, feeds, files, catalogs, internal, records"
+    },
+    {
+        "Text":  "Map content, data, integrations, and operational states.",
+        "Latin":  "Map, content, data, integrations, and, operational, states"
+    },
+    {
+        "Text":  "Map data sources, content inputs, keyword/entity groups, and публикация constraints.",
+        "Latin":  "Map, data, sources, content, inputs, keyword, entity, groups, and, constraints"
+    },
+    {
+        "Text":  "Map data sources, entities, fields, rules, and output requirements.",
+        "Latin":  "Map, data, sources, entities, fields, rules, and, output, requirements"
+    },
+    {
+        "Text":  "Map screens, data objects, user actions, permissions, and integrations.",
+        "Latin":  "Map, screens, data, objects, user, actions, permissions, and, integrations"
+    },
+    {
+        "Text":  "Map the available sources and the structure of the data.",
+        "Latin":  "Map, the, available, sources, and, the, structure, the, data"
+    },
+    {
+        "Text":  "Map the current lead sources and последующие действия path.",
+        "Latin":  "Map, the, current, lead, sources, and, path"
+    },
+    {
+        "Text":  "Map the generation, editing, проверка, export, and публикация stages.",
+        "Latin":  "Map, the, generation, editing, export, and, stages"
+    },
+    {
+        "Text":  "Map the required inputs: website data, CRM records, CMS content, files, APIs, prompts, and business rules.",
+        "Latin":  "Map, the, required, inputs, website, data, records, content, files, prompts, and, business, rules"
+    },
+    {
+        "Text":  "Marketing logic, двигательering, automati...",
+        "Latin":  "Marketing, logic, ering, automati"
+    },
+    {
+        "Text":  "Marketplace or ad feeds break because product data is incomplete, inconsistent, or not transformed correctly.",
+        "Latin":  "Marketplace, feeds, break, because, product, data, incomplete, inconsistent, not, transformed, correctly"
+    },
+    {
+        "Text":  "Marketplace or advertising feed generation.",
+        "Latin":  "Marketplace, advertising, feed, generation"
+    },
+    {
+        "Text":  "Match",
+        "Latin":  "Match"
+    },
+    {
+        "Text":  "Measure accuracy, speed, and operational impact after launch.",
+        "Latin":  "Measure, accuracy, speed, and, operational, impact, after, launch"
+    },
+    {
+        "Text":  "Measure output quality, speed, and content performance signals.",
+        "Latin":  "Measure, output, quality, speed, and, content, performance, signals"
+    },
+    {
+        "Text":  "Measure response speed, source quality, and process gaps.",
+        "Latin":  "Measure, response, speed, source, quality, and, process, gaps"
+    },
+    {
+        "Text":  "Measure производство speed, consistency, and проверка quality.",
+        "Latin":  "Measure, speed, consistency, and, quality"
+    },
+    {
+        "Text":  "Media and content",
+        "Latin":  "Media, and, content"
+    },
+    {
+        "Text":  "Media проверка and approval systems.",
+        "Latin":  "Media, and, approval, systems"
+    },
+    {
+        "Text":  "Media производственный процесс",
+        "Latin":  "Media"
+    },
+    {
+        "Text":  "Media процесс structure",
+        "Latin":  "Media, structure"
+    },
+    {
+        "Text":  "Media процессы",
+        "Latin":  "Media"
+    },
+    {
+        "Text":  "Messy, scattered, unusable.",
+        "Latin":  "Messy, scattered, unusable"
+    },
+    {
+        "Text":  "Missing fields, feed status, price changes, stock issues, catalog coverage.",
+        "Latin":  "Missing, fields, feed, status, price, changes, stock, issues, catalog, coverage"
+    },
+    {
+        "Text":  "Modernize an existing website into a structured platform with better content logic, integrations, speed, and maintainability.",
+        "Latin":  "Modernize, existing, website, into, structured, platform, with, better, content, logic, integrations, speed, and, maintainability"
+    },
+    {
+        "Text":  "Modernize an existing website into a system that can integrate and scale.",
+        "Latin":  "Modernize, existing, website, into, system, that, can, integrate, and, scale"
+    },
+    {
+        "Text":  "Modernize an old site without positioning it as a rebrand story.",
+        "Latin":  "Modernize, old, site, without, positioning, rebrand, story"
+    },
+    {
+        "Text":  "Modules + APIs",
+        "Latin":  "Modules"
+    },
+    {
+        "Text":  "Monitor competitor websites, prices, catalogs, content, or search visibility.",
+        "Latin":  "Monitor, competitor, websites, prices, catalogs, content, search, visibility"
+    },
+    {
+        "Text":  "Monitor competitor цены, доступность, content, catalogs, or changes.",
+        "Latin":  "Monitor, competitor, content, catalogs, changes"
+    },
+    {
+        "Text":  "Monitor performance, identify gaps, and improve the system over time.",
+        "Latin":  "Monitor, performance, identify, gaps, and, improve, the, system, over, time"
+    },
+    {
+        "Text":  "Monitor ранжированиеs, indexation, content quality, and technical issues.",
+        "Latin":  "Monitor, indexation, content, quality, and, technical, issues"
+    },
+    {
+        "Text":  "Monitor цены, stock, competitor changes, or catalog quality.",
+        "Latin":  "Monitor, stock, competitor, changes, catalog, quality"
+    },
+    {
+        "Text":  "Monitoring",
+        "Latin":  "Monitoring"
+    },
+    {
+        "Text":  "Monitoring + operations",
+        "Latin":  "Monitoring, operations"
+    },
+    {
+        "Text":  "Monitoring + reporting",
+        "Latin":  "Monitoring, reporting"
+    },
+    {
+        "Text":  "Monitoring and operations",
+        "Latin":  "Monitoring, and, operations"
+    },
+    {
+        "Text":  "Monitoring and reporting",
+        "Latin":  "Monitoring, and, reporting"
+    },
+    {
+        "Text":  "Monitoring solution",
+        "Latin":  "Monitoring, solution"
+    },
+    {
+        "Text":  "Monitoring systems",
+        "Latin":  "Monitoring, systems"
+    },
+    {
+        "Text":  "Monitoring tools for competitors, catalogs, SERPs, and marketplaces",
+        "Latin":  "Monitoring, tools, for, competitors, catalogs, and, marketplaces"
+    },
+    {
+        "Text":  "Move from business idea to working MVP, SaaS interface, client portal, or productized platform.",
+        "Latin":  "Move, from, business, idea, working, interface, client, portal, productized, platform"
+    },
+    {
+        "Text":  "Next",
+        "Latin":  "Next"
+    },
+    {
+        "Text":  "Next action",
+        "Latin":  "Next, action"
+    },
+    {
+        "Text":  "No. The value is the процесс around generation: templates, проверка, metadata, CMS handoff, and performance loops.",
+        "Latin":  "The, value, the, around, generation, templates, metadata, handoff, and, performance, loops"
+    },
+    {
+        "Text":  "Normalization + matching",
+        "Latin":  "Normalization, matching"
+    },
+    {
+        "Text":  "Normalization and matching",
+        "Latin":  "Normalization, and, matching"
+    },
+    {
+        "Text":  "Notify",
+        "Latin":  "Notify"
+    },
+    {
+        "Text":  "Notify sales or operations teams based on lead attributes.",
+        "Latin":  "Notify, sales, operations, teams, based, lead, attributes"
+    },
+    {
+        "Text":  "Offer, audience, source ассетов, and constraints enter one queue.",
+        "Latin":  "Offer, audience, source, and, constraints, enter, one, queue"
+    },
+    {
+        "Text":  "One content type, one template system, one generation path, one проверка queue, and one CMS-ready output.",
+        "Latin":  "One, content, type, one, template, system, one, generation, path, one, queue, and, one, ready, output"
+    },
+    {
+        "Text":  "One critical WordPress процесс, one CRM/API handoff, one status model, and one visible output path.",
+        "Latin":  "One, critical, one, handoff, one, status, model, and, one, visible, output, path"
+    },
+    {
+        "Text":  "One intake model, one маршрутизация path, one последующие действия signal, and one reporting view for source and response time.",
+        "Latin":  "One, intake, model, one, path, one, signal, and, one, reporting, view, for, source, and, response, time"
+    },
+    {
+        "Text":  "One intake model, qualified requests, visible маршрутизация, and faster first response.",
+        "Latin":  "One, intake, model, qualified, requests, visible, and, faster, first, response"
+    },
+    {
+        "Text":  "One product data model, one feed or export route, one validation layer, and one operations панель or report.",
+        "Latin":  "One, product, data, model, one, feed, export, route, one, validation, layer, and, one, operations, report"
+    },
+    {
+        "Text":  "Operational admin процессы",
+        "Latin":  "Operational, admin"
+    },
+    {
+        "Text":  "Operational interfaces for teams that need to view data, update records, manage процессы, trigger actions, or проверка outputs.",
+        "Latin":  "Operational, interfaces, for, teams, that, need, view, data, update, records, manage, trigger, actions, outputs"
+    },
+    {
+        "Text":  "Operational pain",
+        "Latin":  "Operational, pain"
+    },
+    {
+        "Text":  "Operational tools",
+        "Latin":  "Operational, tools"
+    },
+    {
+        "Text":  "Operational tools + plugins",
+        "Latin":  "Operational, tools, plugins"
+    },
+    {
+        "Text":  "Operational tools and plugins",
+        "Latin":  "Operational, tools, and, plugins"
+    },
+    {
+        "Text":  "Operational админ-инструменты",
+        "Latin":  "Operational"
+    },
+    {
+        "Text":  "Operational панель or recurring reports",
+        "Latin":  "Operational, recurring, reports"
+    },
+    {
+        "Text":  "Operational панель or recurring...",
+        "Latin":  "Operational, recurring"
+    },
+    {
+        "Text":  "Operations output",
+        "Latin":  "Operations, output"
+    },
+    {
+        "Text":  "Output volume, проверка status, публикация queue, indexation, content gaps.",
+        "Latin":  "Output, volume, status, queue, indexation, content, gaps"
+    },
+    {
+        "Text":  "Page types, taxonomy, internal linking, templates, metadata, content groups, and navigation structures designed before производство begins.",
+        "Latin":  "Page, types, taxonomy, internal, linking, templates, metadata, content, groups, and, navigation, structures, designed, before, begins"
+    },
+    {
+        "Text":  "Pages, listings, catalogs",
+        "Latin":  "listings, catalogs"
+    },
+    {
+        "Text":  "Performance and производство status feed the next batch.",
+        "Latin":  "Performance, and, status, feed, the, next, batch"
+    },
+    {
+        "Text":  "Platforms / Dashboards / MVP",
+        "Latin":  "Platforms, Dashboards"
+    },
+    {
+        "Text":  "Plugin dependency, manual exports, duplicate entry, disconnected CRM context.",
+        "Latin":  "Plugin, dependency, manual, exports, duplicate, entry, disconnected, context"
+    },
+    {
+        "Text":  "Post types, taxonomies, fields, templates, editorial states, metadata, and content relationships built around the business model.",
+        "Latin":  "types, taxonomies, fields, templates, editorial, states, metadata, and, content, relationships, built, around, the, business, model"
+    },
+    {
+        "Text":  "Prepare",
+        "Latin":  "Prepare"
+    },
+    {
+        "Text":  "Prepare drafts, reports, internal notes, and structured records from raw inputs.",
+        "Latin":  "Prepare, drafts, reports, internal, notes, and, structured, records, from, raw, inputs"
+    },
+    {
+        "Text":  "Prepare export, публикация, or storage процессы.",
+        "Latin":  "Prepare, export, storage"
+    },
+    {
+        "Text":  "Pricing",
+        "Latin":  "Pricing"
+    },
+    {
+        "Text":  "Pricing, stock, and доступность monitoring",
+        "Latin":  "Pricing, stock, and, monitoring"
+    },
+    {
+        "Text":  "Pricing, stock, or competitor monitoring.",
+        "Latin":  "Pricing, stock, competitor, monitoring"
+    },
+    {
+        "Text":  "Problem routes mapped",
+        "Latin":  "Problem, routes, mapped"
+    },
+    {
+        "Text":  "Processes for briefs, AI-поддерживаемый drafts, editorial проверка, CMS публикация, quality checks, updates, and monitoring.",
+        "Latin":  "Processes, for, briefs, drafts, editorial, quality, checks, updates, and, monitoring"
+    },
+    {
+        "Text":  "Product catalog and content процессы",
+        "Latin":  "Product, catalog, and, content"
+    },
+    {
+        "Text":  "Product catalog restructuring.",
+        "Latin":  "Product, catalog, restructuring"
+    },
+    {
+        "Text":  "Product data + feed процесс",
+        "Latin":  "Product, data, feed"
+    },
+    {
+        "Text":  "Product data and feed процесс",
+        "Latin":  "Product, data, and, feed"
+    },
+    {
+        "Text":  "Product descriptions, category content, посадочная templates, metadata patterns, internal linking, and публикация logic for органический рост.",
+        "Latin":  "Product, descriptions, category, content, templates, metadata, patterns, internal, linking, and, logic, for"
+    },
+    {
+        "Text":  "Product feed infra",
+        "Latin":  "Product, feed, infra"
+    },
+    {
+        "Text":  "Product feed infrastructure",
+        "Latin":  "Product, feed, infrastructure"
+    },
+    {
+        "Text":  "Product interfaces",
+        "Latin":  "Product, interfaces"
+    },
+    {
+        "Text":  "Product interfaces + MVPs",
+        "Latin":  "Product, interfaces, MVPs"
+    },
+    {
+        "Text":  "Product interfaces and MVPs",
+        "Latin":  "Product, interfaces, and, MVPs"
+    },
+    {
+        "Text":  "Product models, categories, attributes, filters, metadata, content fields, and data rules that make the catalog easier to manage and expand.",
+        "Latin":  "Product, models, categories, attributes, filters, metadata, content, fields, and, data, rules, that, make, the, catalog, easier, manage, and, expand"
+    },
+    {
+        "Text":  "Product updates, content, feed exports, stock signals, and цены checks depend on manual work.",
+        "Latin":  "Product, updates, content, feed, exports, stock, signals, and, checks, depend, manual, work"
+    },
+    {
+        "Text":  "Product, listing, location, or competitor ранжирование systems.",
+        "Latin":  "Product, listing, location, competitor, systems"
+    },
+    {
+        "Text":  "Product/category content процессы.",
+        "Latin":  "Product, category, content"
+    },
+    {
+        "Text":  "Product/category/location content generation.",
+        "Latin":  "Product, category, location, content, generation"
+    },
+    {
+        "Text":  "Products and updates",
+        "Latin":  "Products, and, updates"
+    },
+    {
+        "Text":  "Profiles",
+        "Latin":  "Profiles"
+    },
+    {
+        "Text":  "Profiles, modules, процессы, outputs, imp...",
+        "Latin":  "Profiles, modules, outputs, imp"
+    },
+    {
+        "Text":  "Programmatic pages, content queues, AI-поддерживаемый drafts, metadata systems, quality checks, and controlled публикация flows.",
+        "Latin":  "Programmatic, content, queues, drafts, metadata, systems, quality, checks, and, controlled, flows"
+    },
+    {
+        "Text":  "Programmatic SEO structures",
+        "Latin":  "Programmatic, structures"
+    },
+    {
+        "Text":  "Programmatic SEO structures in WordPress.",
+        "Latin":  "Programmatic, structures"
+    },
+    {
+        "Text":  "Programmatic SEO systems",
+        "Latin":  "Programmatic, systems"
+    },
+    {
+        "Text":  "Programmatic SEO производство контента.",
+        "Latin":  "Programmatic"
+    },
+    {
+        "Text":  "Project request",
+        "Latin":  "Project, request"
+    },
+    {
+        "Text":  "Project type, problem, current setup, des...",
+        "Latin":  "Project, type, problem, current, setup, des"
+    },
+    {
+        "Text":  "Prompt-by-prompt производство, inconsistent structure, hard-to-проверка drafts.",
+        "Latin":  "Prompt-by-prompt, inconsistent, structure, hard-to-, drafts"
+    },
+    {
+        "Text":  "Prototype",
+        "Latin":  "Prototype"
+    },
+    {
+        "Text":  "Public sites, product interfaces, fast static delivery, and launchable web surfaces.",
+        "Latin":  "Public, sites, product, interfaces, fast, static, delivery, and, launchable, web, surfaces"
+    },
+    {
+        "Text":  "Publish engine",
+        "Latin":  "Publish, engine"
+    },
+    {
+        "Text":  "Publish, monitor, and improve based on performance.",
+        "Latin":  "Publish, monitor, and, improve, based, performance"
+    },
+    {
+        "Text":  "Publishing + content процессы",
+        "Latin":  "Publishing, content"
+    },
+    {
+        "Text":  "Publishing + distribution",
+        "Latin":  "Publishing, distribution"
+    },
+    {
+        "Text":  "Publishing and content процессы",
+        "Latin":  "Publishing, and, content"
+    },
+    {
+        "Text":  "Publishing and проверка automation",
+        "Latin":  "Publishing, and, automation"
+    },
+    {
+        "Text":  "Publishing infrastructure",
+        "Latin":  "Publishing, infrastructure"
+    },
+    {
+        "Text":  "Publishing or export outputs",
+        "Latin":  "Publishing, export, outputs"
+    },
+    {
+        "Text":  "Publishing pipelines",
+        "Latin":  "Publishing, pipelines"
+    },
+    {
+        "Text":  "Publishing pipelines for CMS and static sites",
+        "Latin":  "Publishing, pipelines, for, and, static, sites"
+    },
+    {
+        "Text":  "Publishing pipelines for generated ассетов.",
+        "Latin":  "Publishing, pipelines, for, generated"
+    },
+    {
+        "Text":  "Publishing tools",
+        "Latin":  "Publishing, tools"
+    },
+    {
+        "Text":  "Publishing процессы",
+        "Latin":  "Publishing"
+    },
+    {
+        "Text":  "Qualified pipeline",
+        "Latin":  "Qualified"
+    },
+    {
+        "Text":  "Quality checks, metadata, and monitoring процессы",
+        "Latin":  "Quality, checks, metadata, and, monitoring"
+    },
+    {
+        "Text":  "Rank",
+        "Latin":  "Rank"
+    },
+    {
+        "Text":  "Rank tracking, indexing checks, content gap analysis, performance signals, and prioritized improvement процессы.",
+        "Latin":  "Rank, tracking, indexing, checks, content, gap, analysis, performance, signals, and, prioritized, improvement"
+    },
+    {
+        "Text":  "Ranking + оценка",
+        "Latin":  "Ranking"
+    },
+    {
+        "Text":  "Ranking and оценка logic",
+        "Latin":  "Ranking, and, logic"
+    },
+    {
+        "Text":  "Ready to publish",
+        "Latin":  "Ready, publish"
+    },
+    {
+        "Text":  "Real-time clarity. Smarter decisions.",
+        "Latin":  "Real-time, clarity, Smarter, decisions"
+    },
+    {
+        "Text":  "Rebuild content architecture for SEO and scalable публикация.",
+        "Latin":  "Rebuild, content, architecture, for, and, scalable"
+    },
+    {
+        "Text":  "Recurring audit reports for agencies or internal teams.",
+        "Latin":  "Recurring, audit, reports, for, agencies, internal, teams"
+    },
+    {
+        "Text":  "Redesign the information architecture, content model, and core templates.",
+        "Latin":  "Redesign, the, information, architecture, content, model, and, core, templates"
+    },
+    {
+        "Text":  "Referral",
+        "Latin":  "Referral"
+    },
+    {
+        "Text":  "Render",
+        "Latin":  "Render"
+    },
+    {
+        "Text":  "Repeatable content",
+        "Latin":  "Repeatable, content"
+    },
+    {
+        "Text":  "Repeatable content, lead, data, or reporting pipelines",
+        "Latin":  "Repeatable, content, lead, data, reporting, pipelines"
+    },
+    {
+        "Text":  "Repeatable social or media ассет производство.",
+        "Latin":  "Repeatable, social, media"
+    },
+    {
+        "Text":  "Repeatable процесс with templates, statuses, QA, публикация, and monitoring.",
+        "Latin":  "Repeatable, with, templates, statuses, and, monitoring"
+    },
+    {
+        "Text":  "Replace fragile plugin chains with controlled кастомные integrations.",
+        "Latin":  "Replace, fragile, plugin, chains, with, controlled, integrations"
+    },
+    {
+        "Text":  "Replace operational spreadsheets with a structured tool.",
+        "Latin":  "Replace, operational, spreadsheets, with, structured, tool"
+    },
+    {
+        "Text":  "Replace spreadsheets or manual processes with internal tools.",
+        "Latin":  "Replace, spreadsheets, manual, processes, with, internal, tools"
+    },
+    {
+        "Text":  "Replacing fragile plugin chains with controlled кастомные logic.",
+        "Latin":  "Replacing, fragile, plugin, chains, with, controlled, logic"
+    },
+    {
+        "Text":  "Report",
+        "Latin":  "Report"
+    },
+    {
+        "Text":  "Reporting + панель layer",
+        "Latin":  "Reporting, layer"
+    },
+    {
+        "Text":  "Reporting and панель layer",
+        "Latin":  "Reporting, and, layer"
+    },
+    {
+        "Text":  "Reporting output",
+        "Latin":  "Reporting, output"
+    },
+    {
+        "Text":  "Reporting, research, and data processing assistants",
+        "Latin":  "Reporting, research, and, data, processing, assistants"
+    },
+    {
+        "Text":  "Request",
+        "Latin":  "Request"
+    },
+    {
+        "Text":  "Request this route",
+        "Latin":  "Request, this, route"
+    },
+    {
+        "Text":  "Requests arrive from forms, messengers, ads, and email without one clear intake path.",
+        "Latin":  "Requests, arrive, from, forms, messengers, ads, and, without, one, clear, intake, path"
+    },
+    {
+        "Text":  "Research + data assistants",
+        "Latin":  "Research, data, assistants"
+    },
+    {
+        "Text":  "Response time, qualified lead rate, owner assignment, source quality, and next action visibility.",
+        "Latin":  "Response, time, qualified, lead, rate, owner, assignment, source, quality, and, next, action, visibility"
+    },
+    {
+        "Text":  "Reusable formats, layout rules, brand ассетов, export sizes, media naming, storage logic, and version handling.",
+        "Latin":  "Reusable, formats, layout, rules, brand, export, sizes, media, naming, storage, logic, and, version, handling"
+    },
+    {
+        "Text":  "Revenue channels stop depending on fragile exports, late issue discovery, and scattered product data.",
+        "Latin":  "Revenue, channels, stop, depending, fragile, exports, late, issue, discovery, and, scattered, product, data"
+    },
+    {
+        "Text":  "Review + quality control",
+        "Latin":  "Review, quality, control"
+    },
+    {
+        "Text":  "Review + публикация flow",
+        "Latin":  "Review, flow"
+    },
+    {
+        "Text":  "Review and quality control",
+        "Latin":  "Review, and, quality, control"
+    },
+    {
+        "Text":  "Review and публикация flow",
+        "Latin":  "Review, and, flow"
+    },
+    {
+        "Text":  "Review data quality and improve coverage, reliability, and signal usefulness.",
+        "Latin":  "Review, data, quality, and, improve, coverage, reliability, and, signal, usefulness"
+    },
+    {
+        "Text":  "Review queue active",
+        "Latin":  "Review, queue, active"
+    },
+    {
+        "Text":  "Rights clear",
+        "Latin":  "Rights, clear"
+    },
+    {
+        "Text":  "Route + notify",
+        "Latin":  "Route, notify"
+    },
+    {
+        "Text":  "Route leads from a website form into the right CRM pipeline.",
+        "Latin":  "Route, leads, from, website, form, into, the, right"
+    },
+    {
+        "Text":  "Routing",
+        "Latin":  "Routing"
+    },
+    {
+        "Text":  "Rules, weights, thresholds, AI-поддерживаемый checks, ранжирование models, issue detection, and recommendation logic.",
+        "Latin":  "Rules, weights, thresholds, checks, models, issue, detection, and, recommendation, logic"
+    },
+    {
+        "Text":  "Sales or operations teams lose time reading context, assigning owners, and asking the same first questions.",
+        "Latin":  "Sales, operations, teams, lose, time, reading, context, assigning, owners, and, asking, the, same, first, questions"
+    },
+    {
+        "Text":  "Scalable SEO systems",
+        "Latin":  "Scalable, systems"
+    },
+    {
+        "Text":  "Scalable SEO/content operations",
+        "Latin":  "Scalable, content, operations"
+    },
+    {
+        "Text":  "Scalable SEO/content ops",
+        "Latin":  "Scalable, content, ops"
+    },
+    {
+        "Text":  "Scale SEO infrastructure",
+        "Latin":  "Scale, infrastructure"
+    },
+    {
+        "Text":  "Scale посадочная страницаs for locations, services, products, categories, or data entities.",
+        "Latin":  "Scale, for, locations, services, products, categories, data, entities"
+    },
+    {
+        "Text":  "Scaling volume makes it harder to keep internal linking, structure, and updates clean.",
+        "Latin":  "Scaling, volume, makes, harder, keep, internal, linking, structure, and, updates, clean"
+    },
+    {
+        "Text":  "Scope",
+        "Latin":  "Scope"
+    },
+    {
+        "Text":  "Scope a route",
+        "Latin":  "Scope, route"
+    },
+    {
+        "Text":  "Scope path",
+        "Latin":  "Scope, path"
+    },
+    {
+        "Text":  "Score",
+        "Latin":  "Score"
+    },
+    {
+        "Text":  "Scrapers, APIs, feeds, file imports, manual inputs, scheduled jobs, and validation logic for gathering structured data.",
+        "Latin":  "Scrapers, feeds, file, imports, manual, inputs, scheduled, jobs, and, validation, logic, for, gathering, structured, data"
+    },
+    {
+        "Text":  "Scraping",
+        "Latin":  "Scraping"
+    },
+    {
+        "Text":  "Scraping + Data",
+        "Latin":  "Scraping, Data"
+    },
+    {
+        "Text":  "Scraping and structured data collection",
+        "Latin":  "Scraping, and, structured, data, collection"
+    },
+    {
+        "Text":  "Scraping, API connectors, feed processors, file imports, scheduled jobs, and validation checks for data collection.",
+        "Latin":  "Scraping, connectors, feed, processors, file, imports, scheduled, jobs, and, validation, checks, for, data, collection"
+    },
+    {
+        "Text":  "Scripts, prompts, product data, article content, media ассетов, brand rules, and generation parameters organized before производство.",
+        "Latin":  "Scripts, prompts, product, data, article, content, media, brand, rules, and, generation, parameters, organized, before"
+    },
+    {
+        "Text":  "Scripts, scenes, variants, captions, and metadata are produced.",
+        "Latin":  "Scripts, scenes, variants, captions, and, metadata, are, produced"
+    },
+    {
+        "Text":  "Select",
+        "Latin":  "Select"
+    },
+    {
+        "Text":  "Selection logic",
+        "Latin":  "Selection, logic"
+    },
+    {
+        "Text":  "Send work to CRM, CMS, панель, owner, or queue.",
+        "Latin":  "Send, work, owner, queue"
+    },
+    {
+        "Text":  "SEO and content infrastructure at AlfaRank is not packaged as a list of isolated optimization tasks. It is the design of a content system: data sources, page types, templates, процесс публикацииs, internal linking logic, metadata, quality control, and monitoring.",
+        "Latin":  "and, content, infrastructure, not, packaged, list, isolated, optimization, tasks, the, design, content, system, data, sources, page, types, templates, internal, linking, logic, metadata, quality, control, and, monitoring"
+    },
+    {
+        "Text":  "SEO Infrastructure",
+        "Latin":  "Infrastructure"
+    },
+    {
+        "Text":  "SEO, content QA, media, automations",
+        "Latin":  "content, media, automations"
+    },
+    {
+        "Text":  "SEO/content infrastructure",
+        "Latin":  "content, infrastructure"
+    },
+    {
+        "Text":  "SERP signals",
+        "Latin":  "signals"
+    },
+    {
+        "Text":  "SERP, marketplace, catalog, or цены monitoring.",
+        "Latin":  "marketplace, catalog, monitoring"
+    },
+    {
+        "Text":  "Service businesses, agencies, B2B teams, and local operators that already get inbound requests but still process them manually.",
+        "Latin":  "Service, businesses, agencies, teams, and, local, operators, that, already, get, inbound, requests, but, still, process, them, manually"
+    },
+    {
+        "Text":  "Slow leads",
+        "Latin":  "Slow, leads"
+    },
+    {
+        "Text":  "Solution route",
+        "Latin":  "Solution, route"
+    },
+    {
+        "Text":  "Solution router",
+        "Latin":  "Solution, router"
+    },
+    {
+        "Text":  "Solution routes",
+        "Latin":  "Solution, routes"
+    },
+    {
+        "Text":  "SOVA / Vidorix is a system profile for AI-поддерживаемый content, video, and media производственный процессs. The system direction is based on repeatable generation, structured inputs, templates, проверка stages, and controlled публикация or export flows.",
+        "Latin":  "system, profile, for, content, video, and, media, The, system, direction, based, repeatable, generation, structured, inputs, templates, stages, and, controlled, export, flows"
+    },
+    {
+        "Text":  "Static-first delivery when speed and reliability matter.",
+        "Latin":  "Static-first, delivery, when, speed, and, reliability, matter"
+    },
+    {
+        "Text":  "Status",
+        "Latin":  "Status"
+    },
+    {
+        "Text":  "Status tracking, approval steps, corrections, final export, публикация queues, or CMS/platform integration.",
+        "Latin":  "Status, tracking, approval, steps, corrections, final, export, queues, platform, integration"
+    },
+    {
+        "Text":  "Status, quality, output",
+        "Latin":  "Status, quality, output"
+    },
+    {
+        "Text":  "Step",
+        "Latin":  "Step"
+    },
+    {
+        "Text":  "Stock",
+        "Latin":  "Stock"
+    },
+    {
+        "Text":  "Stock, цены, and доступность logic",
+        "Latin":  "Stock, and, logic"
+    },
+    {
+        "Text":  "Storage",
+        "Latin":  "Storage"
+    },
+    {
+        "Text":  "Stored",
+        "Latin":  "Stored"
+    },
+    {
+        "Text":  "Structured data, automated exports, monitoring, and visible operations output.",
+        "Latin":  "Structured, data, automated, exports, monitoring, and, visible, operations, output"
+    },
+    {
+        "Text":  "Structured external data",
+        "Latin":  "Structured, external, data"
+    },
+    {
+        "Text":  "Structured intake + lead classi...",
+        "Latin":  "Structured, intake, lead, classi"
+    },
+    {
+        "Text":  "Structured intake and lead classification",
+        "Latin":  "Structured, intake, and, lead, classification"
+    },
+    {
+        "Text":  "Structured products, categories, attributes, filters, metadata, media fields, and rules for maintaining catalog quality.",
+        "Latin":  "Structured, products, categories, attributes, filters, metadata, media, fields, and, rules, for, maintaining, catalog, quality"
+    },
+    {
+        "Text":  "Submission",
+        "Latin":  "Submission"
+    },
+    {
+        "Text":  "Submission source, CRM status, integration logs, owner assignment, публикация state, and next action.",
+        "Latin":  "Submission, source, status, integration, logs, owner, assignment, state, and, next, action"
+    },
+    {
+        "Text":  "Submission source, CRM status, integration logs, owner, next action.",
+        "Latin":  "Submission, source, status, integration, logs, owner, next, action"
+    },
+    {
+        "Text":  "Submit flow",
+        "Latin":  "Submit, flow"
+    },
+    {
+        "Text":  "Summarize research, scraped data, audit results, or monitoring signals.",
+        "Latin":  "Summarize, research, scraped, data, audit, results, monitoring, signals"
+    },
+    {
+        "Text":  "System category",
+        "Latin":  "System, category"
+    },
+    {
+        "Text":  "System fit",
+        "Latin":  "System, fit"
+    },
+    {
+        "Text":  "System профили",
+        "Latin":  "System"
+    },
+    {
+        "Text":  "Systems for AI-поддерживаемый drafts, editorial проверка, metadata, scheduled публикация, programmatic content, and quality control.",
+        "Latin":  "Systems, for, drafts, editorial, metadata, scheduled, programmatic, content, and, quality, control"
+    },
+    {
+        "Text":  "Systems for generating, importing, transforming, and synchronizing product feeds with marketplaces, CRMs, analytics tools, warehouses, or external platforms.",
+        "Latin":  "Systems, for, generating, importing, transforming, and, synchronizing, product, feeds, with, marketplaces, CRMs, analytics, tools, warehouses, external, platforms"
+    },
+    {
+        "Text":  "Teams depend on manual exports, plugin chains, duplicate data entry, and unclear ownership.",
+        "Latin":  "Teams, depend, manual, exports, plugin, chains, duplicate, data, entry, and, unclear, ownership"
+    },
+    {
+        "Text":  "Technology is grouped by system function.",
+        "Latin":  "Technology, grouped, system, function"
+    },
+    {
+        "Text":  "Technology matrix",
+        "Latin":  "Technology, matrix"
+    },
+    {
+        "Text":  "Template + ассет system",
+        "Latin":  "Template, system"
+    },
+    {
+        "Text":  "Template and ассет handling",
+        "Latin":  "Template, and, handling"
+    },
+    {
+        "Text":  "Template and ассет system",
+        "Latin":  "Template, and, system"
+    },
+    {
+        "Text":  "Template-based производственный процессs",
+        "Latin":  "Template-based"
+    },
+    {
+        "Text":  "Template-based производство",
+        "Latin":  "Template-based"
+    },
+    {
+        "Text":  "Templates, product descriptions, category content, programmatic посадочная страницаs, metadata, internal linking, and процесс публикацииs for e-commerce growth.",
+        "Latin":  "Templates, product, descriptions, category, content, programmatic, metadata, internal, linking, and, for, growth"
+    },
+    {
+        "Text":  "Test output quality, производство speed, and проверка reliability.",
+        "Latin":  "Test, output, quality, speed, and, reliability"
+    },
+    {
+        "Text":  "Test real submissions and document the operating path.",
+        "Latin":  "Test, real, submissions, and, document, the, operating, path"
+    },
+    {
+        "Text":  "The stack follows the workflow.",
+        "Latin":  "The, stack, follows, the, workflow"
+    },
+    {
+        "Text":  "Too much time. Not enough output.",
+        "Latin":  "Too, much, time, Not, enough, output"
+    },
+    {
+        "Text":  "Tools orbit the workflow",
+        "Latin":  "Tools, orbit, the, workflow"
+    },
+    {
+        "Text":  "Topic + brief model",
+        "Latin":  "Topic, brief, model"
+    },
+    {
+        "Text":  "Topic, template, + brief system",
+        "Latin":  "Topic, template, brief, system"
+    },
+    {
+        "Text":  "Topic, template, and brief system",
+        "Latin":  "Topic, template, and, brief, system"
+    },
+    {
+        "Text":  "Topics",
+        "Latin":  "Topics"
+    },
+    {
+        "Text":  "Track lead response and последующие действия status across channels.",
+        "Latin":  "Track, lead, response, and, status, across, channels"
+    },
+    {
+        "Text":  "Track SERP results, ранжированиеs, search visibility, or indexation status.",
+        "Latin":  "Track, results, search, visibility, indexation, status"
+    },
+    {
+        "Text":  "Track the loop",
+        "Latin":  "Track, the, loop"
+    },
+    {
+        "Text":  "Tracking systems for indexation, ранжированиеs, content gaps, page quality, structured data, and improvement priorities.",
+        "Latin":  "Tracking, systems, for, indexation, content, gaps, page, quality, structured, data, and, improvement, priorities"
+    },
+    {
+        "Text":  "Trigger notifications, updates, reports, and next actions.",
+        "Latin":  "Trigger, notifications, updates, reports, and, next, actions"
+    },
+    {
+        "Text":  "Turn a brochure website into a structured corporate platform.",
+        "Latin":  "Turn, brochure, website, into, structured, corporate, platform"
+    },
+    {
+        "Text":  "Turn AI-поддерживаемый content generation into a controlled editorial system.",
+        "Latin":  "Turn, content, generation, into, controlled, editorial, system"
+    },
+    {
+        "Text":  "Turn an internal процесс into a product that can be used by кастомныеers.",
+        "Latin":  "Turn, internal, into, product, that, can, used, ers"
+    },
+    {
+        "Text":  "Turn WordPress into a structured публикация or content infrastructure system.",
+        "Latin":  "Turn, into, structured, content, infrastructure, system"
+    },
+    {
+        "Text":  "Type, current system, problem, desired re...",
+        "Latin":  "Type, current, system, problem, desired"
+    },
+    {
+        "Text":  "Upgrade an existing site with better information architecture and internal linking.",
+        "Latin":  "Upgrade, existing, site, with, better, information, architecture, and, internal, linking"
+    },
+    {
+        "Text":  "Upgrade an existing website",
+        "Latin":  "Upgrade, existing, website"
+    },
+    {
+        "Text":  "Use performance signals to improve the system continuously.",
+        "Latin":  "Use, performance, signals, improve, the, system, continuously"
+    },
+    {
+        "Text":  "Use this route when the team needs more useful pages, briefs, articles, or catalog content without losing editorial control.",
+        "Latin":  "Use, this, route, when, the, team, needs, more, useful, briefs, articles, catalog, content, without, losing, editorial, control"
+    },
+    {
+        "Text":  "Use this route when WordPress is already business-critical but forms, CRM, content, and reporting are loosely connected.",
+        "Latin":  "Use, this, route, when, already, business-critical, but, forms, content, and, reporting, are, loosely, connected"
+    },
+    {
+        "Text":  "Usually the smallest процесс that improves data quality, feed reliability, or operational visibility.",
+        "Latin":  "Usually, the, smallest, that, improves, data, quality, feed, reliability, operational, visibility"
+    },
+    {
+        "Text":  "Validate catalog quality and improve the процесс based on real operations.",
+        "Latin":  "Validate, catalog, quality, and, improve, the, based, real, operations"
+    },
+    {
+        "Text":  "Validate the system against real cases and refine the оценка model.",
+        "Latin":  "Validate, the, system, against, real, cases, and, refine, the, model"
+    },
+    {
+        "Text":  "Video / Медиа / Pipelines",
+        "Latin":  "Video, Pipelines"
+    },
+    {
+        "Text":  "Video and content generation pipelines",
+        "Latin":  "Video, and, content, generation, pipelines"
+    },
+    {
+        "Text":  "Video and медиа-автоматизация focuses on turning repeatable creative производство into a controlled system. AlfaRank can design процессы for generating, processing, enriching, проверкаing, exporting, and публикация media ассетов using templates, AI tools, structured inputs, and automation logic.",
+        "Latin":  "Video, and, focuses, turning, repeatable, creative, into, controlled, system, can, design, for, generating, processing, enriching, ing, exporting, and, media, using, templates, tools, structured, inputs, and, automation, logic"
+    },
+    {
+        "Text":  "Video automation",
+        "Latin":  "Video, automation"
+    },
+    {
+        "Text":  "Video generation",
+        "Latin":  "Video, generation"
+    },
+    {
+        "Text":  "Video generation from articles, scripts, or product data.",
+        "Latin":  "Video, generation, from, articles, scripts, product, data"
+    },
+    {
+        "Text":  "Views, filters, exports, recurring reports, alerts, audit summaries, scorecards, and decision-ready панели.",
+        "Latin":  "Views, filters, exports, recurring, reports, alerts, audit, summaries, scorecards, and, decision-ready"
+    },
+    {
+        "Text":  "Visibility",
+        "Latin":  "Visibility"
+    },
+    {
+        "Text":  "Visibility and movement",
+        "Latin":  "Visibility, and, movement"
+    },
+    {
+        "Text":  "Web and product development at AlfaRank is focused on usable business systems, not decorative websites. The work can include public websites, product interfaces, панели, portals, internal tools, and MVPs that connect content, data, automation, and operational процессы.",
+        "Latin":  "Web, and, product, development, focused, usable, business, systems, not, decorative, websites, The, work, can, include, public, websites, product, interfaces, portals, internal, tools, and, MVPs, that, connect, content, data, automation, and, operational"
+    },
+    {
+        "Text":  "Web platform",
+        "Latin":  "Web, platform"
+    },
+    {
+        "Text":  "Web platforms",
+        "Latin":  "Web, platforms"
+    },
+    {
+        "Text":  "Web sources",
+        "Latin":  "Web, sources"
+    },
+    {
+        "Text":  "Website / процесс",
+        "Latin":  "Website"
+    },
+    {
+        "Text":  "Website form",
+        "Latin":  "Website, form"
+    },
+    {
+        "Text":  "Website or platform launch",
+        "Latin":  "Website, platform, launch"
+    },
+    {
+        "Text":  "Website upgrade",
+        "Latin":  "Website, upgrade"
+    },
+    {
+        "Text":  "Website, SEO, or content audits.",
+        "Latin":  "Website, content, audits"
+    },
+    {
+        "Text":  "What is the best first deактивнаяrable?",
+        "Latin":  "What, the, best, first, rable"
+    },
+    {
+        "Text":  "What should be built first?",
+        "Latin":  "What, should, built, first"
+    },
+    {
+        "Text":  "WordPress and API integrations at AlfaRank treat WordPress as a business platform, not only a website CMS. The work can include кастомные content structures, админ-инструменты, API connections, CRM процессы, automation, публикация systems, and operational interfaces built around WordPress.",
+        "Latin":  "and, integrations, treat, business, platform, not, only, website, The, work, can, include, content, structures, connections, automation, systems, and, operational, interfaces, built, around"
+    },
+    {
+        "Text":  "WordPress capability",
+        "Latin":  "capability"
+    },
+    {
+        "Text":  "WordPress has the business context, but the процесс around it is not structured.",
+        "Latin":  "has, the, business, context, but, the, around, not, structured"
+    },
+    {
+        "Text":  "WordPress structure",
+        "Latin":  "structure"
+    },
+    {
+        "Text":  "WordPress/API integration",
+        "Latin":  "integration"
+    },
+    {
+        "Text":  "WordPress-based businesses, service companies, publishers, agencies, and teams that need кастомные forms, CRM handoff, публикация, or процессы данных.",
+        "Latin":  "based, businesses, service, companies, publishers, agencies, and, teams, that, need, forms, handoff"
+    },
+    {
+        "Text":  "Workflow control",
+        "Latin":  "Workflow, control"
+    },
+    {
+        "Text":  "Working first version",
+        "Latin":  "Working, first, version"
+    },
+    {
+        "Text":  "Yes, when sources are suitable and the monitoring rules are defined clearly.",
+        "Latin":  "Yes, when, sources, are, suitable, and, the, monitoring, rules, are, defined, clearly"
+    },
+    {
+        "Text":  "Yes, when the rules are clear and there is a проверка path for important decisions or uncertain cases.",
+        "Latin":  "Yes, when, the, rules, are, clear, and, there, path, for, important, decisions, uncertain, cases"
+    },
+    {
+        "Text":  "Yes. Critical процессы can be moved into controlled кастомные logic instead of relying on several chained plugins.",
+        "Latin":  "Yes, Critical, can, moved, into, controlled, logic, instead, relying, several, chained, plugins"
+    },
+    {
+        "Text":  "Yes. Many first versions improve the процесс around the existing WordPress site before any larger rebuild.",
+        "Latin":  "Yes, Many, first, versions, improve, the, around, the, existing, site, before, any, larger, rebuild"
+    },
+    {
+        "Text":  "Yes. Review states, approvals, corrections, and manual overrides are part of the system.",
+        "Latin":  "Yes, Review, states, approvals, corrections, and, manual, overrides, are, part, the, system"
+    },
+    {
+        "Text":  "Yes. The first version can route into the tools already used by the team, then grow into a fuller CRM процесс later.",
+        "Latin":  "Yes, The, first, version, can, route, into, the, tools, already, used, the, team, then, grow, into, fuller, later"
+    },
+    {
+        "Text":  "Yes. The same integration layer can support публикация, editorial проверка, AI-поддерживаемый drafts, and reporting.",
+        "Latin":  "Yes, The, same, integration, layer, can, support, editorial, drafts, and, reporting"
+    },
+    {
+        "Text":  "Yes. The same structure can support pages for services, locations, products, categories, or other data entities.",
+        "Latin":  "Yes, The, same, structure, can, support, for, services, locations, products, categories, other, data, entities"
+    },
+    {
+        "Text":  "Yes. The system can sit around the current platform and connect through feeds, APIs, exports, imports, or кастомные tools.",
+        "Latin":  "Yes, The, system, can, sit, around, the, current, platform, and, connect, through, feeds, exports, imports, tools"
+    },
+    {
+        "Text":  "Данные и commerce-инфраструктура",
+        "Latin":  "commerce-"
+    },
+    {
+        "Text":  "Для сегмента сервисных компаний страница должна сразу показать захват и маршрутизацию заявок, follow-up в CRM и первый измеримый операционный слой еще до запроса оценки.",
+        "Latin":  "follow-up"
+    },
+    {
+        "Text":  "Каталог / Фиды / Orders",
+        "Latin":  "Orders"
+    },
+    {
+        "Text":  "Контентные и growth-системы",
+        "Latin":  "growth-"
+    },
+    {
+        "Text":  "Лиды, owners, последующие действия",
+        "Latin":  "owners"
+    },
+    {
+        "Text":  "Панели контентных или data-операций.",
+        "Latin":  "data-"
+    },
+    {
+        "Text":  "Показываем направление «follow-up в CRM»: что входит в работу, кто отвечает, что автоматизируется и какой результат измеряется.",
+        "Latin":  "follow-up"
+    },
+    {
+        "Text":  "Показываем, как измеряются захват и маршрутизацию заявок, follow-up в CRM, локальные посадочные страницы услуг, чтобы посетитель видел не обещание, а рабочий контур.",
+        "Latin":  "follow-up"
+    },
+    {
+        "Text":  "Посадочная страница e-comme...",
+        "Latin":  "e-comme"
+    },
+    {
+        "Text":  "Посадочная страница WordPre...",
+        "Latin":  "WordPre"
+    },
+    {
+        "Text":  "Пульт commerce-контроля",
+        "Latin":  "commerce-"
+    },
+    {
+        "Text":  "Сбор данных / Monitoring / Audits",
+        "Latin":  "Monitoring, Audits"
+    },
+    {
+        "Text":  "Сбор через scraping, API или фиды",
+        "Latin":  "scraping"
+    },
+    {
+        "Text":  "Страницы решений связывают операционные, маркетинговые, контентные и data-задачи с инфраструктурой, которая нужна для их решения.",
+        "Latin":  "data-"
+    },
+    {
+        "Text":  "Цифровые системы для компаний с операционными, контентными, data- и growth-процессами.",
+        "Latin":  "data-, growth-"
+    }
+]

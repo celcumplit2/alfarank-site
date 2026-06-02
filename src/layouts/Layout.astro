@@ -47,6 +47,17 @@ const alternates = alternatePaths(basePath).map((entry) => ({
   href: new URL(entry.href, siteUrl).toString()
 }));
 const clientTranslations = JSON.stringify(getClientTranslations(locale));
+const gtmId = import.meta.env.PUBLIC_GTM_ID;
+const gaId = import.meta.env.PUBLIC_GA_ID;
+const plausibleDomain = import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN;
+const plausibleSrc = import.meta.env.PUBLIC_PLAUSIBLE_SRC || "https://plausible.io/js/script.js";
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+const gtmScript = gtmId
+  ? `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer',${JSON.stringify(gtmId)});`
+  : "";
+const gaScript = gaId
+  ? `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.gtag=gtag;gtag('js',new Date());gtag('config',${JSON.stringify(gaId)},{send_page_view:false});`
+  : "";
 const structuredData = JSON.stringify([
   {
     "@context": "https://schema.org",
@@ -90,9 +101,23 @@ const structuredData = JSON.stringify([
     <meta name="twitter:image" content={imageUrl} />
     <script is:inline type="application/ld+json" set:html={structuredData}></script>
     <script is:inline type="application/json" id="alfarank-translations" set:html={clientTranslations}></script>
+    {gtmScript && <script is:inline set:html={gtmScript}></script>}
+    {gaScript && <script is:inline set:html={gaScript}></script>}
+    {plausibleDomain && <script defer data-domain={plausibleDomain} src={plausibleSrc}></script>}
+    {turnstileSiteKey && <script is:inline async defer src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>}
     <title>{pageTitle}</title>
   </head>
   <body>
+    {gtmId && (
+      <noscript>
+        <iframe
+          src={`https://www.googletagmanager.com/ns.html?id=${encodeURIComponent(gtmId)}`}
+          height="0"
+          width="0"
+          style="display:none;visibility:hidden"
+        ></iframe>
+      </noscript>
+    )}
     <LiquidBackground />
     <div class="site-shell">
       <SiteHeader locale={locale} />
@@ -112,6 +137,223 @@ const structuredData = JSON.stringify([
           }
         })();
 
+        const setupLeadAnalytics = () => {
+          const params = new URLSearchParams(window.location.search);
+          const firstParam = (keys) => keys.map((key) => params.get(key)).find(Boolean) || "";
+          const partnerRef = () => firstParam(["partner_ref", "partner", "ref", "affiliate", "affiliate_id"]);
+          const inferLeadChannel = () => {
+            if (params.get("lead_channel")) return params.get("lead_channel");
+            if (partnerRef() || params.get("offer") === "partner-program") return "partner";
+            const medium = (params.get("utm_medium") || "").toLowerCase();
+            if (["cpc", "ppc", "paid", "paid-search", "paid-social", "display"].includes(medium)) return "paid";
+            if (params.get("utm_source")) return "campaign";
+            if (document.referrer) return "referral";
+            return "direct";
+          };
+          const campaignContext = () => {
+            const lpMatch = window.location.pathname.match(/^(?:\/(?:ro|ru))?\/lp\/([^/]+)\//);
+            const landingOffer = params.get("landing_offer") || params.get("offer") || lpMatch?.[1] || "";
+            const formVariant =
+              params.get("form_variant") ||
+              params.get("form") ||
+              (lpMatch ? `lp:${lpMatch[1]}` : "") ||
+              (landingOffer === "quick-intake" || landingOffer === "partner-program" ? landingOffer : "");
+            return {
+              path: window.location.pathname,
+              lead_id: params.get("lead_id") || "",
+              source_path: params.get("source_path") || `${window.location.pathname}${window.location.search}`,
+              landing_page: params.get("landing_page") || params.get("lp") || (lpMatch ? window.location.pathname : ""),
+              landing_offer: landingOffer,
+              form_variant: formVariant,
+              locale: params.get("locale") || pageLocale,
+              referrer: document.referrer || "",
+              lead_channel: inferLeadChannel(),
+              partner_ref: partnerRef(),
+              utm_source: params.get("utm_source") || "",
+              utm_medium: params.get("utm_medium") || "",
+              utm_campaign: params.get("utm_campaign") || "",
+              utm_term: params.get("utm_term") || "",
+              utm_content: params.get("utm_content") || ""
+            };
+          };
+
+          const formValue = (form, name) => form.querySelector(`[name='${name}']`)?.value || "";
+          const formContext = (form) => ({
+            form: form.getAttribute("data-conversion-form") || "tracked-form",
+            source_path: formValue(form, "source_path") || campaignContext().source_path,
+            landing_page: formValue(form, "landing_page") || campaignContext().landing_page,
+            landing_offer: formValue(form, "landing_offer") || campaignContext().landing_offer,
+            form_variant: formValue(form, "form_variant") || form.getAttribute("data-conversion-form") || campaignContext().form_variant,
+            locale: formValue(form, "locale") || campaignContext().locale,
+            referrer: formValue(form, "referrer") || campaignContext().referrer,
+            lead_channel: formValue(form, "lead_channel") || campaignContext().lead_channel,
+            partner_ref: formValue(form, "partner_ref") || campaignContext().partner_ref,
+            project_type: formValue(form, "project_type"),
+            desired_output: formValue(form, "desired_output"),
+            utm_source: formValue(form, "utm_source") || campaignContext().utm_source,
+            utm_medium: formValue(form, "utm_medium") || campaignContext().utm_medium,
+            utm_campaign: formValue(form, "utm_campaign") || campaignContext().utm_campaign,
+            utm_term: formValue(form, "utm_term") || campaignContext().utm_term,
+            utm_content: formValue(form, "utm_content") || campaignContext().utm_content
+          });
+
+          const track = (eventName, properties = {}) => {
+            const payload = {
+              event: eventName,
+              alfarank: {
+                ...campaignContext(),
+                ...properties
+              },
+              timestamp: new Date().toISOString()
+            };
+
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push(payload);
+            window.dispatchEvent(new CustomEvent("alfarank:analytics", { detail: payload }));
+
+            if (typeof window.gtag === "function") {
+              window.gtag("event", eventName, payload.alfarank);
+            }
+
+            if (typeof window.plausible === "function") {
+              window.plausible(eventName, { props: payload.alfarank });
+            }
+          };
+
+          const resetLeadFormState = (form) => {
+            form.removeAttribute("data-submit-state");
+            form.removeAttribute("aria-busy");
+            form.querySelectorAll("button[type='submit']").forEach((button) => {
+              if (button.dataset.defaultLabel) {
+                button.textContent = button.dataset.defaultLabel;
+              }
+              button.disabled = false;
+              button.removeAttribute("aria-disabled");
+            });
+          };
+
+          const setLeadFormStatus = (form, mode, message) => {
+            const status = form.querySelector("[data-form-status]");
+            if (!status) return;
+            status.dataset.mode = mode;
+            status.textContent = message || "";
+          };
+
+          const setLeadFormSubmitting = (form) => {
+            if (form.dataset.submitState === "submitting") return false;
+            form.setAttribute("data-submit-state", "submitting");
+            form.setAttribute("aria-busy", "true");
+            setLeadFormStatus(
+              form,
+              "pending",
+              form.dataset.sendingStatus || "Sending request with source context..."
+            );
+            form.querySelectorAll("button[type='submit']").forEach((button) => {
+              if (!button.dataset.defaultLabel) {
+                button.dataset.defaultLabel = button.textContent?.trim() || "";
+              }
+              button.textContent = form.dataset.sendingLabel || "Sending request...";
+              button.disabled = true;
+              button.setAttribute("aria-disabled", "true");
+            });
+            return true;
+          };
+
+          window.alfaRankTrack = track;
+          document.documentElement.dataset.leadAnalytics = "ready";
+          track("page_view");
+
+          if (/^(?:\/(?:ro|ru))?\/start-project\/thank-you\/$/.test(window.location.pathname)) {
+            track("thank_you_view");
+          }
+
+          document.addEventListener("click", (event) => {
+            if (!(event.target instanceof Element)) return;
+            const target = event.target.closest("a, button");
+            if (!target) return;
+
+            if (target.tagName === "A") {
+              const href = target.getAttribute("href") || "";
+              const contactChannel = target.getAttribute("data-contact-channel");
+
+              if (contactChannel) {
+                track("quick_contact_click", {
+                  channel: contactChannel,
+                  label: target.textContent.trim(),
+                  href,
+                  location: target.closest("section, footer")?.className || "unknown"
+                });
+              }
+
+              const isConversionLink =
+                href.includes("/start-project/") ||
+                href === "#landing-intake" ||
+                target.classList.contains("button");
+
+              if (isConversionLink) {
+                track("cta_click", {
+                  label: target.textContent.trim(),
+                  href,
+                  location: target.closest("section")?.className || "unknown"
+                });
+              }
+            }
+
+            if (target.matches("button[type='submit']")) {
+              const form = target.closest("form[data-conversion-form]");
+              if (form) {
+                track("form_submit_click", formContext(form));
+              }
+            }
+          });
+
+          document.addEventListener("input", (event) => {
+            if (!(event.target instanceof Element)) return;
+            const form = event.target.closest("form[data-conversion-form]");
+            if (!form || form.dataset.formStarted === "true") return;
+            form.dataset.formStarted = "true";
+            track("form_start", formContext(form));
+          });
+
+          document.addEventListener(
+            "invalid",
+            (event) => {
+              if (!(event.target instanceof Element)) return;
+              const field = event.target;
+              const form = field.closest("form[data-conversion-form]");
+              if (!form) return;
+              setLeadFormStatus(
+                form,
+                "error",
+                form.dataset.validationStatus || "Check the highlighted field and try again."
+              );
+              track("form_validation_error", {
+                ...formContext(form),
+                field: field.name || field.id || "unknown"
+              });
+            },
+            true
+          );
+
+          document.addEventListener("submit", (event) => {
+            if (!(event.target instanceof Element)) return;
+            const form = event.target.closest("form[data-conversion-form]");
+            if (!form) return;
+            if (!setLeadFormSubmitting(form)) {
+              event.preventDefault();
+              return;
+            }
+            track("form_submit_attempt", formContext(form));
+          });
+
+          window.addEventListener("pageshow", () => {
+            document.querySelectorAll("form[data-conversion-form]").forEach(resetLeadFormState);
+          });
+        };
+
+        setupLeadAnalytics();
+
+        try {
         const ruExactFallback = {
           "4 modules mapped": "4 модуля на карте",
           "4 connected modules": "4 связанных модуля",
@@ -1488,126 +1730,10 @@ const structuredData = JSON.stringify([
             link.setAttribute("href", `/${pageLocale}${href}`);
           });
         }
-
-        const params = new URLSearchParams(window.location.search);
-        const campaignContext = () => {
-          const lpMatch = window.location.pathname.match(/^(?:\/(?:ro|ru))?\/lp\/([^/]+)\//);
-          return {
-            path: window.location.pathname,
-            source_path: `${window.location.pathname}${window.location.search}`,
-            landing_page: params.get("landing_page") || params.get("lp") || (lpMatch ? window.location.pathname : ""),
-            landing_offer: params.get("landing_offer") || params.get("offer") || lpMatch?.[1] || "",
-            utm_source: params.get("utm_source") || "",
-            utm_medium: params.get("utm_medium") || "",
-            utm_campaign: params.get("utm_campaign") || "",
-            utm_term: params.get("utm_term") || "",
-            utm_content: params.get("utm_content") || ""
-          };
-        };
-
-        const formValue = (form, name) => form.querySelector(`[name='${name}']`)?.value || "";
-        const formContext = (form) => ({
-          form: form.getAttribute("data-conversion-form") || "tracked-form",
-          source_path: formValue(form, "source_path") || campaignContext().source_path,
-          landing_page: formValue(form, "landing_page") || campaignContext().landing_page,
-          landing_offer: formValue(form, "landing_offer") || campaignContext().landing_offer,
-          project_type: formValue(form, "project_type"),
-          desired_output: formValue(form, "desired_output"),
-          utm_source: formValue(form, "utm_source") || campaignContext().utm_source,
-          utm_medium: formValue(form, "utm_medium") || campaignContext().utm_medium,
-          utm_campaign: formValue(form, "utm_campaign") || campaignContext().utm_campaign,
-          utm_term: formValue(form, "utm_term") || campaignContext().utm_term,
-          utm_content: formValue(form, "utm_content") || campaignContext().utm_content
-        });
-
-        const track = (eventName, properties = {}) => {
-          const payload = {
-            event: eventName,
-            alfarank: {
-              ...campaignContext(),
-              ...properties
-            },
-            timestamp: new Date().toISOString()
-          };
-
-          window.dataLayer = window.dataLayer || [];
-          window.dataLayer.push(payload);
-          window.dispatchEvent(new CustomEvent("alfarank:analytics", { detail: payload }));
-
-          if (typeof window.gtag === "function") {
-            window.gtag("event", eventName, payload.alfarank);
-          }
-
-          if (typeof window.plausible === "function") {
-            window.plausible(eventName, { props: payload.alfarank });
-          }
-        };
-
-        window.alfaRankTrack = track;
-        track("page_view");
-
-        if (/^(?:\/(?:ro|ru))?\/start-project\/thank-you\/$/.test(window.location.pathname)) {
-          track("thank_you_view");
+        } catch (error) {
+          console.warn("Runtime localization failed", error);
         }
 
-        document.addEventListener("click", (event) => {
-          if (!(event.target instanceof Element)) return;
-          const target = event.target.closest("a, button");
-          if (!target) return;
-
-          if (target.tagName === "A") {
-            const href = target.getAttribute("href") || "";
-            const isConversionLink =
-              href.includes("/start-project/") ||
-              href === "#landing-intake" ||
-              target.classList.contains("button");
-
-            if (isConversionLink) {
-              track("cta_click", {
-                label: target.textContent.trim(),
-                href,
-                location: target.closest("section")?.className || "unknown"
-              });
-            }
-          }
-
-          if (target.matches("button[type='submit']")) {
-            const form = target.closest("form[data-conversion-form]");
-            if (form) {
-              track("form_submit_click", formContext(form));
-            }
-          }
-        });
-
-        document.addEventListener("input", (event) => {
-          if (!(event.target instanceof Element)) return;
-          const form = event.target.closest("form[data-conversion-form]");
-          if (!form || form.dataset.formStarted === "true") return;
-          form.dataset.formStarted = "true";
-          track("form_start", formContext(form));
-        });
-
-        document.addEventListener(
-          "invalid",
-          (event) => {
-            if (!(event.target instanceof Element)) return;
-            const field = event.target;
-            const form = field.closest("form[data-conversion-form]");
-            if (!form) return;
-            track("form_validation_error", {
-              ...formContext(form),
-              field: field.name || field.id || "unknown"
-            });
-          },
-          true
-        );
-
-        document.addEventListener("submit", (event) => {
-          if (!(event.target instanceof Element)) return;
-          const form = event.target.closest("form[data-conversion-form]");
-          if (!form) return;
-          track("form_submit_attempt", formContext(form));
-        });
       })();
     </script>
   </body>
