@@ -314,11 +314,12 @@ function verifyReport(report, submissions, lifecycleLead, lifecycleEvent) {
 
   if (requireNotificationEvents) {
     const notificationEvents = report.notification_events;
+    const deliveryChannels = new Set(["webhook", "telegram"]);
     const createdEvents = notificationEvents.filter(
-      (event) => event.event_type === "project_request.created" && event.channel === "webhook"
+      (event) => event.event_type === "project_request.created" && deliveryChannels.has(event.channel)
     );
     const statusEvents = notificationEvents.filter(
-      (event) => event.event_type === "project_request.status_updated" && event.channel === "webhook"
+      (event) => event.event_type === "project_request.status_updated" && deliveryChannels.has(event.channel)
     );
 
     assert(createdEvents.length >= submissions.length, "lead report is missing created notification delivery events");
