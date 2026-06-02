@@ -102,6 +102,7 @@ const structuredData = JSON.stringify([
     <script is:inline type="application/ld+json" set:html={structuredData}></script>
     <script is:inline type="application/json" id="alfarank-translations" set:html={clientTranslations}></script>
     {gtmScript && <script is:inline set:html={gtmScript}></script>}
+    {gaId && <script async src={`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(gaId)}`}></script>}
     {gaScript && <script is:inline set:html={gaScript}></script>}
     {plausibleDomain && <script defer data-domain={plausibleDomain} src={plausibleSrc}></script>}
     {turnstileSiteKey && <script is:inline async defer src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>}

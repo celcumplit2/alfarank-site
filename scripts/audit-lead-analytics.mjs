@@ -97,6 +97,7 @@ checkIncludes("src/layouts/Layout.astro", "layout forwards events to first-party
   "window.dataLayer.push(payload)",
   'CustomEvent("alfarank:analytics"',
   'window.gtag("event", eventName, payload.alfarank)',
+  "https://www.googletagmanager.com/gtag/js?id=",
   "window.plausible(eventName, { props: payload.alfarank })",
   "PUBLIC_GTM_ID",
   "PUBLIC_GA_ID",
