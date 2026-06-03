@@ -9,20 +9,114 @@ type Props = {
 
 const { locale = "en" } = Astro.props;
 const year = new Date().getFullYear();
+
+const footerCopy = {
+  en: {
+    brandNote: "Digital systems, automation, content infrastructure, web platforms, and data workflows for practical business operations.",
+    navigation: "Navigation",
+    routes: "Start routes",
+    company: "Company data",
+    contacts: "Direct channels",
+    legalName: "Legal name",
+    idno: "IDNO",
+    registered: "Registered",
+    office: "Registered office",
+    jurisdiction: "Jurisdiction",
+    copyright: "All rights reserved."
+  },
+  ro: {
+    brandNote: "Sisteme digitale, automatizare, infrastructura de continut, platforme web si fluxuri de date pentru operatiuni de business.",
+    navigation: "Navigare",
+    routes: "Rute de pornire",
+    company: "Date companie",
+    contacts: "Canale directe",
+    legalName: "Denumire juridica",
+    idno: "IDNO",
+    registered: "Inregistrare",
+    office: "Sediu inregistrat",
+    jurisdiction: "Jurisdictie",
+    copyright: "Toate drepturile rezervate."
+  },
+  ru: {
+    brandNote: "Цифровые системы, автоматизация, контентная инфраструктура, веб-платформы и процессы данных для бизнес-операций.",
+    navigation: "Навигация",
+    routes: "Стартовые маршруты",
+    company: "Данные компании",
+    contacts: "Прямые каналы",
+    legalName: "Юридическое имя",
+    idno: "IDNO",
+    registered: "Регистрация",
+    office: "Юридический адрес",
+    jurisdiction: "Юрисдикция",
+    copyright: "Все права защищены."
+  }
+}[locale];
+
+const navigationLinks = [
+  { label: t(locale, "capabilities"), href: "/capabilities/" },
+  { label: t(locale, "solutions"), href: "/solutions/" },
+  { label: t(locale, "systems"), href: "/systems/" },
+  { label: t(locale, "technologies"), href: "/technologies/" },
+  { label: t(locale, "industries"), href: "/industries/" },
+  { label: t(locale, "about"), href: "/about/" }
+].map((item) => ({ ...item, href: localizePath(item.href, locale) }));
+
+const routeLinks = [
+  { label: t(locale, "startProject"), href: localizePath("/start-project/", locale) },
+  { label: t(locale, "partnerProgram"), href: localizePath("/partner-program/", locale) }
+];
+
+const companyDetails = [
+  { label: footerCopy.legalName, value: 'Societatea cu Răspundere Limitată "ALFA RANK"' },
+  { label: footerCopy.idno, value: "1019600054378" },
+  { label: footerCopy.registered, value: "2019-11-19" },
+  { label: footerCopy.office, value: "str. Nicolae Dimo 4/1, MD-2068 Chisinau" },
+  { label: footerCopy.jurisdiction, value: "Republic of Moldova" }
+];
 ---
 
 <footer class="site-footer">
-  <div>
-    <strong>AlfaRank</strong>
-    <p>{t(locale, "footerText")}</p>
+  <div class="site-footer__brand">
+    <a class="footer-brand" href={localizePath("/", locale)} aria-label={t(locale, "homeAria")}>
+      <span class="footer-brand__mark" data-no-translate>A</span>
+      <span>AlfaRank</span>
+    </a>
+    <p>{footerCopy.brandNote}</p>
+    <a class="footer-cta" href={localizePath("/start-project/", locale)}>{t(locale, "startProject")}</a>
   </div>
-  <div class="footer-links">
-    <a href={localizePath("/capabilities/", locale)}>{t(locale, "capabilities")}</a>
-    <a href={localizePath("/solutions/", locale)}>{t(locale, "solutions")}</a>
-    <a href={localizePath("/systems/", locale)}>{t(locale, "systems")}</a>
-    <a href={localizePath("/start-project/", locale)}>{t(locale, "startProject")}</a>
-    <a href={localizePath("/partner-program/", locale)}>{t(locale, "partnerProgram")}</a>
+
+  <nav class="footer-nav" aria-label={footerCopy.navigation}>
+    <h2>{footerCopy.navigation}</h2>
+    <div class="footer-links">
+      {navigationLinks.map((item) => <a href={item.href}>{item.label}</a>)}
+    </div>
+  </nav>
+
+  <nav class="footer-nav footer-nav--routes" aria-label={footerCopy.routes}>
+    <h2>{footerCopy.routes}</h2>
+    <div class="footer-links">
+      {routeLinks.map((item) => <a href={item.href}>{item.label}</a>)}
+    </div>
+  </nav>
+
+  <section class="footer-company" aria-labelledby="footer-company-title">
+    <h2 id="footer-company-title">{footerCopy.company}</h2>
+    <dl class="footer-company__grid">
+      {companyDetails.map((item) => (
+        <div class="footer-company__item">
+          <dt>{item.label}</dt>
+          <dd class="notranslate" data-no-translate translate="no">{item.value}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  <div class="site-footer__contact" aria-label={footerCopy.contacts}>
+    <ContactChannels locale={locale} variant="footer" />
   </div>
-  <ContactChannels locale={locale} variant="footer" />
-  <span class="footer-meta">&copy; {year} AlfaRank</span>
+
+  <div class="footer-meta">
+    <span>&copy; {year} AlfaRank</span>
+    <span>{footerCopy.copyright}</span>
+  </div>
 </footer>
