@@ -1238,8 +1238,19 @@ const roCopy: Dictionary = {
   "Decisions": "Decizii",
   "7 directions": "7 directii",
   "Launchable": "Lansabil",
-  "Ready": "Gata"
-  ,
+  "Ready": "Gata",
+  "Themes, entities, page types, and briefs are organized before generation starts.":
+    "Temele, entitatile, tipurile de pagini si briefurile sunt organizate inainte de generare.",
+  "Sources, product data, keywords, and rules become controlled inputs for the workflow.":
+    "Sursele, datele de produs, keywordurile si regulile devin intrari controlate pentru flux.",
+  "AI creates drafts from templates instead of isolated prompts and loose instructions.":
+    "AI creeaza drafturi din sabloane, nu din prompturi izolate si instructiuni vagi.",
+  "Editors keep quality control through statuses, checks, corrections, and approvals.":
+    "Editorii pastreaza controlul calitatii prin statusuri, verificari, corectii si aprobari.",
+  "Approved output moves toward CMS, metadata, internal links, and publishing queues.":
+    "Rezultatul aprobat trece spre CMS, metadata, linkuri interne si cozi de publicare.",
+  "Performance, indexation, gaps, and queue status feed the next production cycle.":
+    "Performanta, indexarea, golurile si statusul cozii alimenteaza urmatorul ciclu de productie.",
   "Route console": "Consola de ruta",
   "Industry system core": "Nucleu de sistem pentru industrie",
   "System fit": "Potrivire de sistem",

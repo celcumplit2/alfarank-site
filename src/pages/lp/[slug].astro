@@ -96,12 +96,48 @@ const leadActions = [
 ];
 
 const contentRail = [
-  { label: "Topics", detail: "Intent map", icon: "content", href: "/capabilities/seo-content-infrastructure/" },
-  { label: "Data", detail: "Inputs clean", icon: "data", href: "/capabilities/data-systems-scraping/" },
-  { label: "Draft", detail: "AI assist", icon: "ai", href: "/capabilities/ai-automation/" },
-  { label: "Review", detail: "Human gate", icon: "tools", href: "#landing-intake" },
-  { label: "Publish", detail: "CMS ready", icon: "api", href: "/systems/content-automation-workflows/" },
-  { label: "Report", detail: "Loop back", icon: "ranking", href: "/solutions/scale-seo-infrastructure/" }
+  {
+    label: "Topics",
+    detail: "Intent map",
+    text: "Themes, entities, page types, and briefs are organized before generation starts.",
+    icon: "content",
+    href: "/capabilities/seo-content-infrastructure/"
+  },
+  {
+    label: "Data",
+    detail: "Inputs clean",
+    text: "Sources, product data, keywords, and rules become controlled inputs for the workflow.",
+    icon: "data",
+    href: "/capabilities/data-systems-scraping/"
+  },
+  {
+    label: "Draft",
+    detail: "AI assist",
+    text: "AI creates drafts from templates instead of isolated prompts and loose instructions.",
+    icon: "ai",
+    href: "/capabilities/ai-automation/"
+  },
+  {
+    label: "Review",
+    detail: "Human gate",
+    text: "Editors keep quality control through statuses, checks, corrections, and approvals.",
+    icon: "tools",
+    href: "#landing-intake"
+  },
+  {
+    label: "Publish",
+    detail: "CMS ready",
+    text: "Approved output moves toward CMS, metadata, internal links, and publishing queues.",
+    icon: "api",
+    href: "/systems/content-automation-workflows/"
+  },
+  {
+    label: "Report",
+    detail: "Loop back",
+    text: "Performance, indexation, gaps, and queue status feed the next production cycle.",
+    icon: "ranking",
+    href: "/solutions/scale-seo-infrastructure/"
+  }
 ];
 
 const commerceDeck = [
@@ -256,6 +292,7 @@ const wordpressLayers = [
             <a class="factory-station" href={station.href} style={`--station-index: "${String(index + 1).padStart(2, "0")}";`}>
               <SystemIcon name={station.icon} />
               <strong>{translateCopy(locale, station.label)}</strong>
+              <p>{translateCopy(locale, station.text)}</p>
               <small>{translateCopy(locale, station.detail)}</small>
             </a>
           ))}

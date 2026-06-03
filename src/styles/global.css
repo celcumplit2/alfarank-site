@@ -4196,14 +4196,14 @@ li {
 .before-after-engine {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(220px, 0.76fr) minmax(300px, 0.9fr) minmax(220px, 0.76fr);
-  grid-template-rows: minmax(260px, auto) auto;
-  column-gap: 14px;
-  row-gap: 28px;
+  grid-template-columns: minmax(230px, 0.82fr) minmax(330px, 1fr) minmax(230px, 0.82fr);
+  grid-template-rows: auto auto;
+  gap: 20px;
+  align-items: stretch;
   overflow: hidden;
   border: 1px solid rgba(125, 211, 252, 0.2);
   border-radius: var(--radius);
-  padding: 18px;
+  padding: 22px;
   background:
     radial-gradient(circle at 50% 40%, rgba(216, 251, 255, 0.12), transparent 30%),
     radial-gradient(circle at 14% 42%, rgba(255, 84, 101, 0.1), transparent 24%),
@@ -4217,12 +4217,16 @@ li {
 .before-after-engine::before {
   content: "";
   position: absolute;
-  left: 12%;
-  right: 12%;
-  top: 42%;
-  height: 2px;
-  background: linear-gradient(90deg, rgba(255, 84, 101, 0.1), rgba(216, 251, 255, 0.72), rgba(223, 248, 255, 0.18));
-  box-shadow: 0 0 34px rgba(216, 251, 255, 0.22);
+  left: 8%;
+  right: 8%;
+  top: 37%;
+  height: 34%;
+  border-top: 1px solid rgba(216, 251, 255, 0.28);
+  border-bottom: 1px dashed rgba(105, 230, 255, 0.2);
+  border-radius: 999px;
+  box-shadow:
+    0 0 34px rgba(216, 251, 255, 0.12),
+    inset 0 0 28px rgba(105, 230, 255, 0.04);
   pointer-events: none;
 }
 
@@ -4244,20 +4248,20 @@ li {
 
 .before-after-panel {
   display: grid;
-  align-content: space-between;
-  gap: 18px;
-  min-height: 300px;
-  padding: 20px;
+  align-content: start;
+  gap: 16px;
+  min-height: 320px;
+  padding: 22px;
 }
 
 .before-after-panel--before {
   border-color: rgba(255, 84, 101, 0.28);
-  transform: translateY(28px);
+  transform: translateY(18px);
 }
 
 .before-after-panel--after {
   border-color: rgba(216, 251, 255, 0.34);
-  transform: translateY(-12px);
+  transform: translateY(18px);
 }
 
 .before-after-panel::after {
@@ -4302,8 +4306,8 @@ li {
 
 .before-after-panel h3 {
   color: #ffffff;
-  font-size: clamp(24px, 2.4vw, 36px);
-  line-height: 1.05;
+  font-size: clamp(25px, 2.2vw, 34px);
+  line-height: 1.02;
 }
 
 .before-after-panel p,
@@ -4319,7 +4323,7 @@ li {
   align-content: center;
   justify-items: center;
   gap: 12px;
-  min-height: 340px;
+  min-height: 360px;
   padding: 28px;
   text-align: center;
 }
@@ -4342,22 +4346,26 @@ li {
 
 .before-after-engine__core strong {
   color: #ffffff;
-  font-size: clamp(36px, 4.4vw, 62px);
-  line-height: 0.92;
+  font-size: clamp(36px, 4vw, 58px);
+  line-height: 0.94;
   text-shadow: var(--heading-shadow);
 }
 
 .before-after-engine__signals {
   display: grid;
   grid-column: 1 / -1;
-  grid-template-columns: 56px auto minmax(0, 1fr);
+  grid-template-columns: 58px max-content minmax(0, 1fr);
   align-items: center;
-  gap: 14px;
-  padding: 16px 18px;
+  gap: 16px;
+  margin-top: 8px;
+  padding: 20px 22px;
+  background:
+    linear-gradient(90deg, rgba(216, 251, 255, 0.08), rgba(1, 16, 38, 0.86) 30%, rgba(1, 16, 38, 0.82)),
+    rgba(1, 16, 38, 0.82);
 }
 
 .before-after-engine__signals p {
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .landing-process-grid {
@@ -9001,7 +9009,7 @@ html[lang="ru"] .command-field {
   z-index: 2;
   display: grid;
   grid-template-columns: repeat(3, minmax(150px, 1fr));
-  gap: 14px;
+  gap: 16px;
   align-content: center;
   align-items: stretch;
 }
@@ -9009,12 +9017,13 @@ html[lang="ru"] .command-field {
 .factory-station {
   position: relative;
   display: grid;
-  grid-template-columns: 50px minmax(0, 1fr);
-  align-content: start;
-  align-items: center;
-  min-height: 142px;
+  grid-template-columns: 52px minmax(0, 1fr);
+  grid-template-rows: auto auto 1fr auto;
+  align-content: stretch;
+  align-items: start;
+  min-height: 178px;
   gap: 8px 14px;
-  padding: 18px;
+  padding: 18px 18px 22px;
   overflow: hidden;
   background:
     radial-gradient(circle at 18% 35%, rgba(216, 251, 255, 0.12), transparent 36%),
@@ -9068,6 +9077,14 @@ html[lang="ru"] .command-field {
   font-weight: 900;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+}
+
+.factory-station p {
+  grid-column: 1 / -1;
+  margin: 4px 0 18px;
+  color: rgba(224, 247, 255, 0.72);
+  font-size: 13px;
+  line-height: 1.38;
 }
 
 .commerce-control {
