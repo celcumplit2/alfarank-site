@@ -11587,6 +11587,10 @@ button:disabled {
   overflow-wrap: anywhere;
 }
 
+.footer-company__item dd span {
+  display: block;
+}
+
 .contact-channels--footer {
   max-width: none;
   padding: 0;

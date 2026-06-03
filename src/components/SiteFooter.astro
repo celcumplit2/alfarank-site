@@ -121,7 +121,7 @@ const standardLinks = [
 ];
 
 const companyDetails = [
-  { label: footerCopy.legalName, value: 'Societatea cu Răspundere Limitată "ALFA RANK"' },
+  { label: footerCopy.legalName, value: ["Societatea cu Răspundere Limitată", '"ALFA RANK"'] },
   { label: footerCopy.idno, value: "1019600054378" },
   { label: footerCopy.registered, value: "2019-11-19" },
   { label: footerCopy.office, value: "str. Nicolae Dimo 4/1, MD-2068 Chisinau" },
@@ -182,7 +182,9 @@ const footerNodes = [
       {companyDetails.map((item) => (
         <div class="footer-company__item">
           <dt>{item.label}</dt>
-          <dd class="notranslate" data-no-translate translate="no">{item.value}</dd>
+          <dd class="notranslate" data-no-translate translate="no">
+            {Array.isArray(item.value) ? item.value.map((line) => <span>{line}</span>) : item.value}
+          </dd>
         </div>
       ))}
     </dl>
