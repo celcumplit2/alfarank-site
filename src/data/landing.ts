@@ -24,7 +24,10 @@ export type LandingOffer = {
     title: string;
     text: string;
   }[];
-  process: string[];
+  process: {
+    title: string;
+    text: string;
+  }[];
   faq: {
     question: string;
     answer: string;
@@ -93,10 +96,22 @@ export const landingOffers: LandingOffer[] = [
       { title: "Signals to show", text: "Lead source, status, owner, response time, qualification score, next step." }
     ],
     process: [
-      "Map the current lead sources and follow-up path.",
-      "Define the intake fields, routing logic, and qualification rules.",
-      "Connect CRM, email, dashboards, sheets, or notifications.",
-      "Launch the first workflow and review lead quality after real submissions."
+      {
+        title: "Map intake",
+        text: "Lead sources, forms, owners, and follow-up timing are mapped before automation starts."
+      },
+      {
+        title: "Define routing",
+        text: "Fields, qualification logic, priority rules, and ownership become one intake model."
+      },
+      {
+        title: "Connect handoff",
+        text: "CRM, email, dashboards, sheets, or notifications receive the structured request."
+      },
+      {
+        title: "Review live leads",
+        text: "Real submissions show source quality, response speed, owner status, and next action."
+      }
     ],
     faq: [
       {
@@ -178,10 +193,22 @@ export const landingOffers: LandingOffer[] = [
       { title: "Signals to show", text: "Output volume, review status, publishing queue, indexation, content gaps." }
     ],
     process: [
-      "Choose the first content type and the inputs behind it.",
-      "Design templates, prompt structure, fields, and review states.",
-      "Build generation, enrichment, QA, and publishing handoff.",
-      "Measure output quality, speed, and content performance signals."
+      {
+        title: "Select content type",
+        text: "One page type, template, source set, and desired CMS output become the first scope."
+      },
+      {
+        title: "Design production model",
+        text: "Prompts, fields, review states, metadata, and approval rules are fixed before generation."
+      },
+      {
+        title: "Build workflow",
+        text: "Generation, enrichment, QA, and publishing handoff move through one controlled path."
+      },
+      {
+        title: "Measure content signals",
+        text: "Output quality, speed, queue status, indexation, and gaps guide the next cycle."
+      }
     ],
     faq: [
       {
@@ -263,10 +290,22 @@ export const landingOffers: LandingOffer[] = [
       { title: "Signals to show", text: "Missing fields, feed status, price changes, stock issues, catalog coverage." }
     ],
     process: [
-      "Audit the current product data, feeds, store platform, and update workflow.",
-      "Define product fields, transformations, rules, and monitoring needs.",
-      "Build the feed, validation, dashboard, or reporting modules.",
-      "Launch with real product data and tune for operational use."
+      {
+        title: "Audit catalog flow",
+        text: "Product data, feeds, platform limits, and update routines are checked as one operating path."
+      },
+      {
+        title: "Define data rules",
+        text: "Fields, transformations, validation rules, and monitoring needs become the product model."
+      },
+      {
+        title: "Build operating modules",
+        text: "Feed export, validation, dashboard, alerts, or reports are assembled around the model."
+      },
+      {
+        title: "Tune with live data",
+        text: "Real products expose missing fields, feed issues, price changes, and operational actions."
+      }
     ],
     faq: [
       {
@@ -348,10 +387,22 @@ export const landingOffers: LandingOffer[] = [
       { title: "Signals to show", text: "Submission source, CRM status, integration logs, owner, next action." }
     ],
     process: [
-      "Audit the current WordPress setup, plugins, forms, and CRM path.",
-      "Define the workflow objects, fields, validation, and API handoff.",
-      "Build the custom tool, integration, or automation layer.",
-      "Test real submissions and document the operating path."
+      {
+        title: "Map WordPress stack",
+        text: "Plugins, forms, content objects, CRM route, and manual handoffs are reviewed together."
+      },
+      {
+        title: "Define workflow objects",
+        text: "Fields, statuses, validation, ownership, and API handoff become the controlled model."
+      },
+      {
+        title: "Build integration layer",
+        text: "Custom tooling, automation, or API sync connects WordPress to the operating workflow."
+      },
+      {
+        title: "Test real submissions",
+        text: "Live records confirm routing, logs, owner status, next action, and documentation."
+      }
     ],
     faq: [
       {

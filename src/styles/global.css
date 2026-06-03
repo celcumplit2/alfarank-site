@@ -3736,7 +3736,8 @@ li {
 
 .campaign-offer span,
 .campaign-offer small,
-.landing-process-grid span {
+.landing-process-grid span,
+.landing-process-grid small {
   color: #d8fbff;
   font-size: 10px;
   font-weight: 900;
@@ -3747,7 +3748,8 @@ li {
 .campaign-offer h3,
 .landing-problem-grid h3,
 .landing-module h3,
-.proof-card h3 {
+.proof-card h3,
+.landing-process-grid h3 {
   color: #ffffff;
   font-size: 21px;
 }
@@ -4370,13 +4372,88 @@ li {
 
 .landing-process-grid {
   grid-template-columns: repeat(4, minmax(0, 1fr));
+  position: relative;
 }
 
 .landing-process-grid article {
-  min-height: 180px;
-  align-content: space-between;
+  grid-template-rows: auto auto 1fr;
+  align-content: start;
   gap: 14px;
-  padding: 18px;
+  min-height: 220px;
+  padding: 20px 20px 22px;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(216, 251, 255, 0.13), transparent 34%),
+    linear-gradient(rgba(125, 211, 252, 0.046) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(125, 211, 252, 0.036) 1px, transparent 1px),
+    rgba(1, 10, 28, 0.2);
+  background-size:
+    100% 100%,
+    32px 32px,
+    32px 32px,
+    100% 100%;
+}
+
+.landing-process-grid article::before {
+  content: "";
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 54px;
+  height: 54px;
+  border: 1px solid rgba(105, 230, 255, 0.16);
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(105, 230, 255, 0.11), transparent 58%);
+  opacity: 0.72;
+}
+
+.landing-process-grid article::after {
+  content: "";
+  position: absolute;
+  right: 20px;
+  bottom: 18px;
+  left: 20px;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(105, 230, 255, 0.92), rgba(216, 251, 255, 0.68), transparent);
+  opacity: 0.74;
+}
+
+.landing-process-grid__meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.landing-process-grid__meta span {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 1px solid rgba(105, 230, 255, 0.26);
+  border-radius: 999px;
+  background: rgba(1, 16, 38, 0.58);
+  box-shadow:
+    inset 0 0 16px rgba(105, 230, 255, 0.12),
+    0 0 20px rgba(105, 230, 255, 0.08);
+  font-size: 12px;
+}
+
+.landing-process-grid__meta small {
+  color: rgba(216, 251, 255, 0.62);
+}
+
+.landing-process-grid h3 {
+  max-width: 220px;
+  margin: 8px 0 0;
+  font-size: clamp(18px, 1.32vw, 22px);
+  line-height: 1.08;
+  text-shadow: var(--heading-shadow);
+}
+
+.landing-process-grid p {
+  align-self: start;
+  max-width: 300px;
+  color: rgba(224, 247, 255, 0.78);
 }
 
 .solution-mechanism {

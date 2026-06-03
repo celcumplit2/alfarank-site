@@ -1239,6 +1239,55 @@ const roCopy: Dictionary = {
   "7 directions": "7 directii",
   "Launchable": "Lansabil",
   "Ready": "Gata",
+  "Build step": "Etapa de build",
+  "Map intake": "Mapare intake",
+  "Lead sources, forms, owners, and follow-up timing are mapped before automation starts.":
+    "Sursele de leaduri, formularele, responsabilii si timpii de raspuns sunt mapate inainte de automatizare.",
+  "Define routing": "Logica de rutare",
+  "Fields, qualification logic, priority rules, and ownership become one intake model.":
+    "Campurile, logica de calificare, prioritatile si ownershipul devin un singur model de intake.",
+  "Connect handoff": "Conectare handoff",
+  "CRM, email, dashboards, sheets, or notifications receive the structured request.":
+    "CRM-ul, emailul, dashboardurile, sheeturile sau notificarile primesc cererea structurata.",
+  "Review live leads": "Verificare leaduri live",
+  "Real submissions show source quality, response speed, owner status, and next action.":
+    "Cererile reale arata calitatea sursei, viteza raspunsului, statusul ownerului si pasul urmator.",
+  "Select content type": "Tip de continut",
+  "One page type, template, source set, and desired CMS output become the first scope.":
+    "Un tip de pagina, un sablon, setul de surse si rezultatul CMS dorit definesc primul scope.",
+  "Design production model": "Model de productie",
+  "Prompts, fields, review states, metadata, and approval rules are fixed before generation.":
+    "Prompturile, campurile, starile de review, metadata si regulile de aprobare sunt fixate inainte de generare.",
+  "Build workflow": "Construire workflow",
+  "Generation, enrichment, QA, and publishing handoff move through one controlled path.":
+    "Generarea, imbogatirea, QA-ul si handofful spre publicare merg pe o singura ruta controlata.",
+  "Measure content signals": "Masurare semnale",
+  "Output quality, speed, queue status, indexation, and gaps guide the next cycle.":
+    "Calitatea outputului, viteza, statusul cozii, indexarea si gapurile ghideaza urmatorul ciclu.",
+  "Audit catalog flow": "Audit flux catalog",
+  "Product data, feeds, platform limits, and update routines are checked as one operating path.":
+    "Datele de produs, feedurile, limitele platformei si rutina de actualizare sunt verificate ca un singur flux operational.",
+  "Define data rules": "Reguli de date",
+  "Fields, transformations, validation rules, and monitoring needs become the product model.":
+    "Campurile, transformarile, regulile de validare si monitorizarea devin modelul de produs.",
+  "Build operating modules": "Module operationale",
+  "Feed export, validation, dashboard, alerts, or reports are assembled around the model.":
+    "Exportul de feed, validarea, dashboardul, alertele sau rapoartele sunt asamblate in jurul modelului.",
+  "Tune with live data": "Ajustare cu date reale",
+  "Real products expose missing fields, feed issues, price changes, and operational actions.":
+    "Produsele reale arata campuri lipsa, probleme de feed, schimbari de pret si actiuni operationale.",
+  "Map WordPress stack": "Mapare stack WordPress",
+  "Plugins, forms, content objects, CRM route, and manual handoffs are reviewed together.":
+    "Pluginurile, formularele, obiectele de continut, ruta CRM si handoffurile manuale sunt analizate impreuna.",
+  "Define workflow objects": "Obiecte workflow",
+  "Fields, statuses, validation, ownership, and API handoff become the controlled model.":
+    "Campurile, statusurile, validarea, ownershipul si handofful API devin modelul controlat.",
+  "Build integration layer": "Strat de integrare",
+  "Custom tooling, automation, or API sync connects WordPress to the operating workflow.":
+    "Toolingul custom, automatizarea sau sincronizarea API conecteaza WordPress la workflowul operational.",
+  "Test real submissions": "Test cu cereri reale",
+  "Live records confirm routing, logs, owner status, next action, and documentation.":
+    "Inregistrarile live confirma rutarea, logurile, statusul ownerului, pasul urmator si documentatia.",
   "Themes, entities, page types, and briefs are organized before generation starts.":
     "Temele, entitatile, tipurile de pagini si briefurile sunt organizate inainte de generare.",
   "Sources, product data, keywords, and rules become controlled inputs for the workflow.":

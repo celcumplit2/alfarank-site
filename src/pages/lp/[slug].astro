@@ -407,8 +407,12 @@ const wordpressLayers = [
     <div class="landing-process-grid">
       {offer.process.map((step, index) => (
         <article>
-          <span>{String(index + 1).padStart(2, "0")}</span>
-          <p>{step}</p>
+          <div class="landing-process-grid__meta">
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <small>{translateCopy(locale, "Build step")}</small>
+          </div>
+          <h3>{translateCopy(locale, step.title)}</h3>
+          <p>{translateCopy(locale, step.text)}</p>
         </article>
       ))}
     </div>
