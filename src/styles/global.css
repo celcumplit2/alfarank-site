@@ -4198,7 +4198,8 @@ li {
   display: grid;
   grid-template-columns: minmax(220px, 0.76fr) minmax(300px, 0.9fr) minmax(220px, 0.76fr);
   grid-template-rows: minmax(260px, auto) auto;
-  gap: 14px;
+  column-gap: 14px;
+  row-gap: 28px;
   overflow: hidden;
   border: 1px solid rgba(125, 211, 252, 0.2);
   border-radius: var(--radius);
