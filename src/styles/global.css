@@ -8937,74 +8937,101 @@ html[lang="ru"] .command-field {
 
 .content-factory {
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-columns: minmax(290px, 0.34fr) minmax(0, 1fr);
   gap: 18px;
+  align-items: stretch;
   background:
-    radial-gradient(circle at 12% 25%, rgba(216, 251, 255, 0.1), transparent 25%),
+    radial-gradient(circle at 13% 32%, rgba(216, 251, 255, 0.18), transparent 30%),
+    radial-gradient(circle at 72% 42%, rgba(105, 230, 255, 0.08), transparent 38%),
     linear-gradient(rgba(125, 211, 252, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(125, 211, 252, 0.026) 1px, transparent 1px),
     rgba(1, 10, 28, 0.22);
-  background-size: 100% 100%, 38px 38px, 38px 38px, 100% 100%;
+  background-size: 100% 100%, 100% 100%, 38px 38px, 38px 38px, 100% 100%;
 }
 
 .content-factory::before {
-  left: 8%;
-  right: 8%;
-  bottom: 30%;
-  height: 8px;
-  border: 1px solid rgba(216, 251, 255, 0.26);
+  inset: 12% 5% 13% 28%;
+  border: 1px solid rgba(105, 230, 255, 0.22);
   border-radius: 999px;
   background:
-    repeating-linear-gradient(90deg, rgba(216, 251, 255, 0.58) 0 2px, transparent 2px 28px),
-    linear-gradient(90deg, transparent, rgba(216, 251, 255, 0.7), transparent);
-  box-shadow: 0 0 24px rgba(216, 251, 255, 0.2);
+    linear-gradient(90deg, transparent, rgba(105, 230, 255, 0.16), transparent);
+  box-shadow:
+    0 0 42px rgba(105, 230, 255, 0.12),
+    inset 0 0 36px rgba(216, 251, 255, 0.05);
+  transform: rotate(-7deg);
+}
+
+.content-factory::after {
+  content: "";
+  position: absolute;
+  left: 35%;
+  right: 6%;
+  top: 50%;
+  height: 1px;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent, rgba(216, 251, 255, 0.56), rgba(105, 230, 255, 0.42), transparent);
+  box-shadow:
+    0 -105px 0 rgba(105, 230, 255, 0.12),
+    0 105px 0 rgba(105, 230, 255, 0.1);
+  opacity: 0.72;
 }
 
 .content-factory__core {
-  min-height: 180px;
+  min-height: 0;
   align-content: center;
-  grid-template-columns: 72px 1fr;
+  grid-template-columns: 1fr;
+  justify-items: start;
   background:
-    linear-gradient(90deg, rgba(216, 251, 255, 0.12), transparent 38%),
+    radial-gradient(circle at 20% 20%, rgba(216, 251, 255, 0.2), transparent 36%),
+    linear-gradient(135deg, rgba(216, 251, 255, 0.1), transparent 44%),
     rgba(1, 16, 38, 0.72);
 }
 
 .content-factory__core .system-icon {
-  grid-row: span 3;
+  grid-row: auto;
 }
 
 .content-factory__core strong {
-  max-width: 760px;
+  max-width: 420px;
 }
 
 .content-factory__rail {
   position: relative;
   z-index: 2;
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(3, minmax(150px, 1fr));
+  gap: 14px;
+  align-content: center;
   align-items: stretch;
 }
 
 .factory-station {
   position: relative;
   display: grid;
-  min-height: 190px;
-  align-content: space-between;
-  gap: 12px;
-  padding: 16px;
+  grid-template-columns: 50px minmax(0, 1fr);
+  align-content: start;
+  align-items: center;
+  min-height: 142px;
+  gap: 8px 14px;
+  padding: 18px;
   overflow: hidden;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(216, 251, 255, 0.04)),
+    radial-gradient(circle at 18% 35%, rgba(216, 251, 255, 0.12), transparent 36%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.082), rgba(216, 251, 255, 0.035)),
     rgba(1, 16, 38, 0.72);
+}
+
+.factory-station .system-icon {
+  grid-row: 1 / span 2;
 }
 
 .factory-station::after {
   content: "";
   position: absolute;
-  left: 16px;
-  right: 16px;
-  bottom: 18px;
+  left: 18px;
+  right: 18px;
+  bottom: 16px;
   height: 3px;
   border-radius: 999px;
   background: linear-gradient(90deg, #69e6ff, #d8fbff);
@@ -9013,14 +9040,17 @@ html[lang="ru"] .command-field {
 
 .factory-station::before {
   content: var(--station-index);
+  position: absolute;
+  top: 14px;
+  right: 16px;
   color: rgba(105, 230, 255, 0.36);
-  font-size: 34px;
+  font-size: 28px;
   font-weight: 900;
   line-height: 1;
 }
 
 .factory-station:nth-child(even) {
-  transform: translateY(34px);
+  transform: none;
 }
 
 .factory-station:hover {
@@ -9028,10 +9058,11 @@ html[lang="ru"] .command-field {
 }
 
 .factory-station:nth-child(even):hover {
-  transform: translateY(30px);
+  transform: translateY(-2px);
 }
 
 .factory-station small {
+  grid-column: 2;
   color: #d8fbff;
   font-size: 10px;
   font-weight: 900;
@@ -12751,6 +12782,7 @@ button:disabled {
   .automation-tower,
   .client-blueprint,
   .lead-reactor,
+  .content-factory,
   .ai-review-console,
   .commerce-control,
   .platform-blueprint,
@@ -12775,6 +12807,7 @@ button:disabled {
   .ai-review-console::before,
   .ai-review-step::before,
   .content-factory::before,
+  .content-factory::after,
   .commerce-control::before,
   .platform-blueprint::before,
   .platform-blueprint__layers::before,
