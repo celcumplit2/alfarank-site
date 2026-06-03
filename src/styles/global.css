@@ -9673,6 +9673,17 @@ html[lang="ru"] .command-field {
   flex-wrap: wrap;
 }
 
+.capability-related-tags {
+  display: grid;
+  justify-items: start;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.capability-related-tags .tag {
+  line-height: 1.28;
+}
+
 .tag {
   display: inline-flex;
   min-width: 0;
