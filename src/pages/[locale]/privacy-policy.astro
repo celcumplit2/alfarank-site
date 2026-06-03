@@ -1,0 +1,15 @@
+---
+import PrivacyPolicyPage from "@/pages/privacy-policy.astro";
+import { translatedLocales } from "@/data/i18n";
+
+export function getStaticPaths() {
+  return translatedLocales.map((locale) => ({
+    params: { locale },
+    props: { locale }
+  }));
+}
+
+const { locale } = Astro.props;
+---
+
+<PrivacyPolicyPage locale={locale} />

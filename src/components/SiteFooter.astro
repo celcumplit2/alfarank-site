@@ -1,6 +1,6 @@
 ---
 import ContactChannels from "@/components/ContactChannels.astro";
-import { localizePath, t } from "@/data/i18n";
+import { getCapabilities, getSolutions, localizePath, t } from "@/data/i18n";
 import type { Locale } from "@/data/i18n";
 
 type Props = {
@@ -13,10 +13,15 @@ const year = new Date().getFullYear();
 const footerCopy = {
   en: {
     brandNote: "Digital systems, automation, content infrastructure, web platforms, and data workflows for practical business operations.",
-    navigation: "Navigation",
-    routes: "Start routes",
+    coreLabel: "Sitemap core",
+    coreState: "Routes online",
+    navigation: "Site map",
+    capabilities: "Build directions",
+    routes: "Solution routes",
+    standard: "Standard pages",
     company: "Company data",
     contacts: "Direct channels",
+    contactNote: "Fast channel for project context and partner introductions.",
     legalName: "Legal name",
     idno: "IDNO",
     registered: "Registered",
@@ -26,10 +31,15 @@ const footerCopy = {
   },
   ro: {
     brandNote: "Sisteme digitale, automatizare, infrastructura de continut, platforme web si fluxuri de date pentru operatiuni de business.",
-    navigation: "Navigare",
-    routes: "Rute de pornire",
+    coreLabel: "Nucleu sitemap",
+    coreState: "Rute active",
+    navigation: "Harta site",
+    capabilities: "Directii de build",
+    routes: "Rute de solutii",
+    standard: "Pagini standard",
     company: "Date companie",
     contacts: "Canale directe",
+    contactNote: "Canal rapid pentru context de proiect si introduceri de parteneri.",
     legalName: "Denumire juridica",
     idno: "IDNO",
     registered: "Inregistrare",
@@ -39,10 +49,15 @@ const footerCopy = {
   },
   ru: {
     brandNote: "Цифровые системы, автоматизация, контентная инфраструктура, веб-платформы и процессы данных для бизнес-операций.",
-    navigation: "Навигация",
-    routes: "Стартовые маршруты",
+    coreLabel: "Ядро карты",
+    coreState: "Маршруты активны",
+    navigation: "Карта сайта",
+    capabilities: "Направления сборки",
+    routes: "Маршруты решений",
+    standard: "Стандартные страницы",
     company: "Данные компании",
     contacts: "Прямые каналы",
+    contactNote: "Быстрый канал для проектного контекста и партнерских интро.",
     legalName: "Юридическое имя",
     idno: "IDNO",
     registered: "Регистрация",
@@ -61,9 +76,48 @@ const navigationLinks = [
   { label: t(locale, "about"), href: "/about/" }
 ].map((item) => ({ ...item, href: localizePath(item.href, locale) }));
 
+const capabilitySlugs = [
+  "ai-automation",
+  "web-product-development",
+  "seo-content-infrastructure",
+  "data-systems-scraping",
+  "ecommerce-systems",
+  "wordpress-api-integrations"
+];
+
+const solutionSlugs = [
+  "automate-lead-processing",
+  "upgrade-existing-website",
+  "generate-more-content",
+  "scale-seo-infrastructure",
+  "build-data-monitoring-system",
+  "launch-digital-product"
+];
+
+const capabilityMap = new Map(getCapabilities(locale).map((item) => [item.slug, item]));
+const solutionMap = new Map(getSolutions(locale).map((item) => [item.slug, item]));
+
+const capabilityLinks = capabilitySlugs
+  .map((slug) => capabilityMap.get(slug))
+  .filter(Boolean)
+  .map((item) => ({ label: item!.title, href: localizePath(`/capabilities/${item!.slug}/`, locale) }));
+
+const solutionLinks = solutionSlugs
+  .map((slug) => solutionMap.get(slug))
+  .filter(Boolean)
+  .map((item) => ({ label: item!.title, href: localizePath(`/solutions/${item!.slug}/`, locale) }));
+
 const routeLinks = [
   { label: t(locale, "startProject"), href: localizePath("/start-project/", locale) },
   { label: t(locale, "partnerProgram"), href: localizePath("/partner-program/", locale) }
+];
+
+const standardLinks = [
+  { label: locale === "ru" ? "Контакты" : locale === "ro" ? "Contact" : "Contact", href: localizePath("/contact/", locale) },
+  { label: locale === "ru" ? "Конфиденциальность" : locale === "ro" ? "Confidentialitate" : "Privacy Policy", href: localizePath("/privacy-policy/", locale) },
+  { label: locale === "ru" ? "Условия" : locale === "ro" ? "Termeni" : "Terms", href: localizePath("/terms-and-conditions/", locale) },
+  { label: locale === "ru" ? "Куки" : locale === "ro" ? "Cookies" : "Cookies", href: localizePath("/cookie-policy/", locale) },
+  { label: locale === "ru" ? "Карта сайта" : locale === "ro" ? "Harta site" : "Sitemap", href: localizePath("/sitemap/", locale) }
 ];
 
 const companyDetails = [
@@ -73,33 +127,56 @@ const companyDetails = [
   { label: footerCopy.office, value: "str. Nicolae Dimo 4/1, MD-2068 Chisinau" },
   { label: footerCopy.jurisdiction, value: "Republic of Moldova" }
 ];
+
+const footerNodes = [
+  { title: footerCopy.navigation, className: "footer-orbit-node--map", links: navigationLinks },
+  { title: footerCopy.capabilities, className: "footer-orbit-node--capabilities", links: capabilityLinks },
+  { title: footerCopy.routes, className: "footer-orbit-node--routes", links: [...routeLinks, ...solutionLinks.slice(0, 2)] },
+  { title: footerCopy.standard, className: "footer-orbit-node--standard", links: standardLinks }
+];
 ---
 
-<footer class="site-footer">
-  <div class="site-footer__brand">
+<footer class="site-footer site-footer--orbit">
+  <div class="footer-orbit-field" aria-hidden="true">
+    <svg viewBox="0 0 1180 620" preserveAspectRatio="none">
+      <ellipse class="footer-orbit footer-orbit--outer" cx="585" cy="302" rx="520" ry="214" />
+      <ellipse class="footer-orbit footer-orbit--middle" cx="620" cy="306" rx="438" ry="158" />
+      <ellipse class="footer-orbit footer-orbit--inner" cx="520" cy="312" rx="306" ry="104" />
+      <path class="footer-route footer-route--solid" d="M274 266 C 408 128, 760 126, 952 250" />
+      <path class="footer-route footer-route--dash" d="M264 368 C 440 496, 792 480, 1004 336" />
+      <path class="footer-route footer-route--fine" d="M188 320 C 356 246, 770 210, 1088 278" />
+      <circle class="footer-route-dot" cx="274" cy="266" r="5" />
+      <circle class="footer-route-dot" cx="952" cy="250" r="5" />
+      <circle class="footer-route-dot" cx="1004" cy="336" r="5" />
+      <circle class="footer-route-dot" cx="540" cy="414" r="4" />
+    </svg>
+  </div>
+
+  <section class="footer-orbit-core">
     <a class="footer-brand" href={localizePath("/", locale)} aria-label={t(locale, "homeAria")}>
       <span class="footer-brand__mark" data-no-translate>A</span>
       <span>AlfaRank</span>
     </a>
-    <p>{footerCopy.brandNote}</p>
-    <a class="footer-cta" href={localizePath("/start-project/", locale)}>{t(locale, "startProject")}</a>
-  </div>
-
-  <nav class="footer-nav" aria-label={footerCopy.navigation}>
+    <span>{footerCopy.coreLabel}</span>
     <h2>{footerCopy.navigation}</h2>
-    <div class="footer-links">
-      {navigationLinks.map((item) => <a href={item.href}>{item.label}</a>)}
+    <p>{footerCopy.brandNote}</p>
+    <div class="footer-orbit-core__actions">
+      <a class="footer-cta" href={localizePath("/start-project/", locale)}>{t(locale, "startProject")}</a>
+      <a class="footer-mini-link" href={localizePath("/partner-program/", locale)}>{t(locale, "partnerProgram")}</a>
     </div>
-  </nav>
+    <small><i></i>{footerCopy.coreState}</small>
+  </section>
 
-  <nav class="footer-nav footer-nav--routes" aria-label={footerCopy.routes}>
-    <h2>{footerCopy.routes}</h2>
-    <div class="footer-links">
-      {routeLinks.map((item) => <a href={item.href}>{item.label}</a>)}
-    </div>
-  </nav>
+  {footerNodes.map((node) => (
+    <nav class:list={["footer-orbit-node", node.className]} aria-label={node.title}>
+      <h2>{node.title}</h2>
+      <div class="footer-links">
+        {node.links.map((item) => <a href={item.href}>{item.label}</a>)}
+      </div>
+    </nav>
+  ))}
 
-  <section class="footer-company" aria-labelledby="footer-company-title">
+  <section class="footer-orbit-node footer-orbit-node--company" aria-labelledby="footer-company-title">
     <h2 id="footer-company-title">{footerCopy.company}</h2>
     <dl class="footer-company__grid">
       {companyDetails.map((item) => (
@@ -111,12 +188,17 @@ const companyDetails = [
     </dl>
   </section>
 
-  <div class="site-footer__contact" aria-label={footerCopy.contacts}>
+  <section class="footer-orbit-node footer-orbit-node--contact" aria-label={footerCopy.contacts}>
+    <h2>{footerCopy.contacts}</h2>
+    <p>{footerCopy.contactNote}</p>
     <ContactChannels locale={locale} variant="footer" />
-  </div>
+  </section>
 
   <div class="footer-meta">
     <span>&copy; {year} AlfaRank</span>
+    <nav aria-label={footerCopy.standard}>
+      {standardLinks.map((item) => <a href={item.href}>{item.label}</a>)}
+    </nav>
     <span>{footerCopy.copyright}</span>
   </div>
 </footer>

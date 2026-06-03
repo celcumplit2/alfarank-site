@@ -1,0 +1,15 @@
+---
+import SitemapPage from "@/pages/sitemap.astro";
+import { translatedLocales } from "@/data/i18n";
+
+export function getStaticPaths() {
+  return translatedLocales.map((locale) => ({
+    params: { locale },
+    props: { locale }
+  }));
+}
+
+const { locale } = Astro.props;
+---
+
+<SitemapPage locale={locale} />

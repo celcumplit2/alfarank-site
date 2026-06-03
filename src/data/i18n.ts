@@ -109,6 +109,11 @@ export const staticBaseRoutes = [
   "/technologies/",
   "/industries/",
   "/about/",
+  "/contact/",
+  "/privacy-policy/",
+  "/terms-and-conditions/",
+  "/cookie-policy/",
+  "/sitemap/",
   "/start-project/",
   "/partner-program/",
   "/start-project/thank-you/"

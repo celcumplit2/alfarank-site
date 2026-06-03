@@ -1,0 +1,258 @@
+---
+import ContactChannels from "@/components/ContactChannels.astro";
+import Layout from "@/layouts/Layout.astro";
+import { getCapabilities, getSolutions, localizePath, t } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
+
+export type StandardPageKey = "contact" | "privacy-policy" | "terms-and-conditions" | "cookie-policy" | "sitemap";
+
+type Props = {
+  locale?: Locale;
+  page: StandardPageKey;
+};
+
+const { locale = "en", page } = Astro.props;
+
+const copy = {
+  en: {
+    contact: {
+      eyebrow: "Contact",
+      title: "Contact AlfaRank.",
+      description: "Use the project form or direct channels to send context about a digital system, automation, platform, content, data, or integration request.",
+      blocks: [
+        ["Project requests", "For scoped work, start with the project form. It preserves the source, context, current system, business pressure, and desired result."],
+        ["Direct channels", "Use direct channels for short questions, urgent context, or partner introductions. A full project request can still be opened afterwards."],
+        ["What to send", "Share the current website or system, the business problem, the desired output, and any tools or integrations already in use."]
+      ]
+    },
+    "privacy-policy": {
+      eyebrow: "Privacy",
+      title: "Privacy Policy.",
+      description: "How AlfaRank handles information submitted through forms, direct channels, analytics, and operational project workflows.",
+      blocks: [
+        ["Data collected", "We may collect contact details, company context, project requirements, website URLs, traffic source data, UTM tags, and technical details needed to respond to a request."],
+        ["How data is used", "Submitted data is used to evaluate the request, reply to the sender, route work internally, improve lead handling, and keep operational records for project communication."],
+        ["Retention and control", "Operational records are kept only as long as useful for communication, delivery, compliance, and business continuity. You can request correction or deletion of submitted contact information."],
+        ["Third-party services", "The site can use hosting, analytics, security, email, and messaging services. These services may process limited technical or contact data needed for the request flow."]
+      ]
+    },
+    "terms-and-conditions": {
+      eyebrow: "Terms",
+      title: "Terms and Conditions.",
+      description: "Basic terms for using the AlfaRank website, requesting project scope, and reviewing information published on the site.",
+      blocks: [
+        ["Website information", "The website describes AlfaRank services, capabilities, solution routes, and system profiles. It is informational and does not create a binding project agreement by itself."],
+        ["Project requests", "Sending a request starts a review process. Scope, price, timeline, deliverables, access, responsibilities, and acceptance criteria must be confirmed separately before work starts."],
+        ["Intellectual property", "Website content, layout, design, text, and visual systems belong to AlfaRank unless otherwise stated. Do not copy or reuse them without permission."],
+        ["Limitations", "AlfaRank works to keep information useful and accurate, but the site may change, contain errors, or become unavailable. Use the content as guidance, not as a guaranteed result."]
+      ]
+    },
+    "cookie-policy": {
+      eyebrow: "Cookies",
+      title: "Cookie Policy.",
+      description: "How cookies and similar technologies can support site operation, analytics, security, and lead attribution.",
+      blocks: [
+        ["Essential cookies", "Some cookies or local storage values can be required for security, access, form handling, and basic site operation."],
+        ["Analytics and attribution", "The site can use analytics and UTM data to understand campaign performance, page usage, and lead source context."],
+        ["Managing cookies", "You can control cookies through browser settings. Blocking some cookies may reduce analytics accuracy or affect protected flows."],
+        ["Updates", "Cookie usage may change when the site adds new analytics, security, or operational services."]
+      ]
+    },
+    sitemap: {
+      eyebrow: "Sitemap",
+      title: "Sitemap.",
+      description: "A human-readable map of the main AlfaRank pages, service directions, solution routes, standard pages, and project entry points.",
+      blocks: []
+    }
+  },
+  ro: {
+    contact: {
+      eyebrow: "Contact",
+      title: "Contacteaza AlfaRank.",
+      description: "Foloseste formularul de proiect sau canalele directe pentru cereri despre sisteme digitale, automatizare, platforme, continut, date sau integrari.",
+      blocks: [
+        ["Cereri de proiect", "Pentru lucru cu scope, incepe cu formularul de proiect. El pastreaza sursa, contextul, sistemul curent, presiunea de business si rezultatul dorit."],
+        ["Canale directe", "Foloseste canalele directe pentru intrebari scurte, context urgent sau recomandari de parteneri. O cerere completa poate fi deschisa ulterior."],
+        ["Ce sa trimiti", "Trimite site-ul sau sistemul curent, problema de business, rezultatul dorit si instrumentele sau integrarile deja folosite."]
+      ]
+    },
+    "privacy-policy": {
+      eyebrow: "Confidentialitate",
+      title: "Politica de confidentialitate.",
+      description: "Cum AlfaRank gestioneaza informatia trimisa prin formulare, canale directe, analytics si fluxuri operationale de proiect.",
+      blocks: [
+        ["Date colectate", "Putem colecta date de contact, context despre companie, cerinte de proiect, URL-uri, sursa traficului, taguri UTM si detalii tehnice necesare pentru raspuns."],
+        ["Utilizarea datelor", "Datele trimise sunt folosite pentru evaluarea cererii, raspuns, rutare interna, imbunatatirea procesarii leadurilor si comunicare operationala."],
+        ["Pastrare si control", "Inregistrarile sunt pastrate cat timp sunt utile pentru comunicare, livrare, conformitate si continuitate. Poti cere corectarea sau stergerea datelor de contact."],
+        ["Servicii terte", "Site-ul poate folosi hosting, analytics, securitate, email si mesagerie. Aceste servicii pot procesa date limitate necesare fluxului de cereri."]
+      ]
+    },
+    "terms-and-conditions": {
+      eyebrow: "Termeni",
+      title: "Termeni si conditii.",
+      description: "Termeni de baza pentru folosirea site-ului AlfaRank, solicitarea unui scope si consultarea informatiei publicate.",
+      blocks: [
+        ["Informatie pe site", "Site-ul descrie servicii, capabilitati, rute de solutii si profile de sisteme. Informatia este orientativa si nu creeaza automat un acord de proiect."],
+        ["Cereri de proiect", "Trimiterea unei cereri porneste un proces de analiza. Scope-ul, pretul, calendarul, livrabilele si criteriile de acceptare se confirma separat."],
+        ["Proprietate intelectuala", "Continutul, layoutul, designul, textul si sistemele vizuale apartin AlfaRank daca nu este specificat altfel."],
+        ["Limitari", "AlfaRank incearca sa pastreze informatia utila si corecta, dar site-ul se poate schimba, poate contine erori sau poate deveni indisponibil."]
+      ]
+    },
+    "cookie-policy": {
+      eyebrow: "Cookies",
+      title: "Politica de cookie-uri.",
+      description: "Cum cookies si tehnologii similare pot sustine functionarea site-ului, analytics, securitatea si atribuirea leadurilor.",
+      blocks: [
+        ["Cookies esentiale", "Unele cookies sau valori in local storage pot fi necesare pentru securitate, acces, formulare si functionarea de baza."],
+        ["Analytics si atribuire", "Site-ul poate folosi analytics si date UTM pentru performanta campaniilor, utilizarea paginilor si contextul sursei de lead."],
+        ["Gestionarea cookies", "Poti controla cookies din setarile browserului. Blocarea lor poate reduce acuratetea analytics sau afecta fluxuri protejate."],
+        ["Actualizari", "Utilizarea cookies se poate schimba cand site-ul adauga servicii noi de analytics, securitate sau operatiuni."]
+      ]
+    },
+    sitemap: {
+      eyebrow: "Sitemap",
+      title: "Sitemap.",
+      description: "Harta principala a paginilor AlfaRank, directiilor de servicii, rutelor de solutii, paginilor standard si punctelor de intrare in proiect.",
+      blocks: []
+    }
+  },
+  ru: {
+    contact: {
+      eyebrow: "Контакты",
+      title: "Связаться с AlfaRank.",
+      description: "Используйте форму проекта или прямые каналы для запроса по цифровой системе, автоматизации, платформе, контенту, данным или интеграциям.",
+      blocks: [
+        ["Проектные запросы", "Для работы с понятным scope начните с формы проекта. Она сохраняет источник, контекст, текущую систему, бизнес-потребность и желаемый результат."],
+        ["Прямые каналы", "Прямые каналы подходят для коротких вопросов, срочного контекста или партнерских интро. Полный проектный запрос можно открыть после этого."],
+        ["Что отправить", "Укажите текущий сайт или систему, бизнес-проблему, желаемый результат и инструменты или интеграции, которые уже используются."]
+      ]
+    },
+    "privacy-policy": {
+      eyebrow: "Конфиденциальность",
+      title: "Политика конфиденциальности.",
+      description: "Как AlfaRank обрабатывает информацию, отправленную через формы, прямые каналы, аналитику и операционные проектные процессы.",
+      blocks: [
+        ["Какие данные собираются", "Мы можем получать контактные данные, контекст компании, требования к проекту, URL, источник трафика, UTM-метки и технические детали, нужные для ответа."],
+        ["Как используются данные", "Данные используются для оценки запроса, ответа отправителю, внутренней маршрутизации, улучшения обработки лидов и ведения проектной коммуникации."],
+        ["Хранение и контроль", "Операционные записи хранятся только пока они полезны для коммуникации, выполнения работ, соответствия требованиям и бизнес-непрерывности."],
+        ["Сторонние сервисы", "Сайт может использовать хостинг, аналитику, безопасность, email и мессенджеры. Эти сервисы могут обрабатывать ограниченные данные, нужные для потока заявок."]
+      ]
+    },
+    "terms-and-conditions": {
+      eyebrow: "Условия",
+      title: "Условия использования.",
+      description: "Базовые условия использования сайта AlfaRank, отправки проектного запроса и просмотра опубликованной информации.",
+      blocks: [
+        ["Информация на сайте", "Сайт описывает услуги, возможности, маршруты решений и профили систем. Информация носит справочный характер и сама по себе не создает проектный договор."],
+        ["Проектные запросы", "Отправка запроса запускает процесс анализа. Scope, цена, сроки, результаты, доступы, ответственность и критерии приемки подтверждаются отдельно."],
+        ["Интеллектуальная собственность", "Контент, структура, дизайн, тексты и визуальные системы сайта принадлежат AlfaRank, если не указано иное."],
+        ["Ограничения", "AlfaRank старается поддерживать информацию полезной и точной, но сайт может меняться, содержать ошибки или быть временно недоступным."]
+      ]
+    },
+    "cookie-policy": {
+      eyebrow: "Куки",
+      title: "Политика cookies.",
+      description: "Как cookies и похожие технологии помогают работе сайта, аналитике, безопасности и атрибуции лидов.",
+      blocks: [
+        ["Необходимые cookies", "Некоторые cookies или значения local storage могут быть нужны для безопасности, доступа, обработки форм и базовой работы сайта."],
+        ["Аналитика и атрибуция", "Сайт может использовать аналитику и UTM-данные, чтобы понимать эффективность кампаний, использование страниц и источник лида."],
+        ["Управление cookies", "Вы можете управлять cookies в настройках браузера. Блокировка части cookies может снизить точность аналитики или повлиять на защищенные потоки."],
+        ["Обновления", "Использование cookies может меняться при добавлении новых сервисов аналитики, безопасности или операционных процессов."]
+      ]
+    },
+    sitemap: {
+      eyebrow: "Карта сайта",
+      title: "Карта сайта.",
+      description: "Человеческая карта основных страниц AlfaRank, направлений услуг, маршрутов решений, стандартных страниц и входов в проект.",
+      blocks: []
+    }
+  }
+}[locale][page];
+
+const standardPageLabels = {
+  en: ["Contact", "Privacy Policy", "Terms", "Cookies", "Sitemap"],
+  ro: ["Contact", "Confidentialitate", "Termeni", "Cookies", "Harta site"],
+  ru: ["Контакты", "Конфиденциальность", "Условия", "Куки", "Карта сайта"]
+}[locale];
+
+const standardPages = [
+  [standardPageLabels[0], "/contact/"],
+  [standardPageLabels[1], "/privacy-policy/"],
+  [standardPageLabels[2], "/terms-and-conditions/"],
+  [standardPageLabels[3], "/cookie-policy/"],
+  [standardPageLabels[4], "/sitemap/"]
+] as const;
+
+const capabilities = getCapabilities(locale).slice(0, 7);
+const solutions = getSolutions(locale).slice(0, 7);
+
+const sitemapGroups = [
+  {
+    title: t(locale, "capabilities"),
+    links: capabilities.map((item) => ({ label: item.title, href: localizePath(`/capabilities/${item.slug}/`, locale) }))
+  },
+  {
+    title: t(locale, "solutions"),
+    links: solutions.map((item) => ({ label: item.title, href: localizePath(`/solutions/${item.slug}/`, locale) }))
+  },
+  {
+    title: locale === "ru" ? "Основные страницы" : locale === "ro" ? "Pagini principale" : "Main pages",
+    links: [
+      { label: t(locale, "systems"), href: localizePath("/systems/", locale) },
+      { label: t(locale, "technologies"), href: localizePath("/technologies/", locale) },
+      { label: t(locale, "industries"), href: localizePath("/industries/", locale) },
+      { label: t(locale, "about"), href: localizePath("/about/", locale) },
+      { label: t(locale, "startProject"), href: localizePath("/start-project/", locale) },
+      { label: t(locale, "partnerProgram"), href: localizePath("/partner-program/", locale) }
+    ]
+  },
+  {
+    title: locale === "ru" ? "Стандартные страницы" : locale === "ro" ? "Pagini standard" : "Standard pages",
+    links: standardPages.map(([label, href]) => ({ label, href: localizePath(href, locale) }))
+  }
+];
+---
+
+<Layout title={`${copy.title} | AlfaRank`} description={copy.description} locale={locale}>
+  <section class="standard-page section ar-system-block">
+    <div class="standard-page__header">
+      <p class="eyebrow">{copy.eyebrow}</p>
+      <h1>{copy.title}</h1>
+      <p>{copy.description}</p>
+      <div class="standard-page__actions">
+        <a class="button primary" href={localizePath("/start-project/", locale)}>{t(locale, "startProject")}</a>
+        <a class="button secondary" href={localizePath("/contact/", locale)}>{locale === "ru" ? "Контакты" : "Contact"}</a>
+      </div>
+    </div>
+
+    {page === "contact" && (
+      <div class="standard-page__contact">
+        <ContactChannels locale={locale} />
+      </div>
+    )}
+
+    {page !== "sitemap" && (
+      <div class="standard-page__grid">
+        {copy.blocks.map(([title, text]) => (
+          <article class="standard-page__card">
+            <h2>{title}</h2>
+            <p>{text}</p>
+          </article>
+        ))}
+      </div>
+    )}
+
+    {page === "sitemap" && (
+      <div class="standard-page__sitemap">
+        {sitemapGroups.map((group) => (
+          <nav class="standard-page__card" aria-label={group.title}>
+            <h2>{group.title}</h2>
+            <div class="standard-page__links">
+              {group.links.map((item) => <a href={item.href}>{item.label}</a>)}
+            </div>
+          </nav>
+        ))}
+      </div>
+    )}
+  </section>
+</Layout>
