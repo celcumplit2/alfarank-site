@@ -5,7 +5,15 @@ const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 {
   siteKey && (
     <div class="turnstile-field" data-turnstile-field>
-      <div class="cf-turnstile" data-sitekey={siteKey} data-theme="dark"></div>
+      <div class="turnstile-field__shell">
+        <div
+          class="cf-turnstile"
+          data-sitekey={siteKey}
+          data-theme="dark"
+          data-size="flexible"
+          data-appearance="interaction-only"
+        ></div>
+      </div>
     </div>
   )
 }

@@ -1,6 +1,5 @@
 ---
 import PageHero from "@/components/PageHero.astro";
-import ContactChannels from "@/components/ContactChannels.astro";
 import LeadAssurance from "@/components/LeadAssurance.astro";
 import LeadProofPatterns from "@/components/LeadProofPatterns.astro";
 import SystemIcon from "@/components/SystemIcon.astro";
@@ -104,7 +103,6 @@ const sendingSourceStatus = translateCopy(locale, "Sending request with source c
           <button class="button primary" type="submit">{translateCopy(locale, "Send Quick Request")}</button>
           <a class="button secondary" href="#full-project-brief">{translateCopy(locale, "Open full brief")}</a>
         </div>
-        <ContactChannels locale={locale} />
         <p class="form-status" data-form-status aria-live="polite"></p>
       </form>
     </article>

@@ -101,7 +101,6 @@ const trackingFields = [
 checkIncludes("src/pages/start-project.astro", "start-project forms preserve attribution fields", [
   'data-conversion-form="quick-intake"',
   'data-conversion-form="start-project"',
-  "<ContactChannels",
   "<LeadAssurance",
   "<LeadProofPatterns",
   "<TurnstileField",
