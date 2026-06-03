@@ -1691,7 +1691,7 @@ const ruExactFallback: Dictionary = {
   "Ask for this system": "Запросить эту систему",
   "What is happening now?": "Что происходит сейчас?",
   "What should the system make visible or faster?": "Что система должна сделать видимым или быстрее?",
-  "Who this page should convert": "Кого должна конвертировать эта страница",
+  "Who this page should convert": "Кому подходит этот маршрут",
   "System offer": "Системный оффер",
   "System engine": "Системный двигатель",
   "Paid traffic brief": "Бриф для рекламного трафика",

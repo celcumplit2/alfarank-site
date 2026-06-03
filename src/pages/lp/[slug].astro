@@ -58,6 +58,30 @@ const landingHeadings = {
   }
 }[locale];
 
+const landingFitCopy = {
+  en: {
+    eyebrow: "Best-fit use cases",
+    title: "Who this route is built for",
+    pressure: "When this is needed",
+    output: "What becomes visible",
+    next: "How to start"
+  },
+  ro: {
+    eyebrow: "Pentru ce situatii",
+    title: "Pentru cine este ruta",
+    pressure: "Cand devine utila",
+    output: "Ce devine vizibil",
+    next: "Cum incepem"
+  },
+  ru: {
+    eyebrow: "Для каких задач",
+    title: "Кому подходит этот маршрут",
+    pressure: "Когда это нужно",
+    output: "Что становится видимым",
+    next: "С чего начать"
+  }
+}[locale];
+
 const leadSources = [
   { label: "Website form", icon: "web" },
   { label: "Ads", icon: "lead" },
@@ -146,8 +170,8 @@ const wordpressLayers = [
   <section class="section landing-problem" aria-labelledby="landing-fit-title">
     <div class="section-header">
       <div>
-        <p class="eyebrow">{translateCopy(locale, "Campaign fit")}</p>
-        <h2 id="landing-fit-title">{translateCopy(locale, "Who this page should convert")}</h2>
+        <p class="eyebrow">{landingFitCopy.eyebrow}</p>
+        <h2 id="landing-fit-title">{landingFitCopy.title}</h2>
       </div>
       <p>{offer.audience}</p>
     </div>
@@ -155,21 +179,21 @@ const wordpressLayers = [
     <div class="landing-problem-grid">
       <article>
         <SystemIcon name={offer.icon} />
-        <h3>{translateCopy(locale, "Buyer pressure")}</h3>
+        <h3>{landingFitCopy.pressure}</h3>
         <ul>
           {offer.painPoints.map((point) => <li>{point}</li>)}
         </ul>
       </article>
       <article>
         <SystemIcon name="ranking" />
-        <h3>{translateCopy(locale, "Expected output")}</h3>
+        <h3>{landingFitCopy.output}</h3>
         <ul>
           {offer.outcomes.map((outcome) => <li>{outcome}</li>)}
         </ul>
       </article>
       <article>
         <SystemIcon name="flow" />
-        <h3>{translateCopy(locale, "Best next action")}</h3>
+        <h3>{landingFitCopy.next}</h3>
         <p>{locale === "en" ? `Send the current workflow, traffic source, tools, and the first result you need from ${offerOutput}. AlfaRank can scope the smallest useful version from that context.` : translateCopy(locale, "Send the current workflow, traffic source, tools, and the first result you need. AlfaRank can scope the smallest useful version from that context.")}</p>
         <div class="landing-link-stack">
           {offer.relatedLinks.map((link) => <a href={localizePath(link.href, locale)}>{link.label}</a>)}
