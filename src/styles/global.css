@@ -231,6 +231,7 @@ select {
   white-space: normal;
   overflow-wrap: anywhere;
   hyphens: auto;
+  font-weight: 600;
   transition:
     background 160ms ease,
     border-color 160ms ease,
@@ -742,6 +743,7 @@ select {
   justify-content: center;
   border: 1px solid var(--pearl-line);
   color: var(--pearl-button-text);
+  font-weight: 600;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(216, 251, 255, 0.88) 50%, rgba(174, 232, 248, 0.9));
   box-shadow:
@@ -5134,7 +5136,7 @@ li {
   border: 1px solid rgba(162, 226, 255, 0.28);
   background: rgba(3, 17, 40, 0.68);
   color: var(--text);
-  font-weight: 800;
+  font-weight: 600;
   font-size: 13px;
 }
 
@@ -11109,14 +11111,16 @@ button:disabled {
   top: 70px;
   left: 48px;
   display: grid;
-  width: 312px;
-  min-height: 312px;
+  width: clamp(344px, 24vw, 372px);
+  height: clamp(344px, 24vw, 372px);
+  min-height: 0;
+  aspect-ratio: 1;
   align-content: center;
   justify-items: center;
-  gap: 12px;
+  gap: 10px;
   border: 1px solid rgba(216, 251, 255, 0.3);
   border-radius: 50%;
-  padding: 34px 32px;
+  padding: 32px 30px;
   text-align: center;
   background:
     radial-gradient(circle at 50% 38%, rgba(80, 210, 255, 0.16), transparent 50%),
@@ -11173,7 +11177,7 @@ button:disabled {
 .footer-orbit-core h2 {
   max-width: 100%;
   color: #ffffff;
-  font-size: clamp(30px, 3.4vw, 42px);
+  font-size: clamp(30px, 3.05vw, 40px);
   line-height: 0.96;
   text-shadow: var(--heading-shadow);
 }
@@ -11183,7 +11187,7 @@ button:disabled {
   max-width: 280px;
   margin: 0;
   color: rgba(224, 247, 255, 0.72);
-  font-size: 14px;
+  font-size: 13.5px;
   line-height: 1.5;
 }
 
@@ -11227,7 +11231,7 @@ button:disabled {
     inset 0 -1px 12px rgba(4, 27, 74, 0.12),
     0 14px 28px -20px rgba(0, 9, 30, 0.9),
     0 0 24px rgba(216, 251, 255, 0.16);
-  font-weight: 820;
+  font-weight: 600;
 }
 
 .footer-mini-link {
@@ -11241,7 +11245,7 @@ button:disabled {
   color: rgba(224, 247, 255, 0.88);
   background: rgba(216, 251, 255, 0.065);
   font-size: 13px;
-  font-weight: 820;
+  font-weight: 600;
   text-decoration: none;
 }
 
@@ -11276,8 +11280,8 @@ button:disabled {
 }
 
 .footer-orbit-node--routes {
-  top: 330px;
-  right: 280px;
+  top: 362px;
+  right: 338px;
   width: 350px;
 }
 
@@ -11315,7 +11319,7 @@ button:disabled {
   color: rgba(224, 247, 255, 0.76);
   background: rgba(216, 251, 255, 0.045);
   font-size: 12.5px;
-  font-weight: 760;
+  font-weight: 600;
   text-decoration: none;
   transition:
     background 160ms ease,
@@ -11343,6 +11347,7 @@ button:disabled {
   display: grid;
   gap: 3px;
   min-width: 0;
+  justify-items: start;
   border: 1px solid rgba(216, 251, 255, 0.14);
   border-radius: 4px;
   padding: 8px 10px;
@@ -11351,16 +11356,20 @@ button:disabled {
 }
 
 .footer-company__item dt {
+  margin: 0;
   color: rgba(216, 251, 255, 0.62);
   font-size: 9px;
+  text-align: left;
 }
 
 .footer-company__item dd {
   min-width: 0;
+  margin: 0;
   color: rgba(255, 255, 255, 0.9);
   font-size: 13px;
-  font-weight: 760;
+  font-weight: 600;
   line-height: 1.32;
+  text-align: left;
   overflow-wrap: anywhere;
 }
 
@@ -11382,11 +11391,39 @@ button:disabled {
 }
 
 .contact-channels--footer .contact-channels__link {
-  min-height: 30px;
-  padding: 6px 9px;
-  color: rgba(224, 247, 255, 0.82);
-  background: rgba(216, 251, 255, 0.055);
+  min-height: 38px;
+  min-width: 126px;
+  justify-content: center;
+  border-color: rgba(216, 251, 255, 0.24);
+  border-radius: 3px;
+  padding: 8px 12px;
+  color: rgba(224, 247, 255, 0.88);
+  background:
+    linear-gradient(135deg, rgba(216, 251, 255, 0.1), rgba(3, 23, 54, 0.72));
   font-size: 12.5px;
+  font-weight: 600;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 14px 26px -22px rgba(0, 7, 26, 0.84);
+}
+
+.contact-channels--footer .contact-channels__link span {
+  display: grid;
+  width: 18px;
+  height: 18px;
+  place-items: center;
+  border: 1px solid rgba(216, 251, 255, 0.24);
+  border-radius: 50%;
+  background: rgba(216, 251, 255, 0.075);
+  box-shadow: 0 0 14px rgba(103, 232, 249, 0.32);
+}
+
+.contact-channels--footer .contact-channels__link[data-contact-channel="email"] span::before {
+  content: "@";
+  color: rgba(216, 251, 255, 0.9);
+  font-size: 11px;
+  font-weight: 650;
+  line-height: 1;
 }
 
 .footer-meta {
