@@ -107,6 +107,16 @@ const sendingSourceStatus = translateCopy(locale, "Sending request with source c
       </form>
     </article>
 
+    <article class="intake-reactor__bridge ar-system-core">
+      <SystemIcon name="lead" />
+      <span>{translateCopy(locale, "Intake reactor")}</span>
+      <strong>{translateCopy(locale, "Turn context into scope.")}</strong>
+      <p>{translateCopy(locale, "The form routes business pressure, current systems, desired output, and integrations into one project request.")}</p>
+      <div class="ar-signal-strip">
+        {intakeSignals.map((signal) => <span class="ar-signal">{signal}</span>)}
+      </div>
+    </article>
+
     <form
       id="full-project-brief"
       class="glass-panel intake-reactor__form"
@@ -207,16 +217,6 @@ const sendingSourceStatus = translateCopy(locale, "Sending request with source c
     </form>
 
     <div class="intake-reactor__console">
-      <article class="intake-reactor__core ar-system-core">
-        <SystemIcon name="lead" />
-        <span>{translateCopy(locale, "Intake reactor")}</span>
-        <strong>{translateCopy(locale, "Turn context into scope.")}</strong>
-        <p>{translateCopy(locale, "The form routes business pressure, current systems, desired output, and integrations into one project request.")}</p>
-        <div class="ar-signal-strip">
-          {intakeSignals.map((signal) => <span class="ar-signal">{signal}</span>)}
-        </div>
-      </article>
-
       <div class="intake-reactor__path">
         {intakePath.map((step, index) => (
           <article class:list={["intake-reactor__step", `intake-reactor__step--${index + 1}`]}>

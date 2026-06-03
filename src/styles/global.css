@@ -5004,7 +5004,7 @@ li {
 
 .intake-reactor::before {
   left: 58%;
-  top: 8%;
+  top: 31%;
   bottom: 8%;
   width: 1px;
   background: linear-gradient(180deg, transparent, rgba(216, 251, 255, 0.48), transparent);
@@ -5023,13 +5023,13 @@ li {
 
 .intake-reactor__form {
   grid-column: 1;
-  grid-row: 2;
+  grid-row: 3;
   min-height: 760px;
 }
 
 .intake-reactor__console {
   grid-column: 2;
-  grid-row: 2;
+  grid-row: 3;
   display: grid;
   gap: 14px;
   position: sticky;
@@ -5042,6 +5042,56 @@ li {
   grid-row: 1;
   position: relative;
   z-index: 4;
+}
+
+.intake-reactor__bridge {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  display: grid;
+  min-height: 238px;
+  grid-template-columns: minmax(132px, 0.18fr) minmax(260px, 0.52fr) minmax(300px, 0.72fr);
+  gap: clamp(18px, 2.8vw, 36px);
+  align-items: center;
+  justify-items: start;
+  padding: clamp(22px, 2.8vw, 34px);
+  text-align: left;
+  background:
+    radial-gradient(ellipse at 18% 50%, rgba(216, 251, 255, 0.16), transparent 42%),
+    radial-gradient(ellipse at 78% 50%, rgba(80, 210, 255, 0.12), transparent 42%),
+    linear-gradient(rgba(216, 251, 255, 0.034) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(216, 251, 255, 0.03) 1px, transparent 1px),
+    rgba(1, 16, 38, 0.78);
+  background-size: 100% 100%, 100% 100%, 18px 18px, 18px 18px, 100% 100%;
+}
+
+.intake-reactor__bridge .system-icon {
+  width: 78px;
+  height: 78px;
+  justify-self: center;
+}
+
+.intake-reactor__bridge > span {
+  grid-column: 2;
+  align-self: end;
+}
+
+.intake-reactor__bridge strong {
+  grid-column: 2;
+  max-width: 460px;
+  font-size: clamp(32px, 3.2vw, 54px);
+}
+
+.intake-reactor__bridge p {
+  grid-column: 3;
+  max-width: 560px;
+  font-size: clamp(15px, 1.25vw, 18px);
+  line-height: 1.52;
+}
+
+.intake-reactor__bridge .ar-signal-strip {
+  grid-column: 3;
+  width: 100%;
+  justify-content: flex-start;
 }
 
 .quick-intake {
@@ -12112,9 +12162,29 @@ button:disabled {
   }
 
   .intake-reactor__quick,
+  .intake-reactor__bridge,
   .intake-reactor__console {
     grid-column: auto;
     grid-row: auto;
+  }
+
+  .intake-reactor__bridge {
+    min-height: 0;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .intake-reactor__bridge .system-icon,
+  .intake-reactor__bridge > span,
+  .intake-reactor__bridge strong,
+  .intake-reactor__bridge p,
+  .intake-reactor__bridge .ar-signal-strip {
+    grid-column: auto;
+  }
+
+  .intake-reactor__bridge .ar-signal-strip {
+    justify-content: center;
   }
 
   .intake-reactor__console {
