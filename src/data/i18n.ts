@@ -176,9 +176,9 @@ const ruCopy: Dictionary = {
   "Capability foundation": "Основа возможностей",
   "All build directions": "Все направления сборки",
   "Use the full catalog when the system is already clear, or start from the layer groups above when the problem still needs routing.":
-    "Используйте полный каталог, когда система уже понятна, или начните с групп слоев выше, если задачу еще нужно направить в правильный маршрут.",
+    "Полный каталог подходит, когда система уже понятна; группы слоев выше помогают направить задачу в правильный маршрут.",
   "Service navigation surface": "Навигационная поверхность услуг",
-  "Choose the build zone": "Выберите зону сборки",
+  "Choose the build zone": "Зона сборки",
   "Scope the first zone": "Описать первую зону",
   "Automation and operations": "Автоматизация и операции",
   "Repeated work, lead handling, content production, reporting, routing, and review loops.":
@@ -226,7 +226,7 @@ const ruCopy: Dictionary = {
   "Buyer pressure": "Давление покупателя",
   "Best next action": "Лучшее следующее действие",
   "Send the current workflow, traffic source, tools, and the first result you need. AlfaRank can scope the smallest useful version from that context.":
-    "Отправьте текущий процесс, источник трафика, инструменты и первый нужный результат. AlfaRank сможет определить минимальную полезную версию из этого контекста.",
+    "Текущий процесс, источник трафика, инструменты и первый нужный результат дают AlfaRank контекст для определения минимальной полезной версии.",
   "What the first build can include": "Что может войти в первую сборку",
   "This offer is specific enough for campaign traffic, but still flexible enough to shape around the buyer's current tools, constraints, and target outcome.":
     "Оффер достаточно конкретен для рекламного трафика, но остается гибким, чтобы подстроиться под текущие инструменты, ограничения и целевой результат покупателя.",
@@ -302,7 +302,7 @@ const ruCopy: Dictionary = {
 
   "capabilities": "возможностей",
   "solutions": "решений",
-  "Automate repeated work": "Автоматизировать повторяющуюся работу",
+  "Automate repeated work": "Автоматизация повторяющейся работы",
   "AI, rules, review states, and connected actions for content, leads, reports, or internal operations.":
     "AI, правила, состояния проверки и связанные действия для контента, лидов, отчетов и внутренних операций.",
   "Lead Processing": "Обработка лидов",
@@ -456,12 +456,12 @@ const ruCopy: Dictionary = {
   "Content system landing page": "Посадочная страница контентной системы",
   "E-commerce operations landing page": "Посадочная страница e-commerce-операций",
   "WordPress integration landing page": "Посадочная страница WordPress-интеграции",
-  "Automate lead processing before good requests go cold.": "Автоматизируйте обработку лидов, пока хорошие заявки не остыли.",
-  "Automate lead intake before requests go cold.": "Автоматизируйте прием заявок до потери интереса.",
-  "Build an AI-assisted content workflow with editorial control.": "Соберите AI-процесс производства контента с редакционным контролем.",
-  "Build an AI content workflow with editorial control.": "Соберите AI-процесс контента с редакционным контролем.",
-  "Turn product data, feeds, and catalog updates into one system.": "Превратите товарные данные, фиды и обновления каталога в одну систему.",
-  "Unify product data, feeds, and catalog updates.": "Объедините товарные данные, фиды и обновления каталога.",
+  "Automate lead processing before good requests go cold.": "Автоматизация обработки лидов до того, как хорошие заявки теряют скорость.",
+  "Automate lead intake before requests go cold.": "Автоматизация приема заявок до потери интереса.",
+  "Build an AI-assisted content workflow with editorial control.": "AI-assisted процесс производства контента с редакционным контролем.",
+  "Build an AI content workflow with editorial control.": "AI-процесс контента с редакционным контролем.",
+  "Turn product data, feeds, and catalog updates into one system.": "Товарные данные, фиды и обновления каталога объединяются в одну систему.",
+  "Unify product data, feeds, and catalog updates.": "Единая система товарных данных, фидов и обновлений каталога.",
   "Connect WordPress forms, CRM, APIs, and internal workflow.": "Соедините формы WordPress, CRM, API и внутренний рабочий процесс.",
   "Connect WordPress, CRM, APIs, and workflows.": "Соедините WordPress, CRM, API и рабочие процессы.",
   "Request This System": "Запросить эту систему",
@@ -649,7 +649,7 @@ const ruCopy: Dictionary = {
   "From business problem": "От бизнес-проблемы",
   "To an operational system": "К операционной системе",
   "Choose the pressure point. Follow the route to solutions and system.":
-    "Выберите точку давления. Следуйте маршруту к решениям и системе.",
+    "Точка давления связывается с маршрутом к решениям и системе.",
   "Pressure point": "Точка давления",
   "A business need becomes a working system with measurable output.":
     "Бизнес-потребность превращается в рабочую систему с измеримым результатом.",
@@ -672,7 +672,7 @@ const ruCopy: Dictionary = {
     "Начинайте с операционной потребности. Каждый маршрут ведет к релевантной возможности, решению или профилю системы, чтобы главная работала как карта компании.",
   "Need -> System": "Потребность -> система",
   "Choose the pressure point, then follow the route into the section with the right level of detail.":
-    "Выберите точку давления и перейдите в раздел с нужным уровнем детализации.",
+    "Каждая точка давления ведет в раздел с нужным уровнем детализации.",
   "what can be built": "что можно собрать",
   "which problem it solves": "какую проблему решает",
   "how it operates": "как работает",
@@ -748,7 +748,7 @@ const ruCopy: Dictionary = {
   "Input fields": "Поля ввода",
   "Mission control": "Центр управления",
   "Client system map / live routing": "Карта клиентской системы / активная маршрутизация",
-  "Orchestrate. Automate. Scale.": "Оркестрировать. Автоматизировать. Масштабировать.",
+  "Orchestrate. Automate. Scale.": "Оркестрация. Автоматизация. Масштабирование.",
   "System online": "Система онлайн",
   "Implementation layer": "Слой реализации",
   "AlfaRank core": "Ядро AlfaRank",
@@ -848,7 +848,7 @@ const ruCopy: Dictionary = {
   "Monitoring and alerts": "Мониторинг и алерты",
   "Reports and exports": "Отчеты и экспорты",
   "Use the strongest repeated workflow as the first commercial solution route.":
-    "Используйте самый частый повторяемый процесс как первый коммерческий маршрут решения.",
+    "Самый частый повторяемый процесс становится первым коммерческим маршрутом решения.",
   "Service businesses": "Сервисные компании",
   "Demand": "Спрос",
   "Catalog": "Каталог",
@@ -866,7 +866,7 @@ const ruCopy: Dictionary = {
   "Cleaner product operations": "Более чистые продуктовые операции",
   "Repeatable production": "Повторяемое производство",
   "Launchable product layer": "Продуктовый слой, готовый к запуску",
-  "Start with the business model, then map the system.": "Начните с бизнес-модели, затем разложите систему.",
+  "Start with the business model, then map the system.": "Бизнес-модель становится стартовой точкой карты системы.",
   "The strongest industry pages translate repeated business needs into concrete system patterns: lead flow, catalog operations, publishing, product interfaces, monitoring, and integrations.":
     "Сильные индустриальные страницы переводят повторяемые бизнес-потребности в конкретные системные паттерны: поток лидов, операции каталога, публикацию, продуктовые интерфейсы, мониторинг и интеграции.",
   "Growth signal funnel": "Воронка сигналов роста",
@@ -1793,12 +1793,12 @@ const ruPhraseFallback: Array<[RegExp, string]> = [
   [/^(.+) capabilities$/i, "Возможности для $1"],
   [/^Where (.+) systems usually start$/i, "Где обычно начинаются системы для $1"],
   [/^For (.+), the page needs to make (.+) obvious before a visitor asks for scope\.$/i, "Для $1 страница должна сделать $2 очевидным до запроса объема работ."],
-  [/^Start with (.+), then shape the system, modules, integration points, and proof that make (.+) visible\.$/i, "Начните с $1, затем соберите систему, модули, точки интеграции и доказательства, которые делают $2 видимым."],
-  [/^Validate (.+) with one working path: input, state, output, and user review\.$/i, "Проверьте $1 на одном рабочем маршруте: вход, состояние, результат и пользовательская проверка."],
-  [/^Connect the (.+) layer to the site, CMS, CRM, APIs, database, analytics, or internal tools that already matter\.$/i, "Подключите слой $1 к сайту, CMS, CRM, API, базе данных, аналитике или внутренним инструментам, которые уже важны."],
-  [/^Add visibility around (.+): dashboards, alerts, QA, reporting, ownership, and improvement loops for daily use\.$/i, "Добавьте видимость вокруг $1: панели, уведомления, QA, отчетность, ответственность и циклы улучшения для ежедневной работы."],
-  [/^Turn this into a visible system output: (.+)\.$/i, "Превратите это в видимый системный результат: $1."],
-  [/^Send the current process, tools, and expected (.+) so this can become a first working system\.$/i, "Отправьте текущий процесс, инструменты и ожидаемый результат $1, чтобы это стало первой рабочей системой."],
+  [/^Start with (.+), then shape the system, modules, integration points, and proof that make (.+) visible\.$/i, "$1 становится стартовой точкой; система, модули, точки интеграции и доказательства делают $2 видимым."],
+  [/^Validate (.+) with one working path: input, state, output, and user review\.$/i, "Проверка $1 на одном рабочем маршруте: вход, состояние, результат и пользовательская проверка."],
+  [/^Connect the (.+) layer to the site, CMS, CRM, APIs, database, analytics, or internal tools that already matter\.$/i, "Слой $1 подключается к сайту, CMS, CRM, API, базе данных, аналитике или важным внутренним инструментам."],
+  [/^Add visibility around (.+): dashboards, alerts, QA, reporting, ownership, and improvement loops for daily use\.$/i, "Вокруг $1 появляется видимость: панели, уведомления, контроль качества, отчетность, ответственность и циклы улучшения для ежедневной работы."],
+  [/^Turn this into a visible system output: (.+)\.$/i, "Это превращается в видимый системный результат: $1."],
+  [/^Send the current process, tools, and expected (.+) so this can become a first working system\.$/i, "Текущий процесс, инструменты и ожидаемый результат $1 становятся основой первой рабочей системы."],
   [/^For (.+), the work starts by mapping the current process and then turning it into architecture, data, interfaces, automations, integrations, and launch workflow\.$/i, "Для $1 работа начинается с карты текущего процесса, а затем превращается в архитектуру, данные, интерфейсы, автоматизацию, интеграции и запуск."],
   [/^This fits when (.+) already creates pressure and the team needs structure, automation, visibility, or scale\.$/i, "Это подходит, когда $1 уже создает давление, а команде нужны структура, автоматизация, видимость или масштаб."],
   [/^These profiles turn the solution into concrete architecture: modules, workflow, integrations, and operating output around (.+)\.$/i, "Эти профили превращают решение в конкретную архитектуру: модули, процесс, интеграции и операционный результат вокруг $1."],
@@ -1821,11 +1821,11 @@ const ruPhraseFallback: Array<[RegExp, string]> = [
   [/^A landing offer for companies that need more content, product pages, guides, briefs, or media drafts without turning publishing into a quality problem\.$/i, "Посадочный оффер для компаний, которым нужно больше контента, продуктовых страниц, гайдов, брифов или медиа-черновиков без потери качества публикации."],
   [/^A landing offer for stores and catalog businesses that need cleaner product data, feed workflows, stock or price monitoring, and operational reporting\.$/i, "Посадочный оффер для магазинов и каталоговых бизнесов, которым нужны более чистые продуктовые данные, процессы фидов, мониторинг остатков или цен и операционная отчетность."],
   [/^A landing offer for businesses that rely on WordPress but need it to act like a connected operating layer instead of a fragile plugin stack\.$/i, "Посадочный оффер для бизнесов на WordPress, которым нужен связанный операционный слой вместо хрупкого набора плагинов."],
-  [/^Turn every serious request into a qualified, routed, visible lead before the first response window closes\.$/i, "Превратите каждый серьезный запрос в квалифицированный, маршрутизированный и видимый лид до закрытия окна первого ответа."],
-  [/^Use this route when paid search, referrals, or website forms already create requests but the team reacts too slowly\.$/i, "Используйте этот маршрут, когда платный поиск, рекомендации или формы сайта уже дают заявки, но команда реагирует слишком медленно."],
-  [/^Make WordPress behave like a controlled workflow layer instead of a fragile stack of plugins\.$/i, "Заставьте WordPress работать как контролируемый процессный слой вместо хрупкого набора плагинов."],
-  [/^Turn catalog data, feeds, and monitoring into one operating layer the team can trust\.$/i, "Превратите данные каталога, фиды и мониторинг в единый операционный слой, которому команда может доверять."],
-  [/^Use this route when catalog updates, feeds, marketplace data, or product checks keep creating manual operations work\.$/i, "Используйте этот маршрут, когда обновления каталога, фиды, данные маркетплейсов или проверки товаров постоянно создают ручную операционную работу."]
+  [/^Turn every serious request into a qualified, routed, visible lead before the first response window closes\.$/i, "Каждый серьезный запрос превращается в квалифицированный, маршрутизированный и видимый лид до закрытия окна первого ответа."],
+  [/^Use this route when paid search, referrals, or website forms already create requests but the team reacts too slowly\.$/i, "Маршрут подходит, когда платный поиск, рекомендации или формы сайта уже дают заявки, но команда реагирует слишком медленно."],
+  [/^Make WordPress behave like a controlled workflow layer instead of a fragile stack of plugins\.$/i, "WordPress работает как контролируемый процессный слой вместо хрупкого набора плагинов."],
+  [/^Turn catalog data, feeds, and monitoring into one operating layer the team can trust\.$/i, "Данные каталога, фиды и мониторинг объединяются в единый операционный слой, которому команда может доверять."],
+  [/^Use this route when catalog updates, feeds, marketplace data, or product checks keep creating manual operations work\.$/i, "Маршрут подходит, когда обновления каталога, фиды, данные маркетплейсов или проверки товаров постоянно создают ручную операционную работу."]
 ];
 
 const ruTermFallback: Dictionary = {
