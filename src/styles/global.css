@@ -1913,6 +1913,13 @@ h3 {
   letter-spacing: 0;
 }
 
+.panel-subsection-heading {
+  margin: 26px 0 14px;
+  color: #ffffff;
+  font-size: 21px;
+  line-height: 1.14;
+}
+
 p,
 li {
   color: var(--muted);

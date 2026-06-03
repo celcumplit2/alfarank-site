@@ -346,7 +346,7 @@ const localizedSolutionProof = solutionProof.map((signal, index) => ({
       <div class="tag-grid">
         {(item.outputs ?? []).map((output) => <span class="tag">{output}</span>)}
       </div>
-      <h3>{solutionCopy.relevantCapabilities}</h3>
+      <h3 class="panel-subsection-heading">{solutionCopy.relevantCapabilities}</h3>
       <div class="tag-grid">
         {(relatedCapabilities.length ? relatedCapabilities : localizedCapabilities.slice(0, 4)).map((capability) => (
           <a class="tag" href={localizePath(`/capabilities/${capability.slug}/`, locale)}>{capability.title}</a>

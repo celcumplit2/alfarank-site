@@ -122,7 +122,7 @@ const capabilityCopy = {
       </div>
       {item.related && (
         <>
-          <h3>{translateCopy(locale, "Related solutions")}</h3>
+          <h3 class="panel-subsection-heading">{translateCopy(locale, "Related solutions")}</h3>
           <div class="tag-grid capability-related-tags">
             {item.related.map((related) => <span class="tag">{related}</span>)}
           </div>
