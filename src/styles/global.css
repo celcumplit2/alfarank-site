@@ -9948,6 +9948,149 @@ html[lang="ru"] .command-field {
   box-shadow: var(--glass-shadow-hover);
 }
 
+.ar-select {
+  position: relative;
+  z-index: 6;
+}
+
+.ar-select.is-open {
+  z-index: 80;
+}
+
+.ar-select__button {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-height: 50px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid rgba(216, 251, 255, 0.2);
+  border-radius: 4px;
+  padding: 12px 42px 12px 14px;
+  color: var(--text);
+  text-align: left;
+  background:
+    radial-gradient(circle at 16% 10%, rgba(216, 251, 255, 0.12), transparent 46%),
+    linear-gradient(135deg, rgba(216, 251, 255, 0.09), rgba(1, 16, 38, 0.34)),
+    rgba(1, 16, 38, 0.78);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -1px 18px rgba(0, 16, 48, 0.24),
+    0 18px 34px -30px rgba(0, 7, 26, 0.72);
+  cursor: pointer;
+}
+
+.ar-select__button::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid #69e6ff;
+  border-bottom: 2px solid #69e6ff;
+  transform: translateY(-64%) rotate(45deg);
+  filter: drop-shadow(0 0 8px rgba(105, 230, 255, 0.5));
+  transition: transform 160ms ease;
+}
+
+.ar-select.is-open .ar-select__button,
+.ar-select__button:focus-visible {
+  border-color: rgba(216, 251, 255, 0.44);
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(216, 251, 255, 0.1),
+    0 0 26px rgba(105, 230, 255, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+.ar-select.is-open .ar-select__button::after {
+  transform: translateY(-28%) rotate(225deg);
+}
+
+.ar-select__value {
+  display: block;
+  min-width: 0;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.ar-select__menu {
+  position: absolute;
+  inset-inline: 0;
+  top: calc(100% + 8px);
+  display: grid;
+  max-height: min(330px, 48vh);
+  gap: 6px;
+  overflow: auto;
+  border: 1px solid rgba(216, 251, 255, 0.28);
+  border-radius: 6px;
+  padding: 8px;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(105, 230, 255, 0.16), transparent 42%),
+    linear-gradient(rgba(216, 251, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(216, 251, 255, 0.035) 1px, transparent 1px),
+    rgba(1, 13, 32, 0.98);
+  background-size: 100% 100%, 14px 14px, 14px 14px, 100% 100%;
+  box-shadow:
+    0 24px 48px -24px rgba(0, 7, 26, 0.86),
+    0 0 0 1px rgba(216, 251, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-6px);
+  transition:
+    opacity 140ms ease,
+    transform 140ms ease,
+    visibility 140ms ease;
+  visibility: hidden;
+}
+
+.ar-select.is-open .ar-select__menu {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+  visibility: visible;
+}
+
+.ar-select__option {
+  display: flex;
+  width: 100%;
+  min-height: 42px;
+  align-items: center;
+  border: 1px solid rgba(216, 251, 255, 0.12);
+  border-radius: 4px;
+  padding: 10px 12px;
+  color: rgba(224, 247, 255, 0.86);
+  text-align: left;
+  background: rgba(4, 24, 54, 0.76);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.ar-select__option:hover,
+.ar-select__option:focus-visible {
+  border-color: rgba(105, 230, 255, 0.42);
+  color: #ffffff;
+  outline: none;
+  background: rgba(8, 43, 82, 0.88);
+  box-shadow: 0 0 20px rgba(105, 230, 255, 0.1);
+}
+
+.ar-select__option.is-selected {
+  border-color: rgba(105, 230, 255, 0.48);
+  color: #d8fbff;
+  background:
+    linear-gradient(90deg, rgba(105, 230, 255, 0.18), rgba(4, 24, 54, 0.82)),
+    rgba(4, 24, 54, 0.86);
+}
+
 .field input::placeholder,
 .field textarea::placeholder {
   color: rgba(255, 255, 255, 0.58);

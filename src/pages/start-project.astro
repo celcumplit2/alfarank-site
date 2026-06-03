@@ -34,6 +34,25 @@ const intakePath = [
   }
 ];
 
+const projectTypeOptions = [
+  "AI automation",
+  "Web platform",
+  "SEO/content infrastructure",
+  "Data or monitoring system",
+  "E-commerce infrastructure",
+  "WordPress/API integration",
+  "Internal business tool"
+].map((option) => translateCopy(locale, option));
+
+const desiredOutputOptions = [
+  "Working first version",
+  "Automation workflow",
+  "Website or platform launch",
+  "Dashboard or internal tool",
+  "Content/publishing system",
+  "Data monitoring/reporting system"
+].map((option) => translateCopy(locale, option));
+
 const sendingRequestLabel = translateCopy(locale, "Sending request...");
 const sendingSourceStatus = translateCopy(locale, "Sending request with source context...");
 ---
@@ -158,31 +177,52 @@ const sendingSourceStatus = translateCopy(locale, "Sending request with source c
           <input id="company" name="company" autocomplete="organization" />
         </div>
         <div class="field">
-          <label for="project-type">{translateCopy(locale, "Project type")}</label>
-          <select id="project-type" name="project_type">
-            <option>{translateCopy(locale, "AI automation")}</option>
-            <option>{translateCopy(locale, "Web platform")}</option>
-            <option>{translateCopy(locale, "SEO/content infrastructure")}</option>
-            <option>{translateCopy(locale, "Data or monitoring system")}</option>
-            <option>{translateCopy(locale, "E-commerce infrastructure")}</option>
-            <option>{translateCopy(locale, "WordPress/API integration")}</option>
-            <option>{translateCopy(locale, "Internal business tool")}</option>
-          </select>
+          <label id="project-type-label">{translateCopy(locale, "Project type")}</label>
+          <div class="ar-select" data-custom-select>
+            <input id="project-type" type="hidden" name="project_type" value={projectTypeOptions[0]} />
+            <button class="ar-select__button" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="project-type-label">
+              <span class="ar-select__value">{projectTypeOptions[0]}</span>
+            </button>
+            <div class="ar-select__menu" role="listbox">
+              {projectTypeOptions.map((option, index) => (
+                <button
+                  class:list={["ar-select__option", index === 0 && "is-selected"]}
+                  type="button"
+                  role="option"
+                  aria-selected={index === 0 ? "true" : "false"}
+                  data-value={option}
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
         <div class="field">
           <label for="current-system">{translateCopy(locale, "Current website/system")}</label>
           <input id="current-system" name="current_system" placeholder={translateCopy(locale, "URL or short description")} />
         </div>
         <div class="field">
-          <label for="desired-output">{translateCopy(locale, "Desired output")}</label>
-          <select id="desired-output" name="desired_output">
-            <option>{translateCopy(locale, "Working first version")}</option>
-            <option>{translateCopy(locale, "Automation workflow")}</option>
-            <option>{translateCopy(locale, "Website or platform launch")}</option>
-            <option>{translateCopy(locale, "Dashboard or internal tool")}</option>
-            <option>{translateCopy(locale, "Content/publishing system")}</option>
-            <option>{translateCopy(locale, "Data monitoring/reporting system")}</option>
-          </select>
+          <label id="desired-output-label">{translateCopy(locale, "Desired output")}</label>
+          <div class="ar-select" data-custom-select>
+            <input id="desired-output" type="hidden" name="desired_output" value={desiredOutputOptions[0]} />
+            <button class="ar-select__button" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="desired-output-label">
+              <span class="ar-select__value">{desiredOutputOptions[0]}</span>
+            </button>
+            <div class="ar-select__menu" role="listbox">
+              {desiredOutputOptions.map((option, index) => (
+                <button
+                  class:list={["ar-select__option", index === 0 && "is-selected"]}
+                  type="button"
+                  role="option"
+                  aria-selected={index === 0 ? "true" : "false"}
+                  data-value={option}
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
         <div class="field full">
           <label for="problem">{translateCopy(locale, "Business problem")}</label>
@@ -283,6 +323,106 @@ const sendingSourceStatus = translateCopy(locale, "Sending request with source c
           if (value) input.value = value;
           if (name === "landing_page" && !input.value) input.value = window.location.pathname;
         });
+      });
+
+      const closeSelect = (select) => {
+        select.classList.remove("is-open");
+        const button = select.querySelector(".ar-select__button");
+        if (button) button.setAttribute("aria-expanded", "false");
+      };
+
+      const closeAllSelects = (except) => {
+        document.querySelectorAll("[data-custom-select].is-open").forEach((select) => {
+          if (select !== except) closeSelect(select);
+        });
+      };
+
+      document.querySelectorAll("[data-custom-select]").forEach((select) => {
+        const input = select.querySelector("input[type='hidden']");
+        const button = select.querySelector(".ar-select__button");
+        const value = select.querySelector(".ar-select__value");
+        const options = Array.from(select.querySelectorAll(".ar-select__option"));
+        if (!input || !button || !value || !options.length) return;
+
+        const setOption = (option) => {
+          const nextValue = option.dataset.value || option.textContent.trim();
+          input.value = nextValue;
+          value.textContent = nextValue;
+          options.forEach((item) => {
+            const isSelected = item === option;
+            item.classList.toggle("is-selected", isSelected);
+            item.setAttribute("aria-selected", isSelected ? "true" : "false");
+          });
+        };
+
+        const openSelect = () => {
+          closeAllSelects(select);
+          select.classList.add("is-open");
+          button.setAttribute("aria-expanded", "true");
+        };
+
+        const toggleSelect = () => {
+          if (select.classList.contains("is-open")) {
+            closeSelect(select);
+            return;
+          }
+          openSelect();
+        };
+
+        const focusOption = (direction) => {
+          const current = options.indexOf(document.activeElement);
+          const next = current === -1 ? 0 : (current + direction + options.length) % options.length;
+          options[next].focus();
+        };
+
+        button.addEventListener("click", toggleSelect);
+        button.addEventListener("keydown", (event) => {
+          if (event.key === "ArrowDown" || event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            openSelect();
+            const selected = options.find((option) => option.classList.contains("is-selected")) || options[0];
+            selected.focus();
+          }
+        });
+
+        options.forEach((option) => {
+          option.addEventListener("click", () => {
+            setOption(option);
+            closeSelect(select);
+            button.focus();
+          });
+
+          option.addEventListener("keydown", (event) => {
+            if (event.key === "ArrowDown") {
+              event.preventDefault();
+              focusOption(1);
+            }
+            if (event.key === "ArrowUp") {
+              event.preventDefault();
+              focusOption(-1);
+            }
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              setOption(option);
+              closeSelect(select);
+              button.focus();
+            }
+            if (event.key === "Escape") {
+              event.preventDefault();
+              closeSelect(select);
+              button.focus();
+            }
+          });
+        });
+      });
+
+      document.addEventListener("click", (event) => {
+        if (!(event.target instanceof Element)) return;
+        if (!event.target.closest("[data-custom-select]")) closeAllSelects();
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeAllSelects();
       });
     })();
   </script>
