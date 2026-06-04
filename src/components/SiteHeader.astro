@@ -1,4 +1,5 @@
 ---
+import BrandLogo from "@/components/BrandLogo.astro";
 import { alternatePaths, localeLabels, localizePath, stripLocaleFromPath, t } from "@/data/i18n";
 import type { Locale } from "@/data/i18n";
 
@@ -28,8 +29,7 @@ const languageNames: Record<Locale, string> = {
 
 <header class="site-header">
   <a class="brand" href={homeHref} aria-label={t(locale, "homeAria")}>
-    <span class="brand-mark" data-no-translate>A</span>
-    <span>AlfaRank</span>
+    <BrandLogo />
   </a>
   <nav class="site-nav desktop-nav" aria-label={t(locale, "primaryNavigation")}>
     {navItems.map((item) => <a href={item.href}>{item.label}</a>)}

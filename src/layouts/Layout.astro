@@ -356,6 +356,8 @@ const structuredData = JSON.stringify([
 
         try {
         const ruExactFallback = {
+          "WhiteSpace": "WhiteSpace",
+          "SOVA / Vidorix": "SOVA / Vidorix",
           "4 modules mapped": "4 модуля на карте",
           "4 connected modules": "4 связанных модуля",
           "4 build modules": "4 модуля сборки",
@@ -983,7 +985,10 @@ const structuredData = JSON.stringify([
                 "github",
                 "cloudflare",
                 "astro",
-                "next.js"
+                "next.js",
+                "whitespace",
+                "sova",
+                "vidorix"
               ]);
               if (allowed.has(normalized) || allowed.has(compact)) return word;
               const replacement = ruWordFallback[normalized] || ruWordFallback[compact] || "";

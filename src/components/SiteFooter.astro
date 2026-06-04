@@ -1,4 +1,5 @@
 ---
+import BrandLogo from "@/components/BrandLogo.astro";
 import ContactChannels from "@/components/ContactChannels.astro";
 import { getCapabilities, getSolutions, localizePath, t } from "@/data/i18n";
 import type { Locale } from "@/data/i18n";
@@ -154,8 +155,7 @@ const footerNodes = [
 
   <section class="footer-orbit-core">
     <a class="footer-brand" href={localizePath("/", locale)} aria-label={t(locale, "homeAria")}>
-      <span class="footer-brand__mark" data-no-translate>A</span>
-      <span>AlfaRank</span>
+      <BrandLogo class="brand-logo--footer" />
     </a>
     <span>{footerCopy.coreLabel}</span>
     <h2>{footerCopy.navigation}</h2>

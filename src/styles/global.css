@@ -195,17 +195,107 @@ select {
   gap: 10px;
   align-items: center;
   font-weight: 720;
+  min-width: 0;
+  color: #ffffff;
+  text-decoration: none;
 }
 
-.brand-mark {
-  display: grid;
-  width: 30px;
-  height: 30px;
-  place-items: center;
-  border: 1px solid rgba(125, 211, 252, 0.48);
-  border-radius: 3px;
+.brand-logo {
+  --brand-logo-mark-size: 38px;
+  --brand-logo-word-size: 20px;
+  --brand-logo-rank: #5aa8ff;
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 11px;
   color: #ffffff;
-  background: rgba(255, 255, 255, 0.055);
+  line-height: 1;
+}
+
+.brand-logo__mark {
+  position: relative;
+  display: grid;
+  width: var(--brand-logo-mark-size);
+  height: var(--brand-logo-mark-size);
+  flex: 0 0 auto;
+  place-items: center;
+  filter: drop-shadow(0 0 14px rgba(61, 142, 255, 0.28));
+}
+
+.brand-logo__mark::after {
+  content: "";
+  position: absolute;
+  inset: 21%;
+  border-radius: 999px;
+  background: rgba(75, 163, 255, 0.22);
+  filter: blur(12px);
+  opacity: 0.82;
+  pointer-events: none;
+}
+
+.brand-logo__mark svg {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.brand-logo__plate {
+  fill: rgba(2, 12, 31, 0.78);
+  stroke-width: 1.35;
+}
+
+.brand-logo__inner-glow {
+  opacity: 0.95;
+}
+
+.brand-logo__a {
+  filter:
+    drop-shadow(0 1px 0 rgba(255, 255, 255, 0.48))
+    drop-shadow(0 0 8px rgba(95, 170, 255, 0.34));
+}
+
+.brand-logo__apex-cut {
+  fill: rgba(2, 13, 34, 0.92);
+}
+
+.brand-logo__star-glow {
+  fill: #2f8cff;
+  opacity: 0.3;
+  filter: drop-shadow(0 0 8px rgba(71, 166, 255, 0.86));
+}
+
+.brand-logo__star {
+  fill: #eefaff;
+  filter: drop-shadow(0 0 7px rgba(93, 183, 255, 0.9));
+}
+
+.brand-logo__wordmark {
+  display: inline-flex;
+  min-width: 0;
+  align-items: baseline;
+  color: #ffffff;
+  font-size: var(--brand-logo-word-size);
+  font-weight: 860;
+  letter-spacing: 0;
+  white-space: nowrap;
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.16),
+    0 0 18px rgba(74, 163, 255, 0.12);
+}
+
+.brand-logo__wordmark-rank {
+  color: var(--brand-logo-rank);
+  background: linear-gradient(180deg, #cfe7ff 0%, #69adff 45%, #2f86ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-logo--footer {
+  --brand-logo-mark-size: 42px;
+  --brand-logo-word-size: 22px;
 }
 
 .site-nav {
@@ -1557,6 +1647,10 @@ select {
   transform: translateY(var(--page-node-lift)) translateZ(var(--page-node-depth));
 }
 
+.page-hero[data-variant="system-profile"] .page-system-node {
+  width: clamp(154px, 12vw, 176px);
+}
+
 .page-system-node:hover,
 .page-system-node:focus-visible {
   --page-node-lift: -5px !important;
@@ -1730,6 +1824,11 @@ select {
 .page-system-map[data-layout="orbit"] .page-system-node--4 {
   right: calc(var(--system-map-gutter) - var(--system-map-content-shift));
   bottom: 104px;
+}
+
+.page-hero[data-variant="system-profile"] .page-system-map[data-layout="orbit"] .page-system-node--3,
+.page-hero[data-variant="system-profile"] .page-system-map[data-layout="orbit"] .page-system-node--4 {
+  bottom: 124px;
 }
 
 .page-system-map[data-layout="orbit"] .page-system-node--5 {
@@ -11508,26 +11607,9 @@ button:disabled {
   display: inline-flex;
   width: fit-content;
   align-items: center;
-  gap: 10px;
+  gap: 0;
   color: #ffffff;
-  font-size: 19px;
-  font-weight: 860;
   text-decoration: none;
-}
-
-.footer-brand__mark {
-  display: grid;
-  width: 34px;
-  height: 34px;
-  place-items: center;
-  border: 1px solid rgba(216, 251, 255, 0.38);
-  border-radius: 4px;
-  background:
-    radial-gradient(circle at 50% 42%, rgba(216, 251, 255, 0.18), transparent 58%),
-    rgba(255, 255, 255, 0.055);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 0 22px rgba(80, 210, 255, 0.12);
 }
 
 .footer-orbit-core > span,
@@ -13123,7 +13205,7 @@ button:disabled {
     min-width: 0;
   }
 
-  .brand span:last-child {
+  .brand .brand-logo__wordmark {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -13224,9 +13306,10 @@ button:disabled {
     margin: 8px 0 34px;
   }
 
-  .brand-mark {
-    width: 28px;
-    height: 28px;
+  .brand-logo {
+    --brand-logo-mark-size: 34px;
+    --brand-logo-word-size: 18px;
+    gap: 9px;
   }
 
   .mobile-menu > summary {

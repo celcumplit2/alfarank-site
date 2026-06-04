@@ -801,51 +801,51 @@ export const systems: PageItem[] = [
     slug: "whitespace",
     icon: "space",
     summary:
-      "A system profile for structured business workflows, content infrastructure, or productized operational modules.",
+      "A workspace operating system for turning service delivery, content work, requests, and internal routines into one visible workflow.",
     intro:
-      "WhiteSpace is presented as a system profile for business workflows that need structure, data, content, automation, and operational visibility. The exact implementation can vary by use case, but the profile demonstrates how AlfaRank thinks about productized systems rather than isolated tasks.",
+      "WhiteSpace is presented as a flexible operating layer for teams that work across requests, content, documents, approvals, and recurring tasks. The profile shows how AlfaRank can turn a loose business process into a structured workspace with entities, states, roles, dashboards, automation, and measurable output.",
     details: [
-      "System overview and module map",
-      "Business context and workflow",
-      "Technology layer and integrations",
-      "Outputs, use cases, and related capabilities"
+      "Workspace model for requests, records, tasks, and approvals",
+      "Role-based dashboards for owners, reviewers, clients, or operators",
+      "Reusable content and data objects that connect across modules",
+      "Automation hooks for reminders, QA, exports, reporting, and handoff"
     ],
     modules: [
       {
-        title: "Workflow structure",
+        title: "Process map and entities",
         text:
-          "A mapped process with inputs, statuses, roles, actions, approvals, and outputs instead of scattered manual work."
+          "The system starts by defining the objects that matter: requests, clients, tasks, files, content items, statuses, owners, deadlines, and outputs."
       },
       {
-        title: "Data and content layer",
+        title: "Workspace interface",
         text:
-          "Structured records, content fields, metadata, files, entities, or operational objects that can be reused by different parts of the system."
+          "Dashboards, queues, kanban-style stages, detail screens, review panels, and filters make the operating process visible to the team."
       },
       {
-        title: "Automation layer",
+        title: "Rules and automation",
         text:
-          "Triggered actions, AI-assisted steps, notifications, imports, exports, checks, or API connections that reduce repeated manual work."
+          "Notifications, status changes, validations, AI-assisted drafts, imports, exports, and recurring checks reduce repeated manual coordination."
       },
       {
-        title: "Interface layer",
+        title: "Reporting and handoff",
         text:
-          "Dashboards, admin screens, review surfaces, status views, and user-facing pages that make the workflow usable."
+          "The system produces summaries, client-ready outputs, internal reports, exports, and signals that show what needs attention next."
       }
     ],
-    outputs: ["Structured workflow", "Operational visibility", "Reusable system modules"],
+    outputs: ["Managed workspace", "Visible delivery process", "Reusable operations modules", "Reports and handoff signals"],
     workflow: [
-      "Define the business process and what output the system should create.",
-      "Map the objects, data, users, states, and actions involved.",
-      "Build the interface and operational workflow.",
-      "Connect automation, content, APIs, or reporting where useful.",
-      "Measure how the system improves speed, quality, or visibility."
+      "Map the current process, roles, objects, and recurring handoffs.",
+      "Define statuses, permissions, data fields, and the screens each role needs.",
+      "Build the first workspace with queues, detail views, review points, and outputs.",
+      "Connect automation, AI assistance, imports, exports, or integrations where the workflow repeats.",
+      "Use reports and operating signals to improve speed, ownership, and quality."
     ],
     useCases: [
-      "Internal workflow systems.",
-      "Productized service platforms.",
-      "Content or data operations dashboards.",
-      "Review, approval, and reporting tools.",
-      "Business process automation systems."
+      "Internal operations dashboard for a service team.",
+      "Client request and delivery workspace.",
+      "Content production and approval hub.",
+      "Document, asset, or data review console.",
+      "Productized service workflow with repeatable outputs."
     ],
     related: ["Web & Product Development", "Build Internal Tools", "AI Automation"]
   },
@@ -854,51 +854,51 @@ export const systems: PageItem[] = [
     slug: "sova-vidorix",
     icon: "lens",
     summary:
-      "AI, video, content, and media automation profile focused on repeatable generation and production workflows.",
+      "An AI media production system for turning briefs, scripts, assets, and templates into reviewed video or content outputs.",
     intro:
-      "SOVA / Vidorix is a system profile for AI-assisted content, video, and media production workflows. The system direction is based on repeatable generation, structured inputs, templates, review stages, and controlled publishing or export flows.",
+      "SOVA / Vidorix is presented as a controlled AI media workflow rather than a single generator. It organizes briefs, scripts, prompts, source assets, brand rules, generation steps, review states, exports, and publishing queues so media production can repeat without losing quality control.",
     details: [
-      "Media workflow structure",
-      "Generation and review stages",
-      "Template and asset handling",
-      "Publishing or export outputs"
+      "Brief, script, prompt, and asset intake",
+      "Template library for scenes, captions, formats, and brand rules",
+      "Human review stages before export or publication",
+      "Export, storage, metadata, and publishing queues"
     ],
     modules: [
       {
-        title: "Input and brief structure",
+        title: "Brief and asset intake",
         text:
-          "Scripts, prompts, product data, article content, media assets, brand rules, and generation parameters organized before production."
+          "Collects scripts, article text, product data, prompts, source media, brand constraints, language, aspect ratio, and publication target before generation starts."
       },
       {
-        title: "Generation pipeline",
+        title: "Media generation pipeline",
         text:
-          "AI-assisted steps for drafts, scenes, captions, media variations, thumbnails, metadata, or structured production assets."
+          "Turns structured inputs into draft scenes, captions, thumbnails, voice or audio notes, metadata, and media variants ready for review."
       },
       {
-        title: "Template and asset system",
+        title: "Template and brand system",
         text:
-          "Reusable formats, layout rules, brand assets, export sizes, media naming, storage logic, and version handling."
+          "Keeps reusable formats, visual rules, naming, export sizes, safe zones, intros, outros, and asset storage consistent across batches."
       },
       {
-        title: "Review and publishing flow",
+        title: "Review and publishing queue",
         text:
-          "Status tracking, approval steps, corrections, final export, publishing queues, or CMS/platform integration."
+          "Adds approval statuses, corrections, final exports, CMS or platform handoff, storage paths, and reporting on production speed and quality."
       }
     ],
-    outputs: ["Media production workflow", "AI-assisted generation pipeline", "Controlled review process"],
+    outputs: ["Reviewed media drafts", "AI-assisted production pipeline", "Template-based asset system", "Publishing-ready exports"],
     workflow: [
-      "Define the repeatable media output and source inputs.",
-      "Create generation templates, prompts, and asset rules.",
-      "Add review, approval, and correction stages.",
-      "Prepare export, publishing, or storage workflows.",
-      "Measure production speed, consistency, and review quality."
+      "Define the repeatable media format and the source material behind it.",
+      "Structure briefs, prompts, templates, brand rules, and export requirements.",
+      "Generate first drafts and variants through controlled pipeline steps.",
+      "Route outputs through review, correction, approval, and final export.",
+      "Publish, store, measure, and improve the workflow for the next batch."
     ],
     useCases: [
-      "Video generation from articles, scripts, or product data.",
-      "Repeatable social or media asset production.",
-      "Content-to-video workflows.",
-      "Media review and approval systems.",
-      "Publishing pipelines for generated assets."
+      "Article-to-video or product-to-video generation.",
+      "Short-form social asset production with review.",
+      "Thumbnail, caption, metadata, and variant generation.",
+      "Media approval workspace for a content team.",
+      "Publishing queue for generated video or visual assets."
     ],
     related: ["Video & Media Automation", "AI Automation", "Generate More Content"]
   },

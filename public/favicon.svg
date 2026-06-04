@@ -1,5 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="8" fill="#041b4a" />
-  <path fill="#e0f7ff" d="M32 10 52 54h-9l-4-10H25l-4 10h-9L32 10Zm-4 26h8l-4-10-4 10Z" />
-  <path fill="#38bdf8" d="M19 54h26l-4-7H23l-4 7Z" opacity=".72" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" role="img" aria-labelledby="title">
+  <title id="title">AlfaRank</title>
+  <defs>
+    <linearGradient id="a" x1="18" y1="14" x2="54" y2="58" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" />
+      <stop offset=".5" stop-color="#eef7ff" />
+      <stop offset="1" stop-color="#5aa8ff" />
+    </linearGradient>
+    <linearGradient id="frame" x1="8" y1="6" x2="64" y2="66" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9fd1ff" />
+      <stop offset=".55" stop-color="#3a86ff" />
+      <stop offset="1" stop-color="#1443a5" />
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="55%" r="50%">
+      <stop offset="0" stop-color="#69d7ff" stop-opacity=".45" />
+      <stop offset="1" stop-color="#69d7ff" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="72" height="72" rx="12" fill="#020d22" />
+  <rect x="6.5" y="6.5" width="59" height="59" rx="12" fill="#031633" stroke="url(#frame)" stroke-width="1.4" />
+  <rect x="9" y="9" width="54" height="54" rx="10" fill="url(#glow)" />
+  <path fill="url(#a)" d="M18.6 53.8 31.2 18h9.6l12.6 35.8H43.2L36 31.8l-7.2 22h-10.2Z" />
+  <path fill="#031633" d="M36 29.9 30.7 45.1 36 41.9l5.3 3.2L36 29.9Z" />
+  <path fill="#2f8cff" opacity=".28" d="M36 39.5c2 5 3.5 6.5 8.5 8.5-5 2-6.5 3.5-8.5 8.5-2-5-3.5-6.5-8.5-8.5 5-2 6.5-3.5 8.5-8.5Z" />
+  <path fill="#eafcff" d="M36 42.8c1.22 3.02 2.18 3.98 5.2 5.2-3.02 1.22-3.98 2.18-5.2 5.2-1.22-3.02-2.18-3.98-5.2-5.2 3.02-1.22 3.98-2.18 5.2-5.2Z" />
 </svg>

@@ -427,6 +427,10 @@ const ruCopy: Dictionary = {
     "Профиль системы для структурированных бизнес-процессов, контентной инфраструктуры или продуктовых операционных модулей.",
   "AI, video, content, and media automation profile focused on repeatable generation and production workflows.":
     "Профиль AI, видео, контента и медиа-автоматизации для повторяемой генерации и производственного процесса.",
+  "A workspace operating system for turning service delivery, content work, requests, and internal routines into one visible workflow.":
+    "Операционная система рабочего пространства, которая собирает сервисную работу, контент, заявки и внутренние процессы в один видимый процесс.",
+  "An AI media production system for turning briefs, scripts, assets, and templates into reviewed video or content outputs.":
+    "AI-система медиапроизводства, которая превращает брифы, сценарии, ассеты и шаблоны в проверенные видео- и контент-результаты.",
   "A system profile for generating, reviewing, enriching, publishing, and monitoring content at scale.":
     "Профиль системы для генерации, проверки, обогащения, публикации и мониторинга контента в масштабе.",
   "Catalog, product content, feed, integration, and monitoring infrastructure for e-commerce operations.":
@@ -1038,6 +1042,80 @@ const ruCopy: Dictionary = {
   "Content or data operations dashboards.": "Панели контентных или data-операций.",
   "Review, approval, and reporting tools.": "Инструменты проверки, согласования и отчетности.",
   "Business process automation systems.": "Системы автоматизации бизнес-процессов.",
+  "WhiteSpace is presented as a flexible operating layer for teams that work across requests, content, documents, approvals, and recurring tasks. The profile shows how AlfaRank can turn a loose business process into a structured workspace with entities, states, roles, dashboards, automation, and measurable output.":
+    "WhiteSpace представлен как гибкий операционный слой для команд, которые работают с заявками, контентом, документами, согласованиями и повторяемыми задачами. Профиль показывает, как AlfaRank превращает разрозненный бизнес-процесс в структурированное рабочее пространство с объектами, статусами, ролями, панелями, автоматизацией и измеримым результатом.",
+  "Workspace model for requests, records, tasks, and approvals": "Модель рабочего пространства для заявок, записей, задач и согласований",
+  "Role-based dashboards for owners, reviewers, clients, or operators": "Ролевые панели для владельцев, ревьюеров, клиентов и операторов",
+  "Reusable content and data objects that connect across modules": "Переиспользуемые объекты контента и данных между модулями",
+  "Automation hooks for reminders, QA, exports, reporting, and handoff": "Автоматизация напоминаний, QA, экспортов, отчетов и передачи",
+  "Process map and entities": "Карта процесса и сущности",
+  "The system starts by defining the objects that matter: requests, clients, tasks, files, content items, statuses, owners, deadlines, and outputs.":
+    "Система начинается с описания ключевых объектов: заявок, клиентов, задач, файлов, контентных единиц, статусов, владельцев, сроков и результатов.",
+  "Workspace interface": "Интерфейс рабочего пространства",
+  "Dashboards, queues, kanban-style stages, detail screens, review panels, and filters make the operating process visible to the team.":
+    "Панели, очереди, канбан-этапы, карточки деталей, экраны проверки и фильтры делают рабочий процесс видимым для команды.",
+  "Rules and automation": "Правила и автоматизация",
+  "Notifications, status changes, validations, AI-assisted drafts, imports, exports, and recurring checks reduce repeated manual coordination.":
+    "Уведомления, смена статусов, проверки, AI-черновики, импорты, экспорты и регулярные контроли сокращают ручную координацию.",
+  "Reporting and handoff": "Отчеты и передача",
+  "The system produces summaries, client-ready outputs, internal reports, exports, and signals that show what needs attention next.":
+    "Система формирует сводки, клиентские результаты, внутренние отчеты, экспорты и сигналы о том, что требует внимания дальше.",
+  "Managed workspace": "Управляемое рабочее пространство",
+  "Visible delivery process": "Видимый процесс выполнения",
+  "Reusable operations modules": "Переиспользуемые операционные модули",
+  "Reports and handoff signals": "Отчеты и сигналы передачи",
+  "Map the current process, roles, objects, and recurring handoffs.":
+    "Картируем текущий процесс, роли, объекты и повторяемые передачи.",
+  "Define statuses, permissions, data fields, and the screens each role needs.":
+    "Определяем статусы, права, поля данных и экраны, которые нужны каждой роли.",
+  "Build the first workspace with queues, detail views, review points, and outputs.":
+    "Собираем первое рабочее пространство с очередями, карточками, точками проверки и результатами.",
+  "Connect automation, AI assistance, imports, exports, or integrations where the workflow repeats.":
+    "Подключаем автоматизацию, AI-помощь, импорты, экспорты и интеграции там, где процесс повторяется.",
+  "Use reports and operating signals to improve speed, ownership, and quality.":
+    "Используем отчеты и операционные сигналы, чтобы улучшать скорость, ответственность и качество.",
+  "Internal operations dashboard for a service team.": "Внутренняя операционная панель для сервисной команды.",
+  "Client request and delivery workspace.": "Рабочее пространство для клиентских заявок и выполнения.",
+  "Content production and approval hub.": "Хаб производства и согласования контента.",
+  "Document, asset, or data review console.": "Консоль проверки документов, ассетов или данных.",
+  "Productized service workflow with repeatable outputs.": "Процесс продуктовой услуги с повторяемыми результатами.",
+  "SOVA / Vidorix is presented as a controlled AI media workflow rather than a single generator. It organizes briefs, scripts, prompts, source assets, brand rules, generation steps, review states, exports, and publishing queues so media production can repeat without losing quality control.":
+    "SOVA / Vidorix представлен как контролируемый AI-медиапроцесс, а не одиночный генератор. Он организует брифы, сценарии, промпты, исходные ассеты, бренд-правила, этапы генерации, статусы проверки, экспорты и очереди публикации, чтобы медиапроизводство повторялось без потери контроля качества.",
+  "Brief, script, prompt, and asset intake": "Прием брифов, сценариев, промптов и ассетов",
+  "Template library for scenes, captions, formats, and brand rules": "Библиотека шаблонов для сцен, субтитров, форматов и бренд-правил",
+  "Human review stages before export or publication": "Этапы проверки человеком перед экспортом или публикацией",
+  "Export, storage, metadata, and publishing queues": "Экспорт, хранение, метаданные и очереди публикации",
+  "Brief and asset intake": "Прием брифов и ассетов",
+  "Collects scripts, article text, product data, prompts, source media, brand constraints, language, aspect ratio, and publication target before generation starts.":
+    "Собирает сценарии, тексты статей, продуктовые данные, промпты, исходные медиа, бренд-ограничения, язык, формат кадра и цель публикации до старта генерации.",
+  "Media generation pipeline": "Конвейер генерации медиа",
+  "Turns structured inputs into draft scenes, captions, thumbnails, voice or audio notes, metadata, and media variants ready for review.":
+    "Превращает структурированные входные данные в черновики сцен, субтитры, обложки, голосовые или аудио-заметки, метаданные и медиа-варианты для проверки.",
+  "Template and brand system": "Система шаблонов и бренда",
+  "Keeps reusable formats, visual rules, naming, export sizes, safe zones, intros, outros, and asset storage consistent across batches.":
+    "Удерживает единые форматы, визуальные правила, нейминг, размеры экспорта, безопасные зоны, заставки, финальные экраны и хранение ассетов между партиями.",
+  "Review and publishing queue": "Очередь проверки и публикации",
+  "Adds approval statuses, corrections, final exports, CMS or platform handoff, storage paths, and reporting on production speed and quality.":
+    "Добавляет статусы согласования, правки, финальные экспорты, передачу в CMS или платформу, пути хранения и отчетность по скорости и качеству производства.",
+  "Reviewed media drafts": "Проверенные медиа-черновики",
+  "AI-assisted production pipeline": "AI-поддерживаемый производственный конвейер",
+  "Template-based asset system": "Система ассетов на базе шаблонов",
+  "Publishing-ready exports": "Экспорты, готовые к публикации",
+  "Define the repeatable media format and the source material behind it.":
+    "Определяем повторяемый медиаформат и исходный материал за ним.",
+  "Structure briefs, prompts, templates, brand rules, and export requirements.":
+    "Структурируем брифы, промпты, шаблоны, бренд-правила и требования к экспорту.",
+  "Generate first drafts and variants through controlled pipeline steps.":
+    "Генерируем первые черновики и варианты через контролируемые шаги конвейера.",
+  "Route outputs through review, correction, approval, and final export.":
+    "Проводим результаты через проверку, правки, согласование и финальный экспорт.",
+  "Publish, store, measure, and improve the workflow for the next batch.":
+    "Публикуем, сохраняем, измеряем и улучшаем процесс для следующей партии.",
+  "Article-to-video or product-to-video generation.": "Генерация видео из статей или продуктовых данных.",
+  "Short-form social asset production with review.": "Производство коротких ассетов для соцсетей с проверкой.",
+  "Thumbnail, caption, metadata, and variant generation.": "Генерация обложек, субтитров, метаданных и вариантов.",
+  "Media approval workspace for a content team.": "Рабочее пространство согласования медиа для контент-команды.",
+  "Publishing queue for generated video or visual assets.": "Очередь публикации для сгенерированных видео и визуальных ассетов.",
   "Reusable patterns online": "Повторяемые паттерны активны",
   "System profile library": "Библиотека системных профилей",
   "Each profile shows modules, workflow, output, and how the pattern can become a scoped implementation path.":

@@ -1,0 +1,51 @@
+---
+type Props = {
+  markOnly?: boolean;
+  class?: string;
+};
+
+const { markOnly = false, class: className = "" } = Astro.props as Props;
+const idBase = `brand-logo-${(className || "default").replace(/[^a-z0-9]+/gi, "-") || "default"}`;
+const aGradientId = `${idBase}-a`;
+const frameGradientId = `${idBase}-frame`;
+const glowGradientId = `${idBase}-glow`;
+---
+
+<span class:list={["brand-logo", className, { "brand-logo--mark-only": markOnly }]} data-no-translate translate="no">
+  <span class="brand-logo__mark" aria-hidden="true">
+    <svg viewBox="0 0 72 72" role="img" focusable="false">
+      <defs>
+        <linearGradient id={aGradientId} x1="18" y1="14" x2="54" y2="58" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#ffffff" />
+          <stop offset="0.48" stop-color="#eef7ff" />
+          <stop offset="1" stop-color="#5aa8ff" />
+        </linearGradient>
+        <linearGradient id={frameGradientId} x1="10" y1="8" x2="62" y2="64" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#9fd1ff" />
+          <stop offset="0.52" stop-color="#3a86ff" />
+          <stop offset="1" stop-color="#1443a5" />
+        </linearGradient>
+        <radialGradient id={glowGradientId} cx="50%" cy="55%" r="50%">
+          <stop offset="0" stop-color="#69d7ff" stop-opacity="0.42" />
+          <stop offset="1" stop-color="#69d7ff" stop-opacity="0" />
+        </radialGradient>
+      </defs>
+
+      <rect class="brand-logo__plate" x="6.5" y="6.5" width="59" height="59" rx="12" stroke={`url(#${frameGradientId})`} />
+      <rect class="brand-logo__inner-glow" x="9" y="9" width="54" height="54" rx="10" fill={`url(#${glowGradientId})`} />
+      <path
+        class="brand-logo__a"
+        fill={`url(#${aGradientId})`}
+        d="M18.6 53.8 31.2 18h9.6l12.6 35.8H43.2L36 31.8l-7.2 22h-10.2Z"
+      />
+      <path class="brand-logo__apex-cut" d="M36 29.9 30.7 45.1 36 41.9l5.3 3.2L36 29.9Z" />
+      <path class="brand-logo__star-glow" d="M36 39.5c2 5 3.5 6.5 8.5 8.5-5 2-6.5 3.5-8.5 8.5-2-5-3.5-6.5-8.5-8.5 5-2 6.5-3.5 8.5-8.5Z" />
+      <path class="brand-logo__star" d="M36 42.8c1.22 3.02 2.18 3.98 5.2 5.2-3.02 1.22-3.98 2.18-5.2 5.2-1.22-3.02-2.18-3.98-5.2-5.2 3.02-1.22 3.98-2.18 5.2-5.2Z" />
+    </svg>
+  </span>
+  {!markOnly && (
+    <span class="brand-logo__wordmark" aria-hidden="true">
+      <span class="brand-logo__wordmark-alpha">Alfa</span><span class="brand-logo__wordmark-rank">Rank</span>
+    </span>
+  )}
+</span>
