@@ -1043,6 +1043,23 @@ const projectVisual = {
       transform: translateX(-50%) !important;
     }
 
+    html body .private-project-page > .page-hero[data-variant="private-project"] {
+      grid-template-columns: minmax(620px, 0.9fr) minmax(540px, 0.82fr) !important;
+      gap: clamp(18px, 2vw, 30px) !important;
+      overflow: visible !important;
+    }
+
+    html body .private-project-page > .page-hero[data-variant="private-project"] .page-hero__copy {
+      max-width: 760px !important;
+    }
+
+    html body .private-project-page > .page-hero[data-variant="private-project"] .page-system-map {
+      justify-self: end !important;
+      width: min(100%, 760px) !important;
+      transform: perspective(900px) rotateY(-10deg) translateX(clamp(-104px, -5.1vw, -72px)) scale(0.98) !important;
+      transform-origin: center center !important;
+    }
+
     html body .private-project-page > .section > .section-header {
       grid-template-columns: minmax(0, 0.95fr) minmax(420px, 0.55fr) !important;
       gap: clamp(30px, 5vw, 80px) !important;
@@ -1335,6 +1352,16 @@ const projectVisual = {
 
       html body .private-project-page > .section > .section-header {
         grid-template-columns: 1fr !important;
+      }
+
+      html body .private-project-page > .page-hero[data-variant="private-project"] {
+        grid-template-columns: 1fr !important;
+      }
+
+      html body .private-project-page > .page-hero[data-variant="private-project"] .page-system-map {
+        justify-self: start !important;
+        width: min(100%, 760px) !important;
+        transform: none !important;
       }
 
       html body .private-project-page .moldovagaz-map-nav {
