@@ -356,8 +356,6 @@ const structuredData = JSON.stringify([
 
         try {
         const ruExactFallback = {
-          "WhiteSpace": "WhiteSpace",
-          "SOVA / Vidorix": "SOVA / Vidorix",
           "4 modules mapped": "4 модуля на карте",
           "4 connected modules": "4 связанных модуля",
           "4 build modules": "4 модуля сборки",
@@ -986,9 +984,10 @@ const structuredData = JSON.stringify([
                 "cloudflare",
                 "astro",
                 "next.js",
-                "whitespace",
-                "sova",
-                "vidorix"
+                "business-workflow-system",
+                "businessworkflowsystem",
+                "ai-media-production-system",
+                "aimediaproductionsystem"
               ]);
               if (allowed.has(normalized) || allowed.has(compact)) return word;
               const replacement = ruWordFallback[normalized] || ruWordFallback[compact] || "";
@@ -1108,7 +1107,6 @@ const structuredData = JSON.stringify([
           "This solution is for companies that need to turn a business idea, internal workflow, or productized service into a working digital product. AlfaRank helps define the first launchable version, design the interface and data model, build the core system, and prepare it for real users.": "Aceasta solutie este pentru companii care trebuie sa transforme o idee de business, un flux intern sau un serviciu productizat intr-un produs digital functional. AlfaRank ajuta la definirea primei versiuni lansabile, proiectarea interfetei si modelului de date, construirea nucleului sistemului si pregatirea pentru utilizatori reali.",
           "This solution is for companies that need better visibility into changing data. AlfaRank builds monitoring systems that collect information from websites, APIs, feeds, SERPs, catalogs, or internal sources, then turn it into alerts, dashboards, reports, scores, and decisions.": "Aceasta solutie este pentru companii care au nevoie de vizibilitate mai buna asupra datelor care se schimba. AlfaRank construieste sisteme de monitorizare care colecteaza informatie din site-uri, API-uri, feeduri, SERP-uri, cataloage sau surse interne, apoi o transforma in alerte, dashboarduri, rapoarte, scoruri si decizii.",
           "This solution is for companies that need organic growth to come from a structured system rather than disconnected SEO tasks. AlfaRank designs the architecture, templates, data structures, publishing workflows, and monitoring layer needed to scale SEO infrastructure.": "Aceasta solutie este pentru companii care vor ca cresterea organica sa vina dintr-un sistem structurat, nu din taskuri SEO separate. AlfaRank proiecteaza arhitectura, template-urile, structurile de date, fluxurile de publicare si stratul de monitorizare necesare pentru scalarea infrastructurii SEO.",
-          "WhiteSpace is presented as a system profile for business workflows that need structure, data, content, automation, and operational visibility. The exact implementation can vary by use case, but the profile demonstrates how AlfaRank thinks about productized systems rather than isolated tasks.": "WhiteSpace este prezentat ca profil de sistem pentru fluxuri de business care au nevoie de structura, date, continut, automatizare si vizibilitate operationala. Implementarea exacta poate varia dupa caz, dar profilul arata cum gandeste AlfaRank sistemele productizate, nu taskurile izolate.",
           "Content Automation Workflows is a system profile for companies that need repeatable content production without losing control over quality. The system combines topic structures, AI-assisted generation, enrichment, review, CMS publishing, and monitoring.": "Content Automation Workflows este un profil de sistem pentru companii care au nevoie de productie de continut repetabila fara sa piarda controlul calitatii. Sistemul combina structuri de topicuri, generare asistata de AI, imbogatire, revizie, publicare CMS si monitorizare.",
           "A focused landing offer for companies that receive website, ad, or referral leads and need faster qualification, routing, follow-up, and source visibility.": "Oferta de landing pentru companii care primesc leaduri din site, reclame sau recomandari si au nevoie de calificare, rutare, follow-up si vizibilitate asupra sursei mai rapide.",
           "A landing offer for companies that need more content, product pages, guides, briefs, or media drafts without turning publishing into a quality problem.": "Oferta de landing pentru companii care au nevoie de mai mult continut, pagini de produs, ghiduri, briefuri sau drafturi media fara ca publicarea sa devina o problema de calitate.",

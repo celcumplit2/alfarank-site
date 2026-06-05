@@ -380,8 +380,6 @@ const ruCopy: Dictionary = {
   "Upgrade an Existing Website": "Апгрейд существующего сайта",
   "Build a Data/Monitoring System": "Система данных и мониторинга",
   "Scale SEO Infrastructure": "Масштабирование SEO-инфраструктуры",
-  "WhiteSpace": "WhiteSpace",
-  "SOVA / Vidorix": "SOVA / Vidorix",
   "Content Automation Workflows": "Процессы автоматизации контента",
   "E-commerce System": "E-commerce-система",
   "WordPress Tools": "Инструменты WordPress",
@@ -1014,8 +1012,6 @@ const ruCopy: Dictionary = {
   "Scalable page systems": "Масштабируемые системы страниц",
   "Structured publishing": "Структурированная публикация",
   "Measurable organic growth infrastructure": "Измеримая инфраструктура органического роста",
-  "WhiteSpace is presented as a system profile for business workflows that need structure, data, content, automation, and operational visibility. The exact implementation can vary by use case, but the profile demonstrates how AlfaRank thinks about productized systems rather than isolated tasks.":
-    "WhiteSpace представлен как профиль системы для бизнес-процессов, которым нужны структура, данные, контент, автоматизация и операционная видимость. Реализация может меняться под сценарий, но профиль показывает, как AlfaRank думает о продуктовых системах, а не об отдельных задачах.",
   "System overview and module map": "Обзор системы и карта модулей",
   "Business context and workflow": "Бизнес-контекст и процесс",
   "Technology layer and integrations": "Технологический слой и интеграции",
@@ -1042,8 +1038,6 @@ const ruCopy: Dictionary = {
   "Content or data operations dashboards.": "Панели контентных или data-операций.",
   "Review, approval, and reporting tools.": "Инструменты проверки, согласования и отчетности.",
   "Business process automation systems.": "Системы автоматизации бизнес-процессов.",
-  "WhiteSpace is presented as a flexible operating layer for teams that work across requests, content, documents, approvals, and recurring tasks. The profile shows how AlfaRank can turn a loose business process into a structured workspace with entities, states, roles, dashboards, automation, and measurable output.":
-    "WhiteSpace представлен как гибкий операционный слой для команд, которые работают с заявками, контентом, документами, согласованиями и повторяемыми задачами. Профиль показывает, как AlfaRank превращает разрозненный бизнес-процесс в структурированное рабочее пространство с объектами, статусами, ролями, панелями, автоматизацией и измеримым результатом.",
   "Workspace model for requests, records, tasks, and approvals": "Модель рабочего пространства для заявок, записей, задач и согласований",
   "Role-based dashboards for owners, reviewers, clients, or operators": "Ролевые панели для владельцев, ревьюеров, клиентов и операторов",
   "Reusable content and data objects that connect across modules": "Переиспользуемые объекты контента и данных между модулями",
@@ -1079,8 +1073,6 @@ const ruCopy: Dictionary = {
   "Content production and approval hub.": "Хаб производства и согласования контента.",
   "Document, asset, or data review console.": "Консоль проверки документов, ассетов или данных.",
   "Productized service workflow with repeatable outputs.": "Процесс продуктовой услуги с повторяемыми результатами.",
-  "SOVA / Vidorix is presented as a controlled AI media workflow rather than a single generator. It organizes briefs, scripts, prompts, source assets, brand rules, generation steps, review states, exports, and publishing queues so media production can repeat without losing quality control.":
-    "SOVA / Vidorix представлен как контролируемый AI-медиапроцесс, а не одиночный генератор. Он организует брифы, сценарии, промпты, исходные ассеты, бренд-правила, этапы генерации, статусы проверки, экспорты и очереди публикации, чтобы медиапроизводство повторялось без потери контроля качества.",
   "Brief, script, prompt, and asset intake": "Прием брифов, сценариев, промптов и ассетов",
   "Template library for scenes, captions, formats, and brand rules": "Библиотека шаблонов для сцен, субтитров, форматов и бренд-правил",
   "Human review stages before export or publication": "Этапы проверки человеком перед экспортом или публикацией",
@@ -1168,8 +1160,6 @@ const roCopy: Dictionary = {
   "Upgrade an Existing Website": "Upgrade pentru un site existent",
   "Build a Data/Monitoring System": "Sistem de date si monitorizare",
   "Scale SEO Infrastructure": "Scaleaza infrastructura SEO",
-  "WhiteSpace": "WhiteSpace",
-  "SOVA / Vidorix": "SOVA / Vidorix",
   "Content Automation Workflows": "Workflow-uri de automatizare a continutului",
   "E-commerce System": "Sistem e-commerce",
   "WordPress Tools": "Instrumente WordPress",
@@ -2087,8 +2077,6 @@ const roExactFallback: Dictionary = {
     "Aceasta solutie este pentru companii care vor ca cresterea organica sa vina dintr-un sistem structurat, nu din taskuri SEO separate. AlfaRank proiecteaza arhitectura, template-urile, structurile de date, fluxurile de publicare si stratul de monitorizare necesare pentru scalarea infrastructurii SEO.",
   "WordPress and API integrations at AlfaRank treat WordPress as a business platform, not only a website CMS. The work can include custom content structures, admin tools, API connections, CRM workflows, automation, publishing systems, and operational interfaces built around WordPress.":
     "Integrarile WordPress si API la AlfaRank trateaza WordPress ca platforma de business, nu doar ca CMS de site. Lucrul poate include structuri custom de continut, instrumente admin, conexiuni API, fluxuri CRM, automatizare, sisteme de publicare si interfete operationale construite in jurul WordPress.",
-  "WhiteSpace is presented as a system profile for business workflows that need structure, data, content, automation, and operational visibility. The exact implementation can vary by use case, but the profile demonstrates how AlfaRank thinks about productized systems rather than isolated tasks.":
-    "WhiteSpace este prezentat ca profil de sistem pentru fluxuri de business care au nevoie de structura, date, continut, automatizare si vizibilitate operationala. Implementarea exacta poate varia dupa caz, dar profilul arata cum gandeste AlfaRank sistemele productizate, nu taskurile izolate.",
   "Content Automation Workflows is a system profile for companies that need repeatable content production without losing control over quality. The system combines topic structures, AI-assisted generation, enrichment, review, CMS publishing, and monitoring.":
     "Content Automation Workflows este un profil de sistem pentru companii care au nevoie de productie de continut repetabila fara sa piarda controlul calitatii. Sistemul combina structuri de topicuri, generare asistata de AI, imbogatire, revizie, publicare CMS si monitorizare.",
   "A focused landing offer for companies that receive website, ad, or referral leads and need faster qualification, routing, follow-up, and source visibility.":

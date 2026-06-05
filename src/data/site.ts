@@ -48,56 +48,56 @@ export const capabilities: PageItem[] = [
     slug: "ai-automation",
     icon: "ai",
     summary:
-      "AI workflows that reduce manual work, accelerate content and data operations, and connect business systems into repeatable processes.",
+      "Technical AI workflow capability for prompts, rules, review states, data actions, and integrations inside business systems.",
     intro:
-      "AI automation at AlfaRank is not a layer of isolated prompts. It is a way to design controlled workflows where AI models, business rules, data sources, CMS tools, CRMs, and human review work together. The result is a system that can produce, classify, enrich, monitor, or route work with less manual effort and more consistency.",
+      "AI automation is treated as a build capability, not a promise to generate content by itself. AlfaRank designs the operating path around models: inputs, prompts, rules, confidence checks, review states, logs, fallback logic, and the CMS, CRM, database, or API actions that should happen after the model responds.",
     details: [
-      "Content generation and review workflows",
-      "Lead enrichment, routing, and follow-up logic",
-      "Reporting, research, and data processing assistants",
-      "Human-in-the-loop automation for controlled output"
+      "Prompt, rule, and workflow design",
+      "Classification, enrichment, routing, and action triggers",
+      "Review states, logs, confidence checks, and fallback logic",
+      "Connections to CMS, CRM, databases, APIs, and internal tools"
     ],
     modules: [
       {
-        title: "Content and publishing workflows",
+        title: "Model and prompt layer",
         text:
-          "Systems that turn topics, entities, product data, briefs, or templates into draft content, enriched media, editorial tasks, and CMS-ready output."
+          "Prompts, templates, system instructions, constraints, and reusable generation or classification patterns are defined before automation is connected to live work."
       },
       {
-        title: "Lead and CRM automation",
+        title: "Business rules and states",
         text:
-          "Workflows for processing form submissions, classifying requests, enriching lead data, assigning owners, updating CRM records, and triggering follow-up actions."
+          "Rules, statuses, confidence thresholds, review steps, exceptions, and ownership keep the workflow controllable instead of acting as a black box."
       },
       {
-        title: "Research and data assistants",
+        title: "Action and integration layer",
         text:
-          "AI-assisted tools for summarizing datasets, preparing reports, monitoring sources, extracting structured information, and supporting internal decisions."
+          "AI output can update CRM records, draft CMS content, enrich data, route tasks, prepare reports, or trigger notifications through controlled actions."
       },
       {
-        title: "Human-in-the-loop control",
+        title: "Observability and fallback",
         text:
-          "Review states, approval steps, logs, confidence checks, and manual override points are designed into the system when output quality matters."
+          "Logs, manual overrides, review queues, and quality signals show where the automation is reliable and where people still need to decide."
       }
     ],
     outputs: [
-      "Automated workflows",
-      "AI-assisted operating processes",
-      "Connected CRM, CMS, and database actions",
-      "Repeatable content, lead, data, or reporting pipelines"
+      "Controlled AI workflows",
+      "Model-assisted actions",
+      "Reviewable automation paths",
+      "Connected CMS, CRM, data, or reporting operations"
     ],
     workflow: [
-      "Identify repeated manual work and define what output should be automated.",
-      "Map the required inputs: website data, CRM records, CMS content, files, APIs, prompts, and business rules.",
-      "Design the automation flow with states, validation, review, and fallback logic.",
-      "Connect the flow to the systems where the work actually happens.",
-      "Measure accuracy, speed, and operational impact after launch."
+      "Define the repeated decision, classification, draft, or action that should be assisted.",
+      "Map inputs, business rules, confidence thresholds, and required review points.",
+      "Design prompts, states, logs, fallbacks, and permissions before connecting tools.",
+      "Connect model output to CMS, CRM, databases, dashboards, or notifications.",
+      "Review accuracy, exceptions, cost, speed, and operational usefulness after launch."
     ],
     useCases: [
-      "Generate and review content for large publishing workflows.",
-      "Classify and route incoming leads by project type or urgency.",
-      "Summarize research, scraped data, audit results, or monitoring signals.",
-      "Prepare drafts, reports, internal notes, and structured records from raw inputs.",
-      "Connect AI actions with WordPress, CRMs, databases, spreadsheets, and APIs."
+      "Classify and route incoming leads, records, tickets, or tasks.",
+      "Generate controlled drafts from approved templates and source data.",
+      "Enrich records with extracted entities, summaries, tags, or scores.",
+      "Prepare research notes, reports, or data reviews with human approval.",
+      "Add AI assistance to WordPress, CRM, dashboards, databases, and APIs."
     ],
     related: ["Generate more content", "Automate lead processing", "Build internal tools"]
   },
@@ -159,14 +159,14 @@ export const capabilities: PageItem[] = [
     slug: "seo-content-infrastructure",
     icon: "content",
     summary:
-      "Search and content systems based on data, templates, publishing workflows, and scalable site architecture.",
+      "Architecture for content systems: page types, taxonomies, templates, metadata, internal links, CMS structures, and publishing controls.",
     intro:
-      "SEO and content infrastructure at AlfaRank is not packaged as a list of isolated optimization tasks. It is the design of a content system: data sources, page types, templates, publishing workflows, internal linking logic, metadata, quality control, and monitoring.",
+      "SEO and content infrastructure is a build capability. It defines how content should be modeled and published: page types, taxonomies, entity relationships, templates, metadata, internal links, CMS fields, QA rules, and monitoring hooks. The growth promise belongs to solution pages; this page explains the system layer that makes scalable publishing possible.",
     details: [
-      "Programmatic SEO structures",
-      "Content databases and template systems",
-      "Publishing pipelines for CMS and static sites",
-      "Quality checks, metadata, and monitoring workflows"
+      "Page types, taxonomies, and entity relationships",
+      "Template, metadata, and internal linking systems",
+      "CMS and static publishing structures",
+      "QA rules, indexation checks, and monitoring hooks"
     ],
     modules: [
       {
@@ -180,17 +180,17 @@ export const capabilities: PageItem[] = [
           "Scalable page structures driven by data, reusable templates, entity relationships, location/product/category models, and automated publishing logic."
       },
       {
-        title: "Publishing workflows",
+        title: "Publishing structures",
         text:
-          "Processes for briefs, AI-assisted drafts, editorial review, CMS publishing, quality checks, updates, and monitoring."
+          "Content fields, review states, CMS handoff rules, static build paths, publishing queues, and update logic define how content moves."
       },
       {
         title: "Content performance layer",
         text:
-          "Tracking systems for indexation, rankings, content gaps, page quality, structured data, and improvement priorities."
+          "Monitoring hooks track indexation, rankings, content gaps, page quality, structured data, and improvement priorities without turning this page into a growth promise."
       }
     ],
-    outputs: ["Content infrastructure", "Publishing pipelines", "Scalable SEO systems"],
+    outputs: ["Content architecture", "Publishing controls", "Scalable page infrastructure"],
     workflow: [
       "Define the organic growth model and the page types required.",
       "Map data sources, content inputs, keyword/entity groups, and publishing constraints.",
@@ -212,14 +212,14 @@ export const capabilities: PageItem[] = [
     slug: "data-systems-scraping",
     icon: "data",
     summary:
-      "Systems for collecting, normalizing, monitoring, auditing, and ranking business data from multiple sources.",
+      "Technical capability for collecting, normalizing, matching, storing, and exposing data from websites, APIs, feeds, files, and SERP sources.",
     intro:
-      "Data systems and scraping work is focused on turning external or internal information into structured business signals. AlfaRank designs systems that collect data, clean it, store it, monitor changes, score entities, generate reports, and trigger actions.",
+      "Data systems and scraping is the capability layer for turning unstable sources into usable data infrastructure. The focus is not the business reason for monitoring, but the mechanics: source access, collection jobs, validation, normalization, entity matching, storage, change detection, exports, dashboards, and alerts.",
     details: [
-      "Scraping and structured data collection",
-      "Monitoring tools for competitors, catalogs, SERPs, and marketplaces",
-      "Audit and ranking systems",
-      "Dashboards, alerts, exports, and reporting"
+      "Source access: scraping, APIs, feeds, files, and SERPs",
+      "Validation, cleaning, deduplication, and entity matching",
+      "Storage, history, search, and comparison structures",
+      "Exports, dashboards, alerts, and reporting interfaces"
     ],
     modules: [
       {
@@ -235,15 +235,15 @@ export const capabilities: PageItem[] = [
       {
         title: "Monitoring and alerts",
         text:
-          "Systems that track changes in competitors, prices, catalogs, rankings, SERPs, availability, reviews, or other business signals."
+          "Change detection, scheduled checks, alert rules, and issue queues expose movement in prices, catalogs, rankings, SERPs, availability, reviews, or other tracked sources."
       },
       {
         title: "Audit, scoring, and reporting",
         text:
-          "Rules and dashboards that turn raw data into scores, rankings, issue lists, recommendations, exports, and recurring reports."
+          "Rules, scoring models, dashboards, exports, and reports can be built on top of the data layer when the project needs evaluation rather than collection alone."
       }
     ],
-    outputs: ["Monitoring systems", "Data pipelines", "Audit and ranking tools"],
+    outputs: ["Data collection layer", "Normalized records", "Change detection", "Dashboards and exports"],
     workflow: [
       "Define what data matters and what decisions it should support.",
       "Map available sources: websites, APIs, feeds, files, SERPs, catalogs, or internal records.",
@@ -265,14 +265,14 @@ export const capabilities: PageItem[] = [
     slug: "ecommerce-systems",
     icon: "commerce",
     summary:
-      "Catalog, feed, content, pricing, stock, and integration infrastructure for e-commerce operations.",
+      "Build capability for catalog data, product content, feed logic, stock/pricing signals, integrations, and commerce operations tooling.",
     intro:
-      "E-commerce systems at AlfaRank are focused on the operational layer behind online sales: product data, catalogs, feeds, content, stock, pricing, integrations, analytics, and repeatable workflows. The goal is to make the store easier to manage, scale, monitor, and connect with other business systems.",
+      "E-commerce systems is a capability page for the pieces AlfaRank can assemble around a store or product catalog. It covers data structures, feeds, product content, stock and price signals, marketplace or ad exports, API connections, dashboards, and operating tools. The concrete catalog operating model lives in the E-commerce System profile.",
     details: [
-      "Product catalog and content workflows",
-      "Feed generation and integrations",
-      "Pricing, stock, and availability monitoring",
-      "Analytics and operational dashboards"
+      "Product data models, categories, attributes, and filters",
+      "Feed import/export and marketplace synchronization",
+      "Product/category content and SEO templates",
+      "Stock, pricing, availability, and catalog quality signals"
     ],
     modules: [
       {
@@ -296,7 +296,7 @@ export const capabilities: PageItem[] = [
           "Dashboards and alerts for stock, pricing, availability, catalog quality, content gaps, technical issues, and key commercial signals."
       }
     ],
-    outputs: ["Catalog infrastructure", "Feed systems", "E-commerce automation"],
+    outputs: ["Catalog build blocks", "Feed and sync logic", "Commerce operations tooling"],
     workflow: [
       "Audit the current catalog, product data, CMS, store platform, feeds, and integrations.",
       "Define the target operating model for product updates, content, pricing, stock, and reporting.",
@@ -318,14 +318,14 @@ export const capabilities: PageItem[] = [
     slug: "video-media-automation",
     icon: "media",
     summary:
-      "Automated media workflows for video, content production, asset generation, and repeatable publishing processes.",
+      "Build capability for repeatable media workflows: brief intake, generation, templates, review, exports, metadata, and publishing handoff.",
     intro:
-      "Video and media automation focuses on turning repeatable creative production into a controlled system. AlfaRank can design workflows for generating, processing, enriching, reviewing, exporting, and publishing media assets using templates, AI tools, structured inputs, and automation logic.",
+      "Video and media automation is the capability layer behind media production systems. It describes what can be assembled for different formats: structured briefs, generation steps, templates, asset rules, captions, thumbnails, export variants, review queues, metadata, storage, and publishing handoff. Concrete system profiles can then show how those pieces become an operating workflow for a specific media process.",
     details: [
-      "Video and content generation pipelines",
-      "Asset preparation and enrichment",
-      "Template-based production workflows",
-      "Publishing and review automation"
+      "Brief intake and structured source material",
+      "Generation, enrichment, captions, thumbnails, and variants",
+      "Template rules, asset rules, exports, and metadata",
+      "Review queues, storage, publishing, and platform handoff"
     ],
     modules: [
       {
@@ -371,9 +371,9 @@ export const capabilities: PageItem[] = [
     slug: "wordpress-api-integrations",
     icon: "api",
     summary:
-      "WordPress-based systems, custom integrations, API connections, publishing tools, and business automation layers.",
+      "Build capability for WordPress content models, admin utilities, API connections, CRM/form handoff, and controlled publishing workflows.",
     intro:
-      "WordPress and API integrations at AlfaRank treat WordPress as a business platform, not only a website CMS. The work can include custom content structures, admin tools, API connections, CRM workflows, automation, publishing systems, and operational interfaces built around WordPress.",
+      "WordPress and API integrations is a capability page. It describes what can be built inside or around WordPress: custom post types, taxonomies, fields, admin screens, import/export tools, form and CRM routes, API synchronization, automation, and publishing controls. Website modernization and WordPress Tools should remain separate solution and system-profile pages.",
     details: [
       "Custom WordPress structures and tools",
       "API integrations with external systems",
@@ -427,51 +427,51 @@ export const solutions: PageItem[] = [
     slug: "generate-more-content",
     icon: "content",
     summary:
-      "Build a content production system that turns topics, data, templates, and review workflows into publishable output.",
+      "A solution for teams that need higher publishing capacity without losing editorial control, review discipline, or CMS handoff quality.",
     intro:
-      "This solution is for companies that need more content without turning production into uncontrolled manual work. AlfaRank designs content systems that combine topic databases, templates, AI-assisted drafting, editorial review, media preparation, CMS publishing, and performance monitoring.",
+      "This solution starts from a business pressure: the team needs more pages, articles, guides, product copy, or local/category content than manual production can handle. AlfaRank turns that pressure into a scoped production route: inputs, templates, AI-assisted drafts, editorial checks, publishing handoff, and measurement.",
     details: [
-      "Topic, keyword, and entity databases",
-      "AI-assisted draft generation",
-      "Editorial review and QA workflow",
-      "CMS publishing pipeline and monitoring"
+      "Publishing demand exceeds manual production capacity",
+      "Inputs, templates, and briefs are not organized enough to scale",
+      "Editors need review states instead of uncontrolled draft generation",
+      "CMS handoff and performance feedback need to become repeatable"
     ],
     modules: [
       {
-        title: "Content input system",
+        title: "Content demand map",
         text:
-          "Topic lists, keyword groups, entities, products, locations, briefs, templates, and source data organized before production starts."
+          "Content types, publishing volume, target page groups, business priority, and current production blockers are defined before workflow design starts."
       },
       {
-        title: "Generation and enrichment",
+        title: "Input and template structure",
         text:
-          "AI-assisted drafts, outlines, metadata, media prompts, structured sections, internal links, and content variants generated from controlled inputs."
+          "Topics, entities, keywords, product data, locations, briefs, templates, source material, and metadata become controlled inputs instead of loose requests."
       },
       {
-        title: "Editorial workflow",
+        title: "Draft and review route",
         text:
-          "Review states, QA checks, approval logic, corrections, versioning, and final publishing preparation."
+          "AI-assisted drafts move through editorial checks, QA rules, corrections, approvals, and readiness states before they can be published."
       },
       {
-        title: "Publishing and monitoring",
+        title: "Publish and measure loop",
         text:
-          "CMS-ready output, publishing queues, indexation checks, performance tracking, and improvement loops."
+          "Approved output moves into CMS handoff, metadata, internal links, publishing queue, indexation checks, and performance feedback."
       }
     ],
-    outputs: ["Higher publishing capacity", "Controlled quality", "Repeatable content operations"],
+    outputs: ["Higher publishing capacity", "Clearer editorial control", "Repeatable CMS handoff", "Visible production and performance signals"],
     workflow: [
-      "Define the content types and publishing volume needed.",
-      "Create the topic, data, template, and brief structure.",
-      "Build AI-assisted generation and enrichment workflows.",
-      "Add editorial review, QA, and approval stages.",
-      "Connect publishing and monitoring systems."
+      "Define what needs to be produced, at what volume, and why current production blocks it.",
+      "Choose the first content type and the inputs needed to create it reliably.",
+      "Create templates, AI-assisted draft logic, review states, and approval rules.",
+      "Connect the approved output to CMS handoff, metadata, internal links, and publishing queue.",
+      "Measure speed, quality, indexation, gaps, and update needs after launch."
     ],
     useCases: [
-      "Scale blog, guide, landing, product, category, or location content.",
-      "Create programmatic content from structured data.",
-      "Support editors with AI-assisted drafts and QA steps.",
-      "Build a CMS publishing pipeline for repeated content formats.",
-      "Monitor content quality, indexation, rankings, and updates."
+      "Scale blog, guide, landing, product, category, or location content when manual production is too slow.",
+      "Turn structured data into publishable drafts with review before CMS handoff.",
+      "Give editors a controlled workflow for AI-assisted drafts and QA steps.",
+      "Create a publishing route for repeated content formats.",
+      "Make production speed, quality, indexation, and content gaps visible."
     ],
     related: ["AI Automation", "SEO & Content Infrastructure", "WordPress & API Integrations"]
   },
@@ -692,14 +692,14 @@ export const solutions: PageItem[] = [
     slug: "build-data-monitoring-system",
     icon: "monitor",
     summary:
-      "Create systems that track competitors, prices, rankings, catalogs, content, SERPs, or operational signals.",
+      "A solution for teams that need current visibility into competitors, prices, rankings, catalogs, SERPs, or operational signals.",
     intro:
-      "This solution is for companies that need better visibility into changing data. AlfaRank builds monitoring systems that collect information from websites, APIs, feeds, SERPs, catalogs, or internal sources, then turn it into alerts, dashboards, reports, scores, and decisions.",
+      "This solution starts from a visibility problem: important data changes outside the team's view or arrives too late to support decisions. AlfaRank scopes a monitoring route that turns sources into validated records, alerts, dashboards, reports, and decision-ready signals.",
     details: [
-      "Data source mapping",
-      "Scraping, API, or feed collection",
-      "Normalization and storage",
-      "Dashboards, alerts, and reports"
+      "Important market or operational data changes faster than the team can check it",
+      "Sources are scattered across websites, feeds, APIs, files, SERPs, or internal tools",
+      "Manual checks do not create history, alerts, or reusable reports",
+      "Teams need dashboards and issue lists tied to decisions"
     ],
     modules: [
       {
@@ -723,10 +723,10 @@ export const solutions: PageItem[] = [
           "Interfaces, reports, exports, alerting rules, issue lists, and monitoring views for business users."
       }
     ],
-    outputs: ["Current market visibility", "Automated checks", "Decision-ready reports"],
+    outputs: ["Current market visibility", "Automated checks", "Decision-ready alerts and reports", "Reusable monitoring history"],
     workflow: [
-      "Define what should be monitored and why it matters.",
-      "Map the available sources and the structure of the data.",
+      "Define which changes matter, who needs to act on them, and how late is too late.",
+      "Map sources, entities, fields, update frequency, and reliability requirements.",
       "Build collection, validation, normalization, and storage logic.",
       "Create dashboards, alerts, reports, or ranking/scoring views.",
       "Improve source coverage, data quality, and business usefulness."
@@ -745,51 +745,51 @@ export const solutions: PageItem[] = [
     slug: "scale-seo-infrastructure",
     icon: "scale",
     summary:
-      "Build the site architecture, data structures, templates, and publishing workflows needed for scalable organic growth.",
+      "A solution for companies whose organic growth needs structured page systems, templates, publishing controls, and measurement loops.",
     intro:
-      "This solution is for companies that need organic growth to come from a structured system rather than disconnected SEO tasks. AlfaRank designs the architecture, templates, data structures, publishing workflows, and monitoring layer needed to scale SEO infrastructure.",
+      "This solution starts from an organic growth bottleneck: the business needs more search coverage, but the site architecture, page types, templates, internal linking, and publishing process cannot scale cleanly. AlfaRank turns SEO into an operating route with data structures, QA, monitoring, and improvement loops.",
     details: [
-      "Programmatic page structures",
-      "Content templates and data sources",
-      "Technical SEO and internal linking logic",
-      "Publishing, monitoring, and improvement cycles"
+      "Search coverage is limited by site structure, not only by content volume",
+      "Page types, templates, and data sources need to scale together",
+      "Internal linking, metadata, and QA need repeatable rules",
+      "Publishing and monitoring need to feed an improvement loop"
     ],
     modules: [
       {
-        title: "Information architecture",
+        title: "Organic growth model",
         text:
-          "Page types, site structure, taxonomy, internal linking, navigation, templates, and content relationships."
+          "Target page groups, search demand, business priority, data availability, and current structural blockers are mapped before production scales."
       },
       {
-        title: "Programmatic publishing layer",
+        title: "Page system and templates",
         text:
-          "Data-driven page creation, reusable layouts, content variables, metadata patterns, and automated publishing logic."
+          "Page types, templates, content variables, taxonomy, internal linking rules, metadata patterns, and navigation are designed as one system."
       },
       {
         title: "Technical and content QA",
         text:
-          "Checks for indexation, metadata, schema, internal links, duplicate patterns, content completeness, and page quality."
+          "Checks for indexation, metadata, schema, internal links, duplicate patterns, content completeness, template quality, and crawlability."
       },
       {
         title: "Monitoring and improvement loop",
         text:
-          "Rank tracking, indexing checks, content gap analysis, performance signals, and prioritized improvement workflows."
+          "Rank tracking, indexing checks, content gap analysis, performance signals, issue queues, and prioritized improvement workflows keep the system moving."
       }
     ],
-    outputs: ["Scalable page systems", "Structured publishing", "Measurable organic growth infrastructure"],
+    outputs: ["Scalable page systems", "Structured publishing controls", "Measurable organic growth infrastructure"],
     workflow: [
-      "Define the organic growth model and target page groups.",
+      "Define the organic growth model, target page groups, and structural blockers.",
       "Design site architecture, templates, content models, and data relationships.",
       "Build publishing workflows and CMS/static-site structures.",
       "Add technical QA, metadata, internal linking, and monitoring.",
-      "Use performance signals to improve the system continuously."
+      "Use performance signals to prioritize updates, fixes, and new page groups."
     ],
     useCases: [
       "Scale landing pages for locations, services, products, categories, or data entities.",
-      "Create programmatic SEO pages from structured data.",
-      "Improve an existing site architecture before content production scales.",
-      "Build AI-assisted content workflows with editorial control.",
-      "Monitor rankings, indexation, content quality, and technical issues."
+      "Create programmatic SEO pages from structured data without losing QA control.",
+      "Fix site architecture before increasing content production.",
+      "Connect AI-assisted content workflows to templates and editorial review.",
+      "Use rankings, indexation, content quality, and technical issues to drive updates."
     ],
     related: ["SEO & Content Infrastructure", "Generate More Content", "WordPress & API Integrations"]
   }
@@ -797,108 +797,108 @@ export const solutions: PageItem[] = [
 
 export const systems: PageItem[] = [
   {
-    title: "WhiteSpace",
-    slug: "whitespace",
+    title: "Business Workflow System",
+    slug: "business-workflow-system",
     icon: "space",
     summary:
-      "A workspace operating system for turning service delivery, content work, requests, and internal routines into one visible workflow.",
+      "A structured workspace for requests, tasks, approvals, files, dashboards, automations, and operating output.",
     intro:
-      "WhiteSpace is presented as a flexible operating layer for teams that work across requests, content, documents, approvals, and recurring tasks. The profile shows how AlfaRank can turn a loose business process into a structured workspace with entities, states, roles, dashboards, automation, and measurable output.",
+      "Business Workflow System is a profile for teams whose work is spread across requests, files, chats, spreadsheets, approvals, and recurring tasks. The system turns that loose process into a workspace with defined objects, statuses, owners, role dashboards, automation hooks, reports, and controlled handoff.",
     details: [
-      "Workspace model for requests, records, tasks, and approvals",
-      "Role-based dashboards for owners, reviewers, clients, or operators",
-      "Reusable content and data objects that connect across modules",
-      "Automation hooks for reminders, QA, exports, reporting, and handoff"
+      "Request, client, task, file, approval, owner, deadline, and output objects",
+      "Queues and dashboards for operators, reviewers, managers, clients, or partners",
+      "Status logic for intake, processing, review, correction, approval, and delivery",
+      "Automation hooks for reminders, QA checks, imports, exports, reports, and handoff"
     ],
     modules: [
       {
-        title: "Process map and entities",
+        title: "Operating model and entities",
         text:
-          "The system starts by defining the objects that matter: requests, clients, tasks, files, content items, statuses, owners, deadlines, and outputs."
+          "The system starts by defining the real objects of the workflow: requests, clients, tasks, files, content items, approvals, statuses, owners, deadlines, and delivered outputs."
       },
       {
-        title: "Workspace interface",
+        title: "Workspace and queue interface",
         text:
-          "Dashboards, queues, kanban-style stages, detail screens, review panels, and filters make the operating process visible to the team."
+          "Dashboards, intake lists, kanban stages, detail screens, review panels, filters, and role views make daily work visible and easier to control."
       },
       {
-        title: "Rules and automation",
+        title: "Rules, permissions, and automation",
         text:
-          "Notifications, status changes, validations, AI-assisted drafts, imports, exports, and recurring checks reduce repeated manual coordination."
+          "Permissions, status changes, notifications, validations, AI-assisted drafts, imports, exports, and recurring checks reduce repeated manual coordination."
       },
       {
-        title: "Reporting and handoff",
+        title: "Reporting and delivery outputs",
         text:
-          "The system produces summaries, client-ready outputs, internal reports, exports, and signals that show what needs attention next."
+          "The system produces summaries, client-ready deliverables, internal reports, exports, bottleneck signals, and handoff records for the next step."
       }
     ],
-    outputs: ["Managed workspace", "Visible delivery process", "Reusable operations modules", "Reports and handoff signals"],
+    outputs: ["Workflow workspace", "Request and task control", "Approval and delivery queues", "Operational reports"],
     workflow: [
-      "Map the current process, roles, objects, and recurring handoffs.",
-      "Define statuses, permissions, data fields, and the screens each role needs.",
-      "Build the first workspace with queues, detail views, review points, and outputs.",
-      "Connect automation, AI assistance, imports, exports, or integrations where the workflow repeats.",
-      "Use reports and operating signals to improve speed, ownership, and quality."
+      "Map the current workflow, roles, objects, files, approvals, and recurring handoffs.",
+      "Define statuses, permissions, required fields, ownership rules, and the screens each role needs.",
+      "Build the first workspace with intake, queues, detail views, review points, and delivery outputs.",
+      "Connect automation, AI assistance, imports, exports, reports, or integrations where the process repeats.",
+      "Use reports and operating signals to improve speed, ownership, quality, and delivery reliability."
     ],
     useCases: [
-      "Internal operations dashboard for a service team.",
-      "Client request and delivery workspace.",
-      "Content production and approval hub.",
-      "Document, asset, or data review console.",
-      "Productized service workflow with repeatable outputs."
+      "Service delivery workspace for requests, owners, deadlines, and client-ready outputs.",
+      "Internal operations console for tasks, approvals, files, and recurring handoffs.",
+      "Content, document, asset, or data review hub with controlled statuses.",
+      "Partner or client workspace for intake, review, correction, and delivery.",
+      "Productized service workflow where repeated work needs measurable output."
     ],
     related: ["Web & Product Development", "Build Internal Tools", "AI Automation"]
   },
   {
-    title: "SOVA / Vidorix",
-    slug: "sova-vidorix",
+    title: "AI Media Production System",
+    slug: "ai-media-production-system",
     icon: "lens",
     summary:
-      "An AI media production system for turning briefs, scripts, assets, and templates into reviewed video or content outputs.",
+      "A controlled system for turning briefs, scripts, products, articles, prompts, and assets into reviewed media outputs.",
     intro:
-      "SOVA / Vidorix is presented as a controlled AI media workflow rather than a single generator. It organizes briefs, scripts, prompts, source assets, brand rules, generation steps, review states, exports, and publishing queues so media production can repeat without losing quality control.",
+      "AI Media Production System is a profile for content teams that need repeatable output without losing editorial or brand control. It organizes briefs, scripts, prompts, source assets, template rules, generation steps, review states, export variants, storage, metadata, and publishing queues.",
     details: [
-      "Brief, script, prompt, and asset intake",
-      "Template library for scenes, captions, formats, and brand rules",
-      "Human review stages before export or publication",
-      "Export, storage, metadata, and publishing queues"
+      "Brief, script, product, article, prompt, and source asset intake",
+      "Generation pipeline for scenes, captions, thumbnails, audio notes, and variants",
+      "Template and brand rules for formats, safe zones, naming, and reusable assets",
+      "Human review states before export, storage, publication, or platform handoff"
     ],
     modules: [
       {
-        title: "Brief and asset intake",
+        title: "Source intake and production brief",
         text:
-          "Collects scripts, article text, product data, prompts, source media, brand constraints, language, aspect ratio, and publication target before generation starts."
+          "Collects scripts, article text, product data, prompts, source media, brand constraints, language, aspect ratio, rights notes, and publication target before generation starts."
       },
       {
-        title: "Media generation pipeline",
+        title: "Generation and variant pipeline",
         text:
-          "Turns structured inputs into draft scenes, captions, thumbnails, voice or audio notes, metadata, and media variants ready for review."
+          "Turns structured inputs into draft scenes, captions, thumbnails, voice or audio notes, metadata, short-form cuts, format variants, and review-ready media drafts."
       },
       {
-        title: "Template and brand system",
+        title: "Template and brand control",
         text:
-          "Keeps reusable formats, visual rules, naming, export sizes, safe zones, intros, outros, and asset storage consistent across batches."
+          "Keeps reusable formats, visual rules, naming, export sizes, safe zones, intros, outros, caption styles, and asset storage consistent across batches."
       },
       {
-        title: "Review and publishing queue",
+        title: "Review, export, and publishing queue",
         text:
-          "Adds approval statuses, corrections, final exports, CMS or platform handoff, storage paths, and reporting on production speed and quality."
+          "Adds approval statuses, corrections, final exports, CMS or platform handoff, storage paths, metadata, and reporting on production speed and quality."
       }
     ],
-    outputs: ["Reviewed media drafts", "AI-assisted production pipeline", "Template-based asset system", "Publishing-ready exports"],
+    outputs: ["Reviewed media drafts", "Controlled generation pipeline", "Template-based asset system", "Publishing-ready exports"],
     workflow: [
-      "Define the repeatable media format and the source material behind it.",
-      "Structure briefs, prompts, templates, brand rules, and export requirements.",
-      "Generate first drafts and variants through controlled pipeline steps.",
-      "Route outputs through review, correction, approval, and final export.",
-      "Publish, store, measure, and improve the workflow for the next batch."
+      "Define the repeatable media format, source material, brand constraints, and publishing target.",
+      "Structure briefs, prompts, templates, asset rules, review criteria, and export requirements.",
+      "Generate drafts and variants through controlled pipeline steps instead of one-off manual prompts.",
+      "Route outputs through review, correction, approval, final export, storage, and platform handoff.",
+      "Measure speed, quality, correction reasons, and performance signals to improve the next batch."
     ],
     useCases: [
-      "Article-to-video or product-to-video generation.",
-      "Short-form social asset production with review.",
-      "Thumbnail, caption, metadata, and variant generation.",
-      "Media approval workspace for a content team.",
-      "Publishing queue for generated video or visual assets."
+      "Article-to-video, product-to-video, or script-to-video production with review.",
+      "Short-form social asset production where templates and brand rules matter.",
+      "Thumbnail, caption, metadata, voice note, and format variant generation.",
+      "Media approval workspace for editors, reviewers, operators, or clients.",
+      "Publishing queue for generated video, visual, audio, or social assets."
     ],
     related: ["Video & Media Automation", "AI Automation", "Generate More Content"]
   },
@@ -907,51 +907,51 @@ export const systems: PageItem[] = [
     slug: "content-automation-workflows",
     icon: "flow",
     summary:
-      "A system profile for generating, reviewing, enriching, publishing, and monitoring content at scale.",
+      "A system profile for operating content production through inputs, queues, roles, review states, CMS handoff, and monitoring.",
     intro:
-      "Content Automation Workflows is a system profile for companies that need repeatable content production without losing control over quality. The system combines topic structures, AI-assisted generation, enrichment, review, CMS publishing, and monitoring.",
+      "Content Automation Workflows is not the promise to publish more content; it is the operating profile behind that promise. The system defines the objects, queues, roles, statuses, checks, and handoff points that let repeated content production move from source inputs to approved CMS-ready output.",
     details: [
-      "Topic and data inputs",
-      "AI-assisted generation",
-      "Review and quality control",
-      "CMS publishing and monitoring"
+      "Topic, entity, source, brief, and template objects",
+      "Generation queue, enrichment queue, review queue, and publishing queue",
+      "Roles for editors, reviewers, operators, and owners",
+      "Status, QA, approval, update, and monitoring states"
     ],
     modules: [
       {
-        title: "Topic and data inputs",
+        title: "Input objects",
         text:
-          "Keyword groups, entities, products, services, locations, briefs, source data, and templates that define what should be produced."
+          "Topics, keyword groups, entities, products, services, locations, briefs, source files, templates, and metadata fields become structured objects."
       },
       {
-        title: "Generation and enrichment",
+        title: "Production queues",
         text:
-          "AI-assisted drafts, outlines, metadata, internal links, media prompts, structured sections, and formatting."
+          "Draft generation, enrichment, media preparation, metadata, internal links, and formatting move through visible queues instead of scattered tasks."
       },
       {
-        title: "Editorial QA",
+        title: "Review and approval states",
         text:
-          "Human review stages, quality checks, status tracking, corrections, approvals, and content readiness signals."
+          "Editors and reviewers use statuses, QA checks, corrections, approvals, and manual overrides before content can leave the system."
       },
       {
-        title: "Publishing and monitoring",
+        title: "CMS handoff and update loop",
         text:
-          "CMS publishing, scheduled releases, indexation checks, ranking monitoring, update queues, and performance review."
+          "Approved items move into CMS handoff, publishing queues, indexation checks, performance monitoring, and update queues."
       }
     ],
-    outputs: ["Repeatable content production", "Controlled publishing workflow", "Scalable SEO/content operations"],
+    outputs: ["Content production operating model", "Controlled draft and review queues", "CMS-ready publishing handoff", "Monitoring and update loop"],
     workflow: [
-      "Define content types, templates, and target publishing volume.",
-      "Build the topic/data input system.",
-      "Create AI-assisted generation and enrichment steps.",
-      "Add review, QA, and approval logic.",
-      "Publish, monitor, and improve based on performance."
+      "Define the content objects, roles, queues, and states the system must manage.",
+      "Build input structures for topics, sources, briefs, templates, and metadata.",
+      "Connect generation, enrichment, review, approval, and correction steps.",
+      "Move approved output into CMS handoff, publishing queue, monitoring, and update logic.",
+      "Use queue health, quality checks, indexation, and performance signals to improve the next cycle."
     ],
     useCases: [
-      "Programmatic SEO content production.",
-      "AI-assisted blog or guide workflows.",
-      "Product/category/location content generation.",
-      "Editorial workflow automation.",
-      "CMS publishing and content monitoring."
+      "Operating model for programmatic SEO production.",
+      "Editorial queue for AI-assisted blog, guide, or landing-page drafts.",
+      "Product, category, location, or entity content production pipeline.",
+      "Approval workflow for teams that need controlled publishing.",
+      "Monitoring and update queue for already published content."
     ],
     related: ["Generate More Content", "SEO & Content Infrastructure", "AI Automation"]
   },
@@ -960,38 +960,38 @@ export const systems: PageItem[] = [
     slug: "ecommerce-system",
     icon: "commerce",
     summary:
-      "Catalog, product content, feed, integration, and monitoring infrastructure for e-commerce operations.",
+      "A system profile for managing catalog operations through product data, feeds, content, stock/pricing signals, integrations, and reports.",
     intro:
-      "E-commerce System is a profile for the operational infrastructure behind online stores and product catalogs. The system connects product data, content, feeds, pricing, availability, integrations, monitoring, and reporting into a more manageable workflow.",
+      "E-commerce System is the operating profile for a product catalog. It shows how product data, attributes, feed rules, content fields, stock and pricing signals, marketplace exports, monitoring, and reporting can work as one catalog operations system.",
     details: [
-      "Product data model",
-      "Content and feed workflows",
-      "Stock, pricing, and availability logic",
-      "Analytics and integrations"
+      "Product data model and catalog governance",
+      "Feed import, export, validation, and synchronization",
+      "Product/category content fields and SEO templates",
+      "Stock, pricing, availability, quality, and reporting signals"
     ],
     modules: [
       {
-        title: "Product data model",
+        title: "Catalog data model",
         text:
-          "Structured products, categories, attributes, filters, metadata, media fields, and rules for maintaining catalog quality."
+          "Products, categories, attributes, filters, media fields, metadata, validation rules, and ownership define the catalog operating base."
       },
       {
         title: "Feed and integration workflow",
         text:
-          "Imports, exports, transformations, marketplace feeds, advertising feeds, CRM connections, warehouse data, and API synchronization."
+          "Imports, exports, transformations, marketplace feeds, advertising feeds, CRM connections, warehouse data, and API synchronization run through controlled rules."
       },
       {
-        title: "Content and SEO layer",
+        title: "Product content layer",
         text:
-          "Product descriptions, category content, landing templates, metadata patterns, internal linking, and publishing logic for organic growth."
+          "Product descriptions, category copy, landing templates, metadata patterns, internal links, and publishing states are tied to catalog data."
       },
       {
         title: "Monitoring and reporting",
         text:
-          "Dashboards and alerts for stock, prices, availability, catalog issues, content gaps, performance signals, and operational changes."
+          "Dashboards and alerts track stock, prices, availability, feed issues, missing fields, content gaps, performance signals, and operational changes."
       }
     ],
-    outputs: ["Catalog operations", "Product feed infrastructure", "E-commerce monitoring"],
+    outputs: ["Catalog operations model", "Product feed control", "Commerce monitoring and reports"],
     workflow: [
       "Audit the current store, catalog, CMS, product data, and integrations.",
       "Design the product data model and operating workflow.",
@@ -1013,25 +1013,25 @@ export const systems: PageItem[] = [
     slug: "wordpress-tools",
     icon: "api",
     summary:
-      "Custom WordPress tools, API connections, content workflows, and admin utilities for business websites.",
+      "A system profile for WordPress admin tools, content objects, publishing queues, integrations, and operational utilities.",
     intro:
-      "WordPress Tools is a system profile for turning WordPress into a structured business platform. The focus is on custom admin utilities, content models, publishing workflows, API connections, automation, and operational tools that sit inside or around WordPress.",
+      "WordPress Tools is not a general website upgrade offer. It is a system profile for the controlled tooling layer inside or around WordPress: content objects, admin utilities, import/export screens, publishing queues, API connections, CRM/form handoff, automation, and operational views.",
     details: [
-      "Custom content structures",
-      "API and CRM integrations",
-      "Publishing tools",
-      "Operational admin workflows"
+      "Content objects, fields, taxonomies, templates, and editorial states",
+      "Admin utilities, import/export tools, bulk actions, and review screens",
+      "API, CRM, form, analytics, and database handoff",
+      "Publishing queues, automation hooks, reports, and operating views"
     ],
     modules: [
       {
         title: "Custom content structures",
         text:
-          "Post types, taxonomies, fields, templates, editorial states, metadata, and content relationships built around the business model."
+          "Post types, taxonomies, fields, templates, editorial states, metadata, and content relationships define the objects WordPress should manage."
       },
       {
         title: "Admin tools and workflows",
         text:
-          "Custom dashboards, import/export tools, review screens, bulk actions, editorial tools, and internal operating views."
+          "Custom dashboards, import/export screens, review panels, bulk actions, editorial utilities, logs, and internal operating views make the process usable."
       },
       {
         title: "API and automation layer",
@@ -1044,7 +1044,7 @@ export const systems: PageItem[] = [
           "Programmatic pages, content queues, AI-assisted drafts, metadata systems, quality checks, and controlled publishing flows."
       }
     ],
-    outputs: ["Custom WordPress platform", "Connected CMS workflows", "Operational admin tools"],
+    outputs: ["WordPress operating tools", "Connected CMS workflows", "Controlled admin utilities"],
     workflow: [
       "Audit the current WordPress setup, plugins, content model, and integrations.",
       "Define what workflow WordPress needs to support.",
@@ -1066,20 +1066,20 @@ export const systems: PageItem[] = [
     slug: "data-audit-ranking-systems",
     icon: "ranking",
     summary:
-      "Systems for collecting data, scoring entities, auditing assets, ranking results, and generating reports.",
+      "A system profile for turning collected data into scores, audits, rankings, issue lists, alerts, and recurring reports.",
     intro:
-      "Data/Audit/Ranking Systems is a profile for tools that transform raw data into evaluations, scores, rankings, reports, alerts, or operational decisions. These systems are useful when a business needs repeatable analysis instead of manual review.",
+      "Data/Audit/Ranking Systems is not general data collection. It is the evaluation profile that sits on top of collected and normalized data: scoring rules, audit checks, ranking logic, issue detection, dashboards, alerts, and recurring reports.",
     details: [
-      "Data collection",
-      "Normalization and scoring",
-      "Audit and ranking logic",
-      "Dashboards and exports"
+      "Scoring rules, weights, thresholds, and confidence signals",
+      "Audit checks for pages, products, listings, campaigns, or entities",
+      "Ranking logic, issue detection, and recommendation rules",
+      "Scorecards, dashboards, exports, alerts, and recurring reports"
     ],
     modules: [
       {
         title: "Data collection layer",
         text:
-          "Scrapers, APIs, feeds, file imports, manual inputs, scheduled jobs, and validation logic for gathering structured data."
+          "Scrapers, APIs, feeds, file imports, manual inputs, scheduled jobs, and validation logic provide the structured input for evaluation."
       },
       {
         title: "Normalization and matching",
@@ -1121,49 +1121,49 @@ export const industries: PageItem[] = [
     title: "Service Businesses",
     slug: "service-businesses",
     icon: "lead",
-    summary: "Lead systems, CRM flows, content infrastructure, websites, and internal tools."
+    summary: "Industry context for companies where response speed, lead routing, service pages, CRM follow-up, and delivery visibility drive revenue."
   },
   {
     title: "E-commerce",
     slug: "ecommerce",
     icon: "commerce",
-    summary: "Catalog infrastructure, feeds, product content, pricing, analytics, and integrations."
+    summary: "Industry context for catalog-heavy businesses: product data quality, feeds, marketplaces, stock/pricing movement, and content operations."
   },
   {
     title: "Media & Content Projects",
     slug: "media-content-projects",
     icon: "media",
-    summary: "Editorial workflows, content databases, programmatic publishing, and automation."
+    summary: "Industry context for teams whose output depends on editorial planning, production queues, publishing cadence, media assets, and performance feedback."
   },
   {
     title: "Travel",
     slug: "travel",
     icon: "map",
-    summary: "Destination data, catalog structures, availability, scraping, and SEO infrastructure."
+    summary: "Industry context for destination catalogs, availability data, programmatic pages, source monitoring, and structured travel content."
   },
   {
     title: "Local Business",
     slug: "local-business",
     icon: "local",
-    summary: "Local landing infrastructure, lead automation, monitoring, and review/data workflows."
+    summary: "Industry context for local search demand, service landing pages, reviews, listing signals, lead flow, and simple CRM handoff."
   },
   {
     title: "SaaS / MVP",
     slug: "saas-mvp",
     icon: "product",
-    summary: "MVPs, dashboards, portals, onboarding flows, data models, and integrations."
+    summary: "Industry context for MVP scope, product interfaces, onboarding, user roles, dashboards, data models, and iteration loops."
   },
   {
     title: "Agencies",
     slug: "agencies",
     icon: "flow",
-    summary: "White-label systems, reporting automation, content production, and internal tooling."
+    summary: "Industry context for agencies that need white-label reporting, client dashboards, content production systems, and internal workflow tooling."
   },
   {
     title: "Data-heavy Businesses",
     slug: "data-heavy-businesses",
     icon: "data",
-    summary: "Collection, normalization, monitoring, alerting, dashboards, and reporting systems."
+    summary: "Industry context for organizations with many sources, changing entities, normalization pressure, alerts, dashboards, and recurring reports."
   }
 ];
 

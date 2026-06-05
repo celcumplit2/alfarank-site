@@ -1,0 +1,18 @@
+---
+import MoldovagazModulePage from "@/pages/projects/moldovagaz/[module].astro";
+import { getMoldovagazProject } from "@/data/moldovagaz-project";
+import { translatedLocales } from "@/data/i18n";
+
+export function getStaticPaths() {
+  return translatedLocales.flatMap((locale) =>
+    getMoldovagazProject(locale).modules.map((module) => ({
+      params: { locale, module: module.slug },
+      props: { locale, module }
+    }))
+  );
+}
+
+const { locale, module } = Astro.props;
+---
+
+<MoldovagazModulePage locale={locale} module={module} />

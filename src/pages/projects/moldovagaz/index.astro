@@ -1,0 +1,1401 @@
+---
+import PageHero from "@/components/PageHero.astro";
+import SystemIcon from "@/components/SystemIcon.astro";
+import Layout from "@/layouts/Layout.astro";
+import { getMoldovagazProject, moldovagazUi } from "@/data/moldovagaz-project";
+import { localizePath } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
+import type { MoldovagazModule } from "@/data/moldovagaz-project";
+
+type Props = {
+  locale?: Locale;
+};
+
+const { locale = "en" } = Astro.props;
+const contentLocale = "ru";
+const shellLocale = contentLocale;
+const project = getMoldovagazProject(contentLocale);
+const ui = moldovagazUi[contentLocale];
+const localizedProjectPath = localizePath(`/projects/${project.slug}/`, locale);
+const moduleBySlug = new Map(project.modules.map((module) => [module.slug, module]));
+const directionGroups = project.groups.map((group) => ({
+  ...group,
+  modules: group.projects
+    .map((slug) => moduleBySlug.get(slug))
+    .filter((module): module is MoldovagazModule => Boolean(module))
+}));
+const directionDeckCards = directionGroups
+  .map((group, originalIndex) => ({ group, originalIndex }))
+  .reverse();
+const defaultActiveDirectionSlug = directionGroups[0]?.slug;
+const directionDeckOffsets = [
+  { x: "0px", y: "0px", z: 105, rotate: "-0.8deg" },
+  { x: "18px", y: "70px", z: 104, rotate: "0.7deg" },
+  { x: "-10px", y: "140px", z: 103, rotate: "-0.5deg" },
+  { x: "22px", y: "210px", z: 102, rotate: "0.6deg" },
+  { x: "6px", y: "280px", z: 101, rotate: "-0.7deg" }
+];
+const priorityQuadrants = project.priorityMatrix.map((quadrant) => ({
+  ...quadrant,
+  modules: quadrant.projects
+    .map((slug) => moduleBySlug.get(slug))
+    .filter((module): module is MoldovagazModule => Boolean(module))
+}));
+
+const directionSignals = directionGroups.map((group, index) => ({
+  title: group.title,
+  state: `${String(group.modules.length).padStart(2, "0")} подпроектов`,
+  icon: group.icon,
+  detail: group.summary,
+  meter: `${76 + index * 4}%`,
+  href: `#${group.slug}`
+}));
+const mapNavItems = directionGroups.map((group, index) => ({
+  href: `#${group.slug}`,
+  kicker: `Направление ${String(index + 1).padStart(2, "0")}`,
+  title: group.title,
+  detail: `${group.modules.length} подпроектов`
+}));
+
+const projectVisual = {
+  mode: "private-project",
+  icon: project.icon,
+  label: project.client,
+  state: project.status,
+  output: "Аудит -> карта -> приоритеты",
+  coreHref: localizedProjectPath,
+  nodes: directionSignals,
+  metrics: [
+    { value: String(project.groups.length).padStart(2, "0"), label: "направлений" },
+    { value: String(project.modules.length).padStart(2, "0"), label: ui.modules },
+    { value: "Аудит", label: "точка старта" }
+  ]
+};
+---
+
+<Layout title={`${project.title} | AlfaRank`} description={project.summary} locale={shellLocale} robots="noindex, nofollow">
+  <div class="private-project-page" data-no-translate>
+    <PageHero
+      eyebrow={project.eyebrow}
+      title={project.title}
+      text={project.summary}
+      primaryHref="#audit"
+      primaryLabel={ui.projectOverview}
+      secondaryHref="#navigation"
+      secondaryLabel="Навигация"
+      locale={locale}
+      visual={projectVisual}
+    />
+
+    <section class="section moldovagaz-map-navigation" id="navigation">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Навигация</p>
+          <h2>Иерархия карты цифрового развития</h2>
+        </div>
+        <p>Сначала руководство видит 5 основных направлений, затем раскрывает подпроекты внутри каждого направления и при необходимости переходит на отдельную страницу подпроекта.</p>
+      </div>
+      <nav class="moldovagaz-map-nav" aria-label="Навигация по карте цифрового развития Moldovagaz">
+        {mapNavItems.map((item) => (
+          <a href={item.href}>
+            <span>{item.kicker}</span>
+            <strong>{item.title}</strong>
+            <small>{item.detail}</small>
+          </a>
+        ))}
+      </nav>
+    </section>
+
+    <section class="section split-panel private-pitch-split" id="audit">
+      <article class="glass-panel private-slide-card private-slide-card--lead moldovagaz-lead-card">
+        <p class="eyebrow">{ui.projectOverview}</p>
+        <h2>{project.thesis.title}</h2>
+        <p>{project.thesis.text}</p>
+      </article>
+      <article class="glass-panel private-slide-card">
+        <p class="eyebrow">{ui.outputs}</p>
+        <div class="tag-grid">
+          {project.outputs.map((output) => <span class="tag">{output}</span>)}
+        </div>
+        <h3>{project.status}</h3>
+        <p>{project.description}</p>
+      </article>
+    </section>
+
+    <section class="section" id="project-map">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">{ui.projectMap}</p>
+          <h2>{project.navigation.title}</h2>
+        </div>
+        <p>{project.navigation.text}</p>
+      </div>
+
+      <div class="moldovagaz-direction-stack moldovagaz-direction-stack--restored">
+        <div class="moldovagaz-direction-deck__intro">
+          <p class="eyebrow">Карта трансформации</p>
+          <h3>5 направлений цифрового развития</h3>
+          <p>Пять управленческих направлений показывают пространство цифрового развития компании: операции, инфраструктура, финансы, внутренние процессы, данные и AI.</p>
+        </div>
+        <div class="moldovagaz-direction-deck__tabs" aria-label="Направления цифрового развития">
+          {directionGroups.map((group, index) => (
+            <article
+              class="glass-panel moldovagaz-direction-card moldovagaz-direction-card--static"
+              id={group.slug}
+              data-direction-card={group.slug}
+              style={`--stack-accent: ${74 + index * 5}%;`}
+            >
+              <div class="moldovagaz-direction-card__top">
+                <span class="private-slide-number">{String(index + 1).padStart(2, "0")}</span>
+                <SystemIcon name={group.icon} />
+                <div class="moldovagaz-direction-card__head">
+                  <div>
+                    <p class="eyebrow">{ui.directionProjects}</p>
+                    <h3>{group.title}</h3>
+                  </div>
+                </div>
+                <span class="moldovagaz-stack-layer__count">{group.modules.length} проектов</span>
+              </div>
+              <div class="moldovagaz-stack-layer__content">
+                <div class="moldovagaz-stack-layer__body">
+                  <p>{group.summary}</p>
+                  <p>{group.framing}</p>
+                  <div class="tag-grid">
+                    {group.outcomes.map((outcome) => <span class="tag">{outcome}</span>)}
+                  </div>
+                </div>
+                <div class="moldovagaz-stack-layer__projects" aria-label={group.title}>
+                  <p class="eyebrow">{ui.directionProjects}</p>
+                  <div class="moldovagaz-project-list">
+                    {group.modules.map((module, moduleIndex) => (
+                      <a class="moldovagaz-project-link" href={localizePath(`/projects/${project.slug}/${module.slug}/`, locale)}>
+                        <span>{String(moduleIndex + 1).padStart(2, "0")}</span>
+                        <strong>{module.title}</strong>
+                        <small>{module.summary}</small>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+        <div class="moldovagaz-direction-deck__panels">
+          {directionGroups.map((group, index) => (
+            <article
+              class={`glass-panel moldovagaz-direction-panel${group.slug === defaultActiveDirectionSlug ? " is-active" : ""}`}
+              data-direction-panel={group.slug}
+              style={`--stack-accent: ${74 + index * 5}%;`}
+            >
+              <div class="moldovagaz-direction-panel__head">
+                <span class="private-slide-number">{String(index + 1).padStart(2, "0")}</span>
+                <SystemIcon name={group.icon} />
+                <div>
+                  <p class="eyebrow">{ui.directionProjects}</p>
+                  <h3>{group.title}</h3>
+                </div>
+                <span class="moldovagaz-stack-layer__count">{group.modules.length} проектов</span>
+              </div>
+              <div class="moldovagaz-stack-layer__content">
+                <div class="moldovagaz-stack-layer__body">
+                  <p>{group.summary}</p>
+                  <p>{group.framing}</p>
+                  <div class="tag-grid">
+                    {group.outcomes.map((outcome) => <span class="tag">{outcome}</span>)}
+                  </div>
+                </div>
+                <div class="moldovagaz-stack-layer__projects" aria-label={`${group.title}: подпроекты`}>
+                  <p class="eyebrow">{ui.directionProjects}</p>
+                  <div class="moldovagaz-project-list">
+                  {group.modules.map((module, moduleIndex) => (
+                    <a class="moldovagaz-project-link" href={localizePath(`/projects/${project.slug}/${module.slug}/`, locale)}>
+                      <span>{String(moduleIndex + 1).padStart(2, "0")}</span>
+                      <strong>{module.title}</strong>
+                      <small>{module.summary}</small>
+                    </a>
+                  ))}
+                  </div>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="priority-matrix">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">{ui.priorityMatrix}</p>
+          <h2>Как сравнивать инициативы после аудита</h2>
+        </div>
+        <p>Матрица помогает руководству увидеть, какие направления дают быстрый управленческий эффект, какие требуют зрелых данных, а какие стоит развивать как стратегические программы.</p>
+      </div>
+      <div class="moldovagaz-priority-grid">
+        {priorityQuadrants.map((quadrant, index) => (
+          <article class="glass-panel private-slide-card moldovagaz-priority-card">
+            <span class="private-slide-number">{String(index + 1).padStart(2, "0")}</span>
+            <p class="eyebrow">{quadrant.label}</p>
+            <h3>{quadrant.title}</h3>
+            <p>{quadrant.summary}</p>
+            <div class="tag-grid">
+              {quadrant.criteria.map((criterion) => <span class="tag">{criterion}</span>)}
+            </div>
+            <div class="moldovagaz-project-list moldovagaz-project-list--compact">
+              {quadrant.modules.map((module) => (
+                <a class="moldovagaz-project-link" href={localizePath(`/projects/${project.slug}/${module.slug}/`, locale)}>
+                  <SystemIcon name={module.icon} />
+                  <strong>{module.title}</strong>
+                </a>
+              ))}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section" id="selection">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">{ui.implementationPlan}</p>
+          <h2>{project.implementation.title}</h2>
+        </div>
+        <p>{project.implementation.text}</p>
+      </div>
+      <ol class="private-step-list">
+        {project.implementation.steps.map((step, index) => (
+          <li>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <p>{step}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="section" id="presentation">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">{ui.presentationFlow}</p>
+          <h2>Что показать руководству</h2>
+        </div>
+        <p>{project.navigation.core}</p>
+      </div>
+      <div class="private-presentation-deck">
+        {project.presentationCards.map((card, index) => (
+          <article class="glass-panel private-slide-card">
+            <span class="private-slide-number">{String(index + 1).padStart(2, "0")}</span>
+            <p class="eyebrow">{card.eyebrow}</p>
+            <h3>{card.title}</h3>
+            <p>{card.text}</p>
+            <div class="tag-grid">
+              {card.items.map((item) => <span class="tag">{item}</span>)}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section split-panel">
+      <article class="glass-panel private-slide-card">
+        <p class="eyebrow">{ui.valuePromise}</p>
+        <h2>{project.thesis.title}</h2>
+        <ul class="feature-list">
+          {project.thesis.items.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+      <article class="glass-panel private-slide-card">
+        <p class="eyebrow">{ui.guardrails}</p>
+        <h2>{project.guardrail.title}</h2>
+        <p>{project.guardrail.text}</p>
+        <ul class="feature-list">
+          {project.guardrail.items.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+    </section>
+  </div>
+
+  <script>
+    document.querySelectorAll("[data-direction-deck]").forEach((deck) => {
+      const cards = Array.from(deck.querySelectorAll("[data-direction-card]"));
+
+      const activateDirection = (slug) => {
+        cards.forEach((card) => {
+          const isActive = card.getAttribute("data-direction-card") === slug;
+          const trigger = card.querySelector("[data-direction-trigger]");
+
+          card.classList.toggle("is-active", isActive);
+          trigger?.setAttribute("aria-expanded", String(isActive));
+        });
+      };
+
+      const activateFromHash = () => {
+        const slug = window.location.hash.slice(1);
+        if (slug && cards.some((card) => card.getAttribute("data-direction-card") === slug)) {
+          activateDirection(slug);
+        }
+      };
+
+      cards.forEach((card) => {
+        const slug = card.getAttribute("data-direction-card");
+        const trigger = card.querySelector("[data-direction-trigger]");
+        if (!slug) return;
+
+        trigger?.addEventListener("click", () => activateDirection(slug));
+        trigger?.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            activateDirection(slug);
+          }
+        });
+      });
+
+      activateFromHash();
+      window.addEventListener("hashchange", activateFromHash);
+    });
+  </script>
+
+  <style is:global>
+    html body .private-project-page .moldovagaz-direction-stack[data-direction-deck] {
+      --moldovagaz-card-header: 82px;
+      --moldovagaz-card-open: 620px;
+      position: relative !important;
+      min-height: 860px !important;
+      margin-top: clamp(118px, 11vw, 150px) !important;
+      padding: 0 !important;
+      overflow: visible !important;
+      perspective: none !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack[data-direction-deck] .moldovagaz-direction-deck__intro {
+      position: absolute !important;
+      top: clamp(-150px, -11vw, -118px) !important;
+      right: 0 !important;
+      left: 0 !important;
+      z-index: 8 !important;
+      display: grid !important;
+      grid-template-columns: minmax(360px, 0.74fr) minmax(420px, 1fr) !important;
+      column-gap: clamp(30px, 5vw, 74px) !important;
+      row-gap: 10px !important;
+      align-items: end !important;
+      width: auto !important;
+      max-width: none !important;
+      padding: 0 0 clamp(20px, 2.4vw, 30px) !important;
+      pointer-events: none !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack[data-direction-deck] .moldovagaz-direction-deck__intro .eyebrow {
+      grid-column: 1 / -1 !important;
+      margin: 0 !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack[data-direction-deck] .moldovagaz-direction-deck__intro h3 {
+      grid-column: 1 / 2 !important;
+      max-width: 560px !important;
+      margin: 0 !important;
+      font-size: clamp(34px, 3vw, 50px) !important;
+      line-height: 1.04 !important;
+      overflow-wrap: normal !important;
+      text-wrap: balance !important;
+      word-break: normal !important;
+      hyphens: none !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack[data-direction-deck] .moldovagaz-direction-deck__intro p:not(.eyebrow) {
+      grid-column: 2 / 3 !important;
+      justify-self: end !important;
+      max-width: 620px !important;
+      margin: 0 !important;
+      border-left: 1px solid rgba(216, 251, 255, 0.64) !important;
+      padding-left: clamp(18px, 2vw, 28px) !important;
+      color: rgba(238, 248, 255, 0.78) !important;
+      font-size: clamp(15px, 1.05vw, 18px) !important;
+      line-height: 1.48 !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack[data-direction-deck] .moldovagaz-direction-deck__tabs {
+      position: absolute !important;
+      top: clamp(34px, 3.2vw, 48px) !important;
+      right: clamp(34px, 4vw, 58px) !important;
+      bottom: clamp(34px, 4vw, 58px) !important;
+      left: clamp(34px, 4vw, 58px) !important;
+      z-index: 12 !important;
+      width: auto !important;
+      height: auto !important;
+      padding: 0 !important;
+      pointer-events: auto !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack[data-direction-deck]:hover .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer:not(.is-active),
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer,
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer:not(.is-active) {
+      position: absolute !important;
+      top: var(--sheet-top, 0px) !important;
+      right: var(--sheet-right, 16%) !important;
+      left: var(--sheet-left, 0%) !important;
+      z-index: var(--deck-z, 10) !important;
+      height: var(--moldovagaz-card-header) !important;
+      min-height: var(--moldovagaz-card-header) !important;
+      max-height: var(--moldovagaz-card-header) !important;
+      border: 0 !important;
+      border-radius: 6px !important;
+      padding: 0 !important;
+      overflow: visible !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      opacity: 0.82 !important;
+      pointer-events: none !important;
+      transform: rotate(var(--sheet-rotate, var(--deck-rotate, 0deg))) !important;
+      transform-origin: 52% 50% !important;
+      transition: opacity 160ms ease, filter 160ms ease, transform 160ms ease !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer:nth-child(1) {
+      --sheet-left: 0%;
+      --sheet-right: 20%;
+      --sheet-top: 0px;
+      --sheet-rotate: -1deg;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer:nth-child(2) {
+      --sheet-left: 8%;
+      --sheet-right: 2%;
+      --sheet-top: 78px;
+      --sheet-rotate: 0.75deg;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer:nth-child(3) {
+      --sheet-left: 0%;
+      --sheet-right: 28%;
+      --sheet-top: 188px;
+      --sheet-rotate: -0.55deg;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer:nth-child(4) {
+      --sheet-left: 5%;
+      --sheet-right: 0%;
+      --sheet-top: 312px;
+      --sheet-rotate: 0.62deg;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer:nth-child(5) {
+      --sheet-left: 1%;
+      --sheet-right: 13%;
+      --sheet-top: 438px;
+      --sheet-rotate: -0.8deg;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer::before,
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer::after {
+      display: none !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer__trigger,
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .moldovagaz-stack-layer__trigger {
+      display: grid !important;
+      grid-template-columns: 52px minmax(0, 1fr) minmax(96px, auto) !important;
+      gap: 16px !important;
+      align-items: center !important;
+      height: var(--moldovagaz-card-header) !important;
+      min-height: var(--moldovagaz-card-header) !important;
+      border: 1px solid rgba(216, 251, 255, 0.16) !important;
+      border-radius: 6px !important;
+      padding: 12px 16px !important;
+      background:
+        radial-gradient(circle at var(--stack-accent, 80%) 12%, rgba(43, 181, 255, 0.16), transparent 34%),
+        linear-gradient(135deg, rgba(28, 62, 98, 0.92), rgba(10, 35, 63, 0.94)) !important;
+      box-shadow:
+        0 22px 46px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+      cursor: pointer !important;
+      pointer-events: auto !important;
+      transform: none !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer__trigger:is(:hover, :focus-visible) {
+      border-color: rgba(255, 190, 75, 0.5) !important;
+      transform: none !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer .system-icon,
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer .moldovagaz-direction-card__head .eyebrow,
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .system-icon,
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .moldovagaz-direction-card__head .eyebrow {
+      display: none !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer__trigger .private-slide-number,
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .moldovagaz-stack-layer__trigger .private-slide-number {
+      width: 50px !important;
+      height: 50px !important;
+      color: rgba(238, 248, 255, 0.9) !important;
+      font-size: 18px !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer__trigger h3,
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .moldovagaz-stack-layer__trigger h3 {
+      display: -webkit-box !important;
+      margin: 0 !important;
+      overflow: hidden !important;
+      color: #ffffff !important;
+      font-size: clamp(18px, 1.35vw, 25px) !important;
+      line-height: 1.06 !important;
+      overflow-wrap: normal !important;
+      text-wrap: balance !important;
+      word-break: normal !important;
+      -webkit-box-orient: vertical !important;
+      -webkit-line-clamp: 2 !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer__count,
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .moldovagaz-stack-layer__count {
+      display: inline-flex !important;
+      justify-self: end !important;
+      align-items: center !important;
+      min-height: 34px !important;
+      border: 1px solid rgba(216, 251, 255, 0.14) !important;
+      border-radius: 4px !important;
+      padding: 7px 10px !important;
+      color: rgba(238, 248, 255, 0.78) !important;
+      font-size: 12px !important;
+      font-weight: 800 !important;
+      line-height: 1 !important;
+      white-space: nowrap !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer .moldovagaz-stack-layer__content {
+      display: none !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active {
+      top: 158px !important;
+      right: clamp(38px, 4vw, 58px) !important;
+      left: clamp(218px, 21%, 292px) !important;
+      z-index: 180 !important;
+      height: var(--moldovagaz-card-open) !important;
+      min-height: var(--moldovagaz-card-open) !important;
+      max-height: var(--moldovagaz-card-open) !important;
+      border: 1px solid rgba(255, 190, 75, 0.64) !important;
+      border-radius: 6px !important;
+      background:
+        linear-gradient(90deg, rgba(255, 190, 75, 0.13), transparent 16%),
+        radial-gradient(circle at var(--stack-accent, 80%) 12%, rgba(43, 181, 255, 0.18), transparent 36%),
+        linear-gradient(135deg, rgba(20, 52, 84, 0.96), rgba(7, 30, 55, 0.96)) !important;
+      box-shadow:
+        -10px 0 0 rgba(255, 190, 75, 0.84),
+        0 38px 92px rgba(0, 0, 0, 0.46),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+      opacity: 1 !important;
+      overflow: hidden !important;
+      pointer-events: auto !important;
+      transform: rotate(-0.28deg) !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .moldovagaz-stack-layer__trigger {
+      border: 0 !important;
+      border-bottom: 1px solid rgba(216, 251, 255, 0.16) !important;
+      border-radius: 0 !important;
+      background:
+        linear-gradient(90deg, rgba(255, 190, 75, 0.1), transparent 24%),
+        rgba(255, 255, 255, 0.035) !important;
+      box-shadow: none !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .moldovagaz-stack-layer__content {
+      position: relative !important;
+      display: grid !important;
+      grid-template-columns: minmax(230px, 0.86fr) minmax(310px, 1.14fr) !important;
+      gap: clamp(20px, 2.4vw, 30px) !important;
+      max-height: calc(var(--moldovagaz-card-open) - var(--moldovagaz-card-header)) !important;
+      margin: 0 !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      padding: 24px 26px 28px !important;
+      overflow: hidden !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+      pointer-events: auto !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .moldovagaz-stack-layer__body,
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .moldovagaz-stack-layer__projects {
+      min-height: 0 !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .moldovagaz-project-list {
+      max-height: calc(var(--moldovagaz-card-open) - var(--moldovagaz-card-header) - 72px) !important;
+      overflow-y: auto !important;
+      padding-right: 4px !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .moldovagaz-stack-layer__content *,
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .moldovagaz-project-link,
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .moldovagaz-project-link * {
+      pointer-events: auto !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__panels {
+      display: none !important;
+    }
+
+    @media (max-width: 1260px) {
+      html body .private-project-page .moldovagaz-direction-stack[data-direction-deck] {
+        --moldovagaz-card-open: 680px;
+        min-height: 970px !important;
+      }
+
+      html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active {
+        left: clamp(178px, 20%, 240px) !important;
+      }
+
+      html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .moldovagaz-stack-layer__content {
+        grid-template-columns: 1fr !important;
+      }
+    }
+
+    @media (max-width: 900px) {
+      html body .private-project-page .moldovagaz-direction-stack[data-direction-deck] {
+        display: grid !important;
+        gap: 14px !important;
+        min-height: 0 !important;
+        margin-top: 0 !important;
+        padding: 18px !important;
+        overflow: visible !important;
+      }
+
+      html body .private-project-page .moldovagaz-direction-stack[data-direction-deck] .moldovagaz-direction-deck__intro,
+      html body .private-project-page .moldovagaz-direction-stack[data-direction-deck] .moldovagaz-direction-deck__tabs {
+        position: relative !important;
+        top: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        left: auto !important;
+        width: auto !important;
+      }
+
+      html body .private-project-page .moldovagaz-direction-stack[data-direction-deck] .moldovagaz-direction-deck__intro {
+        grid-template-columns: 1fr !important;
+        padding: 0 !important;
+      }
+
+      html body .private-project-page .moldovagaz-direction-stack[data-direction-deck] .moldovagaz-direction-deck__intro h3,
+      html body .private-project-page .moldovagaz-direction-stack[data-direction-deck] .moldovagaz-direction-deck__intro p:not(.eyebrow) {
+        grid-column: auto !important;
+        max-width: none !important;
+      }
+
+      html body .private-project-page .moldovagaz-direction-stack[data-direction-deck] .moldovagaz-direction-deck__tabs {
+        display: grid !important;
+        gap: 10px !important;
+      }
+
+      html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer,
+      html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer:not(.is-active),
+      html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active {
+        position: relative !important;
+        top: auto !important;
+        right: auto !important;
+        left: auto !important;
+        z-index: auto !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        opacity: 1 !important;
+        overflow: visible !important;
+        transform: none !important;
+      }
+
+      html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer__trigger,
+      html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .moldovagaz-stack-layer__trigger {
+        grid-template-columns: 48px minmax(0, 1fr) !important;
+        min-height: 86px !important;
+        height: auto !important;
+        gap: 12px !important;
+        border-radius: 6px !important;
+        padding: 14px !important;
+      }
+
+      html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer__count {
+        display: none !important;
+      }
+
+      html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .moldovagaz-stack-layer__content {
+        grid-template-columns: 1fr !important;
+        max-height: none !important;
+        padding: 20px !important;
+        overflow: visible !important;
+      }
+
+      html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .moldovagaz-project-list {
+        max-height: none !important;
+        overflow: visible !important;
+      }
+    }
+  </style>
+
+  <style is:global>
+    html body .private-project-page .moldovagaz-direction-stack[data-direction-deck] {
+      --moldovagaz-card-width: clamp(580px, 42vw, 660px);
+      --moldovagaz-card-height: 350px;
+      --moldovagaz-card-header: 94px;
+      position: relative !important;
+      min-height: 760px !important;
+      margin-top: 0 !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+      perspective: none !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack[data-direction-deck] .moldovagaz-direction-deck__intro {
+      display: none !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack[data-direction-deck] .moldovagaz-direction-deck__tabs {
+      position: absolute !important;
+      inset: clamp(30px, 3.8vw, 56px) clamp(28px, 3.8vw, 56px) !important;
+      z-index: 12 !important;
+      width: auto !important;
+      height: auto !important;
+      padding: 0 !important;
+      pointer-events: auto !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer,
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer:not(.is-active),
+    html body .private-project-page .moldovagaz-direction-stack[data-direction-deck]:hover .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer:not(.is-active) {
+      position: absolute !important;
+      top: var(--sheet-top, 0px) !important;
+      left: var(--sheet-left, 0px) !important;
+      right: auto !important;
+      z-index: var(--sheet-z, 10) !important;
+      width: var(--moldovagaz-card-width) !important;
+      height: var(--moldovagaz-card-height) !important;
+      min-width: var(--moldovagaz-card-width) !important;
+      min-height: var(--moldovagaz-card-height) !important;
+      max-width: var(--moldovagaz-card-width) !important;
+      max-height: var(--moldovagaz-card-height) !important;
+      border: 1px solid rgba(208, 242, 255, 0.18) !important;
+      border-radius: 7px !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+      background:
+        radial-gradient(circle at var(--stack-accent, 84%) 14%, rgba(75, 177, 240, 0.15), transparent 35%),
+        linear-gradient(135deg, rgba(30, 65, 101, 0.9), rgba(8, 35, 63, 0.94)) !important;
+      box-shadow:
+        0 28px 68px rgba(0, 0, 0, 0.34),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+      opacity: 0.84 !important;
+      pointer-events: auto !important;
+      transform: rotate(var(--sheet-rotate, var(--deck-rotate, 0deg))) !important;
+      transform-origin: 52% 50% !important;
+      transition:
+        opacity 160ms ease,
+        filter 160ms ease,
+        transform 160ms ease,
+        box-shadow 160ms ease !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer:nth-child(1) {
+      --sheet-left: clamp(430px, 39vw, 470px);
+      --sheet-top: 580px;
+      --sheet-rotate: 0.95deg;
+      --sheet-z: 1;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer:nth-child(2) {
+      --sheet-left: clamp(0px, 1vw, 12px);
+      --sheet-top: 145px;
+      --sheet-rotate: -1.15deg;
+      --sheet-z: 2;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer:nth-child(3) {
+      --sheet-left: clamp(42px, 7vw, 96px);
+      --sheet-top: 36px;
+      --sheet-rotate: -1.05deg;
+      --sheet-z: 3;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer:nth-child(4) {
+      --sheet-left: clamp(430px, 39vw, 470px);
+      --sheet-top: 74px;
+      --sheet-rotate: 1.05deg;
+      --sheet-z: 4;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer:nth-child(5) {
+      --sheet-left: clamp(180px, 20vw, 260px);
+      --sheet-top: 540px;
+      --sheet-rotate: 0.8deg;
+      --sheet-z: 5;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer::before,
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer::after {
+      display: none !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer__trigger,
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .moldovagaz-stack-layer__trigger {
+      display: grid !important;
+      grid-template-columns: 62px minmax(0, 1fr) minmax(106px, auto) !important;
+      gap: 18px !important;
+      align-items: center !important;
+      height: var(--moldovagaz-card-header) !important;
+      min-height: var(--moldovagaz-card-header) !important;
+      border: 0 !important;
+      border-bottom: 1px solid rgba(208, 242, 255, 0.15) !important;
+      border-radius: 0 !important;
+      padding: 16px 20px !important;
+      background: rgba(255, 255, 255, 0.035) !important;
+      box-shadow: none !important;
+      cursor: pointer !important;
+      pointer-events: auto !important;
+      transform: none !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer__trigger:is(:hover, :focus-visible) {
+      border-color: rgba(208, 242, 255, 0.15) !important;
+      background: rgba(255, 255, 255, 0.05) !important;
+      box-shadow: none !important;
+      transform: none !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer .system-icon,
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer .moldovagaz-direction-card__head .eyebrow,
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .system-icon,
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .moldovagaz-direction-card__head .eyebrow {
+      display: none !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer__trigger .private-slide-number,
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .moldovagaz-stack-layer__trigger .private-slide-number {
+      width: 58px !important;
+      height: 58px !important;
+      border: 1px solid rgba(216, 251, 255, 0.23) !important;
+      color: #eef8ff !important;
+      font-size: 19px !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer__trigger h3,
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .moldovagaz-stack-layer__trigger h3 {
+      display: -webkit-box !important;
+      margin: 0 !important;
+      overflow: hidden !important;
+      color: #ffffff !important;
+      font-size: clamp(18px, 1.34vw, 25px) !important;
+      line-height: 1.08 !important;
+      overflow-wrap: normal !important;
+      text-wrap: balance !important;
+      word-break: normal !important;
+      -webkit-box-orient: vertical !important;
+      -webkit-line-clamp: 2 !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer__count,
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .moldovagaz-stack-layer__count {
+      display: inline-flex !important;
+      justify-self: end !important;
+      align-items: center !important;
+      min-width: 106px !important;
+      min-height: 40px !important;
+      border: 1px solid rgba(216, 251, 255, 0.17) !important;
+      border-radius: 5px !important;
+      padding: 10px 12px !important;
+      background: rgba(255, 255, 255, 0.045) !important;
+      color: rgba(238, 248, 255, 0.84) !important;
+      font-size: 13px !important;
+      font-weight: 900 !important;
+      line-height: 1 !important;
+      white-space: nowrap !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer .moldovagaz-stack-layer__content {
+      display: none !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active {
+      top: 220px !important;
+      left: clamp(160px, 20vw, 230px) !important;
+      right: auto !important;
+      z-index: 500 !important;
+      width: var(--moldovagaz-card-width) !important;
+      height: var(--moldovagaz-card-height) !important;
+      min-width: var(--moldovagaz-card-width) !important;
+      min-height: var(--moldovagaz-card-height) !important;
+      max-width: var(--moldovagaz-card-width) !important;
+      max-height: var(--moldovagaz-card-height) !important;
+      border: 1px solid rgba(210, 246, 255, 0.52) !important;
+      border-radius: 7px !important;
+      background:
+        radial-gradient(circle at var(--stack-accent, 76%) 14%, rgba(92, 195, 255, 0.23), transparent 36%),
+        linear-gradient(135deg, rgba(36, 78, 116, 0.98), rgba(8, 37, 66, 0.99)) !important;
+      box-shadow:
+        0 42px 108px rgba(0, 0, 0, 0.52),
+        0 0 0 1px rgba(184, 232, 255, 0.14),
+        inset 0 1px 0 rgba(255, 255, 255, 0.11) !important;
+      opacity: 1 !important;
+      overflow: hidden !important;
+      pointer-events: auto !important;
+      transform: rotate(-0.12deg) !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .moldovagaz-stack-layer__content {
+      position: relative !important;
+      display: grid !important;
+      grid-template-columns: minmax(220px, 0.92fr) minmax(290px, 1.08fr) !important;
+      gap: 26px !important;
+      max-height: calc(var(--moldovagaz-card-height) - var(--moldovagaz-card-header)) !important;
+      margin: 0 !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      padding: 28px 30px !important;
+      overflow: hidden !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+      pointer-events: auto !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .moldovagaz-project-list {
+      max-height: calc(var(--moldovagaz-card-height) - var(--moldovagaz-card-header) - 72px) !important;
+      overflow-y: auto !important;
+      padding-right: 4px !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-deck__panels {
+      display: none !important;
+    }
+
+    @media (max-width: 1260px) {
+      html body .private-project-page .moldovagaz-direction-stack[data-direction-deck] {
+        --moldovagaz-card-width: clamp(520px, 58vw, 610px);
+        min-height: 780px !important;
+      }
+    }
+
+    @media (max-width: 900px) {
+      html body .private-project-page .moldovagaz-direction-stack[data-direction-deck] {
+        --moldovagaz-card-width: auto;
+        --moldovagaz-card-height: auto;
+        display: grid !important;
+        gap: 14px !important;
+        min-height: 0 !important;
+        padding: 18px !important;
+        overflow: visible !important;
+      }
+
+      html body .private-project-page .moldovagaz-direction-stack[data-direction-deck] .moldovagaz-direction-deck__tabs {
+        position: relative !important;
+        inset: auto !important;
+        display: grid !important;
+        gap: 10px !important;
+      }
+
+      html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer,
+      html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer:not(.is-active),
+      html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        width: auto !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        transform: none !important;
+      }
+
+      html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer__trigger,
+      html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .moldovagaz-stack-layer__trigger {
+        grid-template-columns: 48px minmax(0, 1fr) !important;
+        min-height: 86px !important;
+        height: auto !important;
+        gap: 12px !important;
+        padding: 14px !important;
+      }
+
+      html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer__count {
+        display: none !important;
+      }
+
+      html body .private-project-page .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .moldovagaz-stack-layer__content {
+        grid-template-columns: 1fr !important;
+        max-height: none !important;
+        padding: 20px !important;
+        overflow: visible !important;
+      }
+    }
+  </style>
+  <style is:global>
+    html body .private-project-page {
+      --moldovagaz-page-width: min(1600px, calc(100vw - 64px));
+    }
+
+    html body .private-project-page > :is(.page-hero, .section) {
+      width: var(--moldovagaz-page-width) !important;
+      max-width: none !important;
+      margin-right: 0 !important;
+      margin-left: 50% !important;
+      transform: translateX(-50%) !important;
+    }
+
+    html body .private-project-page > .section > .section-header {
+      grid-template-columns: minmax(0, 0.95fr) minmax(420px, 0.55fr) !important;
+      gap: clamp(30px, 5vw, 80px) !important;
+    }
+
+    html body .private-project-page .moldovagaz-map-nav {
+      grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+      gap: clamp(10px, 1vw, 14px) !important;
+    }
+
+    html body .private-project-page .moldovagaz-map-nav a {
+      min-width: 0 !important;
+    }
+
+    html body .private-project-page #priority-matrix .moldovagaz-priority-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+      gap: clamp(18px, 1.8vw, 28px) !important;
+    }
+
+    html body .private-project-page #priority-matrix .moldovagaz-priority-card {
+      min-height: 0 !important;
+      padding: clamp(22px, 1.8vw, 30px) !important;
+    }
+
+    html body .private-project-page #priority-matrix .moldovagaz-priority-card h3 {
+      font-size: clamp(28px, 1.7vw, 36px) !important;
+      line-height: 1.08 !important;
+      overflow-wrap: normal !important;
+      word-break: normal !important;
+      hyphens: none !important;
+      text-wrap: balance !important;
+    }
+
+    html body .private-project-page #priority-matrix .moldovagaz-priority-card > p:not(.eyebrow) {
+      font-size: 16px !important;
+      line-height: 1.5 !important;
+    }
+
+    html body .private-project-page #priority-matrix .moldovagaz-project-list--compact .moldovagaz-project-link {
+      counter-increment: matrix-project !important;
+      grid-template-columns: 34px minmax(0, 1fr) !important;
+      gap: 0 12px !important;
+      align-items: center !important;
+      min-height: 54px !important;
+      padding: 11px 12px !important;
+    }
+
+    html body .private-project-page #priority-matrix .moldovagaz-project-list--compact {
+      counter-reset: matrix-project !important;
+    }
+
+    html body .private-project-page #priority-matrix .moldovagaz-project-list--compact .moldovagaz-project-link .system-icon {
+      display: none !important;
+    }
+
+    html body .private-project-page #priority-matrix .moldovagaz-project-list--compact .moldovagaz-project-link::before {
+      content: counter(matrix-project, decimal-leading-zero) !important;
+      grid-column: 1 !important;
+      grid-row: 1 !important;
+      display: grid !important;
+      width: 30px !important;
+      height: 30px !important;
+      place-items: center !important;
+      border: 1px solid rgba(216, 251, 255, 0.22) !important;
+      border-radius: 3px !important;
+      color: #ffffff !important;
+      font-size: 12px !important;
+      font-weight: 900 !important;
+      background: rgba(216, 251, 255, 0.08) !important;
+    }
+
+    html body .private-project-page #priority-matrix .moldovagaz-project-list--compact .moldovagaz-project-link strong {
+      grid-column: 2 !important;
+      grid-row: 1 !important;
+      font-size: 15px !important;
+      line-height: 1.18 !important;
+      overflow-wrap: normal !important;
+      word-break: normal !important;
+      hyphens: none !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack--restored {
+      position: relative !important;
+      display: block !important;
+      min-height: 0 !important;
+      margin-top: clamp(26px, 4vw, 44px) !important;
+      padding: 0 !important;
+      overflow: visible !important;
+      perspective: none !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack--restored::before {
+      display: none !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-direction-deck__intro,
+    html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-direction-deck__panels {
+      display: none !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-direction-deck__tabs {
+      position: relative !important;
+      inset: auto !important;
+      display: grid !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      gap: clamp(22px, 2.4vw, 36px) !important;
+      width: 100% !important;
+      min-height: 0 !important;
+      max-width: none !important;
+      padding: 0 !important;
+      overflow: visible !important;
+      transform: none !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-direction-card--static {
+      position: relative !important;
+      inset: auto !important;
+      z-index: auto !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: clamp(18px, 2vw, 26px) !important;
+      width: auto !important;
+      min-width: 0 !important;
+      max-width: none !important;
+      height: auto !important;
+      min-height: 0 !important;
+      max-height: none !important;
+      margin: 0 !important;
+      border-radius: 8px !important;
+      padding: clamp(24px, 2.4vw, 38px) !important;
+      overflow: hidden !important;
+      opacity: 1 !important;
+      filter: none !important;
+      pointer-events: auto !important;
+      transform: none !important;
+      transition: border-color 160ms ease, box-shadow 160ms ease !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-direction-card--static:is(:hover, :focus-within) {
+      transform: none !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-direction-card--static:nth-child(5) {
+      grid-column: 1 / -1 !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-direction-card__top {
+      display: grid !important;
+      grid-template-columns: 58px 56px minmax(0, 1fr) !important;
+      gap: 16px !important;
+      align-items: center !important;
+      width: 100% !important;
+      min-height: 0 !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      padding: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      cursor: default !important;
+      transform: none !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-direction-card__top .private-slide-number,
+    html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-direction-card__top .system-icon {
+      width: 56px !important;
+      height: 56px !important;
+      min-width: 56px !important;
+      margin: 0 !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-direction-card__top .private-slide-number {
+      grid-column: 1 !important;
+      grid-row: 1 !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-direction-card__top .system-icon {
+      grid-column: 2 !important;
+      grid-row: 1 !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-direction-card__head {
+      grid-column: 3 !important;
+      grid-row: 1 !important;
+      min-width: 0 !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-direction-card__head h3 {
+      margin: 0 !important;
+      color: #ffffff !important;
+      font-size: clamp(32px, 2.35vw, 44px) !important;
+      line-height: 1.08 !important;
+      letter-spacing: 0 !important;
+      word-break: normal !important;
+      overflow-wrap: break-word !important;
+      text-wrap: balance !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-stack-layer__count {
+      grid-column: 3 !important;
+      grid-row: 2 !important;
+      justify-self: start !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      min-height: 42px !important;
+      border: 1px solid rgba(216, 251, 255, 0.18) !important;
+      border-radius: 5px !important;
+      padding: 10px 14px !important;
+      background: rgba(255, 255, 255, 0.055) !important;
+      color: rgba(238, 248, 255, 0.86) !important;
+      font-size: 14px !important;
+      font-weight: 850 !important;
+      line-height: 1 !important;
+      white-space: nowrap !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-stack-layer__content {
+      position: relative !important;
+      display: grid !important;
+      grid-template-columns: minmax(270px, 0.82fr) minmax(360px, 1.18fr) !important;
+      gap: clamp(24px, 2.8vw, 44px) !important;
+      width: 100% !important;
+      min-height: 0 !important;
+      max-height: none !important;
+      margin: 0 !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      padding: 0 !important;
+      overflow: visible !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+      pointer-events: auto !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-stack-layer__body,
+    html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-stack-layer__projects {
+      min-width: 0 !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-stack-layer__body {
+      display: grid !important;
+      align-content: start !important;
+      gap: 18px !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-stack-layer__body > p {
+      margin: 0 !important;
+      color: rgba(238, 248, 255, 0.82) !important;
+      font-size: clamp(18px, 1.35vw, 22px) !important;
+      line-height: 1.55 !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-project-list {
+      display: grid !important;
+      gap: 12px !important;
+      max-height: none !important;
+      overflow: visible !important;
+      padding: 0 !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-project-link {
+      padding: 14px !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-project-link strong {
+      font-size: 17px !important;
+      line-height: 1.18 !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-project-link small {
+      font-size: 14px !important;
+      line-height: 1.45 !important;
+    }
+
+    html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-project-link,
+    html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-project-link * {
+      opacity: 1 !important;
+      transform: none !important;
+      pointer-events: auto !important;
+    }
+
+    @media (max-width: 1180px) {
+      html body .private-project-page {
+        --moldovagaz-page-width: calc(100vw - 32px);
+      }
+
+      html body .private-project-page > .section > .section-header {
+        grid-template-columns: 1fr !important;
+      }
+
+      html body .private-project-page .moldovagaz-map-nav {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      }
+
+      html body .private-project-page #priority-matrix .moldovagaz-priority-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      }
+
+      html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-direction-deck__tabs {
+        grid-template-columns: 1fr !important;
+      }
+    }
+
+    @media (max-width: 760px) {
+      html body .private-project-page {
+        --moldovagaz-page-width: calc(100vw - 20px);
+      }
+
+      html body .private-project-page #priority-matrix .moldovagaz-priority-grid {
+        grid-template-columns: 1fr !important;
+      }
+
+      html body .private-project-page .moldovagaz-map-nav {
+        grid-template-columns: 1fr !important;
+      }
+
+      html body .private-project-page #priority-matrix .moldovagaz-priority-card h3 {
+        font-size: clamp(26px, 8vw, 32px) !important;
+      }
+
+      html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-direction-card__top {
+        grid-template-columns: 48px minmax(0, 1fr) !important;
+      }
+
+      html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-direction-card__top .private-slide-number {
+        width: 48px !important;
+        height: 48px !important;
+        min-width: 48px !important;
+      }
+
+      html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-direction-card__head {
+        grid-column: 2 !important;
+        grid-row: 1 !important;
+      }
+
+      html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-direction-card__head h3 {
+        font-size: clamp(25px, 7.2vw, 31px) !important;
+        overflow-wrap: normal !important;
+        text-wrap: normal !important;
+      }
+
+      html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-direction-card__top .system-icon,
+      html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-stack-layer__count {
+        display: none !important;
+      }
+
+      html body .private-project-page .moldovagaz-direction-stack--restored .moldovagaz-stack-layer__content {
+        grid-template-columns: 1fr !important;
+      }
+    }
+  </style>
+</Layout>

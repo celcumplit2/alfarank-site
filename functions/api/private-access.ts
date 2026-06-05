@@ -4,7 +4,7 @@ type Env = {
 };
 
 const COOKIE_NAME = "alfa_private_access";
-const DEFAULT_ACCESS_CODE = "grafit-alpha-2026";
+const DEFAULT_ACCESS_CODE = "AlfaProjects-2026!";
 const MAX_AGE_SECONDS = 60 * 60 * 24 * 7;
 
 const clean = (value: FormDataEntryValue | null) => String(value ?? "").trim();

@@ -1,0 +1,274 @@
+---
+import PageHero from "@/components/PageHero.astro";
+import SystemIcon from "@/components/SystemIcon.astro";
+import Layout from "@/layouts/Layout.astro";
+import { getMoldovagazModule, getMoldovagazProject, moldovagazUi } from "@/data/moldovagaz-project";
+import { localizePath } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
+import type { MoldovagazModule } from "@/data/moldovagaz-project";
+
+type Props = {
+  locale?: Locale;
+  module: MoldovagazModule;
+};
+
+export function getStaticPaths() {
+  return getMoldovagazProject("en").modules.map((module) => ({
+    params: { module: module.slug },
+    props: { module, locale: "en" }
+  }));
+}
+
+const { locale = "en", module } = Astro.props as Props;
+const contentLocale = "ru";
+const shellLocale = contentLocale;
+const project = getMoldovagazProject(contentLocale);
+const localizedModule = getMoldovagazModule(contentLocale, module.slug) ?? module;
+const ui = moldovagazUi[contentLocale];
+const localizedProjectPath = localizePath(`/projects/${project.slug}/`, locale);
+const currentGroup = project.groups.find((group) => group.slug === localizedModule.groupSlug);
+const siblingModules = (currentGroup?.projects ?? [])
+  .map((slug) => project.modules.find((entry) => entry.slug === slug))
+  .filter((entry): entry is MoldovagazModule => Boolean(entry));
+const directionHref = currentGroup ? `${localizedProjectPath}#${currentGroup.slug}` : localizedProjectPath;
+const relatedModules = [
+  ...project.modules.filter((entry) => entry.groupSlug === localizedModule.groupSlug && entry.slug !== localizedModule.slug),
+  ...project.modules.filter((entry) => entry.groupSlug !== localizedModule.groupSlug)
+].slice(0, 4);
+const moduleMapText = `На странице собраны ключевые элементы подпроекта: ${localizedModule.layers.map((layer) => layer.title).join(", ")}.`;
+
+const moduleVisual = {
+  mode: "private-module",
+  icon: localizedModule.icon,
+  label: currentGroup?.title ?? project.client,
+  state: localizedModule.outputs[0],
+  output: localizedModule.outputs.slice(0, 2).join(" -> "),
+  coreHref: localizedProjectPath,
+  nodes: localizedModule.layers.map((layer, index) => ({
+    title: layer.title,
+    state: layer.items[0],
+    icon: layer.icon,
+    detail: layer.text,
+    meter: `${74 + index * 5}%`,
+    href: "#module-blueprint"
+  })),
+  metrics: [
+    { value: String(localizedModule.layers.length).padStart(2, "0"), label: "слоя подпроекта" },
+    { value: String(localizedModule.outputs.length).padStart(2, "0"), label: ui.outputs },
+    { value: "Аудит", label: "точка выбора" }
+  ]
+};
+
+const presentationSlides = [
+  {
+    eyebrow: ui.valuePromise,
+    title: localizedModule.presentation.valueTitle,
+    text: localizedModule.presentation.valueText,
+    items: localizedModule.outputs.slice(0, 3)
+  },
+  {
+    eyebrow: ui.presentationFlow,
+    title: localizedModule.presentation.flowTitle,
+    text: localizedModule.presentation.flowText,
+    items: localizedModule.layers.map((layer) => layer.title).slice(0, 4)
+  },
+  {
+    eyebrow: ui.proofPoints,
+    title: localizedModule.presentation.proofTitle,
+    text: localizedModule.presentation.proofText,
+    items: localizedModule.pilot.metrics.slice(0, 4)
+  }
+];
+---
+
+<Layout title={`${localizedModule.title} | ${project.title} | AlfaRank`} description={localizedModule.summary} locale={shellLocale} robots="noindex, nofollow">
+  <div class="private-project-page" data-no-translate>
+    <PageHero
+      eyebrow={currentGroup?.title ?? project.title}
+      title={localizedModule.title}
+      text={localizedModule.summary}
+      primaryHref={localizePath(`/projects/${project.slug}/`, locale)}
+      primaryLabel={ui.backToProject}
+      secondaryHref="#module-blueprint"
+      secondaryLabel={ui.moduleBlueprint}
+      locale={locale}
+      visual={moduleVisual}
+    />
+
+    <section class="section moldovagaz-subproject-navigation" id="subproject-navigation">
+      <div class="moldovagaz-hierarchy-strip" aria-label="Иерархия подпроекта">
+        <a href={localizedProjectPath}>{project.title}</a>
+        <span>{currentGroup?.title ?? "Направление"}</span>
+        <strong>{localizedModule.title}</strong>
+      </div>
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Подпроекты направления</p>
+          <h2>{currentGroup?.title ?? project.title}</h2>
+        </div>
+        <p>Эта навигация показывает место текущего подпроекта в общей карте и помогает сравнить соседние возможности перед управленческим выбором после аудита.</p>
+      </div>
+      <nav class="moldovagaz-subproject-nav" aria-label={`Подпроекты направления ${currentGroup?.title ?? project.title}`}>
+        {siblingModules.map((entry, index) => (
+          <a
+            class:list={{ "is-current": entry.slug === localizedModule.slug }}
+            href={entry.slug === localizedModule.slug ? "#module-blueprint" : localizePath(`/projects/${project.slug}/${entry.slug}/`, locale)}
+          >
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <strong>{entry.title}</strong>
+          </a>
+        ))}
+      </nav>
+      <a class="moldovagaz-direction-back" href={directionHref}>Вернуться к направлению</a>
+    </section>
+
+    <section class="section" id="module-blueprint">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">{ui.moduleBlueprint}</p>
+          <h2>{localizedModule.presentation.valueTitle}</h2>
+        </div>
+        <p>{localizedModule.positioning}</p>
+      </div>
+
+      <div class="system-blueprint-surface private-blueprint ar-system-block ar-system-layer">
+        <article class="system-blueprint-surface__core ar-system-core">
+          <SystemIcon name={localizedModule.icon} />
+          <span>{project.client}</span>
+          <strong>{localizedModule.title}</strong>
+          <p>{moduleMapText}</p>
+        </article>
+        {localizedModule.layers.map((layer, index) => (
+          <article class:list={["system-blueprint-layer", "ar-system-node", `system-blueprint-layer--${index + 1}`]} style={`--ar-level: ${74 + index * 6}%;`}>
+            <SystemIcon name={layer.icon} />
+            <div>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <h3>{layer.title}</h3>
+              <p>{layer.text}</p>
+            </div>
+            <ul>
+              {layer.items.map((item) => <li>{item}</li>)}
+            </ul>
+            <b class="ar-metric-bar"></b>
+          </article>
+        ))}
+        <div class="system-blueprint-surface__dock ar-signal-strip">
+          {localizedModule.outputs.slice(0, 3).map((output) => <span class="ar-signal">{output}</span>)}
+        </div>
+      </div>
+    </section>
+
+    <section class="section split-panel">
+      <article class="glass-panel private-slide-card">
+        <p class="eyebrow">{ui.valuePromise}</p>
+        <h2>{localizedModule.presentation.valueTitle}</h2>
+        <div class="tag-grid">
+          {localizedModule.outputs.map((output) => <span class="tag">{output}</span>)}
+        </div>
+      </article>
+      <article class="glass-panel private-slide-card">
+        <p class="eyebrow">{ui.guardrails}</p>
+        <ul class="feature-list">
+          {localizedModule.guardrails.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">{ui.presentationFlow}</p>
+          <h2>{localizedModule.presentation.flowTitle}</h2>
+        </div>
+        <p>{localizedModule.presentation.flowText}</p>
+      </div>
+      <div class="private-presentation-deck">
+        {presentationSlides.map((slide, index) => (
+          <article class="glass-panel private-slide-card">
+            <span class="private-slide-number">{String(index + 1).padStart(2, "0")}</span>
+            <p class="eyebrow">{slide.eyebrow}</p>
+            <h3>{slide.title}</h3>
+            <p>{slide.text}</p>
+            <div class="tag-grid">
+              {slide.items.map((item) => <span class="tag">{item}</span>)}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section split-panel">
+      <article class="glass-panel private-slide-card">
+        <p class="eyebrow">{ui.dataSources}</p>
+        <h2>{ui.internalSources}</h2>
+        <div class="tag-grid">
+          {localizedModule.sources.internal.slice(0, 8).map((source) => <span class="tag">{source}</span>)}
+        </div>
+      </article>
+      <article class="glass-panel private-slide-card">
+        <p class="eyebrow">{ui.dataSources}</p>
+        <h2>{ui.externalSources}</h2>
+        <div class="tag-grid">
+          {localizedModule.sources.external.slice(0, 8).map((source) => <span class="tag">{source}</span>)}
+        </div>
+      </article>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">{ui.pilotStory}</p>
+          <h2>{localizedModule.pilot.title}</h2>
+        </div>
+        <p>{localizedModule.pilot.goal}</p>
+      </div>
+      <ol class="private-step-list">
+        {localizedModule.pilot.steps.map((step, index) => (
+          <li>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <p>{step}</p>
+          </li>
+        ))}
+      </ol>
+      <div class="private-metric-panel glass-panel">
+        <h3>{ui.pilotMetrics}</h3>
+        <div class="tag-grid">
+          {localizedModule.pilot.metrics.map((metric) => <span class="tag">{metric}</span>)}
+        </div>
+      </div>
+    </section>
+
+    <section class="section split-panel">
+      <article class="glass-panel private-executive-panel private-slide-card">
+        <p class="eyebrow">{ui.executiveFraming}</p>
+        <h2>{localizedModule.title}</h2>
+        <p>{localizedModule.executive}</p>
+      </article>
+      <article class="glass-panel private-slide-card">
+        <p class="eyebrow">{ui.strategicEffect}</p>
+        <ul class="feature-list">
+          {localizedModule.effects.slice(0, 6).map((effect) => <li>{effect}</li>)}
+        </ul>
+      </article>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">{ui.relatedModules}</p>
+          <h2>{currentGroup?.title ?? project.title}</h2>
+        </div>
+        <p>{ui.relatedText}</p>
+      </div>
+      <div class="private-related-grid">
+        {relatedModules.map((entry) => (
+          <a class="glass-panel private-related-card" href={localizePath(`/projects/${project.slug}/${entry.slug}/`, locale)}>
+            <SystemIcon name={entry.icon} />
+            <h3>{entry.title}</h3>
+            <p>{entry.summary}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+  </div>
+</Layout>

@@ -3,6 +3,7 @@ import PageHero from "@/components/PageHero.astro";
 import SystemIcon from "@/components/SystemIcon.astro";
 import Layout from "@/layouts/Layout.astro";
 import { getPrivateProjects, privateUi } from "@/data/private-projects";
+import { getMoldovagazProject } from "@/data/moldovagaz-project";
 import { localizePath } from "@/data/i18n";
 import type { Locale } from "@/data/i18n";
 
@@ -12,7 +13,7 @@ type Props = {
 
 const { locale = "en" } = Astro.props;
 const ui = privateUi[locale];
-const projects = getPrivateProjects(locale);
+const projects = [...getPrivateProjects(locale), getMoldovagazProject(locale)];
 
 const projectHeroVisual = {
   mode: "private-projects",
