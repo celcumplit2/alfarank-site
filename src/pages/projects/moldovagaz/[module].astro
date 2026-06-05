@@ -20,7 +20,7 @@ export function getStaticPaths() {
 }
 
 const { locale = "en", module } = Astro.props as Props;
-const contentLocale = "ru";
+const contentLocale = locale;
 const shellLocale = contentLocale;
 const project = getMoldovagazProject(contentLocale);
 const localizedModule = getMoldovagazModule(contentLocale, module.slug) ?? module;
@@ -35,7 +35,7 @@ const relatedModules = [
   ...project.modules.filter((entry) => entry.groupSlug === localizedModule.groupSlug && entry.slug !== localizedModule.slug),
   ...project.modules.filter((entry) => entry.groupSlug !== localizedModule.groupSlug)
 ].slice(0, 4);
-const moduleMapText = `На странице собраны ключевые элементы подпроекта: ${localizedModule.layers.map((layer) => layer.title).join(", ")}.`;
+const moduleMapText = `${ui.moduleMapPrefix} ${localizedModule.layers.map((layer) => layer.title).join(", ")}.`;
 
 const moduleVisual = {
   mode: "private-module",
@@ -53,9 +53,9 @@ const moduleVisual = {
     href: "#module-blueprint"
   })),
   metrics: [
-    { value: String(localizedModule.layers.length).padStart(2, "0"), label: "слоя подпроекта" },
+    { value: String(localizedModule.layers.length).padStart(2, "0"), label: ui.moduleLayers },
     { value: String(localizedModule.outputs.length).padStart(2, "0"), label: ui.outputs },
-    { value: "Аудит", label: "точка выбора" }
+    { value: contentLocale === "ru" ? "Аудит" : "Audit", label: ui.auditStartPoint }
   ]
 };
 
@@ -96,19 +96,19 @@ const presentationSlides = [
     />
 
     <section class="section moldovagaz-subproject-navigation" id="subproject-navigation">
-      <div class="moldovagaz-hierarchy-strip" aria-label="Иерархия подпроекта">
+      <div class="moldovagaz-hierarchy-strip" aria-label={ui.moduleHierarchyAria}>
         <a href={localizedProjectPath}>{project.title}</a>
-        <span>{currentGroup?.title ?? "Направление"}</span>
+        <span>{currentGroup?.title ?? ui.directionFallback}</span>
         <strong>{localizedModule.title}</strong>
       </div>
       <div class="section-header">
         <div>
-          <p class="eyebrow">Подпроекты направления</p>
+          <p class="eyebrow">{ui.directionSubprojects}</p>
           <h2>{currentGroup?.title ?? project.title}</h2>
         </div>
-        <p>Эта навигация показывает место текущего подпроекта в общей карте и помогает сравнить соседние возможности перед управленческим выбором после аудита.</p>
+        <p>{ui.subprojectNavigationText}</p>
       </div>
-      <nav class="moldovagaz-subproject-nav" aria-label={`Подпроекты направления ${currentGroup?.title ?? project.title}`}>
+      <nav class="moldovagaz-subproject-nav" aria-label={`${ui.directionSubprojects}: ${currentGroup?.title ?? project.title}`}>
         {siblingModules.map((entry, index) => (
           <a
             class:list={{ "is-current": entry.slug === localizedModule.slug }}
@@ -119,7 +119,7 @@ const presentationSlides = [
           </a>
         ))}
       </nav>
-      <a class="moldovagaz-direction-back" href={directionHref}>Вернуться к направлению</a>
+      <a class="moldovagaz-direction-back" href={directionHref}>{ui.backToDirection}</a>
     </section>
 
     <section class="section" id="module-blueprint">

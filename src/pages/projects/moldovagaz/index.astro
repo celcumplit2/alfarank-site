@@ -2,7 +2,7 @@
 import PageHero from "@/components/PageHero.astro";
 import SystemIcon from "@/components/SystemIcon.astro";
 import Layout from "@/layouts/Layout.astro";
-import { getMoldovagazProject, moldovagazUi } from "@/data/moldovagaz-project";
+import { formatMoldovagazProjectCount, getMoldovagazProject, moldovagazUi } from "@/data/moldovagaz-project";
 import { localizePath } from "@/data/i18n";
 import type { Locale } from "@/data/i18n";
 import type { MoldovagazModule } from "@/data/moldovagaz-project";
@@ -12,7 +12,7 @@ type Props = {
 };
 
 const { locale = "en" } = Astro.props;
-const contentLocale = "ru";
+const contentLocale = locale;
 const shellLocale = contentLocale;
 const project = getMoldovagazProject(contentLocale);
 const ui = moldovagazUi[contentLocale];
@@ -44,7 +44,7 @@ const priorityQuadrants = project.priorityMatrix.map((quadrant) => ({
 
 const directionSignals = directionGroups.map((group, index) => ({
   title: group.title,
-  state: `${String(group.modules.length).padStart(2, "0")} подпроектов`,
+  state: formatMoldovagazProjectCount(contentLocale, group.modules.length),
   icon: group.icon,
   detail: group.summary,
   meter: `${76 + index * 4}%`,
@@ -52,9 +52,9 @@ const directionSignals = directionGroups.map((group, index) => ({
 }));
 const mapNavItems = directionGroups.map((group, index) => ({
   href: `#${group.slug}`,
-  kicker: `Направление ${String(index + 1).padStart(2, "0")}`,
+  kicker: `${ui.directionLabel} ${String(index + 1).padStart(2, "0")}`,
   title: group.title,
-  detail: `${group.modules.length} подпроектов`
+  detail: formatMoldovagazProjectCount(contentLocale, group.modules.length)
 }));
 
 const projectVisual = {
@@ -62,13 +62,13 @@ const projectVisual = {
   icon: project.icon,
   label: project.client,
   state: project.status,
-  output: "Аудит -> карта -> приоритеты",
+  output: ui.heroFlow,
   coreHref: localizedProjectPath,
   nodes: directionSignals,
   metrics: [
-    { value: String(project.groups.length).padStart(2, "0"), label: "направлений" },
+    { value: String(project.groups.length).padStart(2, "0"), label: ui.metricDirections },
     { value: String(project.modules.length).padStart(2, "0"), label: ui.modules },
-    { value: "Аудит", label: "точка старта" }
+    { value: contentLocale === "ru" ? "Аудит" : "Audit", label: ui.auditStartPoint }
   ]
 };
 ---
@@ -82,7 +82,7 @@ const projectVisual = {
       primaryHref="#audit"
       primaryLabel={ui.projectOverview}
       secondaryHref="#navigation"
-      secondaryLabel="Навигация"
+      secondaryLabel={ui.navigationLabel}
       locale={locale}
       visual={projectVisual}
     />
@@ -90,12 +90,12 @@ const projectVisual = {
     <section class="section moldovagaz-map-navigation" id="navigation">
       <div class="section-header">
         <div>
-          <p class="eyebrow">Навигация</p>
-          <h2>Иерархия карты цифрового развития</h2>
+          <p class="eyebrow">{ui.navigationLabel}</p>
+          <h2>{ui.hierarchyTitle}</h2>
         </div>
-        <p>Карта начинается с 5 основных направлений, затем раскрывает подпроекты внутри каждого направления и при необходимости ведет на отдельную страницу подпроекта.</p>
+        <p>{ui.hierarchyText}</p>
       </div>
-      <nav class="moldovagaz-map-nav" aria-label="Навигация по карте цифрового развития Moldovagaz">
+      <nav class="moldovagaz-map-nav" aria-label={ui.mapNavigationAria}>
         {mapNavItems.map((item) => (
           <a href={item.href}>
             <span>{item.kicker}</span>
@@ -133,11 +133,11 @@ const projectVisual = {
 
       <div class="moldovagaz-direction-stack moldovagaz-direction-stack--restored">
         <div class="moldovagaz-direction-deck__intro">
-          <p class="eyebrow">Карта трансформации</p>
-          <h3>5 направлений цифрового развития</h3>
-          <p>Пять управленческих направлений показывают пространство цифрового развития компании: операции, инфраструктура, финансы, внутренние процессы, данные и AI.</p>
+          <p class="eyebrow">{ui.deckIntroEyebrow}</p>
+          <h3>{ui.deckIntroTitle}</h3>
+          <p>{ui.deckIntroText}</p>
         </div>
-        <div class="moldovagaz-direction-deck__tabs" aria-label="Направления цифрового развития">
+        <div class="moldovagaz-direction-deck__tabs" aria-label={ui.deckIntroTitle}>
           {directionGroups.map((group, index) => (
             <article
               class="glass-panel moldovagaz-direction-card moldovagaz-direction-card--static"
@@ -154,7 +154,7 @@ const projectVisual = {
                     <h3>{group.title}</h3>
                   </div>
                 </div>
-                <span class="moldovagaz-stack-layer__count">{group.modules.length} проектов</span>
+                <span class="moldovagaz-stack-layer__count">{formatMoldovagazProjectCount(contentLocale, group.modules.length)}</span>
               </div>
               <div class="moldovagaz-stack-layer__content">
                 <div class="moldovagaz-stack-layer__body">
@@ -194,7 +194,7 @@ const projectVisual = {
                   <p class="eyebrow">{ui.directionProjects}</p>
                   <h3>{group.title}</h3>
                 </div>
-                <span class="moldovagaz-stack-layer__count">{group.modules.length} проектов</span>
+                <span class="moldovagaz-stack-layer__count">{formatMoldovagazProjectCount(contentLocale, group.modules.length)}</span>
               </div>
               <div class="moldovagaz-stack-layer__content">
                 <div class="moldovagaz-stack-layer__body">
@@ -204,7 +204,7 @@ const projectVisual = {
                     {group.outcomes.map((outcome) => <span class="tag">{outcome}</span>)}
                   </div>
                 </div>
-                <div class="moldovagaz-stack-layer__projects" aria-label={`${group.title}: подпроекты`}>
+                <div class="moldovagaz-stack-layer__projects" aria-label={`${group.title}: ${ui.directionProjects}`}>
                   <p class="eyebrow">{ui.directionProjects}</p>
                   <div class="moldovagaz-project-list">
                   {group.modules.map((module, moduleIndex) => (
@@ -227,9 +227,9 @@ const projectVisual = {
       <div class="section-header">
         <div>
           <p class="eyebrow">{ui.priorityMatrix}</p>
-          <h2>Как сравнивать инициативы после аудита</h2>
+          <h2>{ui.priorityTitle}</h2>
         </div>
-        <p>Матрица показывает, какие направления дают быстрый управленческий эффект, какие требуют зрелых данных, а какие стоит развивать как стратегические программы.</p>
+        <p>{ui.priorityText}</p>
       </div>
       <div class="moldovagaz-priority-grid">
         {priorityQuadrants.map((quadrant, index) => (
@@ -276,7 +276,7 @@ const projectVisual = {
       <div class="section-header">
         <div>
           <p class="eyebrow">{ui.presentationFlow}</p>
-          <h2>Как раскрывается карта</h2>
+          <h2>{ui.presentationTitle}</h2>
         </div>
         <p>{project.navigation.core}</p>
       </div>
