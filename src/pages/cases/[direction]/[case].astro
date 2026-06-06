@@ -1,0 +1,178 @@
+---
+import SystemIcon from "@/components/SystemIcon.astro";
+import {
+  caseDirections,
+  caseUi,
+  getCaseDirection,
+  getCaseExample
+} from "@/data/case-examples";
+import { localizePath } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
+import Layout from "@/layouts/Layout.astro";
+
+type Direction = NonNullable<ReturnType<typeof getCaseDirection>>;
+type Example = NonNullable<ReturnType<typeof getCaseExample>>;
+
+type Props = {
+  locale?: Locale;
+  direction: Direction;
+  example: Example;
+};
+
+export function getStaticPaths() {
+  return caseDirections.flatMap((direction) =>
+    direction.examples.map((example) => ({
+      params: { direction: direction.slug, case: example.slug },
+      props: { direction, example, locale: "ru" }
+    }))
+  );
+}
+
+const { locale = "ru", direction, example } = Astro.props as Props;
+const presentation = example.presentation;
+
+const statusLabel = {
+  "first-wave": "первая сборка",
+  draft: "черновик",
+  "needs-sanitizing": "нужна очистка",
+  archive: "архив"
+};
+---
+
+<Layout
+  title={`${example.title} | ${caseUi.title} | AlfaRank`}
+  description={example.summary}
+  locale={locale}
+  robots="noindex, nofollow"
+>
+  <div class="case-library-page" data-no-translate>
+    <section class="section case-library-hero case-library-hero--example">
+      <div class="case-library-hero__content">
+        <a class="case-back-link" href={localizePath(`/cases/${direction.slug}/`, locale)}>{caseUi.backToDirection}</a>
+        <p class="eyebrow">{direction.title}</p>
+        <h1>{example.title}</h1>
+        <p>{example.summary}</p>
+        <div class="case-library-hero__tags">
+          <span>{caseUi.localOnly}</span>
+          <span>{statusLabel[example.status]}</span>
+          {example.tags.map((tag) => <span>{tag}</span>)}
+        </div>
+      </div>
+      <aside class="case-library-note">
+        <SystemIcon name={direction.icon} />
+        <strong>{presentation ? "Проектная база" : caseUi.source}</strong>
+        <p>
+          {presentation
+            ? presentation.sourceNote
+            : "Материалы есть во внутреннем архиве проекта. Для публичной версии нужно выбрать, какие артефакты можно показывать."}
+        </p>
+      </aside>
+    </section>
+
+    {presentation && (
+      <div class="case-presentation-stack">
+        <section class="section case-presentation-lead">
+          <article class="case-detail-panel case-detail-panel--lead">
+            <p class="eyebrow">Суть проекта</p>
+            <h2>Что было построено</h2>
+            <p>{presentation.lead}</p>
+          </article>
+
+          <article class="case-detail-panel">
+            <p class="eyebrow">Задача</p>
+            <h2>Какую проблему закрывали</h2>
+            <p>{presentation.problem}</p>
+          </article>
+
+          <article class="case-detail-panel">
+            <p class="eyebrow">Результат</p>
+            <h2>Что получилось</h2>
+            <p>{presentation.result}</p>
+          </article>
+        </section>
+
+        <section class="section case-metric-grid" aria-label="Ключевые цифры проекта">
+          {presentation.metrics.map((metric) => (
+            <article class="case-metric">
+              <strong>{metric.value}</strong>
+              <span>{metric.label}</span>
+              {metric.note && <p>{metric.note}</p>}
+            </article>
+          ))}
+        </section>
+
+        <section class="section case-story-grid">
+          {presentation.story.map((block) => (
+            <article class="case-detail-panel">
+              <p class="eyebrow">{block.eyebrow}</p>
+              <h2>{block.title}</h2>
+              <p>{block.body}</p>
+            </article>
+          ))}
+        </section>
+
+        <section class="section case-presentation-flow">
+          <article class="case-detail-panel case-detail-panel--wide">
+            <p class="eyebrow">Как работает система</p>
+            <h2>Рабочая цепочка</h2>
+            <ol class="case-flow-list">
+              {presentation.flow.map((item) => <li>{item}</li>)}
+            </ol>
+          </article>
+        </section>
+
+        <section class="section case-proof-grid">
+          <article class="case-detail-panel">
+            <p class="eyebrow">Доказательства</p>
+            <h2>На чем держится страница</h2>
+            <ul class="case-check-list">
+              {presentation.proof.map((item) => <li>{item}</li>)}
+            </ul>
+          </article>
+
+          <article class="case-detail-panel">
+            <p class="eyebrow">Для покупателя</p>
+            <h2>Почему это важно</h2>
+            <ul class="case-check-list">
+              {presentation.buyerValue.map((item) => <li>{item}</li>)}
+            </ul>
+          </article>
+        </section>
+      </div>
+    )}
+
+    {!presentation && (
+    <section class="section case-example-layout">
+      <article class="case-detail-panel case-detail-panel--lead">
+        <p class="eyebrow">{caseUi.conceptShift}</p>
+        <h2>Как меняется подача</h2>
+        <p>{example.shift}</p>
+      </article>
+
+      <article class="case-detail-panel">
+        <p class="eyebrow">{caseUi.whatToShow}</p>
+        <h2>Что должно быть на странице</h2>
+        <ul class="case-check-list">
+          {example.show.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+
+      <article class="case-detail-panel">
+        <p class="eyebrow">{caseUi.proofBase}</p>
+        <h2>На чем строим доказательство</h2>
+        <ul class="case-check-list">
+          {example.evidence.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+
+      <article class="case-detail-panel">
+        <p class="eyebrow">{caseUi.nextWork}</p>
+        <h2>Перед публичной версией</h2>
+        <ul class="case-check-list">
+          {example.next.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+    </section>
+    )}
+  </div>
+</Layout>

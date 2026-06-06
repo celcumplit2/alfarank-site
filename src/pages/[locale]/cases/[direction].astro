@@ -1,0 +1,15 @@
+---
+import CasesDirectionPage from "@/pages/cases/[direction].astro";
+import { caseDirections } from "@/data/case-examples";
+
+export function getStaticPaths() {
+  return caseDirections.map((direction) => ({
+    params: { locale: "ru", direction: direction.slug },
+    props: { locale: "ru", direction }
+  }));
+}
+
+const { locale, direction } = Astro.props;
+---
+
+<CasesDirectionPage locale={locale} direction={direction} />

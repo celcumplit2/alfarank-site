@@ -1,0 +1,1482 @@
+import type { Locale } from "@/data/i18n";
+
+export type CaseStatus = "first-wave" | "draft" | "needs-sanitizing" | "archive";
+
+export type CaseMetric = {
+  value: string;
+  label: string;
+  note?: string;
+};
+
+export type CaseStoryBlock = {
+  eyebrow: string;
+  title: string;
+  body: string;
+};
+
+export type CasePresentation = {
+  sourceNote: string;
+  lead: string;
+  problem: string;
+  result: string;
+  metrics: CaseMetric[];
+  story: CaseStoryBlock[];
+  flow: string[];
+  proof: string[];
+  buyerValue: string[];
+};
+
+export type CaseExample = {
+  slug: string;
+  title: string;
+  summary: string;
+  source: string;
+  status: CaseStatus;
+  tags: string[];
+  shift: string;
+  show: string[];
+  evidence: string[];
+  next: string[];
+  presentation?: CasePresentation;
+};
+
+export type CaseDirection = {
+  slug: string;
+  title: string;
+  eyebrow: string;
+  summary: string;
+  icon: string;
+  role: string;
+  examples: CaseExample[];
+};
+
+export const caseUi = {
+  eyebrow: "Локальный черновик раздела",
+  title: "Примеры систем",
+  description:
+    "Рабочая структура будущего раздела: направления, страницы второго уровня и то, что реально можно показать на каждой странице.",
+  localOnly: "Скрытый просмотр",
+  openDirection: "Открыть направление",
+  openExample: "Открыть страницу",
+  backToDirections: "Все направления",
+  backToDirection: "К направлению",
+  directionPages: "Страницы внутри направления",
+  conceptShift: "Сдвиг концепции",
+  whatToShow: "Что показываем",
+  proofBase: "Доказательная база",
+  nextWork: "Что подготовить перед публикацией",
+  source: "Локальный источник",
+  firstWave: "Первая сборка",
+  noProduction:
+    "Этот раздел не подключен к основному сайту и закрыт от индексации. Страницы открываются только по прямой ссылке для просмотра и отбора."
+} as const;
+
+const projectPresentations = {
+  infobon: {
+    sourceNote:
+      "Основано на handoff-документе от 19.05.2026: запуск, структура языков, контентный аудит, production-проверки и передача Cloudflare Pages.",
+    lead:
+      "Infobon - пример не просто сайта, а публичной справочной платформы. Здесь была важна не только верстка страниц, а вся система вокруг них: понятная двуязычная структура, практические материалы для пользователей, графические блоки в статьях, редиректы со старых адресов, production-запуск и документация для дальнейшей эксплуатации.",
+    problem:
+      "Публичный информационный проект быстро теряет ценность, если пользователь не может найти нужный ответ, старые ссылки ведут в пустоту, языковые версии живут отдельно друг от друга, а запуск держится на ручных действиях одного человека. Задача была собрать платформу так, чтобы ее можно было развивать, проверять и передавать дальше без потери структуры.",
+    result:
+      "Платформа получила румынскую версию на корне, русскую версию в разделе /ru, набор редиректов для старых URL, 142 guide-материала с графическими блоками, чистую Astro-сборку на 182 страницы и Git-based deployment через Cloudflare Pages. Это уже не черновой сайт, а упакованный production-контур с понятной логикой роста.",
+    metrics: [
+      { value: "182", label: "страницы в сборке", note: "локальная сборка прошла без ошибок и предупреждений" },
+      { value: "142", label: "guide-материала с графиками", note: "71 статья на румынском и 71 на русском" },
+      { value: "2", label: "языковые структуры", note: "румынская версия на корне, русская версия в /ru" },
+      { value: "Git", label: "production-путь", note: "Cloudflare Pages подключен к GitHub-репозиторию" }
+    ],
+    story: [
+      {
+        eyebrow: "Архитектура",
+        title: "Сайт стал справочной системой",
+        body:
+          "Главный сдвиг - от набора страниц к структуре, в которой пользователь приходит с конкретной бытовой задачей и быстро понимает, куда идти. Разделы, языки, старые URL и новые guide-страницы были сведены в одну понятную карту."
+      },
+      {
+        eyebrow: "Двуязычность",
+        title: "Языковые версии разведены аккуратно",
+        body:
+          "Румынская версия стала основной и живет на корневых маршрутах, русская версия вынесена в /ru. Это снижает путаницу в индексации, упрощает навигацию и дает нормальную основу для hreflang, каноникалей и дальнейшего SEO-роста."
+      },
+      {
+        eyebrow: "Контент",
+        title: "Статьи получили доказательные блоки",
+        body:
+          "Материалы не оставлены как длинный текст. Для guide-страниц добавлены тематические графические блоки по тарифам, платежам, компенсациям, задолженностям, показаниям счетчиков и другим практическим вопросам."
+      },
+      {
+        eyebrow: "Запуск",
+        title: "Боевой запуск не остался магией",
+        body:
+          "В handoff зафиксированы активный проект Cloudflare, Git-deploy, перенос доменов, роль старого проекта как резервного варианта и список проверок после запуска. Это важно для клиента: проект можно поддерживать, а не только открыть в браузере."
+      },
+      {
+        eyebrow: "Рост",
+        title: "Платформа готова к расширению",
+        body:
+          "Такая структура позволяет добавлять новые guide-материалы, усиливать внутреннюю перелинковку, подключать аналитику и проверять качество без ручного пересмотра всей системы каждый раз."
+      }
+    ],
+    flow: [
+      "Разобрать старую структуру языков, URL и разделов.",
+      "Перенести румынскую версию на корень, русскую - в /ru.",
+      "Добавить редиректы со старых маршрутов, чтобы не терять пользователей и поисковые сигналы.",
+      "Собрать guide-страницы вокруг практических задач пользователя.",
+      "Добавить reusable insight/chart-блоки в статьи.",
+      "Проверить локальную сборку и production-страницы.",
+      "Передать проект с handoff-документом, rollback-логикой и списком следующих проверок."
+    ],
+    proof: [
+      "В PROJECT_HANDOFF.md зафиксированы финальная структура, production-домен, Cloudflare Pages project и GitHub-репозиторий.",
+      "Локальная сборка зафиксировала 182 страницы без ошибок и предупреждений.",
+      "Контентный аудит показывает 71/71 румынских guide-страниц и 71/71 русских guide-страниц с графическими блоками.",
+      "Production-проверки покрывали главную страницу, румынскую guide-страницу, русскую guide-страницу и www-домен.",
+      "Отдельно описаны редиректы старых /ro и русских корневых URL.",
+      "В handoff оставлен список следующих шагов: crawl, Search Console, проверка 404, canonical и hreflang."
+    ],
+    buyerValue: [
+      "Показывает, что мы умеем запускать публичную платформу целиком, а не просто рисовать страницы.",
+      "Дает покупателю уверенность, что SEO-структура, языки и старые URL не развалятся после релиза.",
+      "Показывает способность работать с полезным контентом, а не с декоративным текстом.",
+      "Доказывает, что проект можно передать в эксплуатацию с понятной документацией.",
+      "Хороший пример для справочников, каталогов, порталов услуг и любых public information systems."
+    ]
+  },
+  fido: {
+    sourceNote:
+      "Основано на README FIDO, наборах отчетов и convergence-run от 19.05.2026: source quality, model, sandbox, pixel, DOM и interaction-аудиты.",
+    lead:
+      "FIDO - это система контроля внедрения дизайна. Она нужна там, где недостаточно сказать 'мы сверстали по Figma'. Проект превращает дизайн-источник в нормализованную модель, карту компонентов, изолированный sandbox, браузерные проверки и backlog правок, которые показывают, где интерфейс реально расходится с исходником.",
+    problem:
+      "Визуальная реализация часто выглядит готовой только на глаз. Потом выясняется, что текст стал картинкой, компоненты собраны не теми примитивами, hover/focus/click-состояния не проверены, а pixel-diff нельзя доверять из-за плохого источника. Для клиента это риск: красивая демка попадает в продукт, но ее сложно поддерживать и развивать.",
+    result:
+      "FIDO разделяет качество источника и качество реализации. Если reference PNG и JSON/template не совпадают, маршрут получает статус source-blocked. Если источник доверенный, система генерирует sandbox, проверяет pixel/DOM/interactions, сравнивает с target и не разрешает рискованные target-записи, пока проверки не пройдены.",
+    metrics: [
+      { value: "8", label: "sandbox-страниц", note: "сгенерировано в convergence-run" },
+      { value: "0", label: "sandbox failures", note: "генерация sandbox прошла без падений" },
+      { value: "3", label: "режима источника", note: "MCP, локальный .fig и локальный cache" },
+      { value: "gate", label: "защита target", note: "записи в target закрыты до доверенных проверок" }
+    ],
+    story: [
+      {
+        eyebrow: "Источник",
+        title: "Сначала проверяется сам дизайн",
+        body:
+          "FIDO не бросается сразу писать код. Он индексирует локальные Figma-экспорты, скриншоты, canvas и metadata, а затем проверяет, можно ли вообще доверять source bundle. Если источник противоречивый, это фиксируется как отдельная проблема, а не маскируется под баг верстки."
+      },
+      {
+        eyebrow: "Модель",
+        title: "Дизайн превращается в структуру",
+        body:
+          "Система извлекает токены, примитивы, component kinds, состояния и контракты. В результате команда видит не только скриншот, а карту того, какие элементы должны стать реальными DOM-компонентами, какие состояния нужны и где нельзя подменять текст картинкой."
+      },
+      {
+        eyebrow: "Sandbox",
+        title: "Проверка идет вне продукта",
+        body:
+          "Генерация сначала происходит в изолированном sandbox. Это снижает риск повредить текущий продукт и позволяет сравнивать reference, candidate и diff до того, как кто-то начнет патчить боевой интерфейс."
+      },
+      {
+        eyebrow: "Аудит",
+        title: "Проверяется не только картинка",
+        body:
+          "Pixel-аудит показывает визуальные расхождения, DOM-аудит проверяет текст, кликабельность и raster policy, interaction-аудит смотрит hover/click/focus. Такой набор проверок ближе к реальному продукту, чем один красивый скриншот."
+      },
+      {
+        eyebrow: "Решение",
+        title: "На выходе появляется план правок",
+        body:
+          "Итогом становится не абстрактное 'надо поправить дизайн', а список действий: где источник сломан, где нужен visual-tuning, где нельзя доверять pixel-diff, какие маршруты критичны и почему target пока должен оставаться read-only."
+      }
+    ],
+    flow: [
+      "Загрузить дизайн-источник через MCP, локальный .fig или локальный cache.",
+      "Проверить качество source bundle и соответствие reference-материалов.",
+      "Нормализовать дизайн в модель страниц, фреймов, токенов и компонентов.",
+      "Собрать component contracts и правила реализации.",
+      "Сгенерировать изолированный sandbox без записи в целевой продукт.",
+      "Провести pixel, DOM, interaction и target-compare проверки.",
+      "Сформировать план исправлений или пометить маршрут как source-blocked."
+    ],
+    proof: [
+      "README описывает полный путь от Figma/source bundle до browser verification и backlog.",
+      "Convergence-run фиксирует 8 generated pages, 0 sandbox failures, pixel thresholds и source mismatches.",
+      "Отчеты разделены по source, model, design-system, contracts, generation, sandbox, pixel, DOM, interactions и target-compare.",
+      "Правила FIDO запрещают превращать текст в raster-изображение, если соответствующий узел Figma не является image fill.",
+      "Для проблемных маршрутов отчет явно объясняет, что source PNG и JSON/template dimensions не совпадают.",
+      "Target adapter остается read-only до прохождения доверенных проверок."
+    ],
+    buyerValue: [
+      "Покупателю видно, что дизайн будет внедряться контролируемо, а не 'на глаз'.",
+      "Снижается риск получить красивую страницу, которую невозможно поддерживать.",
+      "Можно отделить проблему дизайна-источника от проблемы реализации.",
+      "Команда получает проверяемый backlog, а не спор мнений.",
+      "Особенно полезно для редизайнов, сложных лендингов, продуктовых интерфейсов и миграций дизайн-систем."
+    ]
+  },
+  travelRoutePlatform: {
+    sourceNote:
+      "Основано на README WOW1, документации route-data refresh и execution tracker с локальными и production-проверками.",
+    lead:
+      "Travel-маршрутная платформа показывает, как данные из авиа/API-источников превращаются в масштабируемую систему страниц. Это не ручное написание посадочных страниц, а pipeline: raw snapshots, нормализация, runtime assets, master database, metasearch snapshots, validation, QA и генерация локализованных route pages.",
+    problem:
+      "В travel-проекте нельзя вручную поддерживать сотни и тысячи маршрутов. Цены, направления, аэропорты, метаданные, локали и поисковые страницы должны обновляться из данных. Иначе проект превращается в набор устаревших лендингов, где бизнес не понимает, какие данные актуальны, какие страницы живые и что реально ушло в production.",
+    result:
+      "Собран контур на Next.js App Router: метаданные по маршрутам, canonical, hreflang, JSON-LD, zod-валидация данных, сгенерированные route-страницы, QA-скрипты и путь сборки под Cloudflare. Сейчас в базе зафиксированы 5 route records, 2 активные локали и 10 route-страниц, но архитектура рассчитана на рост через данные, а не через ручное копирование страниц.",
+    metrics: [
+      { value: "10", label: "route-страниц", note: "5 маршрутов в 2 активных локалях" },
+      { value: "12", label: "шагов refresh", note: "от Travel API snapshots до public runtime assets" },
+      { value: "2", label: "активные локали", note: "английская и испанская версии" },
+      { value: "200", label: "проверенный ответ", note: "боевая route-страница вернула HTTP 200 в tracker" }
+    ],
+    story: [
+      {
+        eyebrow: "Данные",
+        title: "Страница начинается не с текста",
+        body:
+          "Основой является refresh pipeline. Он забирает raw Travel API snapshots, пересобирает routes.json, demo seeds, route master database CSV и metasearch snapshots, а затем синхронизирует публичные runtime assets."
+      },
+      {
+        eyebrow: "Генерация",
+        title: "Маршрут становится страницей",
+        body:
+          "Next.js App Router использует route records для генерации страниц, metadata, canonical URL, hreflang и structured data. Это дает модель, в которой добавление нового направления начинается с данных, а не с ручного создания нового лендинга."
+      },
+      {
+        eyebrow: "Контроль",
+        title: "Данные проходят проверку",
+        body:
+          "После refresh запускаются validate:routes и qa:audit. Это важно: если данные пришли криво, система должна поймать проблему до того, как страница начнет жить как будто все в порядке."
+      },
+      {
+        eyebrow: "Операции",
+        title: "Можно обновлять точечно",
+        body:
+          "Pipeline поддерживает full refresh, targeted route refresh и обновление списка маршрутов. Для бизнеса это означает, что можно менять конкретные направления без полной регенерации всего проекта."
+      },
+      {
+        eyebrow: "Масштаб",
+        title: "Архитектура готова к росту",
+        body:
+          "Текущий набор маршрутов небольшой, но ценность проекта в другом: есть проверенный способ превращать данные в страницы, синхронизировать runtime assets и публиковать это через Cloudflare."
+      }
+    ],
+    flow: [
+      "Загрузить окружение и нормализовать Airsearch CID переменные.",
+      "Получить raw Travel API snapshots.",
+      "Пересобрать routes.json, demo seeds и route master database.",
+      "Обновить metasearch snapshots и публичные runtime assets.",
+      "Синхронизировать JSON по slug для routes, seeds и master database.",
+      "Запустить validate:routes и qa:audit.",
+      "Опубликовать локализованные route pages через Cloudflare build path."
+    ],
+    proof: [
+      "Документ обновления маршрутных данных описывает основную команду и 12 шагов pipeline.",
+      "README фиксирует Next.js 16, App Router, zod validation, generateStaticParams и Cloudflare/OpenNext build.",
+      "Execution tracker подтверждает build:cf, боевую проверку route-страницы и HTTP 200 для маршрута.",
+      "Output files включают routes.json, manifest, airsearch-demo-seeds, route-master-database.csv и JSON-by-slug assets.",
+      "Refresh pipeline может работать по одному route или по списку routes.",
+      "Документация прямо фиксирует, что refresh обновляет factual data и не запускает LLM-текст заново."
+    ],
+    buyerValue: [
+      "Покупатель видит систему programmatic SEO, а не обещание 'мы сделаем много страниц'.",
+      "Данные, валидация, публичные страницы и deployment соединены в один процесс.",
+      "Такой подход подходит travel, marketplace, directory, каталогам, агрегаторам и любым data-heavy проектам.",
+      "Можно масштабироваться через данные, не раздувая ручную редакционную работу.",
+      "QA встроена в pipeline, поэтому рост количества страниц не обязан означать рост хаоса."
+    ]
+  },
+  travelBrokerCrm: {
+    sourceNote:
+      "Основано на execution tracker WOW1: путь лида, проверки broker/admin, support bridge, checkout/status path и проверка боевого worker.",
+    lead:
+      "Это вторая сторона travel-системы: что происходит после того, как пользователь оставил лид. Здесь важна не генерация страниц, а операционный слой: broker session, support bridge, админский дашборд, checkout/status path и связь с внешним CRM-контекстом.",
+    problem:
+      "Лендинг или route page создает интерес, но бизнес зарабатывает не на просмотре страницы, а на обработке лида. Если после отправки заявки контекст теряется, оператор видит неполную информацию, внешняя CRM живет отдельно, а статус сделки неясен - скорость реакции падает и деньги уходят.",
+    result:
+      "В tracker зафиксирован проверенный путь: новые и старые query inputs нормализуются в broker session URLs, админка показывает support-linked state, session/brief/checkout pages отвечают 200, боевой worker подтверждает durable session source, а путь публикации Git-to-Cloudflare остается рабочим.",
+    metrics: [
+      { value: "2", label: "формата входа", note: "новые externalRef/externalLeadId и старые ref/lid" },
+      { value: "200", label: "проверки админки и route", note: "локальные и боевые проверки прошли" },
+      { value: "durable", label: "runtime сессий", note: "broker sessions возвращают durable source" },
+      { value: "Git", label: "путь публикации", note: "обычный push дошел до Cloudflare Worker" }
+    ],
+    story: [
+      {
+        eyebrow: "Контекст",
+        title: "Лид не теряется после клика",
+        body:
+          "Система сохраняет связь между route/funnel entry, external lead id, broker session и support context. Это критично для post-lead бизнеса: оператору нужно видеть, откуда пришел человек и в каком состоянии находится обработка."
+      },
+      {
+        eyebrow: "Совместимость",
+        title: "Старые ссылки не ломаются",
+        body:
+          "Внедрен helper-слой для support bridge URL. Он принимает новые canonical query names, но продолжает понимать старые ref/lid. Это позволяет модернизировать boundary без разрыва существующих CRM/support-ссылок."
+      },
+      {
+        eyebrow: "Оператор",
+        title: "Админка становится рабочим экраном",
+        body:
+          "Админка показывает broker state и support-linked context. Это уже не скрытая техническая страница, а место, где можно быстро понять состояние лида и следующий шаг."
+      },
+      {
+        eyebrow: "Проверка",
+        title: "Путь проверен целиком",
+        body:
+          "Проверялись route page, broker admin, новые редиректы, старые редиректы, session, brief и checkout pages. После локальных проверок ключевой путь был повторен на боевом worker."
+      },
+      {
+        eyebrow: "Решения",
+        title: "Дашборд помогает выбирать действие",
+        body:
+          "Смысл такого слоя - не хранить лид ради хранения. Он должен собирать контекст так, чтобы человеку было проще решить: кому позвонить, какой статус поставить, где сделка зависла и что делать дальше."
+      }
+    ],
+    flow: [
+      "Пользователь приходит с route page, funnel или внешней CRM/support-ссылки.",
+      "URL helper нормализует externalRef и externalLeadId, сохраняя поддержку ref/lid.",
+      "Broker session получает единый контекст входа.",
+      "Админка показывает support-linked state и состояние сессии.",
+      "Brief, checkout и status pages продолжают работать с тем же контекстом.",
+      "Боевой worker проверяется после Git-to-Cloudflare публикации.",
+      "Дальше этот слой можно развивать в decision dashboard для операторов."
+    ],
+    proof: [
+      "Execution tracker содержит точные локальные и production-проверки.",
+      "Подтверждено, что /en/dl/jfk-to-cdg и /en/broker/admin возвращают 200.",
+      "Canonical externalRef/externalLeadId redirects и legacy ref/lid redirects проверены отдельно.",
+      "Broker admin рендерит Broker admin и Support linked.",
+      "API broker sessions возвращает source: durable.",
+      "Git publish path до Cloudflare Worker подтвержден отдельным deployment check."
+    ],
+    buyerValue: [
+      "Показывает, что AlfaRank думает не только о странице, а о деньгах после заявки.",
+      "Дает модель внутренней CRM, которая не конфликтует с внешней CRM, а дополняет ее контекстом.",
+      "Снижает риск потери лида между рекламой, сайтом, оператором и checkout.",
+      "Подходит travel, insurance, finance, services и любым бизнесам с дорогим лидом.",
+      "Помогает строить dashboard, где решения принимаются быстро, а не через разрозненные таблицы."
+    ]
+  },
+  infographicEngine: {
+    sourceNote:
+      "Основано на README Infographic Engine, отчете готовности к релизу от 18.03.2026 и batch-отчете от 21.03.2026.",
+    lead:
+      "Движок инфографики - это система производства визуальных материалов из структурированных данных. Не ручной дизайн каждой картинки и не случайная генерация по промпту, а controlled pipeline: JSON/CSV input, нормализация, scene planning, scoring, quality gates, DOM validation и deterministic export.",
+    problem:
+      "Когда команде нужны десятки или сотни визуалов, ручное производство становится дорогим и медленным, а генерация 'на глаз' плохо контролируется. Бизнесу нужны повторяемые layouts, прозрачные причины выбора варианта, отчеты по ошибкам и экспорт, который можно воспроизвести.",
+    result:
+      "Система принимает structured briefs, нормализует данные, подбирает brand profile и scene preset, планирует несколько вариантов, оценивает их, отсекает слабые, валидирует DOM до capture и сохраняет артефакты: изображения, variant metadata, render-validation, input-report и batch-report.",
+    metrics: [
+      { value: "3", label: "демо-briefs экспортированы", note: "редакционный пакет завершен успешно" },
+      { value: "9", label: "вариантов запланировано", note: "по 3 кандидата на каждый input" },
+      { value: "0", label: "падений и отклонений", note: "batch-отчет не зафиксировал failures или reject" },
+      { value: "4", label: "формата экспорта", note: "PNG, WebP, PDF и HTML поддержаны платформой" }
+    ],
+    story: [
+      {
+        eyebrow: "Вход",
+        title: "Материал начинается с данных",
+        body:
+          "На вход подается JSON brief или пакетный CSV. Данные нормализуются в typed model, поэтому система может работать с неполными inputs и приводить их к единому виду перед планированием сцены."
+      },
+      {
+        eyebrow: "Сцены",
+        title: "Шаблон не равен одной картинке",
+        body:
+          "Движок использует reusable SceneSpec variants, scene presets и brand profiles. Это позволяет получать разные композиции под один input, не теряя контроля над стилем и назначением материала."
+      },
+      {
+        eyebrow: "Выбор",
+        title: "Варианты проходят scoring",
+        body:
+          "Кандидаты оцениваются по preset, brand, соответствию данным и качеству. В batch-отчете сохраняется rationale: почему выбран dense-dashboard, почему другой вариант пропущен, какие проверки качества и рендера прошли."
+      },
+      {
+        eyebrow: "Экспорт",
+        title: "Превью и экспорт совпадают",
+        body:
+          "Отчет готовности к релизу отдельно фиксирует общий путь рендера для превью и экспорта. Это важно: то, что команда видит в превью, должно быть тем же путем, который потом снимается Playwright capture."
+      },
+      {
+        eyebrow: "Отчеты",
+        title: "Пакет можно проверять",
+        body:
+          "После запуска остаются metadata, variant, render-validation и batch-report. Поэтому production-команда видит не только готовые картинки, но и причины выбора, ошибки, skipped variants и качество рендера."
+      }
+    ],
+    flow: [
+      "Принять структурированный JSON brief или пакетный CSV.",
+      "Нормализовать input в typed render model.",
+      "Определить brand profile и scene preset.",
+      "Сгенерировать несколько SceneSpec variants.",
+      "Оценить варианты по preset, brand, data-fit и quality.",
+      "Провести DOM render validation перед capture.",
+      "Экспортировать PNG/WebP/PDF/HTML и сохранить отчеты."
+    ],
+    proof: [
+      "Отчет готовности фиксирует прохождение typecheck, test, build и проверки экспорта.",
+      "Batch-отчет содержит 3 inputs, 9 planned variants, 3 selected exports и 0 failures/rejections.",
+      "README перечисляет артефакты: scene-spec.json, variant.json, metadata.json, render-validation.json, input-report.json и batch-report.json.",
+      "Платформенная гарантия: превью и экспорт используют один HTML scene path.",
+      "Quality gates исключают rejected outputs из выбора варианта.",
+      "Система не зависит от удаленных fonts/CDN и может работать самодостаточно."
+    ],
+    buyerValue: [
+      "Показывает, что мы умеем строить системы производства медиа, а не просто генерировать картинки.",
+      "Дает команде повторяемость, отчеты и контроль качества для больших batch-запусков.",
+      "Подходит для контентных команд, отчетов, маркетплейсов, рекламных креативов и редакционных проектов.",
+      "Снижает стоимость производства визуалов без полной потери контроля над стилем.",
+      "Создает базу для брендированных шаблонов, визуальной регрессии и production-экспорта."
+    ]
+  },
+  belaContentEngine: {
+    sourceNote:
+      "Основано на протоколе переноса, протоколе боевого деплоя, import-скриптах и заметках по runtime renderer локального контентного движка для developer platform.",
+    lead:
+      "Контентный production-движок - это пример промышленной сборки и публикации большого массива материалов. Здесь важны не отдельные тексты, а вся цепочка: generated article payloads, финальный HTML, chart data, matrices, диагностика, восстановление, импорт в MySQL, runtime rendering и Playwright-проверка.",
+    problem:
+      "Большие batch-генерации ломаются не драматично, а мелко и опасно: chart canvas есть, но данных нет; секции остались вне article_body_html; matrix не вставилась; old articles нельзя ломать; SQL batches слишком большие; повторный import должен быть безопасным. Без протокола это превращается в ручной пожар.",
+    result:
+      "Для проекта описан строгий протокол переноса из generated solution folders в базу, набор repair/recovery scripts, протокол боевого деплоя для runtime renderer, условная интеграция новых блоков, миграционный план на 3007 articles и чеклист проверки по HTTP 200, sections, charts и matrix.",
+    metrics: [
+      { value: "3007", label: "статей к импорту", note: "зафиксировано в deploy protocol" },
+      { value: "11", label: "SQL batches", note: "около 110MB миграционного payload" },
+      { value: "5", label: "repair scripts", note: "extract, patch, inject, recover и restore" },
+      { value: "1532", label: "строки runtime CSS", note: "rewritegen block stylesheet в deploy protocol" }
+    ],
+    story: [
+      {
+        eyebrow: "Структура",
+        title: "Каждая статья имеет payload",
+        body:
+          "В solution folder лежат article.payload.json, final.solution.html, diagnostics и payloadMatrix. Это разделение нужно, чтобы понимать, что именно импортируется в DB, откуда берутся charts и как восстановить материал при сбое."
+      },
+      {
+        eyebrow: "Charts",
+        title: "Графики не должны быть пустыми",
+        body:
+          "Transfer protocol отдельно объясняет проблему: canvas-placeholder может быть в HTML, но runtime.payload_charts пустой. Поэтому добавлен шаг extract_payload_charts.py, который переносит chart data в payload перед import."
+      },
+      {
+        eyebrow: "Sections",
+        title: "HTML собирается в правильном порядке",
+        body:
+          "patch_body_html.py извлекает solution-section, rg-chart-section, rg-textblocks и rg-matrix из final.solution.html. Это закрывает проблему, когда chart generation перемещает секции за пределы старого main.single."
+      },
+      {
+        eyebrow: "Recovery",
+        title: "Ошибки имеют путь восстановления",
+        body:
+          "Для сбоев описаны restore_articles.py и recover_charts.py, а полный recovery order зафиксирован отдельной цепочкой. Это делает batch-публикацию управляемой, а не одноразовой."
+      },
+      {
+        eyebrow: "Production",
+        title: "Старые статьи защищены",
+        body:
+          "Runtime renderer и CSS подключаются условно: если у статьи нет rewritegen markers, старый контент не должен принудительно переходить на новую систему блоков. Это важный production-риск, который закрыт архитектурно."
+      }
+    ],
+    flow: [
+      "Сгенерировать solution folders с payload, HTML, diagnostics и matrix data.",
+      "Извлечь chart data из final HTML в runtime payload.",
+      "Пропатчить article_body_html из финального HTML.",
+      "Вставить missing matrix blocks там, где они есть в payload.",
+      "Восстановить charts или articles через recovery scripts при сбоях.",
+      "Импортировать payloads в MySQL через application console.",
+      "Проверить выборку Playwright: HTTP 200, sections, charts и matrix."
+    ],
+    proof: [
+      "TRANSFER_PROTOCOL.md задает единственно правильный порядок переноса контента.",
+      "PRODUCTION_DEPLOY_PROTOCOL.md фиксирует runtime renderer files, CSS и conditional rendering.",
+      "Deploy plan описывает 3007 articles и 11 SQL batches.",
+      "Verification checklist проверяет HTTP 200, sections > 0, charts >= 0 и matrix == 1.",
+      "Есть recovery order: restore -> recover_charts -> extract_payload_charts -> patch_body_html -> inject_missing_matrix -> import.",
+      "Риски старых статей закрываются через optional detection rewritegen blocks."
+    ],
+    buyerValue: [
+      "Показывает способность работать с контентом на масштабе тысяч страниц.",
+      "Демонстрирует не генерацию ради генерации, а production-публикацию с восстановлением.",
+      "Подходит для SEO-проектов, knowledge bases, developer platforms и больших редакционных систем.",
+      "Снижает риск, что batch-контент тихо сломается после импорта.",
+      "Дает покупателю понятную картину: скорость контента может сочетаться с контролем качества."
+    ]
+  }
+} satisfies Record<string, CasePresentation>;
+
+const publicPlatforms: CaseDirection = {
+  slug: "public-platforms",
+  title: "Публичные сайты и продуктовые платформы",
+  eyebrow: "Public platforms",
+  icon: "web",
+  role:
+    "Показать, что AlfaRank умеет не только писать тексты или делать страницы, а собирать публичную платформу с контентом, навигацией, аналитикой, запуском и передачей в эксплуатацию.",
+  summary:
+    "Сюда входят публичные сайты, продуктовые платформы, документация, кабинеты, лендинги, контентные структуры и production-ready витрины.",
+  examples: [
+    {
+      slug: "infobon",
+      title: "Infobon",
+      summary:
+        "Публичный Astro-сайт с RO/RU структурой, guide articles, launch pack, GA/GSC/GTM и Cloudflare handoff.",
+      source: "D:\\MD\\infobon, C:\\GPT\\infobon",
+      presentation: projectPresentations.infobon,
+      status: "first-wave",
+      tags: ["Astro", "content", "launch"],
+      shift:
+        "Из формата 'мы сделали сайт' в формат 'мы подняли публичную контентную платформу с запуском, аналитикой и структурой роста'.",
+      show: ["структуру разделов и языков", "пакет запуска", "подключения аналитики", "контентную модель"],
+      evidence: ["скриншоты страниц", "структура репозитория", "launch notes", "настройки GA/GSC/GTM без секретов"],
+      next: ["снять чистые скриншоты", "обезличить технические детали", "выбрать 3-5 экранов для страницы"]
+    },
+    {
+      slug: "vidorix-platform",
+      title: "Продуктовая платформа с docs/account/app routes",
+      summary:
+        "Next.js платформа с product, pricing, docs, partners, account/app routes и Cloudflare deploy.",
+      source: "C:\\Zenno\\SOVA\\vidorix-platform",
+      status: "first-wave",
+      tags: ["Next.js", "product", "docs"],
+      shift:
+        "Показываем не бренд, а тип сборки: продуктовая оболочка, документация, партнерский контур и маршруты приложения.",
+      show: ["маршруты продукта", "pricing/docs структуру", "app/account зоны", "deploy-контур"],
+      evidence: ["локальные скриншоты", "карта routes", "структура docs", "пример страницы pricing"],
+      next: ["переименовать публично", "убрать брендовые артефакты", "собрать нейтральную story page"]
+    },
+    {
+      slug: "ecommerce-platform",
+      title: "E-commerce platform",
+      summary:
+        "E-commerce платформа: storefront, admin/backoffice, commerce model, donor ingestion, media/SEO scripts.",
+      source: "C:\\GPT\\MM\\mmapp",
+      status: "first-wave",
+      tags: ["e-commerce", "admin", "catalog"],
+      shift:
+        "Не концентрируемся на нише магазина. Показываем класс системы: каталог, витрина, админка, импорт данных, медиа и SEO-процессы.",
+      show: ["storefront", "admin/backoffice", "модель каталога", "импорт/обогащение данных", "SEO/media scripts"],
+      evidence: ["карта сущностей", "скриншоты админки", "пример импорта", "каталог без брендовых данных"],
+      next: ["выбрать каноническую страницу между public platform и commerce", "обезличить товарные и аккаунтные данные"]
+    },
+    {
+      slug: "developer-platform",
+      title: "Платформа для разработчиков: site stack",
+      summary:
+        "Новый Astro site, legacy blog infrastructure и production runtime как пример сложной миграции/пересборки платформы.",
+      source: "D:\\MS\\apps\\molds2, D:\\MS\\apps\\molds_old, D:\\MS\\production-runtime",
+      status: "draft",
+      tags: ["Astro", "migration", "runtime"],
+      shift:
+        "Уходим от названия старого проекта и показываем инженерный тип работы: пересборка developer-платформы, миграция, runtime и контентная инфраструктура.",
+      show: ["новую архитектуру", "legacy-to-new переход", "runtime-слой", "контентную модель"],
+      evidence: ["diff старой/новой структуры", "карта routes", "снимки ключевых страниц", "build/deploy notes"],
+      next: ["держать публичное название нейтральным", "убрать старые брендовые маркеры", "отделить от Figma redesign case"]
+    }
+  ]
+};
+
+const figmaDesign: CaseDirection = {
+  slug: "figma-design",
+  title: "Figma, дизайн-паритет и внедрение интерфейсов",
+  eyebrow: "Design implementation",
+  icon: "space",
+  role:
+    "Показать способность доводить дизайн до рабочей реализации: не просто сверстать экран, а пройти от Figma/source bundle до компонентной карты, pixel/DOM аудита и backlog.",
+  summary:
+    "Здесь лежат Figma-пайплайны, дизайн-аудиты, parity reports, component maps и механика проверки реализации против макета.",
+  examples: [
+    {
+      slug: "fido",
+      title: "FIDO: дизайн в рабочий интерфейс",
+      summary:
+        "Система контроля внедрения дизайна: источник Figma, модель интерфейса, карта компонентов, sandbox, браузерная проверка и backlog расхождений.",
+      source: "D:\\MS\\fido",
+      presentation: projectPresentations.fido,
+      status: "first-wave",
+      tags: ["Figma", "audit", "implementation"],
+      shift:
+        "Это не 'мы сделали дизайн'. Это система контроля реализации дизайна: источник, карта компонентов, проверка браузером, расхождения и backlog.",
+      show: ["цепочку Figma-to-code", "component map", "pixel/DOM reports", "interaction audit"],
+      evidence: ["reports", "screenshots", "diff images", "implementation plans"],
+      next: ["выбрать один понятный flow", "собрать 3 экрана до/после", "пояснить роль FIDO без лишней внутренней кухни"]
+    },
+    {
+      slug: "developer-platform-redesign",
+      title: "Платформа для разработчиков: Figma redesign parity",
+      summary:
+        "Local .fig, canvas.fig, extracted assets, parity PNG/JSON/MD, redesign scripts, component registries и pixel/diff evidence.",
+      source: "D:\\MS\\source.fig, D:\\MS\\figma-local, D:\\MS\\redesign-runtime",
+      status: "first-wave",
+      tags: ["Figma", "redesign", "parity"],
+      shift:
+        "Показываем не клиентский бренд, а процесс: как дизайн был разобран, перенесен в runtime, проверен и доведен до паритета.",
+      show: ["source bundle", "extracted assets", "component registries", "pixel diff"],
+      evidence: ["PNG/JSON/MD parity outputs", "canvas.fig", "скриншоты reference/candidate/diff"],
+      next: ["нейтрализовать названия", "оставить только технически безопасные фрагменты", "собрать короткую историю миграции"]
+    },
+    {
+      slug: "developer-platform-figma-audit",
+      title: "Платформа для разработчиков: Figma migration audit",
+      summary:
+        "Figma audit docs, design tokens, component mapping, gap report, route parity и frame/page bridge.",
+      source: "C:\\GPT\\MS\\MOLDS2\\docs\\figma, C:\\GPT\\MS\\MOLDS2",
+      status: "draft",
+      tags: ["tokens", "components", "gap report"],
+      shift:
+        "Фокус не на красивых экранах, а на управляемой миграции: tokens, components, gaps, routes и доказательство соответствия.",
+      show: ["gap report", "design tokens", "route parity", "component mapping"],
+      evidence: ["Figma audit docs", "JSON map", "Astro frame/page files", "route comparison"],
+      next: ["свести с предыдущей страницей или развести как audit-only", "убрать технический шум"]
+    },
+    {
+      slug: "alfa-fido-diff",
+      title: "Alfa FIDO diff wrapper",
+      summary:
+        "Локальный runner/config для FIDO diff внутри AlfaRank. Страница имеет смысл после добавления source bundle.",
+      source: "D:\\ALFA\\tools\\fido-diff",
+      status: "needs-sanitizing",
+      tags: ["local tool", "diff", "QA"],
+      shift:
+        "Это пока не самостоятельный кейс, а внутренний инструмент, который может стать доказательной частью Figma-направления.",
+      show: ["конфигурацию проверки", "пример запуска", "формат отчета"],
+      evidence: ["config", "templates", "локальный run output"],
+      next: ["добавить реальный source bundle", "не публиковать как отдельный case до появления результата"]
+    }
+  ]
+};
+
+const qaSystems: CaseDirection = {
+  slug: "qa-reliability",
+  title: "Audit, QA и надежность",
+  eyebrow: "QA systems",
+  icon: "shield",
+  role:
+    "Показать, что мы умеем не только создавать страницы, но и строить систему проверки: маршруты, скриншоты, видео, traces, regression history и отчеты.",
+  summary:
+    "Направление про site audit, Playwright harness, visual regression, route discovery, smoke checks и доказательства качества.",
+  examples: [
+    {
+      slug: "site-audit-platform",
+      title: "Site Audit Platform",
+      summary:
+        "Audit-first monorepo: public audit pages, admin, Cloudflare Worker pipeline, audit core/db packages и 4318 JSON bundles.",
+      source: "C:\\GPT\\WS\\site-audit-platform",
+      status: "first-wave",
+      tags: ["audit", "Cloudflare", "JSON bundles"],
+      shift:
+        "Из разовой проверки сайта в audit platform: данные собираются, нормализуются, хранятся и превращаются в страницы/админку.",
+      show: ["audit pipeline", "admin/public pages", "структуру packages", "масштаб JSON bundles"],
+      evidence: ["sample reports", "bundle count", "worker pipeline", "screenshots"],
+      next: ["санитизировать примеры", "не раскрывать приватные домены", "показать 1-2 audit flows"]
+    },
+    {
+      slug: "playwright-qa-harness",
+      title: "Playwright QA Harness",
+      summary:
+        "Reusable QA harness: route discovery, smoke, desktop/mobile/visual/regression, run history, screenshots, videos, traces, summaries.",
+      source: "C:\\GPT\\TEST, D:\\WOW\\TEST",
+      status: "first-wave",
+      tags: ["Playwright", "regression", "screenshots"],
+      shift:
+        "Это не набор костылей, если показывать правильный слой: reusable harness для проверки локальных/production routes с историей запусков.",
+      show: ["route discovery", "desktop/mobile checks", "screenshots/videos/traces", "summary reports"],
+      evidence: ["run history", "HTML reports", "trace files", "screenshots"],
+      next: ["отобрать только универсальную часть", "не показывать временные костыли", "сделать чистую демонстрацию"]
+    },
+    {
+      slug: "travel-broker-qa",
+      title: "Travel broker QA",
+      summary:
+        "Broker e2e, strict durable smoke, admin scenarios, checkout/status checks.",
+      source: "D:\\WOW\\WOW1\\e2e, D:\\WOW\\WOW1\\scripts\\qa",
+      status: "draft",
+      tags: ["travel", "e2e", "admin"],
+      shift:
+        "Показывать как QA-слой вокруг реального продукта: лид, оффер, статус, админка, checkout, а не как набор тестовых файлов.",
+      show: ["главные user flows", "admin scenarios", "smoke checks", "status checks"],
+      evidence: ["e2e specs", "screenshots", "trace/video artifacts", "run summaries"],
+      next: ["связать с Travel Air Broker CRM", "убрать внутренние названия и креды"]
+    },
+    {
+      slug: "fido-pixel-dom-audits",
+      title: "FIDO pixel/DOM audits",
+      summary:
+        "Block-pixel crops, candidate/reference/diff screenshots, DOM/interactions audits и target compare reports.",
+      source: "D:\\MS\\fido\\reports, D:\\MS\\redesign-runtime\\docs\\figma-parity",
+      status: "draft",
+      tags: ["pixel diff", "DOM", "interaction"],
+      shift:
+        "Это доказательная база для design implementation: не самостоятельная витрина, а слой, который показывает, насколько точно реализован интерфейс.",
+      show: ["reference/candidate/diff", "DOM audit", "interaction audit", "target compare"],
+      evidence: ["diff images", "audit markdown", "reports folder"],
+      next: ["связать с FIDO page", "собрать визуально понятный before/after"]
+    }
+  ]
+};
+
+const dataToPage: CaseDirection = {
+  slug: "data-to-page",
+  title: "Data-to-page, SEO data и intelligence systems",
+  eyebrow: "Data systems",
+  icon: "data",
+  role:
+    "Показать способность брать сырые данные, API, CSV, snapshots или мониторинг и превращать их в страницы, карты, очереди решений, отчеты и поисковую инфраструктуру.",
+  summary:
+    "Направление про API ingestion, programmatic pages, URL/canonical logic, domain intelligence, knowledge graph и внутренние индексы.",
+  examples: [
+    {
+      slug: "travel-air-api-route-data",
+      title: "Travel: маршрутная платформа",
+      summary:
+        "Платформа route-pages из данных: API-снимки, master database, metasearch snapshots, runtime assets, валидация и локализованные страницы маршрутов.",
+      source: "D:\\WOW\\WOW1",
+      presentation: projectPresentations.travelRoutePlatform,
+      status: "first-wave",
+      tags: ["Travel API", "routes", "programmatic pages"],
+      shift:
+        "Это отдельный блок от travel CRM: здесь показываем умение добывать данные через Air API и строить из них базу, runtime и страницы.",
+      show: ["API snapshots", "master database", "route generation", "programmatic pages"],
+      evidence: ["sample route data", "generated pages", "data schema", "runtime files"],
+      next: ["отделить от post-lead workflow", "обезличить API/account details", "показать цепочку data -> page"]
+    },
+    {
+      slug: "aurl-redirect-system",
+      title: "AURL canonical redirect system",
+      summary:
+        "Большой URL массив -> similarity/canonical logic -> redirect maps -> token audit. Публиковать только sanitized sample.",
+      source: "C:\\Zenno\\AURL",
+      status: "needs-sanitizing",
+      tags: ["canonical", "redirect", "SEO"],
+      shift:
+        "Не просто SEO-таблица, а система нормализации URL: похожесть, каноникал, редиректы, проверка токенов и управляемый output.",
+      show: ["logic map", "sample redirect map", "similarity rules", "audit output"],
+      evidence: ["sanitized CSV sample", "rule examples", "summary stats"],
+      next: ["не показывать полный CSV", "сделать синтетический пример", "убрать чувствительные домены"]
+    },
+    {
+      slug: "expired-domains-monitor",
+      title: "ExpiredDomains intelligence monitor",
+      summary:
+        "Expired domain monitoring: filters, Wayback/Ahrefs/link evidence и candidate reports.",
+      source: "C:\\GPT\\ExperedDomain",
+      status: "needs-sanitizing",
+      tags: ["domains", "monitoring", "reports"],
+      shift:
+        "Показывать как intelligence workflow: найти кандидатов, собрать evidence, отфильтровать, подготовить отчет для решения.",
+      show: ["filters", "candidate report", "Wayback/link evidence", "decision queue"],
+      evidence: ["sanitized candidate cards", "report examples", "filter config"],
+      next: ["убрать профили браузера и аккаунтные данные", "не показывать sensitive sources"]
+    },
+    {
+      slug: "knowledge-engine",
+      title: "Knowledge Engine",
+      summary:
+        "Ingest -> claim extraction -> story graph -> reputation/review queue -> static publishing.",
+      source: "D:\\knowledge_engine",
+      status: "draft",
+      tags: ["knowledge graph", "claims", "publishing"],
+      shift:
+        "Из набора текстов в knowledge system: факты, claims, связи, очередь проверки и публикация.",
+      show: ["ingest", "claim extraction", "story graph", "review queue"],
+      evidence: ["schemas", "example graph", "static output", "review states"],
+      next: ["выбрать безопасный пример данных", "связать с content/intelligence направлениями"]
+    },
+    {
+      slug: "chat-export-inventory",
+      title: "ChatExport knowledge inventory",
+      summary:
+        "Enriched internal project/chat index with categories, summaries and project tags. Raw conversations не публиковать.",
+      source: "C:\\Zenno\\ChatExport",
+      status: "archive",
+      tags: ["inventory", "summaries", "internal index"],
+      shift:
+        "Это не публичный кейс, а инструмент инвентаризации: найти, классифицировать и использовать знания без публикации raw conversations.",
+      show: ["агрегированный индекс", "категории", "project tags", "summary cards"],
+      evidence: ["sanitized dashboard", "counts", "taxonomy"],
+      next: ["не публиковать сырой экспорт", "использовать как источник для отбора кейсов"]
+    }
+  ]
+};
+
+const workflowSystems: CaseDirection = {
+  slug: "workflow-systems",
+  title: "Post-lead, CRM и workflow systems",
+  eyebrow: "Workflow systems",
+  icon: "flow",
+  role:
+    "Показать системы после заявки: обработка лида, AI pre-broker, ручная проверка, офферы, статусы, CRM bridge, dashboard и память решений.",
+  summary:
+    "Здесь живут CRM/ops-системы, orchestration layers, broker workflows, внутренние панели и маршруты принятия решений.",
+  examples: [
+    {
+      slug: "travel-air-broker-crm",
+      title: "Travel: обработка лидов",
+      summary:
+        "Операционный слой после заявки: контекст маршрута, broker session, support bridge, админский дашборд, checkout/status path и связь с внешней CRM.",
+      source: "D:\\WOW\\WOW1, C:\\GPT\\AiBroker\\ai_broker_platform_pack",
+      presentation: projectPresentations.travelBrokerCrm,
+      status: "first-wave",
+      tags: ["travel", "CRM", "post-lead"],
+      shift:
+        "Это другой блок, не data-to-page: здесь показываем post-lead обработку, внутреннюю CRM, внешний CRM-контекст и decision dashboard.",
+      show: ["lead flow", "AI pre-broker", "qualification", "offers/status", "dashboard"],
+      evidence: ["workflow screens", "event model", "CRM bridge spec", "dashboard examples"],
+      next: ["развести с Air API route data", "очистить персональные/лидовые данные", "подготовить neutral flow"]
+    },
+    {
+      slug: "post-lead-platform",
+      title: "Post-lead platform architecture",
+      summary:
+        "Entity model, access levels, intent gateway, CRM bridge and implementation principles. Strategy/spec page, not shipped product.",
+      source: "D:\\gpt\\post_lead_platform_pack, C:\\GPT\\AiBroker",
+      status: "draft",
+      tags: ["architecture", "CRM bridge", "access"],
+      shift:
+        "Показываем как архитектурный blueprint для post-lead систем, а не как готовый внедренный продукт.",
+      show: ["entity model", "access levels", "intent gateway", "CRM bridge"],
+      evidence: ["spec pack", "architecture diagrams", "implementation principles"],
+      next: ["не смешивать с готовым Travel CRM", "пометить как concept/spec"]
+    },
+    {
+      slug: "meta-orchestrator",
+      title: "Meta Orchestrator",
+      summary:
+        "FastAPI/SQLite MVP and spec for AI executors, artifacts, runs, decisions, context and lifecycle.",
+      source: "C:\\GPT\\meta_orchestrator, C:\\Zenno\\OR\\MOP\\meta_orchestrator_spec",
+      status: "draft",
+      tags: ["orchestration", "AI executors", "artifacts"],
+      shift:
+        "Это слой управления агентными задачами: runs, artifacts, context, decisions и lifecycle вместо хаотичных запусков.",
+      show: ["data model", "runs lifecycle", "artifact tracking", "decision states"],
+      evidence: ["FastAPI MVP", "SQLite schema", "spec docs"],
+      next: ["выбрать демо-сценарий", "убрать внутренние операционные детали"]
+    },
+    {
+      slug: "sova-workflow-dashboard",
+      title: "SOVA Workflow Dashboard",
+      summary:
+        "Standalone dashboard for production workflow. Показывать как internal ops dashboard.",
+      source: "C:\\Zenno\\SOVA\\sova-workflow-dashboard",
+      status: "draft",
+      tags: ["dashboard", "ops", "workflow"],
+      shift:
+        "Не брендовая страница, а пример внутренней панели управления производственным workflow.",
+      show: ["workflow states", "dashboard views", "task queues", "status tracking"],
+      evidence: ["screenshots", "state model", "sample tasks"],
+      next: ["нейтрализовать название", "связать с media/video pipeline или оставить как ops"]
+    }
+  ]
+};
+
+const contentSystems: CaseDirection = {
+  slug: "content-systems",
+  title: "Content production и editorial systems",
+  eyebrow: "Content systems",
+  icon: "content",
+  role:
+    "Показать производственные контентные системы: генерация, rewrite, валидация, публикация, контроль батчей, редакционные очереди и доказательство запуска.",
+  summary:
+    "Сюда входят Rewritegen, Bela, NOVA, live batches, news/content outputs и генераторы структурированных документов.",
+  examples: [
+    {
+      slug: "bela-content-engine",
+      title: "Контентный промышленный движок",
+      summary:
+        "Крупный контентный pipeline для developer platform: payloads, charts, matrices, импорт в DB, runtime renderer, восстановление и протокол проверки.",
+      source: "D:\\MS\\Bela, D:\\MS\\BelaParallel",
+      presentation: projectPresentations.belaContentEngine,
+      status: "first-wave",
+      tags: ["content engine", "workers", "validation"],
+      shift:
+        "Из 'написали контент' в промышленный контентный движок: воркеры, проверки, публикация, восстановление и доказательство результата.",
+      show: ["pipeline", "worker orchestration", "validation", "deploy protocol"],
+      evidence: ["publication evidence", "logs without secrets", "batch reports", "restore notes"],
+      next: ["выбрать один batch story", "убрать внутренние URL", "показать метрики результата"]
+    },
+    {
+      slug: "rewritegen-full",
+      title: "Rewritegen Full",
+      summary:
+        "Content rewrite/decision engine: blocks, layouts, decision units, audit PNG/HTML/JSON outputs and editorial QA.",
+      source: "C:\\Zenno\\Rewritegen\\RW\\rewritegen_full",
+      status: "first-wave",
+      tags: ["rewrite", "layout", "QA"],
+      shift:
+        "Показываем не генератор текста, а редакционный production engine с decision units, layout output и аудитом.",
+      show: ["blocks", "layouts", "decision units", "audit outputs"],
+      evidence: ["PNG/HTML/JSON samples", "QA reports", "before/after fragments"],
+      next: ["связать с Bela или оставить отдельным ядром", "убрать лишние внутренние промпты"]
+    },
+    {
+      slug: "developer-platform-rewritegen-live-batch",
+      title: "Платформа для разработчиков: live rewritegen batch",
+      summary:
+        "Live deployment proof: 105/105 rewritegen URLs return HTTP 200 and keep markers.",
+      source: "C:\\GPT\\MS\\06-live-batch-105.md, D:\\MS\\reports",
+      status: "draft",
+      tags: ["live batch", "HTTP 200", "markers"],
+      shift:
+        "Это не отдельный продукт, а сильное доказательство reliability: большой live batch прошел и сохранил markers.",
+      show: ["105/105 result", "HTTP status proof", "marker checks", "deployment notes"],
+      evidence: ["live batch report", "URL check summary", "marker output"],
+      next: ["убрать старое название проекта", "прикрепить как proof к content или developer platform case"]
+    },
+    {
+      slug: "nova-news-automation",
+      title: "NOVA news automation",
+      summary:
+        "News Orchestration & Vision Automation: ingestion, article generation, page-builder blocks, media instructions and controlled autopublishing.",
+      source: "C:\\Zenno\\GPT\\NOVA",
+      status: "draft",
+      tags: ["news", "orchestration", "autopublishing"],
+      shift:
+        "Показываем контролируемую news automation: сбор, генерация, media instructions, page-builder и публикация под контролем.",
+      show: ["ingestion", "generation flow", "page-builder blocks", "publishing controls"],
+      evidence: ["sample drafts", "workflow map", "block templates"],
+      next: ["санитизировать источники", "не показывать спорные raw outputs"]
+    },
+    {
+      slug: "news-output-archive",
+      title: "News output archive",
+      summary:
+        "Legacy news/content outputs. Use as support for NOVA, not standalone first-version page.",
+      source: "C:\\Zenno\\ZennoMaster\\GoogleNews",
+      status: "archive",
+      tags: ["legacy", "news", "archive"],
+      shift:
+        "Архив нужен как evidence/support, но не как самостоятельная сильная страница первой версии.",
+      show: ["объем output", "типы материалов", "связь с NOVA"],
+      evidence: ["sanitized samples", "counts", "archive structure"],
+      next: ["использовать только как поддержку NOVA", "не выводить в первую волну"]
+    },
+    {
+      slug: "book-chapter-generator",
+      title: "Book Chapter Generator / KOCA",
+      summary:
+        "Plan -> chapter -> enhancement -> .md/.docx outputs. Lab/content production page.",
+      source: "C:\\GPT\\KOCA\\book_chapter_generator_bundle",
+      status: "draft",
+      tags: ["documents", "chapters", "generator"],
+      shift:
+        "Показывать как документный production workflow: план, глава, улучшение, экспорт.",
+      show: ["chapter pipeline", "docx output", "enhancement steps"],
+      evidence: ["sample documents", "generator scripts", "workflow notes"],
+      next: ["оценить публичность", "подготовить нейтральный пример"]
+    },
+    {
+      slug: "equi-manifest-generator",
+      title: "EQUI manifest generator",
+      summary:
+        "Structured manifesto generation: prompts, generator, MD/JSON/DOCX outputs.",
+      source: "C:\\Zenno\\EQUI",
+      status: "archive",
+      tags: ["manifest", "documents", "structured output"],
+      shift:
+        "Это может быть lab/support page, если нужен слой thought-leadership systems.",
+      show: ["prompt structure", "MD/JSON/DOCX outputs", "generation rules"],
+      evidence: ["sample outputs", "schemas", "prompts without sensitive context"],
+      next: ["решить, нужен ли этот слой сайту", "не ставить в первую волну"]
+    }
+  ]
+};
+
+const mediaEngines: CaseDirection = {
+  slug: "media-engines",
+  title: "Media, image и video engines",
+  eyebrow: "Media engines",
+  icon: "media",
+  role:
+    "Показать, что медиа можно производить как систему: шаблоны, сцены, батчи, ассеты, validation, export formats и публикация.",
+  summary:
+    "Направление про инфографику, overlay renderers, batch image generation, video pipeline, thumbnails, audio, JSON schemas и media QA.",
+  examples: [
+    {
+      slug: "infographic-engine",
+      title: "Движок инфографики",
+      summary:
+        "Система производства визуалов из структурированных briefs: scene planning, variant scoring, DOM validation и экспорт PNG/WebP/PDF/HTML.",
+      source: "D:\\INFOGRAF\\IG\\infographic-engine",
+      presentation: projectPresentations.infographicEngine,
+      status: "first-wave",
+      tags: ["infographic", "render", "exports"],
+      shift:
+        "Показываем не картинки, а систему производства визуалов: сцены, шаблоны, форматы экспорта и quality gates.",
+      show: ["templates/scenes", "render pipeline", "PNG/WebP/PDF/HTML exports", "quality gates"],
+      evidence: ["rendered examples", "template structure", "export outputs"],
+      next: ["выбрать лучшие визуальные примеры", "собрать before data -> after render"]
+    },
+    {
+      slug: "infograf-overlay-kit",
+      title: "Infograf Overlay Kit",
+      summary:
+        "Playwright + Sharp glassmorphism overlay renderer for transparent PNG/WEBP.",
+      source: "C:\\Zenno\\INFOGRAF\\infograf_overlay_kit",
+      status: "draft",
+      tags: ["Playwright", "Sharp", "overlay"],
+      shift:
+        "Узкий, но понятный engine: программный рендер визуальных overlay assets в прозрачные форматы.",
+      show: ["input/output", "render script", "transparent assets", "format variants"],
+      evidence: ["PNG/WEBP samples", "render commands", "before/after"],
+      next: ["решить, отдельная страница или часть Infographic Engine"]
+    },
+    {
+      slug: "irak-image-generator",
+      title: "IRAK image generator",
+      summary:
+        "CSV -> batch generation -> retries/errors -> webp outputs.",
+      source: "D:\\IRAK",
+      status: "first-wave",
+      tags: ["image generation", "CSV", "batch"],
+      shift:
+        "Показываем batch media production: входные данные, генерация, повторные попытки, ошибки и готовые ассеты.",
+      show: ["CSV input", "batch flow", "retry/error handling", "WEBP outputs"],
+      evidence: ["sample images", "output folders", "errors/retry logs without secrets"],
+      next: ["подобрать безопасные 12-20 картинок", "показать объем и контроль качества"]
+    },
+    {
+      slug: "image-generator-module",
+      title: "Image Generator Module",
+      summary:
+        "input.csv, output.csv, errors.csv, styles library and 2545 .webp outputs.",
+      source: "C:\\Zenno\\ZennoMaster\\Image Generator Module\\IMGGENLLM7\\IMGGENLLM7",
+      status: "draft",
+      tags: ["2545 outputs", "styles", "batch"],
+      shift:
+        "Сильная метрика объема: не одна генерация, а модуль с input/output/errors и библиотекой стилей.",
+      show: ["styles library", "CSV cycle", "output count", "error handling"],
+      evidence: ["2545 .webp count", "sanitized CSV sample", "style examples"],
+      next: ["проверить права и безопасность картинок", "возможно объединить с IRAK"]
+    },
+    {
+      slug: "sova-video-pipeline",
+      title: "SOVA video pipeline",
+      summary:
+        "Storyboard/voice/video/upload pipeline, schemas, MP4/PNG/JPG/MP3/JSON outputs.",
+      source: "D:\\SOVA, D:\\SOVAH, C:\\Zenno\\SOVA\\SOVA5",
+      status: "first-wave",
+      tags: ["video", "storyboard", "pipeline"],
+      shift:
+        "Показываем production pipeline видео: сценарий, голос, визуалы, сборка, загрузка, схемы и outputs.",
+      show: ["storyboard", "voice", "video assembly", "upload flow", "schemas"],
+      evidence: ["MP4 samples", "thumbnails", "JSON schema", "pipeline notes"],
+      next: ["обезличить название при необходимости", "выбрать короткий demo reel"]
+    },
+    {
+      slug: "vidorix-media-outputs",
+      title: "Short-form media outputs",
+      summary:
+        "18 short MP4 + thumbnails around editorial pipeline, visual language and content infrastructure.",
+      source: "C:\\Zenno\\SOVA\\vidorix-platform\\final_mp4",
+      status: "draft",
+      tags: ["MP4", "thumbnails", "short-form"],
+      shift:
+        "Показывать как evidence для media/video или product platform, не обязательно как отдельный case.",
+      show: ["18 MP4", "thumbnails", "visual system", "content infrastructure"],
+      evidence: ["video files", "thumbnail grid", "asset list"],
+      next: ["нейтрализовать бренд", "использовать как proof внутри другой страницы"]
+    }
+  ]
+};
+
+const growthOps: CaseDirection = {
+  slug: "growth-operations",
+  title: "Growth, ads и analytics operations",
+  eyebrow: "Growth operations",
+  icon: "target",
+  role:
+    "Показать операционный слой роста: audits, campaign checks, conversion goals, GSC/GA4/GTM, scripts, exports и принятие решений по данным.",
+  summary:
+    "Это не общий маркетинг, а инженерный growth operations: проверки, фиды, отчеты, скрипты и clean handoff.",
+  examples: [
+    {
+      slug: "travel-ads",
+      title: "Travel Ads operations",
+      summary:
+        "Audit -> campaign checks -> conversion goals -> geo/keyword/search term fixes -> screenshots -> reports.",
+      source: "D:\\WOW\\ADS",
+      status: "first-wave",
+      tags: ["ads", "audit", "travel"],
+      shift:
+        "Отделяем от travel data/platform: здесь показываем рекламный операционный контур и управляемые проверки кампаний.",
+      show: ["campaign audit", "conversion goals", "geo/keyword fixes", "reports"],
+      evidence: ["screenshots", "audit notes", "before/after fixes", "reports"],
+      next: ["обезличить аккаунты и бюджеты", "связать с travel platform как growth layer"]
+    },
+    {
+      slug: "ecommerce-google-ads",
+      title: "E-commerce Google Ads operations",
+      summary:
+        "Google Ads scripts, GA4 checks, campaign cleanup and performance evidence. Account/cost data must be anonymized.",
+      source: "C:\\GPT\\MM\\google-ads",
+      status: "draft",
+      tags: ["e-commerce", "Google Ads", "GA4"],
+      shift:
+        "Фокус не на бренде магазина, а на e-commerce growth ops: скрипты, проверки, чистка кампаний и аналитика.",
+      show: ["Google Ads scripts", "GA4 checks", "campaign cleanup", "performance evidence"],
+      evidence: ["sanitized screenshots", "script outputs", "GA4 checks"],
+      next: ["обезличить account/cost data", "привязать к e-commerce direction"]
+    },
+    {
+      slug: "platform-connect-audits",
+      title: "Platform Connect audits",
+      summary:
+        "GSC/GA4/GTM/Bing/IndexNow audits for multiple sites, screenshots and reports.",
+      source: "C:\\GPT\\GSC-Audits",
+      status: "draft",
+      tags: ["GSC", "GA4", "GTM"],
+      shift:
+        "Показывать как технический launch/analytics readiness audit: подключено, проверено, работает, что исправить.",
+      show: ["GSC checks", "GA4/GTM checks", "Bing/IndexNow", "reports"],
+      evidence: ["screenshots", "audit reports", "checklists"],
+      next: ["выбрать обезличенный пример", "не раскрывать аккаунты"]
+    },
+    {
+      slug: "ecommerce-gsc-diagnosis",
+      title: "E-commerce GSC diagnosis",
+      summary:
+        "GSC countries/days/devices/pages/queries screenshots and RPC data.",
+      source: "C:\\GPT\\MM\\gsc-diagnosis-2026-06-01",
+      status: "needs-sanitizing",
+      tags: ["GSC", "diagnosis", "search"],
+      shift:
+        "Показываем search diagnosis для e-commerce: страны, устройства, страницы, запросы и выводы для действий.",
+      show: ["countries/devices/pages", "queries", "diagnosis", "actions"],
+      evidence: ["sanitized screenshots", "RPC data summaries"],
+      next: ["замазать аккаунтные и доменные детали", "оставить только структуру вывода"]
+    },
+    {
+      slug: "google-ads-generator",
+      title: "Google Ads generator",
+      summary:
+        "CSV/data -> campaigns/adgroups/keywords/ads exports for Google Ads Editor.",
+      source: "C:\\Zenno\\ADS",
+      status: "draft",
+      tags: ["CSV", "Google Ads Editor", "exports"],
+      shift:
+        "Из ручного набора кампаний в generator: данные -> adgroups -> keywords -> ads -> import-ready exports.",
+      show: ["CSV input", "campaign generation", "Google Ads Editor exports"],
+      evidence: ["sample CSV", "export files", "generation rules"],
+      next: ["сделать synthetic dataset", "не показывать реальные аккаунты"]
+    },
+    {
+      slug: "gama-customer-match",
+      title: "Customer Match data artifact",
+      summary:
+        "Customer match CSV and ads/data artifact. Needs context before publication.",
+      source: "D:\\GAMA",
+      status: "needs-sanitizing",
+      tags: ["customer match", "ads", "data"],
+      shift:
+        "Скорее internal evidence, чем публичная страница: чувствительный слой, который можно описывать только концептуально.",
+      show: ["data preparation flow", "privacy-safe summary", "import checklist"],
+      evidence: ["sanitized structure only", "no personal data"],
+      next: ["не публиковать реальные CSV", "решить, нужен ли этот пример вообще"]
+    }
+  ]
+};
+
+const commerceSystems: CaseDirection = {
+  slug: "commerce-systems",
+  title: "E-commerce systems",
+  eyebrow: "Commerce systems",
+  icon: "commerce",
+  role:
+    "Показать e-commerce как систему: каталог, данные продукта, storefront, backoffice, feeds, SEO/media scripts, импорт и управляемая операционка.",
+  summary:
+    "Фокус направления только на e-commerce классе, без привязки к конкретной товарной нише.",
+  examples: [
+    {
+      slug: "ecommerce-system",
+      title: "E-commerce system",
+      summary:
+        "Storefront, admin, product/media/SEO scripts and donor ingestion. Может дублировать public platform page; выбрать один канонический вариант.",
+      source: "C:\\GPT\\MM\\mmapp",
+      status: "first-wave",
+      tags: ["storefront", "admin", "catalog"],
+      shift:
+        "Показываем управляемую e-commerce систему, а не магазин определенной тематики.",
+      show: ["storefront", "admin", "catalog model", "media/SEO scripts", "donor ingestion"],
+      evidence: ["entity map", "admin screenshots", "import samples", "SEO scripts"],
+      next: ["решить каноническую страницу: public platform или commerce", "убрать нишу/бренд"]
+    },
+    {
+      slug: "ecommerce-architecture",
+      title: "E-commerce architecture",
+      summary:
+        "Storefront/backoffice architecture, category/product backlog, QA prompts, catalog/PDP tasks.",
+      source: "C:\\GPT\\MM\\commerce, C:\\GPT\\MM\\module_commerce_codex_task",
+      status: "draft",
+      tags: ["architecture", "PDP", "catalog"],
+      shift:
+        "Это архитектурный слой e-commerce: как устроить каталог, PDP, backoffice, backlog и QA.",
+      show: ["architecture map", "PDP tasks", "backoffice model", "QA prompts"],
+      evidence: ["task packs", "specs", "screenshots if available"],
+      next: ["не смешивать с готовой платформой", "использовать как blueprint page"]
+    },
+    {
+      slug: "commerce-production-workflow",
+      title: "Commerce production workflow",
+      summary:
+        "Product/configuration task packs. Только после отдельного разбора, пока нет понятного flow.",
+      source: "D:\\BM, D:\\gpt\\commerce_*",
+      status: "archive",
+      tags: ["configuration", "task packs", "production"],
+      shift:
+        "Пока это не сильная публичная страница. Может стать примером production workflow, если собрать понятный flow.",
+      show: ["configuration tasks", "production steps", "output artifacts"],
+      evidence: ["task packs", "structured examples"],
+      next: ["разобрать отдельно", "не ставить в первую волну"]
+    }
+  ]
+};
+
+const wpPlugins: CaseDirection = {
+  slug: "wp-plugins",
+  title: "WordPress и editorial plugins",
+  eyebrow: "WP plugins",
+  icon: "puzzle",
+  role:
+    "Показать, что WordPress для нас не только темы и страницы, а кастомные инструменты, редакционные проверки, анализаторы и операционные плагины.",
+  summary:
+    "Направление про custom plugins, editorial QA, redirect analyzers, frontend badges, admin workflows и resource library.",
+  examples: [
+    {
+      slug: "checontai-content-checker",
+      title: "ChecontAI Content Checker",
+      summary:
+        "WordPress editorial QA plugin: human-likelihood / AI-assist risk scoring, review workflow and frontend badge.",
+      source: "C:\\Zenno\\PL\\ai-detector-rank\\checontai-content-checker",
+      status: "draft",
+      tags: ["WordPress", "editorial QA", "badge"],
+      shift:
+        "Показываем custom editorial plugin: проверка, score, review workflow и публичный/админский output.",
+      show: ["admin flow", "score model", "review state", "badge"],
+      evidence: ["plugin files", "screenshots", "sample scoring"],
+      next: ["проверить claims", "не обещать невозможное detection качество"]
+    },
+    {
+      slug: "human-verified-llm-detector",
+      title: "Human Verified / LLM Detector",
+      summary:
+        "Previous plugin iterations: score on save, reasons, badges and analyzer code.",
+      source: "C:\\Zenno\\PL\\human-verified, C:\\Zenno\\PL\\LLM detector",
+      status: "archive",
+      tags: ["WordPress", "LLM", "content score"],
+      shift:
+        "Использовать как history/evidence для ChecontAI, не как отдельную первую страницу.",
+      show: ["score on save", "reasons", "badges", "analyzer code"],
+      evidence: ["plugin iterations", "screenshots if available"],
+      next: ["объединить с ChecontAI", "не плодить похожие страницы"]
+    },
+    {
+      slug: "redirect-analyzer",
+      title: "Redirect Analyzer plugins",
+      summary:
+        "WordPress redirect/AI analyzer plugins. Needs separate current-version review.",
+      source: "C:\\Zenno\\PL\\wp-redirect-analyzer, C:\\Zenno\\PL\\wp-redirect-ai-analyzer",
+      status: "draft",
+      tags: ["redirect", "WordPress", "SEO"],
+      shift:
+        "Показать SEO/technical plugin as tool: анализ редиректов, проблемы, рекомендации, экспорт.",
+      show: ["redirect checks", "issue list", "recommendations", "export"],
+      evidence: ["plugin screenshots", "sample reports", "code structure"],
+      next: ["выбрать актуальную версию", "убрать дубли"]
+    },
+    {
+      slug: "socialpush-product-tools",
+      title: "SocialPush / product plugins",
+      summary:
+        "WP plugin/product evidence. Не смешивать с resource library.",
+      source: "C:\\Zenno\\PL\\ms-socialpush, C:\\Zenno\\PL\\ai-product-describer, D:\\WP\\PL",
+      status: "archive",
+      tags: ["WordPress", "product tools", "social"],
+      shift:
+        "Пока это ресурсная группа, не самостоятельная история. Может усилить направление custom WP tools.",
+      show: ["plugin capabilities", "admin flows", "product tools"],
+      evidence: ["plugin list", "screenshots", "sample output"],
+      next: ["разобрать current versions", "не выводить в первую волну"]
+    },
+    {
+      slug: "wordpress-resources",
+      title: "WordPress resource library",
+      summary:
+        "Elementor/Woodmart/template kits and zips. This is archive/resources, not a main case.",
+      source: "D:\\WP, C:\\Zenno\\PL",
+      status: "archive",
+      tags: ["archive", "resources", "templates"],
+      shift:
+        "Не превращать в кейс. Это база материалов, которая может помогать сборке, но не доказывает системную работу.",
+      show: ["resource categories", "available kits", "where used"],
+      evidence: ["inventory only"],
+      next: ["не публиковать standalone", "использовать как internal resource"]
+    }
+  ]
+};
+
+const strategyMaps: CaseDirection = {
+  slug: "strategy-maps",
+  title: "Strategy, intelligence и transformation maps",
+  eyebrow: "Strategy maps",
+  icon: "map",
+  role:
+    "Показать стратегические карты и концепции только там, где важно объяснить системное мышление, пилоты, слои данных и decision architecture.",
+  summary:
+    "Направление про transformation maps, intelligence layers, proposal packs and doctrine systems. Часть примеров не является delivery case.",
+  examples: [
+    {
+      slug: "transformation-map",
+      title: "Transformation map",
+      summary:
+        "Направления, подпроекты, transformation map and pilots. Не подавать как внедренный success case без разрешения.",
+      source: "D:\\ALFA\\project\\moldovagaz_transformation_package, D:\\ALFA\\src\\data\\moldovagaz-project.ts",
+      status: "needs-sanitizing",
+      tags: ["transformation", "pilots", "map"],
+      shift:
+        "Показывать как формат стратегической карты, не как публично подтвержденный внедренный кейс.",
+      show: ["map logic", "pilot structure", "direction model", "decision framing"],
+      evidence: ["sanitized map", "module descriptions", "pilot outline"],
+      next: ["не трогать текущий публичный блок без отдельного решения", "обезличить или оставить внутренним"]
+    },
+    {
+      slug: "grafit-intelligence-layer",
+      title: "Grafit Intelligence Layer",
+      summary:
+        "Trade radar, surplus network, opportunity engine, institutional memory and cross-vertical intelligence.",
+      source: "D:\\gpt\\grafit, D:\\ALFA\\src\\data\\private-projects.ts",
+      status: "draft",
+      tags: ["intelligence", "trade radar", "decision memory"],
+      shift:
+        "Стратегический concept case: как данные, рынок, supply и history становятся decision-intelligence layer.",
+      show: ["module map", "pilot logic", "signal flow", "decision memory"],
+      evidence: ["existing project pages", "module descriptions", "strategy docs"],
+      next: ["решить публичность", "не смешивать с operational delivery cases"]
+    },
+    {
+      slug: "salt-edge-zoho-leads",
+      title: "Zoho lead generation proposal",
+      summary:
+        "Sales/proposal pack for Zoho lead generation. Not delivery case.",
+      source: "D:\\Saltedge",
+      status: "archive",
+      tags: ["proposal", "Zoho", "lead gen"],
+      shift:
+        "Это пример sales/proposal thinking, но не доказательство внедрения. Можно оставить в archive/support.",
+      show: ["proposal structure", "lead model", "scope"],
+      evidence: ["proposal docs"],
+      next: ["не выводить как case первой волны"]
+    },
+    {
+      slug: "ai-doctrine-manifestos",
+      title: "AI doctrine / manifesto systems",
+      summary:
+        "Longform/manifest/book content systems. Only if a thought-leadership layer is needed.",
+      source: "D:\\gpt\\ai_doctrine_movement_10x10, D:\\gpt\\Liberty",
+      status: "archive",
+      tags: ["manifest", "longform", "thought leadership"],
+      shift:
+        "Это не коммерческий proof, а слой идей/методологии. Нужен только если сайту понадобится отдельный thought-leadership блок.",
+      show: ["structure", "content system", "outputs"],
+      evidence: ["docs", "generated longform"],
+      next: ["решить, нужен ли на сайте такой слой"]
+    }
+  ]
+};
+
+const labs: CaseDirection = {
+  slug: "labs-prototypes",
+  title: "Labs и прототипы",
+  eyebrow: "Labs",
+  icon: "chip",
+  role:
+    "Собрать эксперименты и прототипы отдельно, чтобы они не размывали основной раздел доказательных кейсов.",
+  summary:
+    "Здесь можно держать MIRA, MICO, real estate MVP, task packs и другие рабочие лабораторные заготовки.",
+  examples: [
+    {
+      slug: "mira-assistant",
+      title: "MIRA / Shoulder Pain Profiler",
+      summary:
+        "Structured interview assistant prototype. No medical claims.",
+      source: "D:\\SPP, D:\\SSP, D:\\gpt\\shoulder_pain_profiler_mvp_docs.zip",
+      status: "draft",
+      tags: ["assistant", "structured interview", "prototype"],
+      shift:
+        "Показывать как structured interview assistant, не как медицинский продукт и не как claim-based решение.",
+      show: ["question flow", "profile structure", "assistant logic"],
+      evidence: ["MVP docs", "flow examples", "safe demo"],
+      next: ["убрать medical claims", "проверить compliance framing"]
+    },
+    {
+      slug: "mico-agent-control-plane",
+      title: "MICO agent control plane",
+      summary:
+        "Mobile-first control plane for coding agents. Internal lab, not main proof case.",
+      source: "D:\\MICO\\mico",
+      status: "draft",
+      tags: ["agents", "control plane", "mobile"],
+      shift:
+        "Показывать как внутренний lab по управлению agent workflows, если нужен R&D слой.",
+      show: ["control plane", "agent state", "mobile UI"],
+      evidence: ["screenshots", "repo structure", "prototype notes"],
+      next: ["решить публичность", "не смешивать с shipped systems"]
+    },
+    {
+      slug: "real-estate-mvp",
+      title: "Real Estate MVP",
+      summary:
+        "International real estate MVP docs. Needs archive/content review.",
+      source: "D:\\gpt\\Real_Estate",
+      status: "archive",
+      tags: ["MVP", "real estate", "archive"],
+      shift:
+        "Пока это архивная заготовка. Может стать lab page после разбора содержимого.",
+      show: ["MVP structure", "business flow", "data model"],
+      evidence: ["docs", "specs"],
+      next: ["разобрать архив", "не выводить в первую волну"]
+    },
+    {
+      slug: "spec-packs",
+      title: "Spec/task pack archive",
+      summary:
+        "Task packs/specs: airbroker, post-lead, site audit, SOVA, commerce, real estate, etc. Not ready cases.",
+      source: "D:\\gpt, C:\\GPT, C:\\Zenno\\OR\\MOP",
+      status: "archive",
+      tags: ["specs", "task packs", "archive"],
+      shift:
+        "Это источник для будущих страниц, а не сам раздел. Его задача — помогать найти материал и не потерять контекст.",
+      show: ["inventory", "categories", "links to stronger cases"],
+      evidence: ["task packs", "spec docs"],
+      next: ["использовать как backstage inventory", "не публиковать как case"]
+    }
+  ]
+};
+
+export const caseDirections: CaseDirection[] = [
+  publicPlatforms,
+  figmaDesign,
+  qaSystems,
+  dataToPage,
+  workflowSystems,
+  contentSystems,
+  mediaEngines,
+  growthOps,
+  commerceSystems,
+  wpPlugins,
+  strategyMaps,
+  labs
+];
+
+export const getCaseDirections = (_locale: Locale = "ru") => caseDirections;
+
+export const getCaseDirection = (slug: string) => caseDirections.find((direction) => direction.slug === slug);
+
+export const getCaseExample = (directionSlug: string, exampleSlug: string) =>
+  getCaseDirection(directionSlug)?.examples.find((example) => example.slug === exampleSlug);
+
+export const getFirstWaveCases = () =>
+  caseDirections.flatMap((direction) =>
+    direction.examples
+      .filter((example) => example.status === "first-wave")
+      .map((example) => ({ direction, example }))
+  );

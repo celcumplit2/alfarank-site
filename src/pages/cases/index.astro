@@ -1,0 +1,121 @@
+---
+import SystemIcon from "@/components/SystemIcon.astro";
+import { caseUi, getCaseDirections, getFirstWaveCases } from "@/data/case-examples";
+import { localizePath } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
+import Layout from "@/layouts/Layout.astro";
+
+type Props = {
+  locale?: Locale;
+};
+
+const { locale = "ru" } = Astro.props as Props;
+const directions = getCaseDirections(locale);
+const firstWave = getFirstWaveCases();
+const totalExamples = directions.reduce((total, direction) => total + direction.examples.length, 0);
+
+const statusLabel = {
+  "first-wave": "первая сборка",
+  draft: "черновик",
+  "needs-sanitizing": "нужна очистка",
+  archive: "архив"
+};
+---
+
+<Layout
+  title={`${caseUi.title} | AlfaRank`}
+  description={caseUi.description}
+  locale={locale}
+  robots="noindex, nofollow"
+>
+  <div class="case-library-page" data-no-translate>
+    <section class="section case-library-hero">
+      <div class="case-library-hero__content">
+        <p class="eyebrow">{caseUi.eyebrow}</p>
+        <h1>{caseUi.title}</h1>
+        <p>{caseUi.description}</p>
+        <div class="case-library-hero__tags">
+          <span>{caseUi.localOnly}</span>
+          <span>{directions.length} направлений</span>
+          <span>{totalExamples} страниц</span>
+          <span>{firstWave.length} в первой сборке</span>
+        </div>
+      </div>
+      <aside class="case-library-note">
+        <SystemIcon name="local" />
+        <strong>{caseUi.localOnly}</strong>
+        <p>{caseUi.noProduction}</p>
+      </aside>
+    </section>
+
+    <section class="section case-direction-grid" aria-labelledby="case-directions-title">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Навигация</p>
+          <h2 id="case-directions-title">Направления и страницы внутри</h2>
+        </div>
+        <p>Каждое направление ведет на список страниц следующего уровня. Страницы можно переименовывать и переносить между направлениями.</p>
+      </div>
+
+      <div class="case-card-grid">
+        {directions.map((direction, index) => (
+          <article class="case-card">
+            <div class="case-card__head">
+              <SystemIcon name={direction.icon} />
+              <div>
+                <p class="eyebrow">{String(index + 1).padStart(2, "0")} · {direction.eyebrow}</p>
+                <h3>{direction.title}</h3>
+              </div>
+            </div>
+            <p>{direction.summary}</p>
+            <div class="case-card__meta">
+              <span>{direction.examples.length} страниц</span>
+              <span>{direction.examples.filter((example) => example.status === "first-wave").length} первая сборка</span>
+            </div>
+            <a class="case-card__link" href={localizePath(`/cases/${direction.slug}/`, locale)}>
+              {caseUi.openDirection}
+            </a>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section case-first-wave" aria-labelledby="case-first-wave-title">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">{caseUi.firstWave}</p>
+          <h2 id="case-first-wave-title">Страницы, которые стоит собрать первыми</h2>
+        </div>
+        <p>Это рабочая витрина проектных страниц: можно открыть, прочитать и решить, что усиливать перед публичным показом.</p>
+      </div>
+
+      <div class="case-table-wrap">
+        <table class="case-table">
+          <thead>
+            <tr>
+              <th>Страница</th>
+              <th>Направление</th>
+              <th>Статус</th>
+              <th>Открыть</th>
+            </tr>
+          </thead>
+          <tbody>
+            {firstWave.map(({ direction, example }) => (
+              <tr>
+                <td>
+                  <strong>{example.title}</strong>
+                  <small>{example.summary}</small>
+                </td>
+                <td>{direction.title}</td>
+                <td>{statusLabel[example.status]}</td>
+                <td>
+                  <a href={localizePath(`/cases/${direction.slug}/${example.slug}/`, locale)}>{caseUi.openExample}</a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</Layout>

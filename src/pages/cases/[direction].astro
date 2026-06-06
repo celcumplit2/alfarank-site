@@ -1,0 +1,87 @@
+---
+import SystemIcon from "@/components/SystemIcon.astro";
+import { caseDirections, caseUi, getCaseDirection } from "@/data/case-examples";
+import { localizePath } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
+import Layout from "@/layouts/Layout.astro";
+
+type Props = {
+  locale?: Locale;
+  direction: NonNullable<ReturnType<typeof getCaseDirection>>;
+};
+
+export function getStaticPaths() {
+  return caseDirections.map((direction) => ({
+    params: { direction: direction.slug },
+    props: { direction, locale: "ru" }
+  }));
+}
+
+const { locale = "ru", direction } = Astro.props as Props;
+
+const statusLabel = {
+  "first-wave": "первая сборка",
+  draft: "черновик",
+  "needs-sanitizing": "нужна очистка",
+  archive: "архив"
+};
+---
+
+<Layout
+  title={`${direction.title} | ${caseUi.title} | AlfaRank`}
+  description={direction.summary}
+  locale={locale}
+  robots="noindex, nofollow"
+>
+  <div class="case-library-page" data-no-translate>
+    <section class="section case-library-hero case-library-hero--direction">
+      <div class="case-library-hero__content">
+        <a class="case-back-link" href={localizePath("/cases/", locale)}>{caseUi.backToDirections}</a>
+        <p class="eyebrow">{direction.eyebrow}</p>
+        <h1>{direction.title}</h1>
+        <p>{direction.summary}</p>
+        <div class="case-library-hero__tags">
+          <span>{caseUi.localOnly}</span>
+          <span>{direction.examples.length} страниц</span>
+          <span>{direction.examples.filter((example) => example.status === "first-wave").length} первая сборка</span>
+        </div>
+      </div>
+      <aside class="case-library-note">
+        <SystemIcon name={direction.icon} />
+        <strong>Роль направления</strong>
+        <p>{direction.role}</p>
+      </aside>
+    </section>
+
+    <section class="section" aria-labelledby="case-direction-pages-title">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">{caseUi.directionPages}</p>
+          <h2 id="case-direction-pages-title">Что входит в направление</h2>
+        </div>
+        <p>Каждая страница ниже показывает отдельный тип системы, артефакты на диске и то, что надо подготовить перед публичной версией.</p>
+      </div>
+
+      <div class="case-card-grid case-card-grid--examples">
+        {direction.examples.map((example) => (
+          <article class="case-card">
+            <div class="case-card__head">
+              <SystemIcon name={direction.icon} />
+              <div>
+                <p class="eyebrow">{statusLabel[example.status]}</p>
+                <h3>{example.title}</h3>
+              </div>
+            </div>
+            <p>{example.summary}</p>
+            <div class="case-card__meta">
+              {example.tags.map((tag) => <span>{tag}</span>)}
+            </div>
+            <a class="case-card__link" href={localizePath(`/cases/${direction.slug}/${example.slug}/`, locale)}>
+              {caseUi.openExample}
+            </a>
+          </article>
+        ))}
+      </div>
+    </section>
+  </div>
+</Layout>
