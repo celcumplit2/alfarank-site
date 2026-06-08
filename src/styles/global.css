@@ -1853,6 +1853,12 @@ select {
   font-size: clamp(38px, 5.4vw, 68px);
 }
 
+:lang(ru) .page-hero h1 {
+  max-width: 720px;
+  font-size: 62px;
+  line-height: 0.98;
+}
+
 .page-system-map {
   position: relative;
   min-height: 470px;
@@ -2450,6 +2456,17 @@ li {
   margin: 0 0 76px;
   content-visibility: auto;
   contain-intrinsic-size: 1px 760px;
+}
+
+.section:has(.solution-mechanism),
+.section:has(.solution-module-rail),
+.section:has(.systems-navigation-console:not(.private-module-console)),
+.section:has(.system-blueprint-surface:not(.private-blueprint)),
+.section:has(.system-module-console),
+.section:has(.industry-detail-funnel),
+.section:has(.industry-route-console) {
+  content-visibility: visible;
+  contain-intrinsic-size: none;
 }
 
 .section-header {
@@ -5138,8 +5155,14 @@ li {
   align-content: space-between;
 }
 
-.solution-module-rail .solution-module-station:is(:hover, :focus-within) {
-  z-index: 8;
+.solution-module-rail .solution-module-station:is(:hover, :focus-within),
+.solution-mechanism .ar-system-panel:is(:hover, :focus-within),
+.systems-navigation-console:not(.private-module-console) .systems-navigation-node:is(:hover, :focus-visible, :focus-within),
+.system-template .system-blueprint-surface .system-blueprint-layer:is(:hover, :focus-within),
+.system-module-console .system-module-console__item:is(:hover, :focus-within),
+.industry-detail-funnel .industry-need-node:is(:hover, :focus-within),
+.industry-route-console .industry-route-panel:is(:hover, :focus-within) {
+  z-index: 14;
 }
 
 .solution-module-station--1 { grid-column: 1 / 4; grid-row: 1 / 3; transform: translateY(22px); }
@@ -13476,6 +13499,11 @@ button:disabled {
     max-width: 760px;
   }
 
+  :lang(ru) .page-hero h1 {
+    max-width: 760px;
+    font-size: 56px;
+  }
+
   .page-system-map {
     width: min(100%, 720px);
     min-height: 470px;
@@ -15461,6 +15489,11 @@ button:disabled {
     font-size: clamp(38px, 11vw, 52px);
   }
 
+  :lang(ru) .page-hero h1 {
+    font-size: 44px;
+    line-height: 1.02;
+  }
+
   .glass-card {
     min-height: 0;
     padding: 20px;
@@ -15468,6 +15501,12 @@ button:disabled {
 
   .hero-actions .button {
     width: 100%;
+  }
+}
+
+@media (max-width: 400px) {
+  :lang(ru) .page-hero h1 {
+    font-size: 40px;
   }
 }
 
