@@ -1,0 +1,304 @@
+---
+import SystemIcon from "@/components/SystemIcon.astro";
+import type { CaseMetric } from "@/data/case-examples";
+
+type Variant = "scoreboard" | "timeline";
+
+type Props = {
+  variant: Variant;
+  icon?: string;
+  metrics?: CaseMetric[];
+  flow?: string[];
+  buyerValue?: string[];
+};
+
+const {
+  variant,
+  icon = "target",
+  metrics = [],
+  flow = [],
+  buyerValue = []
+} = Astro.props;
+
+const metricHasNumber = (metric: CaseMetric) => /[\d$€£%]/.test(metric.value);
+const firstNumberMetricIndex = metrics.findIndex(metricHasNumber);
+const orderedMetrics =
+  firstNumberMetricIndex > 0
+    ? [
+        metrics[firstNumberMetricIndex],
+        ...metrics.filter((_, index) => index !== firstNumberMetricIndex)
+      ]
+    : metrics;
+
+const primaryMetric = orderedMetrics[0];
+const secondaryMetrics = orderedMetrics.slice(1, 4);
+const timelineItems = flow.slice(0, 4);
+const valueItems = buyerValue.slice(0, 2);
+
+const variantCopy = {
+  scoreboard: {
+    label: "Результат",
+    title: "Что изменилось",
+    kicker: "цифры, риск и управленческий вывод"
+  },
+  timeline: {
+    label: "Процесс",
+    title: "Как была собрана работа",
+    kicker: "цепочка действий от задачи до проверки"
+  }
+} as const;
+---
+
+<aside class={`case-hero-visual case-hero-visual--${variant}`} aria-label={variantCopy[variant].title}>
+  <div class="case-hero-visual__head">
+    <SystemIcon name={icon} />
+    <div>
+      <p>{variantCopy[variant].label}</p>
+      <strong>{variantCopy[variant].title}</strong>
+      <span>{variantCopy[variant].kicker}</span>
+    </div>
+  </div>
+
+  {variant === "scoreboard" && (
+    <div class="case-hero-scoreboard">
+      <div class="case-hero-scoreboard__primary">
+        <span>{primaryMetric?.label ?? "ключевой показатель"}</span>
+        <strong>{primaryMetric?.value ?? "результат"}</strong>
+        <p>{primaryMetric?.note ?? valueItems[0] ?? "Главный эффект кейса выводится первым, без служебного объяснения."}</p>
+      </div>
+
+      {secondaryMetrics.length > 0 && (
+        <div class="case-hero-scoreboard__metrics">
+          {secondaryMetrics.map((metric) => (
+            <div class="case-hero-scoreboard__metric">
+              <strong>{metric.value}</strong>
+              <span>{metric.label}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div class="case-hero-scoreboard__signal">
+        <span>вывод</span>
+        <p>{valueItems[0] ?? "Показывает, какую бизнес-проблему закрывает собранная система."}</p>
+      </div>
+    </div>
+  )}
+
+  {variant === "timeline" && (
+    <ol class="case-hero-timeline">
+      {timelineItems.map((item, index) => (
+        <li>
+          <span>{String(index + 1).padStart(2, "0")}</span>
+          <p>{item}</p>
+        </li>
+      ))}
+    </ol>
+  )}
+</aside>
+
+<style>
+  .case-hero-visual {
+    min-height: 360px;
+    padding: 26px;
+    border: 1px solid rgba(128, 199, 255, 0.24);
+    background:
+      linear-gradient(150deg, rgba(9, 32, 54, 0.94), rgba(6, 18, 32, 0.86)),
+      rgba(4, 16, 31, 0.9);
+    box-shadow: 0 22px 70px rgba(0, 0, 0, 0.26);
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 24px;
+    overflow: hidden;
+  }
+
+  .case-hero-visual__head {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
+  }
+
+  .case-hero-visual__head .system-icon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .case-hero-visual__head p,
+  .case-hero-visual__head strong,
+  .case-hero-visual__head span {
+    display: block;
+    margin: 0;
+  }
+
+  .case-hero-visual__head p {
+    color: #8de9ff;
+    font-size: 0.78rem;
+    font-weight: 900;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .case-hero-visual__head strong {
+    margin-top: 5px;
+    color: #ffffff;
+    font-size: 1.28rem;
+    line-height: 1.16;
+  }
+
+  .case-hero-visual__head span {
+    margin-top: 8px;
+    color: rgba(227, 241, 255, 0.74);
+    line-height: 1.45;
+  }
+
+  .case-hero-scoreboard,
+  .case-hero-timeline {
+    min-height: 0;
+  }
+
+  .case-hero-scoreboard {
+    display: grid;
+    gap: 14px;
+  }
+
+  .case-hero-scoreboard__primary {
+    padding: 20px 0 18px;
+    border-top: 1px solid rgba(141, 233, 255, 0.32);
+    border-bottom: 1px solid rgba(141, 233, 255, 0.22);
+  }
+
+  .case-hero-scoreboard__primary span,
+  .case-hero-scoreboard__signal span {
+    display: block;
+    color: rgba(196, 231, 255, 0.76);
+    font-size: 0.75rem;
+    font-weight: 900;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .case-hero-scoreboard__primary strong {
+    display: block;
+    margin-top: 10px;
+    color: #ffffff;
+    font-size: clamp(3rem, 6vw, 5rem);
+    line-height: 0.92;
+  }
+
+  .case-hero-scoreboard__primary p,
+  .case-hero-scoreboard__signal p,
+  .case-hero-scoreboard__metric span,
+  .case-hero-timeline p {
+    margin: 0;
+    color: rgba(232, 242, 255, 0.82);
+    line-height: 1.5;
+  }
+
+  .case-hero-scoreboard__primary p {
+    margin-top: 12px;
+  }
+
+  .case-hero-scoreboard__metrics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .case-hero-scoreboard__metric {
+    min-height: 88px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(141, 233, 255, 0.2);
+  }
+
+  .case-hero-scoreboard__metric strong {
+    display: block;
+    color: #d8fbff;
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+
+  .case-hero-scoreboard__metric span {
+    display: block;
+    margin-top: 9px;
+    font-size: 0.88rem;
+  }
+
+  .case-hero-scoreboard__signal {
+    padding: 14px 0 0;
+  }
+
+  .case-hero-scoreboard__signal p {
+    margin-top: 9px;
+  }
+
+  .case-hero-timeline {
+    position: relative;
+    display: grid;
+    gap: 13px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .case-hero-timeline::before {
+    content: "";
+    position: absolute;
+    top: 12px;
+    bottom: 12px;
+    left: 17px;
+    width: 1px;
+    background: linear-gradient(#ffd37e, rgba(255, 211, 126, 0.12));
+  }
+
+  .case-hero-timeline li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 14px;
+    align-items: start;
+    min-height: 58px;
+  }
+
+  .case-hero-timeline span {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid rgba(255, 211, 126, 0.48);
+    background: #082235;
+    color: #ffe2a3;
+    font-size: 0.76rem;
+    font-weight: 900;
+  }
+
+  .case-hero-timeline p {
+    padding: 5px 0 14px;
+    border-bottom: 1px solid rgba(255, 211, 126, 0.14);
+  }
+
+  .case-hero-visual--scoreboard {
+    border-color: rgba(141, 233, 255, 0.34);
+  }
+
+  .case-hero-visual--timeline {
+    border-color: rgba(255, 204, 112, 0.32);
+  }
+
+  .case-hero-visual--timeline .case-hero-visual__head p {
+    color: #ffe2a3;
+  }
+
+  @media (max-width: 640px) {
+    .case-hero-visual {
+      min-height: auto;
+      padding: 22px;
+    }
+
+    .case-hero-scoreboard__metrics {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

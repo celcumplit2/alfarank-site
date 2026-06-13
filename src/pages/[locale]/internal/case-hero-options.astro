@@ -1,0 +1,11 @@
+---
+import CaseHeroOptionsPage from "@/pages/internal/case-hero-options.astro";
+
+export function getStaticPaths() {
+  return [{ params: { locale: "ru" }, props: { locale: "ru" } }];
+}
+
+const { locale } = Astro.props;
+---
+
+<CaseHeroOptionsPage locale={locale} />

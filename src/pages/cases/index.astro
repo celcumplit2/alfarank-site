@@ -9,16 +9,34 @@ type Props = {
   locale?: Locale;
 };
 
+if (!Astro.props.locale) {
+  return Astro.redirect("/ru/cases/");
+}
+
 const { locale = "ru" } = Astro.props as Props;
 const directions = getCaseDirections(locale);
 const firstWave = getFirstWaveCases();
 const totalExamples = directions.reduce((total, direction) => total + direction.examples.length, 0);
+const detailedCaseLabel = (count: number) => {
+  const mod10 = count % 10;
+  const mod100 = count % 100;
+
+  if (mod10 === 1 && mod100 !== 11) {
+    return `${count} подробный кейс`;
+  }
+
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) {
+    return `${count} подробных кейса`;
+  }
+
+  return `${count} подробных кейсов`;
+};
 
 const statusLabel = {
-  "first-wave": "первая сборка",
-  draft: "черновик",
-  "needs-sanitizing": "нужна очистка",
-  archive: "архив"
+  "first-wave": "подробный кейс",
+  draft: "краткий пример",
+  "needs-sanitizing": "краткий пример",
+  archive: "архивный пример"
 };
 ---
 
@@ -35,15 +53,14 @@ const statusLabel = {
         <h1>{caseUi.title}</h1>
         <p>{caseUi.description}</p>
         <div class="case-library-hero__tags">
-          <span>{caseUi.localOnly}</span>
           <span>{directions.length} направлений</span>
           <span>{totalExamples} страниц</span>
-          <span>{firstWave.length} в первой сборке</span>
+          <span>{detailedCaseLabel(firstWave.length)}</span>
         </div>
       </div>
       <aside class="case-library-note">
         <SystemIcon name="local" />
-        <strong>{caseUi.localOnly}</strong>
+        <strong>Как читать раздел</strong>
         <p>{caseUi.noProduction}</p>
       </aside>
     </section>
@@ -54,7 +71,7 @@ const statusLabel = {
           <p class="eyebrow">Навигация</p>
           <h2 id="case-directions-title">Направления и страницы внутри</h2>
         </div>
-        <p>Каждое направление ведет на список страниц следующего уровня. Страницы можно переименовывать и переносить между направлениями.</p>
+        <p>Каждое направление собирает близкие по смыслу проекты, чтобы быстро увидеть тип задачи, результат и подход AlfaRank к похожим системам.</p>
       </div>
 
       <div class="case-card-grid">
@@ -70,7 +87,7 @@ const statusLabel = {
             <p>{direction.summary}</p>
             <div class="case-card__meta">
               <span>{direction.examples.length} страниц</span>
-              <span>{direction.examples.filter((example) => example.status === "first-wave").length} первая сборка</span>
+              <span>{detailedCaseLabel(direction.examples.filter((example) => example.status === "first-wave").length)}</span>
             </div>
             <a class="case-card__link" href={localizePath(`/cases/${direction.slug}/`, locale)}>
               {caseUi.openDirection}
@@ -84,9 +101,9 @@ const statusLabel = {
       <div class="section-header">
         <div>
           <p class="eyebrow">{caseUi.firstWave}</p>
-          <h2 id="case-first-wave-title">Страницы, которые стоит собрать первыми</h2>
+          <h2 id="case-first-wave-title">Страницы с подробным описанием</h2>
         </div>
-        <p>Это рабочая витрина проектных страниц: можно открыть, прочитать и решить, что усиливать перед публичным показом.</p>
+        <p>Эти страницы уже можно читать как кейсы: они объясняют задачу, решение, процесс работы и практическую ценность.</p>
       </div>
 
       <div class="case-table-wrap">
@@ -95,7 +112,7 @@ const statusLabel = {
             <tr>
               <th>Страница</th>
               <th>Направление</th>
-              <th>Статус</th>
+              <th>Формат</th>
               <th>Открыть</th>
             </tr>
           </thead>

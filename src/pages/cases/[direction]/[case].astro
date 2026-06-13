@@ -1,5 +1,5 @@
 ---
-import SystemIcon from "@/components/SystemIcon.astro";
+import CaseHeroVisual from "@/components/CaseHeroVisual.astro";
 import {
   caseDirections,
   caseUi,
@@ -23,20 +23,27 @@ export function getStaticPaths() {
   return caseDirections.flatMap((direction) =>
     direction.examples.map((example) => ({
       params: { direction: direction.slug, case: example.slug },
-      props: { direction, example, locale: "ru" }
+      props: { direction, example }
     }))
   );
 }
 
+if (!Astro.props.locale) {
+  return Astro.redirect(`/ru/cases/${Astro.params.direction}/${Astro.params.case}/`);
+}
+
 const { locale = "ru", direction, example } = Astro.props as Props;
 const presentation = example.presentation;
+const metricHasNumber = (value: string) => /[\d$€£%]/.test(value);
+const heroHasMetrics = presentation?.metrics.some((metric) => metricHasNumber(metric.value)) ?? false;
+const heroVariant = heroHasMetrics ? "scoreboard" : "timeline";
+const heroFlow = presentation
+  ? presentation.flow
+  : [example.shift, ...example.show, ...example.evidence].filter(Boolean);
+const heroBuyerValue = presentation
+  ? presentation.buyerValue
+  : [example.shift, ...example.next].filter(Boolean);
 
-const statusLabel = {
-  "first-wave": "первая сборка",
-  draft: "черновик",
-  "needs-sanitizing": "нужна очистка",
-  archive: "архив"
-};
 ---
 
 <Layout
@@ -52,21 +59,19 @@ const statusLabel = {
         <p class="eyebrow">{direction.title}</p>
         <h1>{example.title}</h1>
         <p>{example.summary}</p>
-        <div class="case-library-hero__tags">
-          <span>{caseUi.localOnly}</span>
-          <span>{statusLabel[example.status]}</span>
-          {example.tags.map((tag) => <span>{tag}</span>)}
-        </div>
+        {example.tags.length > 0 && (
+          <div class="case-library-hero__tags">
+            {example.tags.map((tag) => <span>{tag}</span>)}
+          </div>
+        )}
       </div>
-      <aside class="case-library-note">
-        <SystemIcon name={direction.icon} />
-        <strong>{presentation ? "Проектная база" : caseUi.source}</strong>
-        <p>
-          {presentation
-            ? presentation.sourceNote
-            : "Материалы есть во внутреннем архиве проекта. Для публичной версии нужно выбрать, какие артефакты можно показывать."}
-        </p>
-      </aside>
+      <CaseHeroVisual
+        variant={heroVariant}
+        icon={direction.icon}
+        metrics={presentation?.metrics ?? []}
+        flow={heroFlow}
+        buyerValue={heroBuyerValue}
+      />
     </section>
 
     {presentation && (

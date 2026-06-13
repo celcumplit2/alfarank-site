@@ -1,0 +1,215 @@
+---
+import CaseHeroVisual from "@/components/CaseHeroVisual.astro";
+import { caseUi, getCaseDirection, getCaseExample } from "@/data/case-examples";
+import { localizePath } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
+import Layout from "@/layouts/Layout.astro";
+
+type Props = {
+  locale?: Locale;
+};
+
+if (!Astro.props.locale) {
+  return Astro.redirect("/ru/internal/case-hero-options/");
+}
+
+const { locale = "ru" } = Astro.props as Props;
+const direction = getCaseDirection("growth-operations");
+const example = getCaseExample("growth-operations", "travel-ads");
+const presentation = example?.presentation;
+
+if (!direction || !example || !presentation) {
+  throw new Error("Internal hero preview needs the growth-operations/travel-ads case.");
+}
+
+const variants = [
+  {
+    id: "scoreboard",
+    number: "01",
+    name: "Основной вариант: когда есть цифры",
+    note: "Используется для кейсов, где есть сильные метрики: деньги, объем, проценты, количество страниц, файлов, прогонов или другой измеримый результат."
+  },
+  {
+    id: "timeline",
+    number: "02",
+    name: "Fallback: когда цифр нет",
+    note: "Используется для кейсов без нормальной числовой опоры. Вместо слабых псевдометрик показывает понятную рабочую цепочку."
+  }
+] as const;
+---
+
+<Layout
+  title={`Внутренняя дизайн-песочница | ${caseUi.title} | AlfaRank`}
+  description="Внутренняя noindex-страница для выбора правого hero-блока детальных кейсов AlfaRank."
+  locale={locale}
+  robots="noindex, nofollow"
+>
+  <div class="case-library-page hero-options-page" data-no-translate data-internal-preview="true">
+    <section class="section hero-options-intro">
+      <a class="case-back-link" href={localizePath(`/cases/${direction.slug}/${example.slug}/`, locale)}>
+        Вернуться к кейсу
+      </a>
+
+      <div class="internal-preview-mark">
+        <span>Внутренняя дизайн-песочница</span>
+        <span>noindex / nofollow</span>
+        <span>не рабочая страница кейсов</span>
+      </div>
+
+      <p class="eyebrow">Hero-блок кейса</p>
+      <h1>2 варианта правой стороны</h1>
+      <p>
+        Это служебная страница для выбора универсального правого блока. В рабочих кейсах
+        применяется правило: если у проекта есть сильные цифры, показываем результат;
+        если цифр нет, показываем процесс.
+      </p>
+    </section>
+
+    <div class="hero-options-stack">
+      {variants.map((variant) => (
+        <section class="section hero-option-block" aria-labelledby={`hero-option-${variant.id}`}>
+          <div class="hero-option-block__label">
+            <span>{variant.number}</span>
+            <div>
+              <strong id={`hero-option-${variant.id}`}>{variant.name}</strong>
+              <p>{variant.note}</p>
+            </div>
+          </div>
+
+          <div class="case-library-hero case-library-hero--example hero-option-block__hero">
+            <div class="case-library-hero__content">
+              <a class="case-back-link" href={localizePath(`/cases/${direction.slug}/`, locale)}>{caseUi.backToDirection}</a>
+              <p class="eyebrow">{direction.title}</p>
+              <h2>{example.title}</h2>
+              <p>{example.summary}</p>
+              {example.tags.length > 0 && (
+                <div class="case-library-hero__tags">
+                  {example.tags.map((tag) => <span>{tag}</span>)}
+                </div>
+              )}
+            </div>
+
+            <CaseHeroVisual
+              variant={variant.id}
+              icon={direction.icon}
+              metrics={presentation.metrics}
+              flow={presentation.flow}
+              buyerValue={presentation.buyerValue}
+            />
+          </div>
+        </section>
+      ))}
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .hero-options-page {
+    padding-bottom: 80px;
+  }
+
+  .hero-options-intro {
+    max-width: 980px;
+    padding-top: 72px;
+  }
+
+  .internal-preview-mark {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 24px;
+  }
+
+  .internal-preview-mark span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    padding: 7px 10px;
+    border: 1px solid rgba(255, 211, 126, 0.34);
+    background: rgba(255, 211, 126, 0.09);
+    color: #ffe2a3;
+    font-size: 0.76rem;
+    font-weight: 900;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .hero-options-intro h1 {
+    max-width: 860px;
+    margin: 0;
+    font-size: clamp(3rem, 5.8vw, 6rem);
+    line-height: 0.98;
+  }
+
+  .hero-options-intro p:not(.eyebrow) {
+    max-width: 760px;
+    margin: 22px 0 0;
+    color: var(--muted);
+    font-size: 1.12rem;
+    line-height: 1.7;
+  }
+
+  .hero-options-stack {
+    display: grid;
+    gap: 8px;
+  }
+
+  .hero-option-block {
+    padding-top: 28px;
+  }
+
+  .hero-option-block__label {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 12px;
+    align-items: start;
+    margin-bottom: 16px;
+  }
+
+  .hero-option-block__label > span {
+    color: #8de9ff;
+    font-size: 0.78rem;
+    font-weight: 900;
+    letter-spacing: 0;
+  }
+
+  .hero-option-block__label strong {
+    display: block;
+    color: #ffffff;
+    font-size: 1.05rem;
+  }
+
+  .hero-option-block__label p {
+    max-width: 820px;
+    margin: 7px 0 0;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  .hero-option-block__hero {
+    padding-top: 0;
+  }
+
+  .hero-option-block__hero .case-library-hero__content h2 {
+    max-width: 920px;
+    margin: 0;
+    font-size: clamp(3rem, 5.8vw, 6.5rem);
+    line-height: 0.98;
+    letter-spacing: 0;
+  }
+
+  @media (max-width: 640px) {
+    .hero-options-intro {
+      padding-top: 42px;
+    }
+
+    .hero-options-intro h1,
+    .hero-option-block__hero .case-library-hero__content h2 {
+      font-size: 3rem;
+    }
+
+    .hero-option-block__label {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
