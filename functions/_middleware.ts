@@ -1,9 +1,11 @@
 type Env = {
   PRIVATE_PROJECTS_ACCESS_CODE?: string;
   PRIVATE_PROJECTS_COOKIE_SECRET?: string;
+  [key: string]: string | undefined;
 };
 
 const COOKIE_NAME = "alfa_private_access";
+const PROJECT_COOKIE_PREFIX = "alfa_project_";
 const DEFAULT_ACCESS_CODE = "AlfaProjects-2026!";
 
 const isProtectedProjectPath = (pathname: string) =>
@@ -23,8 +25,34 @@ const configuredCode = (env: Env) => env.PRIVATE_PROJECTS_ACCESS_CODE || DEFAULT
 
 const configuredSecret = (env: Env) => env.PRIVATE_PROJECTS_COOKIE_SECRET || configuredCode(env);
 
+const projectSlugFromPath = (pathname: string) => {
+  const match = pathname.match(/^\/(?:(?:ro|ru)\/)?projects\/([^/]+)(?:\/|$)/);
+  return match?.[1]?.toLowerCase() ?? "";
+};
+
+const projectEnvNameFor = (projectSlug: string) => {
+  const key = projectSlug.toUpperCase().replace(/[^A-Z0-9]+/g, "_").replace(/^_+|_+$/g, "");
+  return key ? `PRIVATE_PROJECT_${key}_ACCESS_CODE` : "";
+};
+
+const projectCookieNameFor = (projectSlug: string) =>
+  `${PROJECT_COOKIE_PREFIX}${projectSlug.replace(/[^a-z0-9-]+/g, "_")}_access`;
+
+const configuredProjectCode = (env: Env, projectSlug: string) => {
+  const envName = projectEnvNameFor(projectSlug);
+  return envName ? String(env[envName] ?? "").trim() : "";
+};
+
 const cookieValueFor = async (env: Env) => {
   const input = new TextEncoder().encode(`${configuredCode(env)}:${configuredSecret(env)}`);
+  const digest = await crypto.subtle.digest("SHA-256", input);
+  return Array.from(new Uint8Array(digest))
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
+};
+
+const projectCookieValueFor = async (env: Env, projectSlug: string, projectCode: string) => {
+  const input = new TextEncoder().encode(`project:${projectSlug}:${projectCode}:${configuredSecret(env)}`);
   const digest = await crypto.subtle.digest("SHA-256", input);
   return Array.from(new Uint8Array(digest))
     .map((byte) => byte.toString(16).padStart(2, "0"))
@@ -50,6 +78,18 @@ export const onRequest: PagesFunction<Env> = async ({ request, env, next }) => {
 
   if (currentCookie === expectedCookie) {
     return next();
+  }
+
+  const projectSlug = projectSlugFromPath(url.pathname);
+  const projectCode = configuredProjectCode(env, projectSlug);
+
+  if (projectSlug && projectCode) {
+    const expectedProjectCookie = await projectCookieValueFor(env, projectSlug, projectCode);
+    const currentProjectCookie = readCookie(request, projectCookieNameFor(projectSlug));
+
+    if (currentProjectCookie === expectedProjectCookie) {
+      return next();
+    }
   }
 
   const loginUrl = new URL(accessPathFor(url.pathname), request.url);
