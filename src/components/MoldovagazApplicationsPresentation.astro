@@ -744,6 +744,8 @@ const visualNodes = [
   }
 
   .mgas-timeline-card {
+    display: grid;
+    grid-template-rows: 42px 86px 132px 1fr;
     min-height: 320px;
     padding: 22px;
   }
@@ -760,13 +762,15 @@ const visualNodes = [
   }
 
   .mgas-timeline-card h3 {
-    margin: 18px 0 16px;
+    align-self: start;
+    margin: 18px 0 0;
     font-size: clamp(21px, 1.8vw, 27px);
     line-height: 1.15;
   }
 
   .mgas-timeline-card dl {
     display: grid;
+    grid-template-rows: repeat(2, 1fr);
     gap: 10px;
     margin: 0;
   }
@@ -790,6 +794,7 @@ const visualNodes = [
     color: var(--mgas-good);
     font-size: 18px;
     font-weight: 900;
+    white-space: nowrap;
   }
 
   .mgas-timeline-card p {
