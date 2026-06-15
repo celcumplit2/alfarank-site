@@ -184,25 +184,25 @@ const riskBlocks = [
 
 const timeline = [
   {
-    name: "Предпроектное обследование",
+    name: ["Предпроектное", "обследование"],
     time: "до 3 недель",
     cost: "до 10 000 EUR",
     scope: "анализ процессов, данных, статусов, сроков, ролей, уведомлений и доступного обмена с 1C/ERP"
   },
   {
-    name: "Рабочий пилот",
+    name: ["Рабочий", "пилот"],
     time: "до 16 недель",
     cost: "до 65 000 EUR",
     scope: "ограниченный набор услуг, проверка статуса на сайте, базовая связь с 1C/ERP, основные уведомления и контроль сроков"
   },
   {
-    name: "Полноценный запуск",
+    name: ["Полноценный", "запуск"],
     time: "до 20 недель",
     cost: "до 110 000 EUR",
     scope: "клиентский модуль, статусы, сроки, уведомления, панель руководителя, роли, журнал действий, базовые отчеты"
   },
   {
-    name: "Промышленное расширение",
+    name: ["Промышленное", "расширение"],
     time: "до 28 недель",
     cost: "до 180 000 EUR",
     scope: "больше услуг и подразделений, расширенная отчетность, устойчивый запуск, обучение, мониторинг и поддержка"
@@ -302,7 +302,9 @@ const visualNodes = [
         {timeline.map((item, index) => (
           <article class="mgas-timeline-card">
             <span>{String(index + 1).padStart(2, "0")}</span>
-            <h3>{item.name}</h3>
+            <h3>
+              {Array.isArray(item.name) ? item.name.map((line) => <span>{line}</span>) : item.name}
+            </h3>
             <dl>
               <div>
                 <dt>Срок</dt>
@@ -766,6 +768,10 @@ const visualNodes = [
     margin: 18px 0 0;
     font-size: clamp(21px, 1.8vw, 27px);
     line-height: 1.15;
+  }
+
+  .mgas-timeline-card h3 span {
+    display: block;
   }
 
   .mgas-timeline-card dl {
