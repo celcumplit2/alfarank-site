@@ -38,7 +38,7 @@ const moduleCardDescription = (module: Props["project"]["modules"][number]) => {
 
   return cardDescription(`${normalized} ${module.outputs[0] ?? ""}.`);
 };
-const projectNarrative = {
+const defaultProjectNarrative = {
   en: {
     architecture:
       "The modules are separated by role: detect market movement, discover external surplus, build opportunity hypotheses, preserve decision memory, and move learning across verticals.",
@@ -61,6 +61,15 @@ const projectNarrative = {
     valueHeading: "Что меняется для торговой команды"
   }
 }[locale];
+const projectNarrative = {
+  ...defaultProjectNarrative,
+  ...(project.narrative ?? {})
+};
+const projectHref = localizePath(`/projects/${project.slug}/`, locale);
+const projectsIndexHref = localizePath("/projects/", locale);
+const firstModuleHref = project.modules[0]
+  ? localizePath(`/projects/${project.slug}/${project.modules[0].slug}/`, locale)
+  : projectHref;
 
 const moduleSignals = project.modules.map((module, index) => ({
   title: module.title,
@@ -68,7 +77,7 @@ const moduleSignals = project.modules.map((module, index) => ({
   icon: module.icon,
   detail: moduleCardDescription(module),
   meter: `${72 + index * 4}%`,
-  href: `/projects/${project.slug}/${module.slug}/`
+  href: localizePath(`/projects/${project.slug}/${module.slug}/`, locale)
 }));
 
 const projectVisual = {
@@ -77,7 +86,7 @@ const projectVisual = {
   label: project.client,
   state: project.status,
   output: project.outputs.join(", "),
-  coreHref: `/projects/${project.slug}/`,
+  coreHref: projectHref,
   nodes: moduleSignals,
   metrics: [
     { value: String(project.modules.length).padStart(2, "0"), label: ui.modules },
@@ -93,9 +102,9 @@ const projectVisual = {
       eyebrow={project.eyebrow}
       title={project.title}
       text={project.summary}
-      primaryHref={`/projects/${project.slug}/${project.modules[0]?.slug ?? ""}/`}
+      primaryHref={firstModuleHref}
       primaryLabel={ui.openModule}
-      secondaryHref="/projects/"
+      secondaryHref={projectsIndexHref}
       secondaryLabel={ui.allProjects}
       locale={locale}
       visual={projectVisual}
@@ -121,7 +130,7 @@ const projectVisual = {
       <div class="section-header">
         <div>
           <p class="eyebrow">{ui.projectMap}</p>
-          <h2>{ui.moduleMap}</h2>
+          <h2>{projectNarrative.moduleMapTitle ?? ui.moduleMap}</h2>
         </div>
         <p>{projectNarrative.architecture}</p>
       </div>

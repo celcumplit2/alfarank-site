@@ -1,82 +1,8 @@
-import type { Locale } from "@/data/i18n";
+import { locales, type Locale } from "@/data/i18n";
+import { phoenixProjects } from "@/data/phoenix-project";
+import type { LocalizedPrivateProject, PrivateModule, PrivateProject } from "@/data/private-project-types";
 
-export type PrivateModule = {
-  slug: string;
-  title: string;
-  icon: string;
-  summary: string;
-  positioning: string;
-  presentation?: {
-    valueTitle?: string;
-    valueText?: string;
-    flowTitle?: string;
-    flowText?: string;
-    proofTitle?: string;
-    proofText?: string;
-    pilotSlideTitle?: string;
-    pilotSlideText?: string;
-    internalSourceTitle?: string;
-    externalSourceTitle?: string;
-    metricTitle?: string;
-  };
-  outputs: string[];
-  layers: {
-    title: string;
-    text: string;
-    icon: string;
-    items: string[];
-  }[];
-  sections: {
-    title: string;
-    text?: string;
-    items?: string[];
-    groups?: {
-      title: string;
-      items: string[];
-    }[];
-  }[];
-  sources: {
-    internal: string[];
-    external: string[];
-  };
-  pilot: {
-    title: string;
-    steps: string[];
-    goal: string;
-    metrics: string[];
-  };
-  guardrails: string[];
-  executive: string;
-  effects: string[];
-};
-
-export type PrivateProject = {
-  slug: string;
-  title: string;
-  eyebrow: string;
-  client: string;
-  summary: string;
-  description: string;
-  icon: string;
-  status: string;
-  outputs: string[];
-  modules: PrivateModule[];
-  thesis: {
-    title: string;
-    text: string;
-    items: string[];
-  };
-  implementation: {
-    title: string;
-    text: string;
-    steps: string[];
-  };
-  guardrail: {
-    title: string;
-    text: string;
-    items: string[];
-  };
-};
+export type { LocalizedPrivateProject, PrivateModule, PrivateProject } from "@/data/private-project-types";
 
 export const privateUi: Record<
   Locale,
@@ -1724,7 +1650,7 @@ const roModules: PrivateModule[] = [
   }
 ];
 
-export const privateProjects: Record<Locale, PrivateProject[]> = {
+const basePrivateProjects: Record<Locale, PrivateProject[]> = {
   en: [
     {
       slug: "grafit",
@@ -1873,6 +1799,20 @@ export const privateProjects: Record<Locale, PrivateProject[]> = {
     }
   ]
 };
+
+const registeredPrivateProjects = [
+  phoenixProjects
+] satisfies LocalizedPrivateProject[];
+
+export const privateProjects: Record<Locale, PrivateProject[]> = Object.fromEntries(
+  locales.map((locale) => [
+    locale,
+    [
+      ...(basePrivateProjects[locale] ?? []),
+      ...registeredPrivateProjects.map((projectSet) => projectSet[locale])
+    ]
+  ])
+) as Record<Locale, PrivateProject[]>;
 
 export const getPrivateProjects = (locale: Locale) => privateProjects[locale] ?? privateProjects.en;
 

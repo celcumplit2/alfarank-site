@@ -25,6 +25,8 @@ export function getStaticPaths() {
 const { project, module, locale = "en" } = Astro.props as Props;
 const ui = privateUi[locale];
 const relatedModules = project.modules.filter((entry) => entry.slug !== module.slug).slice(0, 4);
+const projectHref = localizePath(`/projects/${project.slug}/`, locale);
+const projectsIndexHref = localizePath("/projects/", locale);
 const cardDescription = (value: string, limit = 160) => {
   const normalized = value.replace(/\s+/g, " ").trim();
   if (normalized.length <= limit) {
@@ -78,11 +80,12 @@ const moduleStory = {
 };
 const modulePositioningTitle = module.sections[0]?.title ?? ui.moduleBlueprint;
 const moduleFlowTitle = module.presentation?.flowTitle ?? module.sections[2]?.title ?? ui.presentationFlow;
-const relatedIntro = {
+const defaultRelatedIntro = {
   en: `${module.title} stays inside the same intelligence stack; the neighboring modules show which signal, memory, or learning layer can strengthen it next.`,
   ro: `${module.title} ramane in acelasi stack de intelligence; modulele vecine arata ce strat de semnal, memorie sau invatare il poate intari mai departe.`,
-  ru: `${module.title} остается частью общего контура Grafit; соседние модули показывают, какой слой сигнала, памяти или обучения усиливает его дальше.`
+  ru: `${module.title} остается частью общего контура ${project.title}; соседние модули показывают, какой слой сигнала, памяти или решения усиливает его дальше.`
 }[locale];
+const relatedIntro = (project.narrative?.relatedIntro ?? defaultRelatedIntro).replace("{module}", module.title);
 const presentationSlides = [
   {
     eyebrow: ui.valuePromise,
@@ -110,7 +113,7 @@ const moduleVisual = {
   label: project.client,
   state: module.outputs[0],
   output: module.positioning,
-  coreHref: `/projects/${project.slug}/`,
+  coreHref: projectHref,
   nodes: module.layers.map((layer, index) => ({
     title: layer.title,
     state: layer.items[0] ?? ui.modules,
@@ -133,9 +136,9 @@ const moduleVisual = {
       eyebrow={project.title}
       title={module.title}
       text={module.summary}
-      primaryHref={`/projects/${project.slug}/`}
+      primaryHref={projectHref}
       primaryLabel={ui.backToProject}
-      secondaryHref="/projects/"
+      secondaryHref={projectsIndexHref}
       secondaryLabel={ui.allProjects}
       locale={locale}
       visual={moduleVisual}
