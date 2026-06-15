@@ -7,6 +7,7 @@ import {
   getClientTranslations,
   localeFromPath,
   localeOg,
+  locales,
   localizePath,
   stripLocaleFromPath,
   t,
@@ -20,6 +21,7 @@ type Props = {
   description?: string;
   image?: string;
   locale?: Locale;
+  alternateLocales?: Locale[];
   robots?: string;
 };
 
@@ -28,6 +30,7 @@ const {
   title = t(locale, "defaultTitle"),
   description = t(locale, "defaultDescription"),
   image = "/og-image.svg",
+  alternateLocales = [...locales],
   robots = "index, follow"
 } = Astro.props;
 
@@ -42,10 +45,14 @@ const pageTitle = title
   .map((part) => translateCopy(locale, part))
   .join(" | ");
 const pageDescription = translateCopy(locale, description);
+const activeAlternateLocales = alternateLocales.length > 0 ? alternateLocales : [...locales];
+const activeAlternateLocaleSet = new Set<Locale>(activeAlternateLocales);
 const alternates = alternatePaths(basePath).map((entry) => ({
   ...entry,
   href: new URL(entry.href, siteUrl).toString()
-}));
+})).filter((entry) => activeAlternateLocaleSet.has(entry.locale));
+const xDefaultLocale = activeAlternateLocaleSet.has("en") ? "en" : (activeAlternateLocales[0] ?? locale);
+const xDefaultUrl = new URL(localizePath(basePath, xDefaultLocale), siteUrl).toString();
 const clientTranslations = JSON.stringify(getClientTranslations(locale));
 const gtmId = import.meta.env.PUBLIC_GTM_ID;
 const gaId = gtmId ? "" : import.meta.env.PUBLIC_GA_ID || import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
@@ -86,7 +93,7 @@ const structuredData = JSON.stringify([
     <meta name="robots" content={robots} />
     <link rel="canonical" href={canonicalUrl} />
     {alternates.map((entry) => <link rel="alternate" hreflang={entry.locale} href={entry.href} />)}
-    <link rel="alternate" hreflang="x-default" href={new URL(basePath, siteUrl).toString()} />
+    <link rel="alternate" hreflang="x-default" href={xDefaultUrl} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta property="og:site_name" content="AlfaRank" />
     <meta property="og:locale" content={localeOg[locale]} />
@@ -121,7 +128,7 @@ const structuredData = JSON.stringify([
     )}
     <LiquidBackground />
     <div class="site-shell">
-      <SiteHeader locale={locale} />
+      <SiteHeader locale={locale} alternateLocales={activeAlternateLocales} />
       <main>
         <slot />
       </main>

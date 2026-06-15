@@ -547,6 +547,7 @@ const localizedCopy = {
 
 const contentLocale = locale === "ro" ? "ro" : "ru";
 const copy = localizedCopy[contentLocale];
+const alternateLocales: Locale[] = ["ru", "ro"];
 const { assumptions, needFromClient, overview, riskBlocks, timeline, visualNodes, workBlocks } = copy;
 ---
 
@@ -554,6 +555,7 @@ const { assumptions, needFromClient, overview, riskBlocks, timeline, visualNodes
   title={copy.metaTitle}
   description={copy.metaDescription}
   locale={locale}
+  alternateLocales={alternateLocales}
   robots="noindex, nofollow"
 >
   <div class="mgas-brief-page" data-no-translate>

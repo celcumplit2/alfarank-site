@@ -1,13 +1,14 @@
 ---
 import BrandLogo from "@/components/BrandLogo.astro";
-import { alternatePaths, localeLabels, localizePath, stripLocaleFromPath, t } from "@/data/i18n";
+import { alternatePaths, localeLabels, locales, localizePath, stripLocaleFromPath, t } from "@/data/i18n";
 import type { Locale } from "@/data/i18n";
 
 type Props = {
   locale?: Locale;
+  alternateLocales?: Locale[];
 };
 
-const { locale = "en" } = Astro.props;
+const { locale = "en", alternateLocales = [...locales] } = Astro.props;
 const navItems = [
   { label: t(locale, "capabilities"), href: "/capabilities/" },
   { label: t(locale, "solutions"), href: "/solutions/" },
@@ -19,7 +20,11 @@ const navItems = [
 
 const homeHref = localizePath("/", locale);
 const startProjectHref = localizePath("/start-project/", locale);
-const languageLinks = alternatePaths(stripLocaleFromPath(Astro.url.pathname));
+const activeAlternateLocales = alternateLocales.length > 0 ? alternateLocales : [...locales];
+const activeAlternateLocaleSet = new Set<Locale>(activeAlternateLocales);
+const languageLinks = alternatePaths(stripLocaleFromPath(Astro.url.pathname)).filter((item) =>
+  activeAlternateLocaleSet.has(item.locale)
+);
 const languageNames: Record<Locale, string> = {
   en: "English",
   ro: "Romana",
