@@ -6,9 +6,276 @@ type Props = {
   locale?: Locale;
 };
 
-const { locale = "ru" } = Astro.props;
+const { locale = "en" } = Astro.props;
 
 const localizedCopy = {
+  en: {
+    metaTitle: "Chișinău-Gaz Application Digitalization | AlfaRank",
+    metaDescription:
+      "Client-facing rationale for digitizing submission, monitoring, and control of Single Window applications at Chișinău-Gaz.",
+    heroEyebrow: "SRL Chișinău-Gaz · Single Window",
+    heroTitle: "Digitizing application submission and monitoring",
+    heroText:
+      "The proposal is to create a digital module that does not replace 1C/ERP, but makes the application journey transparent for clients and controllable for management.",
+    navAria: "Page navigation",
+    flowAria: "General solution flow",
+    nav: {
+      summary: "What is proposed",
+      timeline: "Timeline and budget",
+      work: "Scope of work"
+    },
+    summaryEyebrow: "In brief",
+    summaryTitle: "What is proposed",
+    summaryText:
+      "The system should remove the situation where an application is registered, but the client does not understand where it stands, while management sees the problem only after calls, complaints, or missed deadlines.",
+    timelineEyebrow: "Timeline and budget",
+    timelineTitle: "Indicative estimate",
+    timelineText:
+      "The estimate is shown as an upper reference point for the first operational launch. After the assessment, the scope can be clarified and the budget reduced if some integrations or processes prove simpler.",
+    termLabel: "Timeline",
+    budgetLabel: "Budget",
+    recommendedLabel: "Recommended approach:",
+    recommendedText:
+      "first complete an assessment of up to 3 weeks, then approve the first full launch of up to 20 weeks with a budget of up to 110 000 EUR. This leaves room to adjust the cost after checking the data and rules in 1C/ERP.",
+    workEyebrow: "Scope of work",
+    workTitle: "What needs to be done",
+    workText:
+      "The main project blocks are listed below. Each block can be opened to see the required work and the result the client should receive.",
+    resultLabel: "Result:",
+    risksEyebrow: "Complex areas",
+    risksTitle: "Where attention is needed",
+    risksText:
+      "The main complexity is not the status-check page itself, but the correctness of data, deadline rules, notifications, and responsibility between departments.",
+    assumptionsEyebrow: "Estimate conditions",
+    assumptionsTitle: "What is included in the assumptions",
+    assumptionsText:
+      "These conditions should be discussed before the commercial offer so that the budget is not treated as the cost of any future expansion.",
+    clientInputEyebrow: "What is needed from the client",
+    clientInputTitle: "Data for an accurate estimate",
+    clientInputText:
+      "After these materials are received, it will be possible to prepare the exact architecture, calendar plan, and fixed scope for the first launch.",
+    overview: [
+      {
+        label: "What is proposed",
+        value: "Digital module around 1C/ERP",
+        text: "Applications remain in the main accounting system, while the new module shows the status to clients, controls deadlines, and helps management see the situation."
+      },
+      {
+        label: "First launch timeline",
+        value: "Up to 16 weeks",
+        text: "This reference applies to the first operational launch after scope approval: client status check, 1C/ERP connection, deadlines, notifications, and a control dashboard."
+      },
+      {
+        label: "First launch budget",
+        value: "Up to 110 000 EUR",
+        text: "This is the maximum preliminary estimate for discussion. After the assessment, the scope can be clarified and, if needed, reduced without losing the launch logic."
+      }
+    ],
+    workBlocks: [
+      {
+        title: "1. Assessment of the current process",
+        short: "We document how an application moves from submission to final result.",
+        result: "Approved process map, list of services, statuses, deadlines, roles, and data.",
+        details: [
+          "review the types of applications and Single Window services;",
+          "describe the current application processing stages;",
+          "collect statutory and internal deadlines by service;",
+          "define roles: client, operator, department, manager, administrator;",
+          "agree which data can be shown to the client and which data remains internal."
+        ]
+      },
+      {
+        title: "2. Connection with 1C/ERP",
+        short: "The new module must receive data from the existing accounting system.",
+        result: "Applications, statuses, invoices, payments, and key events are automatically transferred into the new module.",
+        details: [
+          "check what data already exists in 1C/ERP and how completely it is filled in;",
+          "agree the data exchange method: API, web service, scheduled exchange, or another available mechanism;",
+          "configure receiving new applications and changes to existing applications;",
+          "provide a fallback for temporary 1C/ERP unavailability;",
+          "keep an exchange error log so failures are not left unnoticed."
+        ]
+      },
+      {
+        title: "3. Digital application card",
+        short: "Each application receives a single digital card.",
+        result: "For each application, the number, service, status, deadline, responsible unit, documents, payment, history, and result are visible.",
+        details: [
+          "bring the main application data into one structure;",
+          "separate the internal status from the public client status;",
+          "store the history of changes and sent notifications;",
+          "show the reason for suspension, rejection, or withdrawal of an application;",
+          "leave manual input only for exceptions: delay reason, missing documents, visit date."
+        ]
+      },
+      {
+        title: "4. Client status-check page",
+        short: "The client checks an application without a call or visit.",
+        result: "A website page appears for checking status by application number, phone, and one-time code.",
+        details: [
+          "create a website section: Check application status;",
+          "add access by application number and phone with a one-time code;",
+          "add a QR code to the confirmation or receipt;",
+          "show the current stage, registration date, last update, remaining business days, and next action;",
+          "make the interface available in English, Romanian, and Russian and convenient on mobile."
+        ]
+      },
+      {
+        title: "5. Statuses and deadline control",
+        short: "The system calculates deadlines and shows the risk of delay in advance.",
+        result: "Each application has a control date, remaining business days, deadline status, and reason for deadline suspension.",
+        details: [
+          "configure deadline rules for each service type;",
+          "account for working days, weekends, and public holidays;",
+          "suspend the deadline when action is expected from the client: documents, payment, access to the site;",
+          "mark applications by color: on time, risk, last day, overdue, deadline suspended;",
+          "show management applications without movement and applications with deadline risk."
+        ]
+      },
+      {
+        title: "6. Notifications for clients and staff",
+        short: "Messages are sent by events, not only after the client contacts the company.",
+        result: "The client receives clear notifications, while staff and managers receive deadline alerts.",
+        details: [
+          "prepare message templates in English, Romanian, and Russian;",
+          "send notifications about registration, invoice, payment, missing documents, readiness, or withdrawal;",
+          "remind the client before removing an application from execution;",
+          "warn the executor before the control deadline;",
+          "notify the manager if an application moves into risk or delay."
+        ]
+      },
+      {
+        title: "7. Management dashboard and reports",
+        short: "Management sees the full process picture, not isolated phone calls.",
+        result: "A dashboard appears with active applications, risks, overdue items, workload, and reasons for delays.",
+        details: [
+          "create a general overview: active, on time, at risk, overdue, waiting for client, completed;",
+          "add an application register with search, filters, and export;",
+          "show control by department and service type;",
+          "collect reasons for delays, rejections, and application withdrawals;",
+          "show indicators: average execution time, share of applications completed on time, applications without movement."
+        ]
+      },
+      {
+        title: "8. Security and evidence trail",
+        short: "The system must protect data and record every important action.",
+        result: "Client access is protected by code, staff permissions are separated by roles, and action history is stored.",
+        details: [
+          "verify client access by application number, phone, and one-time code;",
+          "avoid showing unnecessary personal data and internal comments;",
+          "separate staff permissions by roles and departments;",
+          "record status changes, sent notifications, delay reasons, and application withdrawal;",
+          "provide backups, session control, and an error log."
+        ]
+      }
+    ],
+    riskBlocks: [
+      {
+        title: "Data in 1C/ERP",
+        text: "Complexity depends on how accurately applications, statuses, phones, invoices, payments, and departments are maintained in 1C.",
+        checks: [
+          "whether a prepared data exchange method exists;",
+          "whether different employees fill fields in the same way;",
+          "whether it is possible to receive not only the current status, but also events related to the application."
+        ]
+      },
+      {
+        title: "Status map",
+        text: "Internal statuses may be clear to staff, but too technical for clients.",
+        checks: [
+          "public wording must be agreed;",
+          "each internal stage must map to a clear client-facing status;",
+          "disputed situations need rules: what is shown and what remains internal."
+        ]
+      },
+      {
+        title: "Deadlines and suspension",
+        text: "The system must calculate business days, not calendar days, with holidays and cases where the deadline is suspended because of client actions.",
+        checks: [
+          "an approved calendar of working and non-working days is required;",
+          "the statutory deadline must be clear for each service;",
+          "events that suspend and resume the deadline must be defined."
+        ]
+      },
+      {
+        title: "Notifications",
+        text: "A message must be sent at the right moment, through the right channel, with legally careful wording.",
+        checks: [
+          "a provider for SMS, Viber, or email must be selected;",
+          "templates must be approved in English, Romanian, and Russian;",
+          "each sent message must be stored in the application history."
+        ]
+      },
+      {
+        title: "Personal data",
+        text: "The client page must not disclose unnecessary information even when the application number is known.",
+        checks: [
+          "access only through phone confirmation;",
+          "the QR code must not directly open personal data;",
+          "employees must see only the applications that match their role."
+        ]
+      },
+      {
+        title: "Employee habits",
+        text: "The project is successful only if it does not create parallel accounting or increase manual work.",
+        checks: [
+          "main work remains in 1C/ERP;",
+          "manual input is needed only for exceptions;",
+          "management receives control without extra reports from employees."
+        ]
+      }
+    ],
+    timeline: [
+      {
+        name: ["Pre-project", "assessment"],
+        time: "up to 3 weeks",
+        cost: "up to 10 000 EUR",
+        scope: "analysis of processes, data, statuses, deadlines, roles, notifications, and available exchange with 1C/ERP"
+      },
+      {
+        name: ["Working", "pilot"],
+        time: "up to 16 weeks",
+        cost: "up to 65 000 EUR",
+        scope: "limited service set, website status check, basic 1C/ERP connection, main notifications, and deadline control"
+      },
+      {
+        name: ["Full", "launch"],
+        time: "up to 20 weeks",
+        cost: "up to 110 000 EUR",
+        scope: "client module, statuses, deadlines, notifications, management dashboard, roles, action log, basic reports"
+      },
+      {
+        name: ["Industrial", "scale-up"],
+        time: "up to 28 weeks",
+        cost: "up to 180 000 EUR",
+        scope: "more services and departments, extended reporting, stable launch, training, monitoring, and support"
+      }
+    ],
+    assumptions: [
+      "1C/ERP remains the main system of record for applications.",
+      "The cost of SMS, Viber, and email messages is paid separately according to provider tariffs.",
+      "If 1C/ERP development is required from their contractor, it is estimated separately.",
+      "The exact cost is fixed after assessment of data, statuses, and deadline rules.",
+      "The first launch is best done for a limited list of services, then the system can be expanded."
+    ],
+    needFromClient: [
+      "list of application types and Single Window services;",
+      "current statuses and processing stages in 1C/ERP;",
+      "statutory and internal deadlines for each service type;",
+      "description of departments involved in processing;",
+      "examples of applications, invoices, notifications, and letters about application withdrawal;",
+      "information about the available data exchange method with 1C/ERP;",
+      "requirements for personal data, roles, and access rights;",
+      "preferred notification channels: SMS, Viber, email."
+    ],
+    visualNodes: [
+      { label: "1C/ERP", note: "data source" },
+      { label: "Status module", note: "rules and deadlines" },
+      { label: "Website", note: "client status" },
+      { label: "Notifications", note: "SMS, Viber, email" },
+      { label: "Dashboard", note: "control and reports" }
+    ]
+  },
   ru: {
     metaTitle: "Цифровизация заявлений Chișinău-Gaz | AlfaRank",
     metaDescription:
@@ -545,9 +812,9 @@ const localizedCopy = {
   }
 };
 
-const contentLocale = locale === "ro" ? "ro" : "ru";
+const contentLocale = locale === "ro" ? "ro" : locale === "ru" ? "ru" : "en";
 const copy = localizedCopy[contentLocale];
-const alternateLocales: Locale[] = ["ru", "ro"];
+const alternateLocales: Locale[] = ["en", "ro", "ru"];
 const { assumptions, needFromClient, overview, riskBlocks, timeline, visualNodes, workBlocks } = copy;
 ---
 
