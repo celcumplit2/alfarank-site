@@ -1,0 +1,886 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import type { Locale } from "@/data/i18n";
+
+type Props = {
+  locale?: Locale;
+};
+
+const { locale = "ru" } = Astro.props;
+
+const overview = [
+  {
+    label: "Что создаем",
+    value: "цифровой модуль вокруг 1C/ERP",
+    text: "Заявления остаются в основной учетной системе, а новый модуль показывает статус клиенту, контролирует сроки и помогает руководству видеть ситуацию."
+  },
+  {
+    label: "Первый результат",
+    value: "рабочий пилот за 2.5-3.5 месяца",
+    text: "Можно начать с ограниченного набора услуг и подразделений, чтобы проверить данные, статусы, уведомления и реакцию пользователей."
+  },
+  {
+    label: "Ориентир бюджета",
+    value: "75 000 - 110 000 EUR",
+    text: "Диапазон для первого полноценного запуска без стоимости сообщений, лицензий внешних провайдеров и возможных доработок 1C."
+  }
+];
+
+const workBlocks = [
+  {
+    title: "1. Обследование текущего процесса",
+    short: "Фиксируем, как заявление проходит путь от подачи до результата.",
+    result: "Согласованная карта процесса, список услуг, статусов, сроков, ролей и данных.",
+    details: [
+      "разобрать виды заявлений и услуг Единого окна;",
+      "описать текущие этапы обработки заявления;",
+      "собрать нормативные и внутренние сроки по услугам;",
+      "определить роли: клиент, оператор, подразделение, руководитель, администратор;",
+      "согласовать, какие данные можно показывать клиенту, а какие остаются внутренними."
+    ]
+  },
+  {
+    title: "2. Связь с 1C/ERP",
+    short: "Новый модуль должен получать данные из существующей учетной системы.",
+    result: "Заявления, статусы, счета, оплаты и ключевые события автоматически поступают в новый модуль.",
+    details: [
+      "проверить, какие данные уже есть в 1C/ERP и насколько они заполнены;",
+      "согласовать способ обмена данными: API, веб-сервис, регламентный обмен или другой доступный механизм;",
+      "настроить получение новых заявлений и изменений по ним;",
+      "предусмотреть работу при временной недоступности 1C/ERP;",
+      "вести журнал ошибок обмена, чтобы сбои не оставались незамеченными."
+    ]
+  },
+  {
+    title: "3. Карточка заявления",
+    short: "Каждое заявление получает единую цифровую карточку.",
+    result: "По каждому заявлению видно номер, услугу, статус, срок, ответственный блок, документы, оплату, историю и результат.",
+    details: [
+      "собрать основные данные заявления в одной структуре;",
+      "разделить внутренний статус и публичный статус для клиента;",
+      "хранить историю изменений и отправленных уведомлений;",
+      "показывать причину остановки, отказа или снятия заявки;",
+      "оставить ручное заполнение только для исключений: причина задержки, недостающие документы, дата выезда."
+    ]
+  },
+  {
+    title: "4. Страница проверки статуса для клиента",
+    short: "Клиент проверяет заявление без звонка и визита.",
+    result: "На сайте появляется страница проверки статуса по номеру заявления, телефону и одноразовому коду.",
+    details: [
+      "сделать раздел на сайте: Проверить статус заявления;",
+      "добавить вход по номеру заявления и телефону с одноразовым кодом;",
+      "добавить QR-код на подтверждении или квитанции;",
+      "показать клиенту текущий этап, дату регистрации, последнее обновление, оставшиеся рабочие дни и следующее действие;",
+      "сделать интерфейс на русском и румынском языках, удобный для телефона."
+    ]
+  },
+  {
+    title: "5. Статусы и контроль сроков",
+    short: "Система считает сроки и заранее показывает риск просрочки.",
+    result: "У каждого заявления есть контрольная дата, остаток рабочих дней, статус срока и причина остановки срока.",
+    details: [
+      "настроить правила сроков для каждого вида услуги;",
+      "учитывать рабочие, выходные и праздничные дни;",
+      "останавливать срок, когда ожидается действие клиента: документы, оплата, доступ к объекту;",
+      "выделять заявления по цветам: в срок, риск, последний день, просрочено, срок остановлен;",
+      "показывать руководителям заявления без движения и заявления с риском нарушения срока."
+    ]
+  },
+  {
+    title: "6. Уведомления клиентам и сотрудникам",
+    short: "Сообщения отправляются по событиям, а не только после обращения клиента.",
+    result: "Клиент получает понятные уведомления, а сотрудники и руководители получают предупреждения по срокам.",
+    details: [
+      "подготовить шаблоны сообщений на русском и румынском языках;",
+      "отправлять уведомления о регистрации, счете, оплате, недостающих документах, готовности или снятии заявки;",
+      "напоминать клиенту до снятия заявки с исполнения;",
+      "предупреждать исполнителя до контрольного срока;",
+      "уведомлять руководителя, если заявление перешло в риск или просрочку."
+    ]
+  },
+  {
+    title: "7. Панель руководителя и отчеты",
+    short: "Руководство видит не отдельные звонки, а полную картину процесса.",
+    result: "Появляется панель с активными заявлениями, рисками, просрочками, нагрузкой и причинами задержек.",
+    details: [
+      "сделать общий обзор: активные, в срок, в риске, просрочены, ждут клиента, завершены;",
+      "добавить реестр заявлений с поиском, фильтрами и выгрузкой;",
+      "показать контроль по подразделениям и типам услуг;",
+      "собирать причины задержек, отказов и снятия заявок;",
+      "показывать показатели: средний срок исполнения, доля заявлений в срок, заявления без движения."
+    ]
+  },
+  {
+    title: "8. Безопасность и доказательная база",
+    short: "Система должна защищать данные и фиксировать каждое важное действие.",
+    result: "Доступ клиента защищен кодом, права сотрудников разделены по ролям, история действий сохраняется.",
+    details: [
+      "проверять доступ клиента через номер заявления, телефон и одноразовый код;",
+      "не показывать лишние персональные данные и внутренние комментарии;",
+      "разделить права сотрудников по ролям и подразделениям;",
+      "фиксировать изменения статусов, отправку уведомлений, причины задержек и снятие заявки;",
+      "предусмотреть резервное копирование, контроль сессий и журнал ошибок."
+    ]
+  }
+];
+
+const riskBlocks = [
+  {
+    title: "Данные в 1C/ERP",
+    text: "Сложность зависит от того, насколько аккуратно в 1C ведутся заявления, статусы, телефоны, счета, оплаты и подразделения.",
+    checks: [
+      "есть ли готовый способ обмена данными;",
+      "одинаково ли заполняются поля разными сотрудниками;",
+      "можно ли получить не только текущий статус, но и события по заявлению."
+    ]
+  },
+  {
+    title: "Карта статусов",
+    text: "Внутренние статусы могут быть понятны сотрудникам, но слишком техническими для клиента.",
+    checks: [
+      "нужно согласовать публичные формулировки;",
+      "каждый внутренний этап должен попадать в понятный статус для клиента;",
+      "для спорных ситуаций нужны правила: что показывать, а что оставить внутри компании."
+    ]
+  },
+  {
+    title: "Сроки и остановка срока",
+    text: "Система должна считать не календарные дни, а рабочие дни с учетом праздников и случаев, когда срок остановлен из-за действий клиента.",
+    checks: [
+      "нужен утвержденный календарь рабочих и нерабочих дней;",
+      "по каждой услуге должен быть понятен нормативный срок;",
+      "нужно определить события, которые останавливают и возобновляют срок."
+    ]
+  },
+  {
+    title: "Уведомления",
+    text: "Сообщение должно уходить в правильный момент, по правильному каналу и с юридически аккуратной формулировкой.",
+    checks: [
+      "нужен выбранный поставщик SMS/Viber/e-mail;",
+      "шаблоны должны быть согласованы на русском и румынском языках;",
+      "каждое отправленное сообщение должно сохраняться в истории заявления."
+    ]
+  },
+  {
+    title: "Персональные данные",
+    text: "Клиентская страница не должна раскрывать лишнюю информацию даже при наличии номера заявления.",
+    checks: [
+      "доступ только через подтверждение телефона;",
+      "QR-код не должен сразу открывать персональные данные;",
+      "сотрудники должны видеть только те заявления, которые относятся к их роли."
+    ]
+  },
+  {
+    title: "Привычки сотрудников",
+    text: "Проект успешен только если он не создает параллельный учет и не увеличивает ручную работу.",
+    checks: [
+      "основная работа остается в 1C/ERP;",
+      "ручной ввод нужен только для исключений;",
+      "руководство получает контроль без дополнительных отчетов от сотрудников."
+    ]
+  }
+];
+
+const timeline = [
+  {
+    name: "Предпроектное обследование",
+    time: "2-3 недели",
+    cost: "5 000 - 10 000 EUR",
+    scope: "анализ процессов, данных, статусов, сроков, ролей, уведомлений и доступного обмена с 1C/ERP"
+  },
+  {
+    name: "Рабочий пилот",
+    time: "2.5-3.5 месяца",
+    cost: "45 000 - 65 000 EUR",
+    scope: "ограниченный набор услуг, проверка статуса на сайте, базовая связь с 1C/ERP, основные уведомления и контроль сроков"
+  },
+  {
+    name: "Первый полноценный запуск",
+    time: "4-5 месяцев",
+    cost: "75 000 - 110 000 EUR",
+    scope: "клиентский модуль, статусы, сроки, уведомления, панель руководителя, роли, журнал действий, базовые отчеты"
+  },
+  {
+    name: "Промышленное расширение",
+    time: "5-7 месяцев",
+    cost: "120 000 - 180 000+ EUR",
+    scope: "больше услуг и подразделений, расширенная отчетность, устойчивый запуск, обучение, мониторинг и поддержка"
+  }
+];
+
+const assumptions = [
+  "1C/ERP остается основной системой учета заявлений.",
+  "Стоимость сообщений SMS/Viber/e-mail оплачивается отдельно по тарифам поставщика.",
+  "Если для 1C/ERP потребуется доработка со стороны их подрядчика, она оценивается отдельно.",
+  "Точная стоимость фиксируется после обследования данных, статусов и правил сроков.",
+  "Первый запуск лучше делать на ограниченном перечне услуг, затем расширять систему."
+];
+
+const needFromClient = [
+  "список видов заявлений и услуг Единого окна;",
+  "текущие статусы и этапы обработки в 1C/ERP;",
+  "нормативные и внутренние сроки по каждому виду услуги;",
+  "описание, какие подразделения участвуют в обработке;",
+  "примеры заявлений, счетов, уведомлений и писем о снятии заявки;",
+  "информация о доступном способе обмена данными с 1C/ERP;",
+  "требования по персональным данным, ролям и доступам;",
+  "предпочтительные каналы уведомлений: SMS, Viber, e-mail."
+];
+
+const visualNodes = [
+  { label: "1C/ERP", note: "источник данных" },
+  { label: "Модуль статусов", note: "правила и сроки" },
+  { label: "Сайт", note: "статус для клиента" },
+  { label: "Уведомления", note: "SMS, Viber, e-mail" },
+  { label: "Панель", note: "контроль и отчеты" }
+];
+---
+
+<Layout
+  title="Цифровизация заявлений Chișinău-Gaz | AlfaRank"
+  description="Клиентское обоснование проекта цифровизации подачи, мониторинга и контроля заявлений Единого окна Chișinău-Gaz."
+  locale={locale}
+  robots="noindex, nofollow"
+>
+  <div class="mgas-brief-page" data-no-translate>
+    <section class="mgas-brief-hero">
+      <div class="mgas-brief-hero__copy">
+        <p class="eyebrow">SRL Chișinău-Gaz · Единое окно</p>
+        <h1>Цифровизация подачи и мониторинга заявлений</h1>
+        <p>
+          Предлагается создать цифровой модуль, который не заменяет 1C/ERP, а делает путь заявления
+          прозрачным для клиента и управляемым для руководства.
+        </p>
+        <div class="mgas-brief-actions" aria-label="Навигация по странице">
+          <a href="#work">Что делаем</a>
+          <a href="#risks">Где сложности</a>
+          <a href="#timeline">Сроки и бюджет</a>
+        </div>
+      </div>
+      <div class="mgas-brief-flow" aria-label="Общая схема решения">
+        {visualNodes.map((node, index) => (
+          <div class="mgas-brief-flow__node">
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <strong>{node.label}</strong>
+            <small>{node.note}</small>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="mgas-brief-section" id="summary">
+      <div class="mgas-brief-section__head">
+        <p class="eyebrow">Кратко</p>
+        <h2>Что предлагается</h2>
+        <p>
+          Система должна убрать ситуацию, когда заявление принято, но клиент не понимает, где оно находится,
+          а руководство видит проблему только после звонков, жалоб или просрочки.
+        </p>
+      </div>
+      <div class="mgas-summary-grid">
+        {overview.map((item) => (
+          <article class="mgas-summary-item">
+            <span>{item.label}</span>
+            <strong>{item.value}</strong>
+            <p>{item.text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="mgas-brief-section" id="work">
+      <div class="mgas-brief-section__head">
+        <p class="eyebrow">Состав работ</p>
+        <h2>Что нужно сделать</h2>
+        <p>
+          Ниже перечислены основные блоки проекта. Каждый блок можно раскрыть и увидеть, какие работы
+          требуется выполнить и какой результат должен получить заказчик.
+        </p>
+      </div>
+      <div class="mgas-details-list">
+        {workBlocks.map((block, index) => (
+          <details class="mgas-detail" open={index === 0}>
+            <summary>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <strong>{block.title}</strong>
+              <small>{block.short}</small>
+            </summary>
+            <div class="mgas-detail__body">
+              <p><b>Результат:</b> {block.result}</p>
+              <ul>
+                {block.details.map((detail) => <li>{detail}</li>)}
+              </ul>
+            </div>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="mgas-brief-section" id="risks">
+      <div class="mgas-brief-section__head">
+        <p class="eyebrow">Сложные места</p>
+        <h2>Где потребуется внимание</h2>
+        <p>
+          Основная сложность проекта не в самой странице проверки статуса, а в корректности данных,
+          правил сроков, уведомлений и ответственности между подразделениями.
+        </p>
+      </div>
+      <div class="mgas-details-list mgas-details-list--two">
+        {riskBlocks.map((block) => (
+          <details class="mgas-detail">
+            <summary>
+              <strong>{block.title}</strong>
+              <small>{block.text}</small>
+            </summary>
+            <div class="mgas-detail__body">
+              <ul>
+                {block.checks.map((check) => <li>{check}</li>)}
+              </ul>
+            </div>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="mgas-brief-section" id="timeline">
+      <div class="mgas-brief-section__head">
+        <p class="eyebrow">Сроки и бюджет</p>
+        <h2>Ориентировочная оценка</h2>
+        <p>
+          Цены указаны как предварительный диапазон для обсуждения. Точная сумма зависит от состояния 1C/ERP,
+          количества услуг, правил сроков и выбранных каналов уведомлений.
+        </p>
+      </div>
+      <div class="mgas-timeline-grid">
+        {timeline.map((item, index) => (
+          <article class="mgas-timeline-card">
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <h3>{item.name}</h3>
+            <dl>
+              <div>
+                <dt>Срок</dt>
+                <dd>{item.time}</dd>
+              </div>
+              <div>
+                <dt>Бюджет</dt>
+                <dd>{item.cost}</dd>
+              </div>
+            </dl>
+            <p>{item.scope}</p>
+          </article>
+        ))}
+      </div>
+      <div class="mgas-note-band">
+        <strong>Рекомендуемый вариант:</strong>
+        <p>
+          начать с обследования за 2-3 недели, затем согласовать первый рабочий запуск в диапазоне
+          75 000 - 110 000 EUR. Это позволит не обещать точную стоимость до проверки данных и правил в 1C/ERP.
+        </p>
+      </div>
+    </section>
+
+    <section class="mgas-brief-section" id="assumptions">
+      <div class="mgas-brief-section__head">
+        <p class="eyebrow">Условия оценки</p>
+        <h2>Что включено в допущения</h2>
+        <p>
+          Эти условия важно проговорить до коммерческого предложения, чтобы бюджет не воспринимался как
+          стоимость любых будущих расширений.
+        </p>
+      </div>
+      <ul class="mgas-check-list">
+        {assumptions.map((item) => <li>{item}</li>)}
+      </ul>
+    </section>
+
+    <section class="mgas-brief-section" id="client-input">
+      <div class="mgas-brief-section__head">
+        <p class="eyebrow">Что нужно от заказчика</p>
+        <h2>Данные для точной оценки</h2>
+        <p>
+          После получения этих материалов можно подготовить точную архитектуру, календарный план и фиксированный
+          состав первого запуска.
+        </p>
+      </div>
+      <ul class="mgas-check-list mgas-check-list--columns">
+        {needFromClient.map((item) => <li>{item}</li>)}
+      </ul>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .mgas-brief-page {
+    --mgas-surface: rgba(5, 22, 43, 0.82);
+    --mgas-surface-strong: rgba(8, 34, 58, 0.92);
+    --mgas-line: rgba(190, 230, 255, 0.22);
+    --mgas-line-strong: rgba(216, 251, 255, 0.38);
+    --mgas-text: #f6fbff;
+    --mgas-muted: rgba(238, 248, 255, 0.76);
+    --mgas-faint: rgba(238, 248, 255, 0.58);
+    --mgas-accent: #8de9ff;
+    --mgas-good: #8ff0b3;
+    --mgas-warn: #ffd166;
+    width: min(1280px, calc(100vw - 32px));
+    margin: 0 auto clamp(72px, 8vw, 118px);
+    color: var(--mgas-text);
+  }
+
+  .mgas-brief-page :where(h1, h2, h3, p, li, summary, a, span, strong, small, dd, dt) {
+    letter-spacing: 0;
+    overflow-wrap: break-word;
+    word-break: normal;
+    hyphens: none;
+  }
+
+  .mgas-brief-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(360px, 0.72fr);
+    gap: clamp(22px, 4vw, 56px);
+    align-items: stretch;
+    min-height: 520px;
+    margin-bottom: clamp(58px, 7vw, 96px);
+    padding: clamp(28px, 5vw, 64px);
+    border: 1px solid var(--mgas-line);
+    border-radius: 8px;
+    background:
+      linear-gradient(135deg, rgba(10, 47, 78, 0.9), rgba(4, 19, 37, 0.9)),
+      var(--mgas-surface);
+    box-shadow: 0 28px 86px rgba(0, 0, 0, 0.28);
+  }
+
+  .mgas-brief-hero__copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .mgas-brief-hero h1 {
+    max-width: 760px;
+    margin: 0;
+    font-size: clamp(42px, 6vw, 76px);
+    line-height: 1;
+  }
+
+  .mgas-brief-hero p:not(.eyebrow) {
+    max-width: 760px;
+    margin: 24px 0 0;
+    color: var(--mgas-muted);
+    font-size: clamp(18px, 1.5vw, 22px);
+    line-height: 1.6;
+  }
+
+  .mgas-brief-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 30px;
+  }
+
+  .mgas-brief-actions a {
+    display: inline-flex;
+    min-height: 42px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--mgas-line);
+    border-radius: 4px;
+    padding: 10px 14px;
+    color: var(--mgas-text);
+    background: rgba(255, 255, 255, 0.06);
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  .mgas-brief-actions a:first-child {
+    color: #031622;
+    background: linear-gradient(180deg, #ffffff, #d8fbff);
+    text-shadow: none;
+  }
+
+  .mgas-brief-flow {
+    display: grid;
+    align-content: center;
+    gap: 12px;
+  }
+
+  .mgas-brief-flow__node {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 4px 14px;
+    align-items: center;
+    min-height: 82px;
+    border: 1px solid var(--mgas-line);
+    border-radius: 6px;
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .mgas-brief-flow__node span {
+    grid-row: span 2;
+    display: grid;
+    width: 44px;
+    height: 44px;
+    place-items: center;
+    border: 1px solid rgba(141, 233, 255, 0.36);
+    border-radius: 4px;
+    color: var(--mgas-accent);
+    font-weight: 900;
+  }
+
+  .mgas-brief-flow__node strong {
+    font-size: 18px;
+    line-height: 1.2;
+  }
+
+  .mgas-brief-flow__node small {
+    color: var(--mgas-muted);
+    font-size: 14px;
+  }
+
+  .mgas-brief-section {
+    margin-top: clamp(54px, 7vw, 92px);
+  }
+
+  .mgas-brief-section__head {
+    display: grid;
+    grid-template-columns: minmax(0, 0.76fr) minmax(320px, 0.56fr);
+    gap: clamp(20px, 4vw, 56px);
+    align-items: end;
+    margin-bottom: 24px;
+  }
+
+  .mgas-brief-section__head .eyebrow {
+    grid-column: 1 / -1;
+    margin-bottom: -8px;
+  }
+
+  .mgas-brief-section__head h2 {
+    margin: 0;
+    font-size: clamp(34px, 4vw, 52px);
+    line-height: 1.05;
+  }
+
+  .mgas-brief-section__head p:not(.eyebrow) {
+    margin: 0;
+    color: var(--mgas-muted);
+    font-size: 17px;
+    line-height: 1.65;
+  }
+
+  .mgas-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .mgas-summary-item,
+  .mgas-timeline-card,
+  .mgas-note-band {
+    border: 1px solid var(--mgas-line);
+    border-radius: 7px;
+    background: var(--mgas-surface);
+  }
+
+  .mgas-summary-item {
+    min-height: 220px;
+    padding: 24px;
+  }
+
+  .mgas-summary-item span {
+    display: block;
+    color: var(--mgas-accent);
+    font-size: 13px;
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+
+  .mgas-summary-item strong {
+    display: block;
+    margin-top: 14px;
+    font-size: clamp(24px, 2.4vw, 34px);
+    line-height: 1.08;
+  }
+
+  .mgas-summary-item p {
+    margin: 16px 0 0;
+    color: var(--mgas-muted);
+    line-height: 1.62;
+  }
+
+  .mgas-details-list {
+    display: grid;
+    align-items: start;
+    gap: 12px;
+  }
+
+  .mgas-details-list--two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .mgas-detail {
+    align-self: start;
+    border: 1px solid var(--mgas-line);
+    border-radius: 7px;
+    background: var(--mgas-surface);
+    overflow: hidden;
+  }
+
+  .mgas-detail[open] {
+    border-color: var(--mgas-line-strong);
+    background: var(--mgas-surface-strong);
+  }
+
+  .mgas-detail summary {
+    display: grid;
+    grid-template-columns: 46px minmax(0, 1fr) 34px;
+    gap: 5px 14px;
+    align-items: center;
+    min-height: 76px;
+    padding: 18px 20px;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .mgas-details-list--two .mgas-detail summary {
+    grid-template-columns: minmax(0, 1fr) 34px;
+  }
+
+  .mgas-detail summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .mgas-detail summary::after {
+    content: "+";
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    justify-self: end;
+    color: var(--mgas-accent);
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .mgas-details-list--two .mgas-detail summary::after {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .mgas-detail[open] summary::after {
+    content: "-";
+  }
+
+  .mgas-detail summary span {
+    grid-row: span 2;
+    display: grid;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    border: 1px solid rgba(141, 233, 255, 0.32);
+    border-radius: 4px;
+    color: var(--mgas-accent);
+    font-weight: 900;
+  }
+
+  .mgas-detail summary strong {
+    padding-right: 34px;
+    font-size: clamp(18px, 1.6vw, 24px);
+    line-height: 1.2;
+  }
+
+  .mgas-detail summary small {
+    display: block;
+    padding-right: 34px;
+    color: var(--mgas-muted);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .mgas-detail__body {
+    border-top: 1px solid rgba(216, 251, 255, 0.14);
+    padding: 20px 24px 24px;
+  }
+
+  .mgas-detail__body p {
+    margin: 0 0 14px;
+    color: var(--mgas-muted);
+    line-height: 1.62;
+  }
+
+  .mgas-detail__body ul,
+  .mgas-check-list {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .mgas-detail__body li,
+  .mgas-check-list li {
+    position: relative;
+    padding-left: 24px;
+    color: rgba(238, 248, 255, 0.9);
+    line-height: 1.58;
+  }
+
+  .mgas-detail__body li::before,
+  .mgas-check-list li::before {
+    content: "";
+    position: absolute;
+    top: 0.66em;
+    left: 0;
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--mgas-accent);
+    box-shadow: 0 0 14px rgba(141, 233, 255, 0.5);
+  }
+
+  .mgas-timeline-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .mgas-timeline-card {
+    min-height: 320px;
+    padding: 22px;
+  }
+
+  .mgas-timeline-card > span {
+    display: grid;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    border: 1px solid rgba(141, 233, 255, 0.32);
+    border-radius: 4px;
+    color: var(--mgas-accent);
+    font-weight: 900;
+  }
+
+  .mgas-timeline-card h3 {
+    margin: 18px 0 16px;
+    font-size: clamp(21px, 1.8vw, 27px);
+    line-height: 1.15;
+  }
+
+  .mgas-timeline-card dl {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+  }
+
+  .mgas-timeline-card dl div {
+    display: grid;
+    gap: 4px;
+    border-top: 1px solid rgba(216, 251, 255, 0.14);
+    padding-top: 10px;
+  }
+
+  .mgas-timeline-card dt {
+    color: var(--mgas-faint);
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+
+  .mgas-timeline-card dd {
+    margin: 0;
+    color: var(--mgas-good);
+    font-size: 18px;
+    font-weight: 900;
+  }
+
+  .mgas-timeline-card p {
+    margin: 18px 0 0;
+    color: var(--mgas-muted);
+    line-height: 1.58;
+  }
+
+  .mgas-note-band {
+    display: grid;
+    grid-template-columns: minmax(220px, 0.28fr) minmax(0, 1fr);
+    gap: 18px;
+    align-items: center;
+    margin-top: 16px;
+    padding: 22px;
+    border-color: rgba(255, 209, 102, 0.36);
+    background: rgba(55, 43, 15, 0.32);
+  }
+
+  .mgas-note-band strong {
+    color: var(--mgas-warn);
+    font-size: 19px;
+  }
+
+  .mgas-note-band p {
+    margin: 0;
+    color: var(--mgas-muted);
+    line-height: 1.62;
+  }
+
+  .mgas-check-list {
+    border: 1px solid var(--mgas-line);
+    border-radius: 7px;
+    padding: 24px;
+    background: var(--mgas-surface);
+  }
+
+  .mgas-check-list--columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 24px;
+  }
+
+  @media (max-width: 1100px) {
+    .mgas-brief-hero,
+    .mgas-brief-section__head {
+      grid-template-columns: 1fr;
+    }
+
+    .mgas-summary-grid,
+    .mgas-timeline-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 760px) {
+    .mgas-brief-page {
+      width: min(100%, calc(100vw - 20px));
+    }
+
+    .mgas-brief-hero {
+      min-height: 0;
+      padding: 22px;
+    }
+
+    .mgas-brief-hero h1 {
+      font-size: clamp(36px, 11vw, 52px);
+    }
+
+    .mgas-summary-grid,
+    .mgas-details-list--two,
+    .mgas-timeline-grid,
+    .mgas-check-list--columns {
+      grid-template-columns: 1fr;
+    }
+
+    .mgas-detail summary {
+      grid-template-columns: 40px minmax(0, 1fr) 30px;
+      padding: 16px;
+    }
+
+    .mgas-details-list--two .mgas-detail summary {
+      grid-template-columns: minmax(0, 1fr) 30px;
+    }
+
+    .mgas-detail summary span {
+      width: 38px;
+      height: 38px;
+    }
+
+    .mgas-note-band {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
