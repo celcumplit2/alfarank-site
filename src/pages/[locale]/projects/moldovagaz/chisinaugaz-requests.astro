@@ -1,17 +1,14 @@
 ---
 import MoldovagazApplicationsPresentation from "@/components/MoldovagazApplicationsPresentation.astro";
-import type { Locale } from "@/data/i18n";
+import { translatedLocales, type Locale } from "@/data/i18n";
 
 export function getStaticPaths() {
-  return [
-    {
-      params: { locale: "ru" },
-      props: { locale: "ru" as Locale }
-    }
-  ];
+  return translatedLocales.map((locale) => ({
+    params: { locale }
+  }));
 }
 
-const { locale } = Astro.props;
+const locale = Astro.params.locale as Locale;
 ---
 
 <MoldovagazApplicationsPresentation locale={locale} />

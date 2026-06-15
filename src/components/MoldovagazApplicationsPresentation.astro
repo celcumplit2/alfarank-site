@@ -8,257 +8,567 @@ type Props = {
 
 const { locale = "ru" } = Astro.props;
 
-const overview = [
-  {
-    label: "Что предлагается",
-    value: "Цифровой модуль вокруг 1C/ERP",
-    text: "Заявления остаются в основной учетной системе, а новый модуль показывает статус клиенту, контролирует сроки и помогает руководству видеть ситуацию."
+const localizedCopy = {
+  ru: {
+    metaTitle: "Цифровизация заявлений Chișinău-Gaz | AlfaRank",
+    metaDescription:
+      "Клиентское обоснование проекта цифровизации подачи, мониторинга и контроля заявлений Единого окна Chișinău-Gaz.",
+    heroEyebrow: "SRL Chișinău-Gaz · Единое окно",
+    heroTitle: "Цифровизация подачи и мониторинга заявлений",
+    heroText:
+      "Предлагается создать цифровой модуль, который не заменяет 1C/ERP, а делает путь заявления прозрачным для клиента и управляемым для руководства.",
+    navAria: "Навигация по странице",
+    flowAria: "Общая схема решения",
+    nav: {
+      summary: "Что предлагается",
+      timeline: "Сроки и бюджет",
+      work: "Состав работ"
+    },
+    summaryEyebrow: "Кратко",
+    summaryTitle: "Что предлагается",
+    summaryText:
+      "Система должна убрать ситуацию, когда заявление принято, но клиент не понимает, где оно находится, а руководство видит проблему только после звонков, жалоб или просрочки.",
+    timelineEyebrow: "Сроки и бюджет",
+    timelineTitle: "Ориентировочная оценка",
+    timelineText:
+      "Оценка указана как верхний ориентир для первого рабочего запуска. После обследования можно уточнить состав работ и уменьшить бюджет, если часть интеграций или процессов окажется проще.",
+    termLabel: "Срок",
+    budgetLabel: "Бюджет",
+    recommendedLabel: "Рекомендуемый вариант:",
+    recommendedText:
+      "сначала провести обследование до 3 недель, затем согласовать первый полноценный запуск до 20 недель с бюджетом до 110 000 EUR. Это оставляет пространство уточнить стоимость после проверки данных и правил в 1C/ERP.",
+    workEyebrow: "Состав работ",
+    workTitle: "Что нужно сделать",
+    workText:
+      "Ниже перечислены основные блоки проекта. Каждый блок можно раскрыть и увидеть, какие работы требуется выполнить и какой результат должен получить заказчик.",
+    resultLabel: "Результат:",
+    risksEyebrow: "Сложные места",
+    risksTitle: "Где потребуется внимание",
+    risksText:
+      "Основная сложность проекта не в самой странице проверки статуса, а в корректности данных, правил сроков, уведомлений и ответственности между подразделениями.",
+    assumptionsEyebrow: "Условия оценки",
+    assumptionsTitle: "Что включено в допущения",
+    assumptionsText:
+      "Эти условия важно проговорить до коммерческого предложения, чтобы бюджет не воспринимался как стоимость любых будущих расширений.",
+    clientInputEyebrow: "Что нужно от заказчика",
+    clientInputTitle: "Данные для точной оценки",
+    clientInputText:
+      "После получения этих материалов можно подготовить точную архитектуру, календарный план и фиксированный состав первого запуска.",
+    overview: [
+      {
+        label: "Что предлагается",
+        value: "Цифровой модуль вокруг 1C/ERP",
+        text: "Заявления остаются в основной учетной системе, а новый модуль показывает статус клиенту, контролирует сроки и помогает руководству видеть ситуацию."
+      },
+      {
+        label: "Срок первого запуска",
+        value: "До 16 недель",
+        text: "Ориентир относится к первому рабочему запуску после согласования объема: клиентская проверка статуса, связь с 1C/ERP, сроки, уведомления и панель контроля."
+      },
+      {
+        label: "Бюджет первого запуска",
+        value: "До 110 000 EUR",
+        text: "Это верхняя предварительная оценка для обсуждения. После обследования объем можно уточнить и при необходимости уменьшить без потери логики запуска."
+      }
+    ],
+    workBlocks: [
+      {
+        title: "1. Обследование текущего процесса",
+        short: "Фиксируем, как заявление проходит путь от подачи до результата.",
+        result: "Согласованная карта процесса, список услуг, статусов, сроков, ролей и данных.",
+        details: [
+          "разобрать виды заявлений и услуг Единого окна;",
+          "описать текущие этапы обработки заявления;",
+          "собрать нормативные и внутренние сроки по услугам;",
+          "определить роли: клиент, оператор, подразделение, руководитель, администратор;",
+          "согласовать, какие данные можно показывать клиенту, а какие остаются внутренними."
+        ]
+      },
+      {
+        title: "2. Связь с 1C/ERP",
+        short: "Новый модуль должен получать данные из существующей учетной системы.",
+        result: "Заявления, статусы, счета, оплаты и ключевые события автоматически поступают в новый модуль.",
+        details: [
+          "проверить, какие данные уже есть в 1C/ERP и насколько они заполнены;",
+          "согласовать способ обмена данными: API, веб-сервис, регламентный обмен или другой доступный механизм;",
+          "настроить получение новых заявлений и изменений по ним;",
+          "предусмотреть работу при временной недоступности 1C/ERP;",
+          "вести журнал ошибок обмена, чтобы сбои не оставались незамеченными."
+        ]
+      },
+      {
+        title: "3. Карточка заявления",
+        short: "Каждое заявление получает единую цифровую карточку.",
+        result: "По каждому заявлению видно номер, услугу, статус, срок, ответственный блок, документы, оплату, историю и результат.",
+        details: [
+          "собрать основные данные заявления в одной структуре;",
+          "разделить внутренний статус и публичный статус для клиента;",
+          "хранить историю изменений и отправленных уведомлений;",
+          "показывать причину остановки, отказа или снятия заявки;",
+          "оставить ручное заполнение только для исключений: причина задержки, недостающие документы, дата выезда."
+        ]
+      },
+      {
+        title: "4. Страница проверки статуса для клиента",
+        short: "Клиент проверяет заявление без звонка и визита.",
+        result: "На сайте появляется страница проверки статуса по номеру заявления, телефону и одноразовому коду.",
+        details: [
+          "сделать раздел на сайте: Проверить статус заявления;",
+          "добавить вход по номеру заявления и телефону с одноразовым кодом;",
+          "добавить QR-код на подтверждении или квитанции;",
+          "показать клиенту текущий этап, дату регистрации, последнее обновление, оставшиеся рабочие дни и следующее действие;",
+          "сделать интерфейс на русском и румынском языках, удобный для телефона."
+        ]
+      },
+      {
+        title: "5. Статусы и контроль сроков",
+        short: "Система считает сроки и заранее показывает риск просрочки.",
+        result: "У каждого заявления есть контрольная дата, остаток рабочих дней, статус срока и причина остановки срока.",
+        details: [
+          "настроить правила сроков для каждого вида услуги;",
+          "учитывать рабочие, выходные и праздничные дни;",
+          "останавливать срок, когда ожидается действие клиента: документы, оплата, доступ к объекту;",
+          "выделять заявления по цветам: в срок, риск, последний день, просрочено, срок остановлен;",
+          "показывать руководителям заявления без движения и заявления с риском нарушения срока."
+        ]
+      },
+      {
+        title: "6. Уведомления клиентам и сотрудникам",
+        short: "Сообщения отправляются по событиям, а не только после обращения клиента.",
+        result: "Клиент получает понятные уведомления, а сотрудники и руководители получают предупреждения по срокам.",
+        details: [
+          "подготовить шаблоны сообщений на русском и румынском языках;",
+          "отправлять уведомления о регистрации, счете, оплате, недостающих документах, готовности или снятии заявки;",
+          "напоминать клиенту до снятия заявки с исполнения;",
+          "предупреждать исполнителя до контрольного срока;",
+          "уведомлять руководителя, если заявление перешло в риск или просрочку."
+        ]
+      },
+      {
+        title: "7. Панель руководителя и отчеты",
+        short: "Руководство видит не отдельные звонки, а полную картину процесса.",
+        result: "Появляется панель с активными заявлениями, рисками, просрочками, нагрузкой и причинами задержек.",
+        details: [
+          "сделать общий обзор: активные, в срок, в риске, просрочены, ждут клиента, завершены;",
+          "добавить реестр заявлений с поиском, фильтрами и выгрузкой;",
+          "показать контроль по подразделениям и типам услуг;",
+          "собирать причины задержек, отказов и снятия заявок;",
+          "показывать показатели: средний срок исполнения, доля заявлений в срок, заявления без движения."
+        ]
+      },
+      {
+        title: "8. Безопасность и доказательная база",
+        short: "Система должна защищать данные и фиксировать каждое важное действие.",
+        result: "Доступ клиента защищен кодом, права сотрудников разделены по ролям, история действий сохраняется.",
+        details: [
+          "проверять доступ клиента через номер заявления, телефон и одноразовый код;",
+          "не показывать лишние персональные данные и внутренние комментарии;",
+          "разделить права сотрудников по ролям и подразделениям;",
+          "фиксировать изменения статусов, отправку уведомлений, причины задержек и снятие заявки;",
+          "предусмотреть резервное копирование, контроль сессий и журнал ошибок."
+        ]
+      }
+    ],
+    riskBlocks: [
+      {
+        title: "Данные в 1C/ERP",
+        text: "Сложность зависит от того, насколько аккуратно в 1C ведутся заявления, статусы, телефоны, счета, оплаты и подразделения.",
+        checks: [
+          "есть ли готовый способ обмена данными;",
+          "одинаково ли заполняются поля разными сотрудниками;",
+          "можно ли получить не только текущий статус, но и события по заявлению."
+        ]
+      },
+      {
+        title: "Карта статусов",
+        text: "Внутренние статусы могут быть понятны сотрудникам, но слишком техническими для клиента.",
+        checks: [
+          "нужно согласовать публичные формулировки;",
+          "каждый внутренний этап должен попадать в понятный статус для клиента;",
+          "для спорных ситуаций нужны правила: что показывать, а что оставить внутри компании."
+        ]
+      },
+      {
+        title: "Сроки и остановка срока",
+        text: "Система должна считать не календарные дни, а рабочие дни с учетом праздников и случаев, когда срок остановлен из-за действий клиента.",
+        checks: [
+          "нужен утвержденный календарь рабочих и нерабочих дней;",
+          "по каждой услуге должен быть понятен нормативный срок;",
+          "нужно определить события, которые останавливают и возобновляют срок."
+        ]
+      },
+      {
+        title: "Уведомления",
+        text: "Сообщение должно уходить в правильный момент, по правильному каналу и с юридически аккуратной формулировкой.",
+        checks: [
+          "нужен выбранный поставщик SMS/Viber/e-mail;",
+          "шаблоны должны быть согласованы на русском и румынском языках;",
+          "каждое отправленное сообщение должно сохраняться в истории заявления."
+        ]
+      },
+      {
+        title: "Персональные данные",
+        text: "Клиентская страница не должна раскрывать лишнюю информацию даже при наличии номера заявления.",
+        checks: [
+          "доступ только через подтверждение телефона;",
+          "QR-код не должен сразу открывать персональные данные;",
+          "сотрудники должны видеть только те заявления, которые относятся к их роли."
+        ]
+      },
+      {
+        title: "Привычки сотрудников",
+        text: "Проект успешен только если он не создает параллельный учет и не увеличивает ручную работу.",
+        checks: [
+          "основная работа остается в 1C/ERP;",
+          "ручной ввод нужен только для исключений;",
+          "руководство получает контроль без дополнительных отчетов от сотрудников."
+        ]
+      }
+    ],
+    timeline: [
+      {
+        name: ["Предпроектное", "обследование"],
+        time: "до 3 недель",
+        cost: "до 10 000 EUR",
+        scope: "анализ процессов, данных, статусов, сроков, ролей, уведомлений и доступного обмена с 1C/ERP"
+      },
+      {
+        name: ["Рабочий", "пилот"],
+        time: "до 16 недель",
+        cost: "до 65 000 EUR",
+        scope: "ограниченный набор услуг, проверка статуса на сайте, базовая связь с 1C/ERP, основные уведомления и контроль сроков"
+      },
+      {
+        name: ["Полноценный", "запуск"],
+        time: "до 20 недель",
+        cost: "до 110 000 EUR",
+        scope: "клиентский модуль, статусы, сроки, уведомления, панель руководителя, роли, журнал действий, базовые отчеты"
+      },
+      {
+        name: ["Промышленное", "расширение"],
+        time: "до 28 недель",
+        cost: "до 180 000 EUR",
+        scope: "больше услуг и подразделений, расширенная отчетность, устойчивый запуск, обучение, мониторинг и поддержка"
+      }
+    ],
+    assumptions: [
+      "1C/ERP остается основной системой учета заявлений.",
+      "Стоимость сообщений SMS/Viber/e-mail оплачивается отдельно по тарифам поставщика.",
+      "Если для 1C/ERP потребуется доработка со стороны их подрядчика, она оценивается отдельно.",
+      "Точная стоимость фиксируется после обследования данных, статусов и правил сроков.",
+      "Первый запуск лучше делать на ограниченном перечне услуг, затем расширять систему."
+    ],
+    needFromClient: [
+      "список видов заявлений и услуг Единого окна;",
+      "текущие статусы и этапы обработки в 1C/ERP;",
+      "нормативные и внутренние сроки по каждому виду услуги;",
+      "описание, какие подразделения участвуют в обработке;",
+      "примеры заявлений, счетов, уведомлений и писем о снятии заявки;",
+      "информация о доступном способе обмена данными с 1C/ERP;",
+      "требования по персональным данным, ролям и доступам;",
+      "предпочтительные каналы уведомлений: SMS, Viber, e-mail."
+    ],
+    visualNodes: [
+      { label: "1C/ERP", note: "источник данных" },
+      { label: "Модуль статусов", note: "правила и сроки" },
+      { label: "Сайт", note: "статус для клиента" },
+      { label: "Уведомления", note: "SMS, Viber, e-mail" },
+      { label: "Панель", note: "контроль и отчеты" }
+    ]
   },
-  {
-    label: "Срок первого запуска",
-    value: "До 16 недель",
-    text: "Ориентир относится к первому рабочему запуску после согласования объема: клиентская проверка статуса, связь с 1C/ERP, сроки, уведомления и панель контроля."
-  },
-  {
-    label: "Бюджет первого запуска",
-    value: "До 110 000 EUR",
-    text: "Это верхняя предварительная оценка для обсуждения. После обследования объем можно уточнить и при необходимости уменьшить без потери логики запуска."
+  ro: {
+    metaTitle: "Digitalizarea cererilor Chișinău-Gaz | AlfaRank",
+    metaDescription:
+      "Justificarea proiectului de digitalizare a depunerii, monitorizării și controlului cererilor din Ghișeul unic Chișinău-Gaz.",
+    heroEyebrow: "SRL Chișinău-Gaz · Ghișeul unic",
+    heroTitle: "Digitalizarea depunerii și monitorizării cererilor",
+    heroText:
+      "Se propune crearea unui modul digital care nu înlocuiește 1C/ERP, ci face traseul cererii transparent pentru client și controlabil pentru management.",
+    navAria: "Navigare pe pagină",
+    flowAria: "Schema generală a soluției",
+    nav: {
+      summary: "Ce se propune",
+      timeline: "Termene și buget",
+      work: "Structura lucrărilor"
+    },
+    summaryEyebrow: "Pe scurt",
+    summaryTitle: "Ce se propune",
+    summaryText:
+      "Sistemul trebuie să elimine situația în care cererea este înregistrată, dar clientul nu înțelege unde se află, iar managementul vede problema doar după apeluri, reclamații sau depășirea termenului.",
+    timelineEyebrow: "Termene și buget",
+    timelineTitle: "Estimare orientativă",
+    timelineText:
+      "Estimarea este indicată ca reper superior pentru prima lansare operațională. După analiză, volumul lucrărilor poate fi clarificat și bugetul redus, dacă o parte din integrări sau procese se dovedește mai simplă.",
+    termLabel: "Termen",
+    budgetLabel: "Buget",
+    recommendedLabel: "Varianta recomandată:",
+    recommendedText:
+      "mai întâi analiza până la 3 săptămâni, apoi aprobarea primei lansări complete până la 20 de săptămâni, cu buget până la 110 000 EUR. Această abordare lasă spațiu pentru ajustarea costului după verificarea datelor și regulilor din 1C/ERP.",
+    workEyebrow: "Structura lucrărilor",
+    workTitle: "Ce trebuie făcut",
+    workText:
+      "Mai jos sunt listate etapele principale ale proiectului. Fiecare bloc poate fi deschis pentru a vedea lucrările necesare și rezultatul pe care trebuie să îl primească beneficiarul.",
+    resultLabel: "Rezultat:",
+    risksEyebrow: "Zone dificile",
+    risksTitle: "Unde este nevoie de atenție",
+    risksText:
+      "Complexitatea principală a proiectului nu este pagina de verificare a statutului, ci corectitudinea datelor, regulilor de termene, notificărilor și responsabilităților între subdiviziuni.",
+    assumptionsEyebrow: "Condițiile estimării",
+    assumptionsTitle: "Ce intră în ipoteze",
+    assumptionsText:
+      "Aceste condiții trebuie discutate înainte de oferta comercială, ca bugetul să nu fie perceput ca prețul oricăror extinderi viitoare.",
+    clientInputEyebrow: "Ce este necesar de la beneficiar",
+    clientInputTitle: "Date pentru o estimare exactă",
+    clientInputText:
+      "După primirea acestor materiale se poate pregăti arhitectura exactă, calendarul și componența fixă a primei lansări.",
+    overview: [
+      {
+        label: "Ce se propune",
+        value: "Modul digital în jurul 1C/ERP",
+        text: "Cererile rămân în sistemul principal de evidență, iar noul modul afișează statutul pentru client, controlează termenele și ajută managementul să vadă situația."
+      },
+      {
+        label: "Termenul primei lansări",
+        value: "Până la 16 săptămâni",
+        text: "Reperul se referă la prima lansare operațională după aprobarea volumului: verificarea statutului de către client, legătura cu 1C/ERP, termene, notificări și panou de control."
+      },
+      {
+        label: "Bugetul primei lansări",
+        value: "Până la 110 000 EUR",
+        text: "Aceasta este estimarea preliminară maximă pentru discuție. După analiză, volumul poate fi precizat și, dacă este cazul, redus fără a pierde logica lansării."
+      }
+    ],
+    workBlocks: [
+      {
+        title: "1. Analiza procesului actual",
+        short: "Fixăm cum parcurge cererea traseul de la depunere până la rezultat.",
+        result: "Hartă de proces agreată, listă de servicii, stări, termene, roluri și date.",
+        details: [
+          "analiza tipurilor de cereri și servicii ale Ghișeului unic;",
+          "descrierea etapelor actuale de procesare a cererii;",
+          "colectarea termenelor legale și interne pe servicii;",
+          "definirea rolurilor: client, operator, subdiviziune, manager, administrator;",
+          "stabilirea datelor care pot fi afișate clientului și a celor care rămân interne."
+        ]
+      },
+      {
+        title: "2. Integrarea cu 1C/ERP",
+        short: "Noul modul trebuie să primească date din sistemul existent de evidență.",
+        result: "Cererile, stările, facturile, plățile și evenimentele-cheie ajung automat în noul modul.",
+        details: [
+          "verificarea datelor existente în 1C/ERP și a nivelului lor de completare;",
+          "stabilirea metodei de schimb de date: API, web service, schimb programat sau alt mecanism disponibil;",
+          "configurarea preluării cererilor noi și a modificărilor aferente;",
+          "asigurarea funcționării când 1C/ERP este temporar indisponibil;",
+          "jurnalizarea erorilor de schimb, astfel încât blocajele să nu rămână neobservate."
+        ]
+      },
+      {
+        title: "3. Fișa digitală a cererii",
+        short: "Fiecare cerere primește o fișă digitală unică.",
+        result: "Pentru fiecare cerere se văd numărul, serviciul, starea, termenul, blocul responsabil, documentele, plata, istoricul și rezultatul.",
+        details: [
+          "reunirea datelor principale ale cererii într-o singură structură;",
+          "separarea stării interne de starea publică pentru client;",
+          "păstrarea istoricului modificărilor și notificărilor trimise;",
+          "afișarea motivului de suspendare, refuz sau retragere a cererii;",
+          "păstrarea introducerii manuale doar pentru excepții: motivul întârzierii, documente lipsă, data deplasării."
+        ]
+      },
+      {
+        title: "4. Pagina de verificare a statutului pentru client",
+        short: "Clientul verifică cererea fără apel și fără vizită.",
+        result: "Pe site apare o pagină de verificare a statutului după numărul cererii, telefon și cod unic.",
+        details: [
+          "crearea secțiunii pe site: Verifică statutul cererii;",
+          "adăugarea accesului prin numărul cererii și telefon, cu cod unic;",
+          "adăugarea codului QR pe confirmare sau chitanță;",
+          "afișarea etapei curente, datei înregistrării, ultimei actualizări, zilelor lucrătoare rămase și următoarei acțiuni;",
+          "interfață în română și rusă, comodă pentru telefon."
+        ]
+      },
+      {
+        title: "5. Stări și controlul termenelor",
+        short: "Sistemul calculează termenele și arată din timp riscul de întârziere.",
+        result: "Fiecare cerere are dată de control, zile lucrătoare rămase, starea termenului și motivul suspendării termenului.",
+        details: [
+          "configurarea regulilor de termen pentru fiecare tip de serviciu;",
+          "luarea în calcul a zilelor lucrătoare, weekendurilor și sărbătorilor;",
+          "suspendarea termenului când este așteptată o acțiune a clientului: documente, plată, acces la obiect;",
+          "marcarea cererilor pe culori: în termen, risc, ultima zi, depășit, termen suspendat;",
+          "afișarea pentru management a cererilor fără mișcare și a celor cu risc de depășire."
+        ]
+      },
+      {
+        title: "6. Notificări pentru clienți și angajați",
+        short: "Mesajele se trimit la evenimente, nu doar după ce clientul întreabă.",
+        result: "Clientul primește notificări clare, iar angajații și managerii primesc avertizări privind termenele.",
+        details: [
+          "pregătirea șabloanelor de mesaje în română și rusă;",
+          "trimiterea notificărilor despre înregistrare, factură, plată, documente lipsă, pregătire sau retragerea cererii;",
+          "reamintirea clientului înainte de retragerea cererii din execuție;",
+          "avertizarea executorului înainte de termenul de control;",
+          "notificarea managerului dacă cererea a intrat în risc sau întârziere."
+        ]
+      },
+      {
+        title: "7. Panou pentru management și rapoarte",
+        short: "Managementul vede imaginea completă a procesului, nu apeluri izolate.",
+        result: "Apare un panou cu cereri active, riscuri, depășiri de termen, încărcare și motive ale întârzierilor.",
+        details: [
+          "crearea unei imagini generale: active, în termen, în risc, întârziate, așteaptă clientul, finalizate;",
+          "adăugarea registrului de cereri cu căutare, filtre și export;",
+          "afișarea controlului pe subdiviziuni și tipuri de servicii;",
+          "colectarea motivelor de întârziere, refuz și retragere a cererilor;",
+          "afișarea indicatorilor: termen mediu de execuție, ponderea cererilor în termen, cereri fără mișcare."
+        ]
+      },
+      {
+        title: "8. Securitate și bază probatorie",
+        short: "Sistemul trebuie să protejeze datele și să înregistreze fiecare acțiune importantă.",
+        result: "Accesul clientului este protejat prin cod, drepturile angajaților sunt împărțite pe roluri, iar istoricul acțiunilor se păstrează.",
+        details: [
+          "verificarea accesului clientului prin numărul cererii, telefon și cod unic;",
+          "neafișarea datelor personale inutile și a comentariilor interne;",
+          "împărțirea drepturilor angajaților pe roluri și subdiviziuni;",
+          "înregistrarea modificărilor de stare, trimiterii notificărilor, motivelor de întârziere și retragerii cererii;",
+          "asigurarea copiilor de rezervă, controlului sesiunilor și jurnalului de erori."
+        ]
+      }
+    ],
+    riskBlocks: [
+      {
+        title: "Datele din 1C/ERP",
+        text: "Complexitatea depinde de cât de ordonat sunt ținute în 1C cererile, stările, telefoanele, facturile, plățile și subdiviziunile.",
+        checks: [
+          "există sau nu o metodă pregătită de schimb de date;",
+          "câmpurile sunt completate la fel de angajați diferiți;",
+          "se poate obține nu doar starea curentă, ci și evenimentele aferente cererii."
+        ]
+      },
+      {
+        title: "Harta stărilor",
+        text: "Stările interne pot fi clare pentru angajați, dar prea tehnice pentru client.",
+        checks: [
+          "trebuie agreate formulările publice;",
+          "fiecare etapă internă trebuie să ajungă într-o stare clară pentru client;",
+          "pentru situațiile discutabile sunt necesare reguli: ce se afișează și ce rămâne intern."
+        ]
+      },
+      {
+        title: "Termene și suspendare",
+        text: "Sistemul trebuie să calculeze zile lucrătoare, nu zile calendaristice, ținând cont de sărbători și de cazurile în care termenul este suspendat din cauza acțiunilor clientului.",
+        checks: [
+          "este necesar un calendar aprobat al zilelor lucrătoare și nelucrătoare;",
+          "pentru fiecare serviciu trebuie să fie clar termenul normativ;",
+          "trebuie definite evenimentele care suspendă și reiau termenul."
+        ]
+      },
+      {
+        title: "Notificări",
+        text: "Mesajul trebuie trimis la momentul corect, prin canalul corect și cu o formulare juridică atentă.",
+        checks: [
+          "este necesar un furnizor ales pentru SMS/Viber/e-mail;",
+          "șabloanele trebuie agreate în română și rusă;",
+          "fiecare mesaj trimis trebuie păstrat în istoricul cererii."
+        ]
+      },
+      {
+        title: "Date cu caracter personal",
+        text: "Pagina clientului nu trebuie să dezvăluie informații inutile, chiar dacă există numărul cererii.",
+        checks: [
+          "acces doar prin confirmarea telefonului;",
+          "codul QR nu trebuie să deschidă direct date personale;",
+          "angajații trebuie să vadă doar cererile care corespund rolului lor."
+        ]
+      },
+      {
+        title: "Obiceiurile angajaților",
+        text: "Proiectul reușește doar dacă nu creează evidență paralelă și nu mărește munca manuală.",
+        checks: [
+          "activitatea principală rămâne în 1C/ERP;",
+          "introducerea manuală este necesară doar pentru excepții;",
+          "managementul primește control fără rapoarte suplimentare de la angajați."
+        ]
+      }
+    ],
+    timeline: [
+      {
+        name: ["Analiza", "inițială"],
+        time: "până la 3 săptămâni",
+        cost: "până la 10 000 EUR",
+        scope: "analiza proceselor, datelor, stărilor, termenelor, rolurilor, notificărilor și schimbului disponibil cu 1C/ERP"
+      },
+      {
+        name: ["Pilot", "operațional"],
+        time: "până la 16 săptămâni",
+        cost: "până la 65 000 EUR",
+        scope: "set limitat de servicii, verificarea statutului pe site, legătură de bază cu 1C/ERP, notificări principale și controlul termenelor"
+      },
+      {
+        name: ["Lansare", "completă"],
+        time: "până la 20 de săptămâni",
+        cost: "până la 110 000 EUR",
+        scope: "modul pentru client, stări, termene, notificări, panou pentru management, roluri, jurnal de acțiuni, rapoarte de bază"
+      },
+      {
+        name: ["Extindere", "industrială"],
+        time: "până la 28 de săptămâni",
+        cost: "până la 180 000 EUR",
+        scope: "mai multe servicii și subdiviziuni, raportare extinsă, lansare stabilă, instruire, monitorizare și suport"
+      }
+    ],
+    assumptions: [
+      "1C/ERP rămâne sistemul principal de evidență a cererilor.",
+      "Costul mesajelor SMS/Viber/e-mail se achită separat conform tarifelor furnizorului.",
+      "Dacă pentru 1C/ERP va fi necesară dezvoltare din partea contractorului lor, aceasta se estimează separat.",
+      "Costul exact se fixează după analiza datelor, stărilor și regulilor de termene.",
+      "Prima lansare este recomandat să fie făcută pe o listă limitată de servicii, apoi sistemul se extinde."
+    ],
+    needFromClient: [
+      "lista tipurilor de cereri și servicii ale Ghișeului unic;",
+      "stările și etapele actuale de procesare în 1C/ERP;",
+      "termenele normative și interne pentru fiecare tip de serviciu;",
+      "descrierea subdiviziunilor care participă la procesare;",
+      "exemple de cereri, facturi, notificări și scrisori privind retragerea cererii;",
+      "informații despre metoda disponibilă de schimb de date cu 1C/ERP;",
+      "cerințe privind datele cu caracter personal, rolurile și accesul;",
+      "canalele preferate de notificare: SMS, Viber, e-mail."
+    ],
+    visualNodes: [
+      { label: "1C/ERP", note: "sursa datelor" },
+      { label: "Modul de stări", note: "reguli și termene" },
+      { label: "Site", note: "statut pentru client" },
+      { label: "Notificări", note: "SMS, Viber, e-mail" },
+      { label: "Panou", note: "control și rapoarte" }
+    ]
   }
-];
+};
 
-const workBlocks = [
-  {
-    title: "1. Обследование текущего процесса",
-    short: "Фиксируем, как заявление проходит путь от подачи до результата.",
-    result: "Согласованная карта процесса, список услуг, статусов, сроков, ролей и данных.",
-    details: [
-      "разобрать виды заявлений и услуг Единого окна;",
-      "описать текущие этапы обработки заявления;",
-      "собрать нормативные и внутренние сроки по услугам;",
-      "определить роли: клиент, оператор, подразделение, руководитель, администратор;",
-      "согласовать, какие данные можно показывать клиенту, а какие остаются внутренними."
-    ]
-  },
-  {
-    title: "2. Связь с 1C/ERP",
-    short: "Новый модуль должен получать данные из существующей учетной системы.",
-    result: "Заявления, статусы, счета, оплаты и ключевые события автоматически поступают в новый модуль.",
-    details: [
-      "проверить, какие данные уже есть в 1C/ERP и насколько они заполнены;",
-      "согласовать способ обмена данными: API, веб-сервис, регламентный обмен или другой доступный механизм;",
-      "настроить получение новых заявлений и изменений по ним;",
-      "предусмотреть работу при временной недоступности 1C/ERP;",
-      "вести журнал ошибок обмена, чтобы сбои не оставались незамеченными."
-    ]
-  },
-  {
-    title: "3. Карточка заявления",
-    short: "Каждое заявление получает единую цифровую карточку.",
-    result: "По каждому заявлению видно номер, услугу, статус, срок, ответственный блок, документы, оплату, историю и результат.",
-    details: [
-      "собрать основные данные заявления в одной структуре;",
-      "разделить внутренний статус и публичный статус для клиента;",
-      "хранить историю изменений и отправленных уведомлений;",
-      "показывать причину остановки, отказа или снятия заявки;",
-      "оставить ручное заполнение только для исключений: причина задержки, недостающие документы, дата выезда."
-    ]
-  },
-  {
-    title: "4. Страница проверки статуса для клиента",
-    short: "Клиент проверяет заявление без звонка и визита.",
-    result: "На сайте появляется страница проверки статуса по номеру заявления, телефону и одноразовому коду.",
-    details: [
-      "сделать раздел на сайте: Проверить статус заявления;",
-      "добавить вход по номеру заявления и телефону с одноразовым кодом;",
-      "добавить QR-код на подтверждении или квитанции;",
-      "показать клиенту текущий этап, дату регистрации, последнее обновление, оставшиеся рабочие дни и следующее действие;",
-      "сделать интерфейс на русском и румынском языках, удобный для телефона."
-    ]
-  },
-  {
-    title: "5. Статусы и контроль сроков",
-    short: "Система считает сроки и заранее показывает риск просрочки.",
-    result: "У каждого заявления есть контрольная дата, остаток рабочих дней, статус срока и причина остановки срока.",
-    details: [
-      "настроить правила сроков для каждого вида услуги;",
-      "учитывать рабочие, выходные и праздничные дни;",
-      "останавливать срок, когда ожидается действие клиента: документы, оплата, доступ к объекту;",
-      "выделять заявления по цветам: в срок, риск, последний день, просрочено, срок остановлен;",
-      "показывать руководителям заявления без движения и заявления с риском нарушения срока."
-    ]
-  },
-  {
-    title: "6. Уведомления клиентам и сотрудникам",
-    short: "Сообщения отправляются по событиям, а не только после обращения клиента.",
-    result: "Клиент получает понятные уведомления, а сотрудники и руководители получают предупреждения по срокам.",
-    details: [
-      "подготовить шаблоны сообщений на русском и румынском языках;",
-      "отправлять уведомления о регистрации, счете, оплате, недостающих документах, готовности или снятии заявки;",
-      "напоминать клиенту до снятия заявки с исполнения;",
-      "предупреждать исполнителя до контрольного срока;",
-      "уведомлять руководителя, если заявление перешло в риск или просрочку."
-    ]
-  },
-  {
-    title: "7. Панель руководителя и отчеты",
-    short: "Руководство видит не отдельные звонки, а полную картину процесса.",
-    result: "Появляется панель с активными заявлениями, рисками, просрочками, нагрузкой и причинами задержек.",
-    details: [
-      "сделать общий обзор: активные, в срок, в риске, просрочены, ждут клиента, завершены;",
-      "добавить реестр заявлений с поиском, фильтрами и выгрузкой;",
-      "показать контроль по подразделениям и типам услуг;",
-      "собирать причины задержек, отказов и снятия заявок;",
-      "показывать показатели: средний срок исполнения, доля заявлений в срок, заявления без движения."
-    ]
-  },
-  {
-    title: "8. Безопасность и доказательная база",
-    short: "Система должна защищать данные и фиксировать каждое важное действие.",
-    result: "Доступ клиента защищен кодом, права сотрудников разделены по ролям, история действий сохраняется.",
-    details: [
-      "проверять доступ клиента через номер заявления, телефон и одноразовый код;",
-      "не показывать лишние персональные данные и внутренние комментарии;",
-      "разделить права сотрудников по ролям и подразделениям;",
-      "фиксировать изменения статусов, отправку уведомлений, причины задержек и снятие заявки;",
-      "предусмотреть резервное копирование, контроль сессий и журнал ошибок."
-    ]
-  }
-];
-
-const riskBlocks = [
-  {
-    title: "Данные в 1C/ERP",
-    text: "Сложность зависит от того, насколько аккуратно в 1C ведутся заявления, статусы, телефоны, счета, оплаты и подразделения.",
-    checks: [
-      "есть ли готовый способ обмена данными;",
-      "одинаково ли заполняются поля разными сотрудниками;",
-      "можно ли получить не только текущий статус, но и события по заявлению."
-    ]
-  },
-  {
-    title: "Карта статусов",
-    text: "Внутренние статусы могут быть понятны сотрудникам, но слишком техническими для клиента.",
-    checks: [
-      "нужно согласовать публичные формулировки;",
-      "каждый внутренний этап должен попадать в понятный статус для клиента;",
-      "для спорных ситуаций нужны правила: что показывать, а что оставить внутри компании."
-    ]
-  },
-  {
-    title: "Сроки и остановка срока",
-    text: "Система должна считать не календарные дни, а рабочие дни с учетом праздников и случаев, когда срок остановлен из-за действий клиента.",
-    checks: [
-      "нужен утвержденный календарь рабочих и нерабочих дней;",
-      "по каждой услуге должен быть понятен нормативный срок;",
-      "нужно определить события, которые останавливают и возобновляют срок."
-    ]
-  },
-  {
-    title: "Уведомления",
-    text: "Сообщение должно уходить в правильный момент, по правильному каналу и с юридически аккуратной формулировкой.",
-    checks: [
-      "нужен выбранный поставщик SMS/Viber/e-mail;",
-      "шаблоны должны быть согласованы на русском и румынском языках;",
-      "каждое отправленное сообщение должно сохраняться в истории заявления."
-    ]
-  },
-  {
-    title: "Персональные данные",
-    text: "Клиентская страница не должна раскрывать лишнюю информацию даже при наличии номера заявления.",
-    checks: [
-      "доступ только через подтверждение телефона;",
-      "QR-код не должен сразу открывать персональные данные;",
-      "сотрудники должны видеть только те заявления, которые относятся к их роли."
-    ]
-  },
-  {
-    title: "Привычки сотрудников",
-    text: "Проект успешен только если он не создает параллельный учет и не увеличивает ручную работу.",
-    checks: [
-      "основная работа остается в 1C/ERP;",
-      "ручной ввод нужен только для исключений;",
-      "руководство получает контроль без дополнительных отчетов от сотрудников."
-    ]
-  }
-];
-
-const timeline = [
-  {
-    name: ["Предпроектное", "обследование"],
-    time: "до 3 недель",
-    cost: "до 10 000 EUR",
-    scope: "анализ процессов, данных, статусов, сроков, ролей, уведомлений и доступного обмена с 1C/ERP"
-  },
-  {
-    name: ["Рабочий", "пилот"],
-    time: "до 16 недель",
-    cost: "до 65 000 EUR",
-    scope: "ограниченный набор услуг, проверка статуса на сайте, базовая связь с 1C/ERP, основные уведомления и контроль сроков"
-  },
-  {
-    name: ["Полноценный", "запуск"],
-    time: "до 20 недель",
-    cost: "до 110 000 EUR",
-    scope: "клиентский модуль, статусы, сроки, уведомления, панель руководителя, роли, журнал действий, базовые отчеты"
-  },
-  {
-    name: ["Промышленное", "расширение"],
-    time: "до 28 недель",
-    cost: "до 180 000 EUR",
-    scope: "больше услуг и подразделений, расширенная отчетность, устойчивый запуск, обучение, мониторинг и поддержка"
-  }
-];
-
-const assumptions = [
-  "1C/ERP остается основной системой учета заявлений.",
-  "Стоимость сообщений SMS/Viber/e-mail оплачивается отдельно по тарифам поставщика.",
-  "Если для 1C/ERP потребуется доработка со стороны их подрядчика, она оценивается отдельно.",
-  "Точная стоимость фиксируется после обследования данных, статусов и правил сроков.",
-  "Первый запуск лучше делать на ограниченном перечне услуг, затем расширять систему."
-];
-
-const needFromClient = [
-  "список видов заявлений и услуг Единого окна;",
-  "текущие статусы и этапы обработки в 1C/ERP;",
-  "нормативные и внутренние сроки по каждому виду услуги;",
-  "описание, какие подразделения участвуют в обработке;",
-  "примеры заявлений, счетов, уведомлений и писем о снятии заявки;",
-  "информация о доступном способе обмена данными с 1C/ERP;",
-  "требования по персональным данным, ролям и доступам;",
-  "предпочтительные каналы уведомлений: SMS, Viber, e-mail."
-];
-
-const visualNodes = [
-  { label: "1C/ERP", note: "источник данных" },
-  { label: "Модуль статусов", note: "правила и сроки" },
-  { label: "Сайт", note: "статус для клиента" },
-  { label: "Уведомления", note: "SMS, Viber, e-mail" },
-  { label: "Панель", note: "контроль и отчеты" }
-];
+const contentLocale = locale === "ro" ? "ro" : "ru";
+const copy = localizedCopy[contentLocale];
+const { assumptions, needFromClient, overview, riskBlocks, timeline, visualNodes, workBlocks } = copy;
 ---
 
 <Layout
-  title="Цифровизация заявлений Chișinău-Gaz | AlfaRank"
-  description="Клиентское обоснование проекта цифровизации подачи, мониторинга и контроля заявлений Единого окна Chișinău-Gaz."
+  title={copy.metaTitle}
+  description={copy.metaDescription}
   locale={locale}
   robots="noindex, nofollow"
 >
   <div class="mgas-brief-page" data-no-translate>
     <section class="mgas-brief-hero">
       <div class="mgas-brief-hero__copy">
-        <p class="eyebrow">SRL Chișinău-Gaz · Единое окно</p>
-        <h1>Цифровизация подачи и мониторинга заявлений</h1>
-        <p>
-          Предлагается создать цифровой модуль, который не заменяет 1C/ERP, а делает путь заявления
-          прозрачным для клиента и управляемым для руководства.
-        </p>
-        <div class="mgas-brief-actions" aria-label="Навигация по странице">
-          <a href="#summary">Что предлагается</a>
-          <a href="#timeline">Сроки и бюджет</a>
-          <a href="#work">Состав работ</a>
+        <p class="eyebrow">{copy.heroEyebrow}</p>
+        <h1>{copy.heroTitle}</h1>
+        <p>{copy.heroText}</p>
+        <div class="mgas-brief-actions" aria-label={copy.navAria}>
+          <a href="#summary">{copy.nav.summary}</a>
+          <a href="#timeline">{copy.nav.timeline}</a>
+          <a href="#work">{copy.nav.work}</a>
         </div>
       </div>
-      <div class="mgas-brief-flow" aria-label="Общая схема решения">
+      <div class="mgas-brief-flow" aria-label={copy.flowAria}>
         {visualNodes.map((node, index) => (
           <div class="mgas-brief-flow__node">
             <span>{String(index + 1).padStart(2, "0")}</span>
@@ -271,12 +581,9 @@ const visualNodes = [
 
     <section class="mgas-brief-section" id="summary">
       <div class="mgas-brief-section__head">
-        <p class="eyebrow">Кратко</p>
-        <h2>Что предлагается</h2>
-        <p>
-          Система должна убрать ситуацию, когда заявление принято, но клиент не понимает, где оно находится,
-          а руководство видит проблему только после звонков, жалоб или просрочки.
-        </p>
+        <p class="eyebrow">{copy.summaryEyebrow}</p>
+        <h2>{copy.summaryTitle}</h2>
+        <p>{copy.summaryText}</p>
       </div>
       <div class="mgas-summary-grid">
         {overview.map((item) => (
@@ -291,12 +598,9 @@ const visualNodes = [
 
     <section class="mgas-brief-section" id="timeline">
       <div class="mgas-brief-section__head">
-        <p class="eyebrow">Сроки и бюджет</p>
-        <h2>Ориентировочная оценка</h2>
-        <p>
-          Оценка указана как верхний ориентир для первого рабочего запуска. После обследования можно
-          уточнить состав работ и уменьшить бюджет, если часть интеграций или процессов окажется проще.
-        </p>
+        <p class="eyebrow">{copy.timelineEyebrow}</p>
+        <h2>{copy.timelineTitle}</h2>
+        <p>{copy.timelineText}</p>
       </div>
       <div class="mgas-timeline-grid">
         {timeline.map((item, index) => (
@@ -307,11 +611,11 @@ const visualNodes = [
             </h3>
             <dl>
               <div>
-                <dt>Срок</dt>
+                <dt>{copy.termLabel}</dt>
                 <dd>{item.time}</dd>
               </div>
               <div>
-                <dt>Бюджет</dt>
+                <dt>{copy.budgetLabel}</dt>
                 <dd>{item.cost}</dd>
               </div>
             </dl>
@@ -320,22 +624,16 @@ const visualNodes = [
         ))}
       </div>
       <div class="mgas-note-band">
-        <strong>Рекомендуемый вариант:</strong>
-        <p>
-          сначала провести обследование до 3 недель, затем согласовать первый полноценный запуск до 20 недель
-          с бюджетом до 110 000 EUR. Это оставляет пространство уточнить стоимость после проверки данных и правил в 1C/ERP.
-        </p>
+        <strong>{copy.recommendedLabel}</strong>
+        <p>{copy.recommendedText}</p>
       </div>
     </section>
 
     <section class="mgas-brief-section" id="work">
       <div class="mgas-brief-section__head">
-        <p class="eyebrow">Состав работ</p>
-        <h2>Что нужно сделать</h2>
-        <p>
-          Ниже перечислены основные блоки проекта. Каждый блок можно раскрыть и увидеть, какие работы
-          требуется выполнить и какой результат должен получить заказчик.
-        </p>
+        <p class="eyebrow">{copy.workEyebrow}</p>
+        <h2>{copy.workTitle}</h2>
+        <p>{copy.workText}</p>
       </div>
       <div class="mgas-details-list">
         {workBlocks.map((block, index) => (
@@ -346,7 +644,7 @@ const visualNodes = [
               <small>{block.short}</small>
             </summary>
             <div class="mgas-detail__body">
-              <p><b>Результат:</b> {block.result}</p>
+              <p><b>{copy.resultLabel}</b> {block.result}</p>
               <ul>
                 {block.details.map((detail) => <li>{detail}</li>)}
               </ul>
@@ -358,12 +656,9 @@ const visualNodes = [
 
     <section class="mgas-brief-section" id="risks">
       <div class="mgas-brief-section__head">
-        <p class="eyebrow">Сложные места</p>
-        <h2>Где потребуется внимание</h2>
-        <p>
-          Основная сложность проекта не в самой странице проверки статуса, а в корректности данных,
-          правил сроков, уведомлений и ответственности между подразделениями.
-        </p>
+        <p class="eyebrow">{copy.risksEyebrow}</p>
+        <h2>{copy.risksTitle}</h2>
+        <p>{copy.risksText}</p>
       </div>
       <div class="mgas-details-list mgas-details-list--two">
         {riskBlocks.map((block) => (
@@ -384,12 +679,9 @@ const visualNodes = [
 
     <section class="mgas-brief-section" id="assumptions">
       <div class="mgas-brief-section__head">
-        <p class="eyebrow">Условия оценки</p>
-        <h2>Что включено в допущения</h2>
-        <p>
-          Эти условия важно проговорить до коммерческого предложения, чтобы бюджет не воспринимался как
-          стоимость любых будущих расширений.
-        </p>
+        <p class="eyebrow">{copy.assumptionsEyebrow}</p>
+        <h2>{copy.assumptionsTitle}</h2>
+        <p>{copy.assumptionsText}</p>
       </div>
       <ul class="mgas-check-list">
         {assumptions.map((item) => <li>{item}</li>)}
@@ -398,12 +690,9 @@ const visualNodes = [
 
     <section class="mgas-brief-section" id="client-input">
       <div class="mgas-brief-section__head">
-        <p class="eyebrow">Что нужно от заказчика</p>
-        <h2>Данные для точной оценки</h2>
-        <p>
-          После получения этих материалов можно подготовить точную архитектуру, календарный план и фиксированный
-          состав первого запуска.
-        </p>
+        <p class="eyebrow">{copy.clientInputEyebrow}</p>
+        <h2>{copy.clientInputTitle}</h2>
+        <p>{copy.clientInputText}</p>
       </div>
       <ul class="mgas-check-list mgas-check-list--columns">
         {needFromClient.map((item) => <li>{item}</li>)}
