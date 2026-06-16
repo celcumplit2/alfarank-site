@@ -1,11 +1,13 @@
 ---
 import SystemIcon from "@/components/SystemIcon.astro";
-import type { CaseMetric } from "@/data/case-examples";
+import { isPublicCaseMetric, type CaseMetric } from "@/data/case-examples";
+import type { Locale } from "@/data/i18n";
 
 type Variant = "scoreboard" | "timeline";
 
 type Props = {
   variant: Variant;
+  locale?: Locale;
   icon?: string;
   metrics?: CaseMetric[];
   flow?: string[];
@@ -14,57 +16,111 @@ type Props = {
 
 const {
   variant,
+  locale = "ru",
   icon = "target",
   metrics = [],
   flow = [],
   buyerValue = []
 } = Astro.props;
 
-const metricHasNumber = (metric: CaseMetric) => /[\d$€£%]/.test(metric.value);
-const firstNumberMetricIndex = metrics.findIndex(metricHasNumber);
+const heroMetrics = metrics.filter(isPublicCaseMetric);
+const firstNumberMetricIndex = heroMetrics.findIndex(isPublicCaseMetric);
 const orderedMetrics =
   firstNumberMetricIndex > 0
     ? [
-        metrics[firstNumberMetricIndex],
-        ...metrics.filter((_, index) => index !== firstNumberMetricIndex)
+        heroMetrics[firstNumberMetricIndex],
+        ...heroMetrics.filter((_, index) => index !== firstNumberMetricIndex)
       ]
-    : metrics;
+    : heroMetrics;
 
 const primaryMetric = orderedMetrics[0];
 const secondaryMetrics = orderedMetrics.slice(1, 4);
+const effectiveVariant = variant === "scoreboard" && primaryMetric ? "scoreboard" : "timeline";
 const timelineItems = flow.slice(0, 4);
 const valueItems = buyerValue.slice(0, 2);
 
-const variantCopy = {
-  scoreboard: {
-    label: "Результат",
-    title: "Что изменилось",
-    kicker: "цифры, риск и управленческий вывод"
-  },
-  timeline: {
-    label: "Процесс",
-    title: "Как была собрана работа",
-    kicker: "цепочка действий от задачи до проверки"
-  }
-} as const;
+const variantCopy =
+  locale === "en"
+    ? {
+        scoreboard: {
+          label: "Result",
+          title: "What changed",
+          kicker: "numbers, risk and business conclusion"
+        },
+        timeline: {
+          label: "Process",
+          title: "How the work was assembled",
+          kicker: "the chain from task to validation"
+        }
+      }
+    : locale === "ro"
+      ? {
+          scoreboard: {
+            label: "Rezultat",
+            title: "Ce s-a schimbat",
+            kicker: "cifre, risc si concluzie de business"
+          },
+          timeline: {
+            label: "Proces",
+            title: "Cum a fost construit lucrul",
+            kicker: "lantul de la sarcina la validare"
+          }
+        }
+    : {
+        scoreboard: {
+          label: "Результат",
+          title: "Что изменилось",
+          kicker: "цифры, риск и управленческий вывод"
+        },
+        timeline: {
+          label: "Процесс",
+          title: "Как была собрана работа",
+          kicker: "цепочка действий от задачи до проверки"
+        }
+      };
+
+const fallbackCopy =
+  locale === "en"
+    ? {
+        primaryLabel: "key indicator",
+        primaryValue: "result",
+        primaryNote: "The main case effect is shown first, without internal delivery notes.",
+        conclusionLabel: "conclusion",
+        conclusionText: "Shows what business problem the assembled system solves."
+      }
+    : locale === "ro"
+      ? {
+          primaryLabel: "indicator cheie",
+          primaryValue: "rezultat",
+          primaryNote: "Efectul principal al cazului este aratat primul, fara note interne de livrare.",
+          conclusionLabel: "concluzie",
+          conclusionText: "Arata ce problema de business rezolva sistemul construit."
+        }
+    : {
+        primaryLabel: "ключевой показатель",
+        primaryValue: "результат",
+        primaryNote: "Главный эффект кейса выводится первым, без служебного объяснения.",
+        conclusionLabel: "вывод",
+        conclusionText: "Показывает, какую бизнес-проблему закрывает собранная система."
+      };
 ---
 
-<aside class={`case-hero-visual case-hero-visual--${variant}`} aria-label={variantCopy[variant].title}>
+<aside class={`case-hero-visual case-hero-visual--${effectiveVariant}`} aria-label={variantCopy[effectiveVariant].title}>
   <div class="case-hero-visual__head">
     <SystemIcon name={icon} />
     <div>
-      <p>{variantCopy[variant].label}</p>
-      <strong>{variantCopy[variant].title}</strong>
-      <span>{variantCopy[variant].kicker}</span>
+      <p>{variantCopy[effectiveVariant].label}</p>
+      <strong>{variantCopy[effectiveVariant].title}</strong>
+      <span>{variantCopy[effectiveVariant].kicker}</span>
     </div>
   </div>
 
-  {variant === "scoreboard" && (
+  {effectiveVariant === "scoreboard" && (
     <div class="case-hero-scoreboard">
       <div class="case-hero-scoreboard__primary">
-        <span>{primaryMetric?.label ?? "ключевой показатель"}</span>
-        <strong>{primaryMetric?.value ?? "результат"}</strong>
-        <p>{primaryMetric?.note ?? valueItems[0] ?? "Главный эффект кейса выводится первым, без служебного объяснения."}</p>
+        <span>{primaryMetric?.label ?? fallbackCopy.primaryLabel}</span>
+        <strong>{primaryMetric?.value ?? fallbackCopy.primaryValue}</strong>
+        <p>{primaryMetric?.note ?? valueItems[0] ?? fallbackCopy.primaryNote}</p>
       </div>
 
       {secondaryMetrics.length > 0 && (
@@ -79,13 +135,13 @@ const variantCopy = {
       )}
 
       <div class="case-hero-scoreboard__signal">
-        <span>вывод</span>
-        <p>{valueItems[0] ?? "Показывает, какую бизнес-проблему закрывает собранная система."}</p>
+        <span>{fallbackCopy.conclusionLabel}</span>
+        <p>{valueItems[0] ?? fallbackCopy.conclusionText}</p>
       </div>
     </div>
   )}
 
-  {variant === "timeline" && (
+  {effectiveVariant === "timeline" && (
     <ol class="case-hero-timeline">
       {timelineItems.map((item, index) => (
         <li>
@@ -201,7 +257,7 @@ const variantCopy = {
 
   .case-hero-scoreboard__metrics {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
     gap: 10px;
   }
 

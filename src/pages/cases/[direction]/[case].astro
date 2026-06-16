@@ -2,9 +2,19 @@
 import CaseHeroVisual from "@/components/CaseHeroVisual.astro";
 import {
   caseDirections,
-  caseUi,
   getCaseDirection,
-  getCaseExample
+  getCaseExample,
+  getCaseUi,
+  getPublicCaseTitle,
+  getPublicCaseMetrics,
+  getPublicCasePresentation,
+  getPublicCaseEvidence,
+  getPublicCaseNext,
+  getPublicCaseShift,
+  getPublicCaseShow,
+  getPublicCaseSummary,
+  getPublicCaseTags,
+  getPublicDirectionTitle
 } from "@/data/case-examples";
 import { localizePath } from "@/data/i18n";
 import type { Locale } from "@/data/i18n";
@@ -28,47 +38,74 @@ export function getStaticPaths() {
   );
 }
 
-if (!Astro.props.locale) {
-  return Astro.redirect(`/ru/cases/${Astro.params.direction}/${Astro.params.case}/`);
-}
-
-const { locale = "ru", direction, example } = Astro.props as Props;
-const presentation = example.presentation;
-const metricHasNumber = (value: string) => /[\d$€£%]/.test(value);
-const heroHasMetrics = presentation?.metrics.some((metric) => metricHasNumber(metric.value)) ?? false;
+const { locale = "en", direction, example } = Astro.props as Props;
+const caseUi = getCaseUi(locale);
+const caseAlternateLocales: Locale[] = ["en", "ro", "ru"];
+const presentation = getPublicCasePresentation(example, locale);
+const publicExampleTitle = getPublicCaseTitle(example, locale);
+const publicDirectionTitle = getPublicDirectionTitle(direction, locale);
+const publicSummary = getPublicCaseSummary(example, locale);
+const publicShift = getPublicCaseShift(example, locale);
+const publicShow = getPublicCaseShow(example, locale);
+const publicEvidence = getPublicCaseEvidence(example, locale);
+const publicNext = getPublicCaseNext(example, locale);
+const publicTags = getPublicCaseTags(example, locale);
+const presentationMetrics = getPublicCaseMetrics(example, locale);
+const heroHasMetrics = presentationMetrics.length > 0;
 const heroVariant = heroHasMetrics ? "scoreboard" : "timeline";
 const heroFlow = presentation
   ? presentation.flow
-  : [example.shift, ...example.show, ...example.evidence].filter(Boolean);
+  : [publicShift, ...publicShow, ...publicEvidence].filter(Boolean);
 const heroBuyerValue = presentation
   ? presentation.buyerValue
-  : [example.shift, ...example.next].filter(Boolean);
+  : [publicSummary, ...publicNext].filter(Boolean);
+
+const pageCopy = {
+  projectEssence: locale === "en" ? "Project essence" : locale === "ro" ? "Esenta proiectului" : "Суть проекта",
+  builtTitle: locale === "en" ? "What was built" : locale === "ro" ? "Ce a fost construit" : "Что было построено",
+  task: locale === "en" ? "Task" : locale === "ro" ? "Sarcina" : "Задача",
+  problemTitle: locale === "en" ? "What problem was solved" : locale === "ro" ? "Ce problema a fost rezolvata" : "Какую проблему закрывали",
+  result: locale === "en" ? "Result" : locale === "ro" ? "Rezultat" : "Результат",
+  resultTitle: locale === "en" ? "What changed" : locale === "ro" ? "Ce s-a schimbat" : "Что получилось",
+  metricsLabel: locale === "en" ? "Key project numbers" : locale === "ro" ? "Cifre cheie ale proiectului" : "Ключевые цифры проекта",
+  systemFlow: locale === "en" ? "How the system works" : locale === "ro" ? "Cum functioneaza sistemul" : "Как работает система",
+  workflowTitle: locale === "en" ? "Working chain" : locale === "ro" ? "Lantul de lucru" : "Рабочая цепочка",
+  proof: locale === "en" ? "Proof" : locale === "ro" ? "Dovezi" : "Доказательства",
+  proofTitle: locale === "en" ? "How the result is confirmed" : locale === "ro" ? "Cum este confirmat rezultatul" : "Как подтверждается результат",
+  value: locale === "en" ? "Value" : locale === "ro" ? "Valoare" : "Ценность",
+  businessTitle: locale === "en" ? "What the business gets" : locale === "ro" ? "Ce primeste businessul" : "Что получает бизнес",
+  shiftTitle: locale === "en" ? "How the presentation changes" : locale === "ro" ? "Cum se schimba prezentarea" : "Как меняется подача",
+  showTitle: locale === "en" ? "What should be on the page" : locale === "ro" ? "Ce trebuie sa fie pe pagina" : "Что должно быть на странице",
+  evidenceTitle: locale === "en" ? "What the proof is based on" : locale === "ro" ? "Pe ce se bazeaza dovada" : "На чем строим доказательство",
+  nextTitle: locale === "en" ? "Before the public version" : locale === "ro" ? "Inainte de versiunea publica" : "Перед публичной версией"
+};
 
 ---
 
 <Layout
-  title={`${example.title} | ${caseUi.title} | AlfaRank`}
-  description={example.summary}
+  title={`${publicExampleTitle} | ${caseUi.title} | AlfaRank`}
+  description={publicSummary}
   locale={locale}
-  robots="noindex, nofollow"
+  alternateLocales={caseAlternateLocales}
 >
   <div class="case-library-page" data-no-translate>
     <section class="section case-library-hero case-library-hero--example">
       <div class="case-library-hero__content">
         <a class="case-back-link" href={localizePath(`/cases/${direction.slug}/`, locale)}>{caseUi.backToDirection}</a>
-        <p class="eyebrow">{direction.title}</p>
-        <h1>{example.title}</h1>
-        <p>{example.summary}</p>
-        {example.tags.length > 0 && (
+        <p class="eyebrow">{publicDirectionTitle}</p>
+        <h1>{publicExampleTitle}</h1>
+        <p>{publicSummary}</p>
+        {publicTags.length > 0 && (
           <div class="case-library-hero__tags">
-            {example.tags.map((tag) => <span>{tag}</span>)}
+            {publicTags.map((tag) => <span>{tag}</span>)}
           </div>
         )}
       </div>
       <CaseHeroVisual
         variant={heroVariant}
+        locale={locale}
         icon={direction.icon}
-        metrics={presentation?.metrics ?? []}
+        metrics={presentationMetrics}
         flow={heroFlow}
         buyerValue={heroBuyerValue}
       />
@@ -78,33 +115,35 @@ const heroBuyerValue = presentation
       <div class="case-presentation-stack">
         <section class="section case-presentation-lead">
           <article class="case-detail-panel case-detail-panel--lead">
-            <p class="eyebrow">Суть проекта</p>
-            <h2>Что было построено</h2>
+            <p class="eyebrow">{pageCopy.projectEssence}</p>
+            <h2>{pageCopy.builtTitle}</h2>
             <p>{presentation.lead}</p>
           </article>
 
           <article class="case-detail-panel">
-            <p class="eyebrow">Задача</p>
-            <h2>Какую проблему закрывали</h2>
+            <p class="eyebrow">{pageCopy.task}</p>
+            <h2>{pageCopy.problemTitle}</h2>
             <p>{presentation.problem}</p>
           </article>
 
           <article class="case-detail-panel">
-            <p class="eyebrow">Результат</p>
-            <h2>Что получилось</h2>
+            <p class="eyebrow">{pageCopy.result}</p>
+            <h2>{pageCopy.resultTitle}</h2>
             <p>{presentation.result}</p>
           </article>
         </section>
 
-        <section class="section case-metric-grid" aria-label="Ключевые цифры проекта">
-          {presentation.metrics.map((metric) => (
-            <article class="case-metric">
-              <strong>{metric.value}</strong>
-              <span>{metric.label}</span>
-              {metric.note && <p>{metric.note}</p>}
-            </article>
-          ))}
-        </section>
+        {presentationMetrics.length > 0 && (
+          <section class="section case-metric-grid" aria-label={pageCopy.metricsLabel}>
+            {presentationMetrics.map((metric) => (
+              <article class="case-metric">
+                <strong>{metric.value}</strong>
+                <span>{metric.label}</span>
+                {metric.note && <p>{metric.note}</p>}
+              </article>
+            ))}
+          </section>
+        )}
 
         <section class="section case-story-grid">
           {presentation.story.map((block) => (
@@ -118,8 +157,8 @@ const heroBuyerValue = presentation
 
         <section class="section case-presentation-flow">
           <article class="case-detail-panel case-detail-panel--wide">
-            <p class="eyebrow">Как работает система</p>
-            <h2>Рабочая цепочка</h2>
+            <p class="eyebrow">{pageCopy.systemFlow}</p>
+            <h2>{pageCopy.workflowTitle}</h2>
             <ol class="case-flow-list">
               {presentation.flow.map((item) => <li>{item}</li>)}
             </ol>
@@ -128,16 +167,16 @@ const heroBuyerValue = presentation
 
         <section class="section case-proof-grid">
           <article class="case-detail-panel">
-            <p class="eyebrow">Доказательства</p>
-            <h2>На чем держится страница</h2>
+            <p class="eyebrow">{pageCopy.proof}</p>
+            <h2>{pageCopy.proofTitle}</h2>
             <ul class="case-check-list">
               {presentation.proof.map((item) => <li>{item}</li>)}
             </ul>
           </article>
 
           <article class="case-detail-panel">
-            <p class="eyebrow">Для покупателя</p>
-            <h2>Почему это важно</h2>
+            <p class="eyebrow">{pageCopy.value}</p>
+            <h2>{pageCopy.businessTitle}</h2>
             <ul class="case-check-list">
               {presentation.buyerValue.map((item) => <li>{item}</li>)}
             </ul>
@@ -150,31 +189,31 @@ const heroBuyerValue = presentation
     <section class="section case-example-layout">
       <article class="case-detail-panel case-detail-panel--lead">
         <p class="eyebrow">{caseUi.conceptShift}</p>
-        <h2>Как меняется подача</h2>
-        <p>{example.shift}</p>
+        <h2>{pageCopy.shiftTitle}</h2>
+        <p>{publicShift}</p>
       </article>
 
       <article class="case-detail-panel">
         <p class="eyebrow">{caseUi.whatToShow}</p>
-        <h2>Что должно быть на странице</h2>
+        <h2>{pageCopy.showTitle}</h2>
         <ul class="case-check-list">
-          {example.show.map((item) => <li>{item}</li>)}
+          {publicShow.map((item) => <li>{item}</li>)}
         </ul>
       </article>
 
       <article class="case-detail-panel">
         <p class="eyebrow">{caseUi.proofBase}</p>
-        <h2>На чем строим доказательство</h2>
+        <h2>{pageCopy.evidenceTitle}</h2>
         <ul class="case-check-list">
-          {example.evidence.map((item) => <li>{item}</li>)}
+          {publicEvidence.map((item) => <li>{item}</li>)}
         </ul>
       </article>
 
       <article class="case-detail-panel">
         <p class="eyebrow">{caseUi.nextWork}</p>
-        <h2>Перед публичной версией</h2>
+        <h2>{pageCopy.nextTitle}</h2>
         <ul class="case-check-list">
-          {example.next.map((item) => <li>{item}</li>)}
+          {publicNext.map((item) => <li>{item}</li>)}
         </ul>
       </article>
     </section>

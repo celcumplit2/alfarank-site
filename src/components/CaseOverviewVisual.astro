@@ -1,0 +1,315 @@
+---
+import SystemIcon from "@/components/SystemIcon.astro";
+import type { Locale } from "@/data/i18n";
+
+type OverviewMetric = {
+  value: string;
+  label: string;
+  note?: string;
+};
+
+type OverviewLink = {
+  title: string;
+  note?: string;
+  href?: string;
+};
+
+type Props = {
+  variant?: "library" | "direction";
+  locale?: Locale;
+  icon?: string;
+  label: string;
+  title: string;
+  kicker: string;
+  primary: OverviewMetric;
+  metrics?: OverviewMetric[];
+  links?: OverviewLink[];
+  conclusion?: string;
+};
+
+const {
+  variant = "library",
+  locale = "ru",
+  icon = "system",
+  label,
+  title,
+  kicker,
+  primary,
+  metrics = [],
+  links = [],
+  conclusion
+} = Astro.props;
+
+const visibleMetrics = metrics.slice(0, 3);
+const visibleLinks = links.slice(0, 3);
+const routeLabel = locale === "en" ? "what to open next" : locale === "ro" ? "ce deschidem mai departe" : "что открыть дальше";
+const conclusionLabel = locale === "en" ? "conclusion" : locale === "ro" ? "concluzie" : "вывод";
+---
+
+<aside class={`case-overview-visual case-overview-visual--${variant}`} aria-label={title}>
+  <div class="case-overview-visual__head">
+    <SystemIcon name={icon} />
+    <div>
+      <p>{label}</p>
+      <strong>{title}</strong>
+      <span>{kicker}</span>
+    </div>
+  </div>
+
+  <div class="case-overview-visual__primary">
+    <span>{primary.label}</span>
+    <strong>{primary.value}</strong>
+    {primary.note && <p>{primary.note}</p>}
+  </div>
+
+  {visibleMetrics.length > 0 && (
+    <div class="case-overview-visual__metrics">
+      {visibleMetrics.map((metric) => (
+        <div>
+          <strong>{metric.value}</strong>
+          <span>{metric.label}</span>
+          {metric.note && <p>{metric.note}</p>}
+        </div>
+      ))}
+    </div>
+  )}
+
+  {visibleLinks.length > 0 && (
+    <div class="case-overview-visual__routes">
+      <span>{routeLabel}</span>
+      <ol>
+        {visibleLinks.map((link, index) => (
+          <li>
+            <small>{String(index + 1).padStart(2, "0")}</small>
+            <div>
+              {link.href ? <a href={link.href}>{link.title}</a> : <strong>{link.title}</strong>}
+              {link.note && <p>{link.note}</p>}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  )}
+
+  {conclusion && (
+    <div class="case-overview-visual__conclusion">
+      <span>{conclusionLabel}</span>
+      <p>{conclusion}</p>
+    </div>
+  )}
+</aside>
+
+<style>
+  .case-overview-visual {
+    min-height: 360px;
+    padding: 26px;
+    border: 1px solid rgba(128, 199, 255, 0.24);
+    background:
+      linear-gradient(150deg, rgba(9, 32, 54, 0.94), rgba(6, 18, 32, 0.86)),
+      rgba(4, 16, 31, 0.9);
+    box-shadow: 0 22px 70px rgba(0, 0, 0, 0.26);
+    display: grid;
+    gap: 18px;
+    align-content: start;
+    overflow: hidden;
+  }
+
+  .case-overview-visual__head {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
+  }
+
+  .case-overview-visual__head .system-icon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .case-overview-visual__head p,
+  .case-overview-visual__head strong,
+  .case-overview-visual__head span,
+  .case-overview-visual__primary span,
+  .case-overview-visual__primary strong,
+  .case-overview-visual__primary p,
+  .case-overview-visual__metrics strong,
+  .case-overview-visual__metrics span,
+  .case-overview-visual__metrics p,
+  .case-overview-visual__routes span,
+  .case-overview-visual__routes p,
+  .case-overview-visual__conclusion span,
+  .case-overview-visual__conclusion p {
+    display: block;
+    margin: 0;
+  }
+
+  .case-overview-visual__head p,
+  .case-overview-visual__primary span,
+  .case-overview-visual__routes > span,
+  .case-overview-visual__conclusion span {
+    color: #8de9ff;
+    font-size: 0.75rem;
+    font-weight: 900;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .case-overview-visual__head strong {
+    margin-top: 5px;
+    color: #ffffff;
+    font-size: 1.28rem;
+    line-height: 1.16;
+  }
+
+  .case-overview-visual__head span {
+    margin-top: 8px;
+    color: rgba(227, 241, 255, 0.74);
+    line-height: 1.45;
+  }
+
+  .case-overview-visual__primary {
+    padding: 18px 0 16px;
+    border-top: 1px solid rgba(141, 233, 255, 0.32);
+    border-bottom: 1px solid rgba(141, 233, 255, 0.22);
+  }
+
+  .case-overview-visual__primary strong {
+    margin-top: 10px;
+    color: #ffffff;
+    font-size: clamp(2.8rem, 5vw, 4.3rem);
+    line-height: 0.92;
+  }
+
+  .case-overview-visual__primary p,
+  .case-overview-visual__metrics p,
+  .case-overview-visual__routes p,
+  .case-overview-visual__conclusion p {
+    color: rgba(232, 242, 255, 0.82);
+    line-height: 1.5;
+  }
+
+  .case-overview-visual__primary p {
+    margin-top: 12px;
+  }
+
+  .case-overview-visual__metrics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .case-overview-visual__metrics > div {
+    min-height: 78px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(141, 233, 255, 0.2);
+  }
+
+  .case-overview-visual__metrics strong {
+    color: #d8fbff;
+    font-size: 1.35rem;
+    line-height: 1;
+  }
+
+  .case-overview-visual__metrics span {
+    margin-top: 9px;
+    color: rgba(232, 242, 255, 0.82);
+    font-size: 0.88rem;
+    line-height: 1.42;
+  }
+
+  .case-overview-visual__metrics p {
+    margin-top: 8px;
+    font-size: 0.82rem;
+  }
+
+  .case-overview-visual__routes {
+    display: grid;
+    gap: 10px;
+  }
+
+  .case-overview-visual__routes ol {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .case-overview-visual__routes li {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 12px;
+    align-items: start;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(141, 233, 255, 0.14);
+  }
+
+  .case-overview-visual__routes small {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid rgba(141, 233, 255, 0.42);
+    color: #d8fbff;
+    font-size: 0.74rem;
+    font-weight: 900;
+  }
+
+  .case-overview-visual__routes a,
+  .case-overview-visual__routes strong {
+    color: #ffffff;
+    font-weight: 900;
+    line-height: 1.25;
+    text-decoration: none;
+  }
+
+  .case-overview-visual__routes a:hover {
+    color: #8de9ff;
+  }
+
+  .case-overview-visual__routes p {
+    margin-top: 5px;
+    font-size: 0.86rem;
+  }
+
+  .case-overview-visual__conclusion {
+    padding-top: 2px;
+  }
+
+  .case-overview-visual__conclusion p {
+    margin-top: 9px;
+  }
+
+  .case-overview-visual--direction {
+    border-color: rgba(255, 204, 112, 0.32);
+  }
+
+  .case-overview-visual--direction .case-overview-visual__head p,
+  .case-overview-visual--direction .case-overview-visual__primary span,
+  .case-overview-visual--direction .case-overview-visual__routes > span,
+  .case-overview-visual--direction .case-overview-visual__conclusion span {
+    color: #ffe2a3;
+  }
+
+  .case-overview-visual--direction .case-overview-visual__primary {
+    border-top-color: rgba(255, 211, 126, 0.32);
+    border-bottom-color: rgba(255, 211, 126, 0.2);
+  }
+
+  .case-overview-visual--direction .case-overview-visual__metrics > div,
+  .case-overview-visual--direction .case-overview-visual__routes li {
+    border-bottom-color: rgba(255, 211, 126, 0.16);
+  }
+
+  .case-overview-visual--direction .case-overview-visual__routes small {
+    border-color: rgba(255, 211, 126, 0.44);
+    color: #ffe2a3;
+  }
+
+  @media (max-width: 640px) {
+    .case-overview-visual {
+      min-height: auto;
+      padding: 22px;
+    }
+  }
+</style>

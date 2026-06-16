@@ -11,6 +11,7 @@ import type { PageItem } from "@/data/site";
 import { landingOffers as baseLandingOffers } from "@/data/landing";
 import type { LandingOffer } from "@/data/landing";
 import { ruQualityOverrides } from "@/data/ru-overrides";
+import { caseDirections } from "@/data/case-examples";
 
 export const locales = ["en", "ro", "ru"] as const;
 export const translatedLocales = ["ro", "ru"] as const;
@@ -93,9 +94,14 @@ export const localizePath = (href: string | undefined, locale: Locale) => {
   return `${localized}${suffix}`;
 };
 
+export const localesForBaseRoute = (path: string): Locale[] => {
+  const basePath = stripLocaleFromPath(path);
+  return basePath.startsWith("/cases/") ? ["en", "ro", "ru"] : [...locales];
+};
+
 export const alternatePaths = (path: string) => {
   const basePath = stripLocaleFromPath(path);
-  return locales.map((locale) => ({
+  return localesForBaseRoute(basePath).map((locale) => ({
     locale,
     href: localizePath(basePath, locale)
   }));
@@ -119,8 +125,17 @@ export const staticBaseRoutes = [
   "/start-project/thank-you/"
 ];
 
+const caseBaseRoutes = () => [
+  "/cases/",
+  ...caseDirections.map((direction) => `/cases/${direction.slug}/`),
+  ...caseDirections.flatMap((direction) =>
+    direction.examples.map((example) => `/cases/${direction.slug}/${example.slug}/`)
+  )
+];
+
 export const allBaseRoutes = () => [
   ...staticBaseRoutes,
+  ...caseBaseRoutes(),
   ...baseCapabilities.map((item) => `/capabilities/${item.slug}/`),
   ...baseSolutions.map((item) => `/solutions/${item.slug}/`),
   ...baseSystems.map((item) => `/systems/${item.slug}/`),
@@ -129,7 +144,7 @@ export const allBaseRoutes = () => [
 ];
 
 export const allLocalizedRoutes = () =>
-  locales.flatMap((locale) => allBaseRoutes().map((route) => localizePath(route, locale)));
+  allBaseRoutes().flatMap((route) => localesForBaseRoute(route).map((locale) => localizePath(route, locale)));
 
 type Dictionary = Record<string, string>;
 
@@ -170,15 +185,15 @@ const ruCopy: Dictionary = {
 
   "Capabilities are grouped by operating layer.": "Возможности сгруппированы по операционным слоям.",
   "Each group combines build directions with the solution routes where that capability usually becomes a working system.":
-    "Каждая группа связывает направления сборки с маршрутами решений, где эта возможность обычно становится рабочей системой.",
+    "Каждая группа связывает направления работ с маршрутами решений, где эта возможность обычно становится рабочей системой.",
   "Each zone opens a capability page with practical modules, workflow use cases, and related system routes.":
     "Каждая зона ведет на страницу возможности с практическими модулями, сценариями применения и связанными системными маршрутами.",
   "Capability foundation": "Основа возможностей",
-  "All build directions": "Все направления сборки",
+  "All build directions": "Все направления работ",
   "Use the full catalog when the system is already clear, or start from the layer groups above when the problem still needs routing.":
     "Полный каталог подходит, когда система уже понятна; группы слоев выше помогают направить задачу в правильный маршрут.",
   "Service navigation surface": "Навигационная поверхность услуг",
-  "Choose the build zone": "Зона сборки",
+  "Choose the build zone": "Зона работ",
   "Scope the first zone": "Описать первую зону",
   "Automation and operations": "Автоматизация и операции",
   "Repeated work, lead handling, content production, reporting, routing, and review loops.":
@@ -189,9 +204,9 @@ const ruCopy: Dictionary = {
   "Data and commerce infrastructure": "Данные и commerce-инфраструктура",
   "Collection, normalization, scoring, feeds, catalog operations, dashboards, and alerts.":
     "Сбор, нормализация, оценка, фиды, операции каталога, панели и уведомления.",
-  "Build directions online": "Направления сборки активны",
+  "Build directions online": "Направления работ активны",
   "Directions": "Направления",
-  "Build map": "Карта сборки",
+  "Build map": "Карта направлений",
   "Buildable modules": "Собираемые модули",
   "A capability becomes useful when it connects real inputs, review states, integrations, and a visible business output.":
     "Возможность становится полезной, когда соединяет реальные входные данные, состояния проверки, интеграции и видимый бизнес-результат.",
@@ -293,7 +308,7 @@ const ruCopy: Dictionary = {
   "The request is reviewed against system type, current workflow, feasibility, timeline, and implementation path.":
     "Заявка проверяется по типу системы, текущему процессу, реализуемости, срокам и маршруту внедрения.",
   "Next route": "Следующий маршрут",
-  "Review possible build directions": "Посмотреть возможные направления сборки",
+  "Review possible build directions": "Посмотреть возможные направления работ",
   "Map the business problem": "Разложить бизнес-проблему",
   "Explore operating patterns": "Изучить операционные паттерны",
   "System type": "Тип системы",
@@ -1808,7 +1823,7 @@ const roQualityOverrides: Dictionary = {
 const ruExactFallback: Dictionary = {
   "4 modules mapped": "4 модуля на карте",
   "4 connected modules": "4 связанных модуля",
-  "4 build modules": "4 модуля сборки",
+  "4 build modules": "4 рабочих модуля",
   "Scope This Solution": "Запросить это решение",
   "Scope This System": "Запросить эту систему",
   "Scope this solution": "Запросить это решение",
@@ -1839,7 +1854,7 @@ const ruExactFallback: Dictionary = {
   "Trigger": "Триггер",
   "Promise": "Обещание",
   "Related solutions": "Связанные решения",
-  "Build rail": "Рельс сборки",
+  "Build rail": "Рабочий маршрут",
   "Input layer": "Входной слой",
   "Workflow modules": "Модули процесса",
   "Automation layer": "Слой автоматизации",
@@ -1914,7 +1929,7 @@ const ruPhraseFallback: Array<[RegExp, string]> = [
   [/^(.+) as an operating system$/i, "$1 как операционная система"],
   [/^(\d+) modules mapped$/i, "$1 модуля на карте"],
   [/^(\d+) connected modules$/i, "$1 связанных модуля"],
-  [/^(\d+) build modules$/i, "$1 модуля сборки"],
+  [/^(\d+) build modules$/i, "$1 рабочих модуля"],
   [/^(\d+) reusable patterns$/i, "$1 повторяемых паттернов"],
   [/^System profiles for (.+)$/i, "Профили систем для $1"],
   [/^Solution routes for (.+)$/i, "Маршруты решений для $1"],

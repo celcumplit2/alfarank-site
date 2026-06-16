@@ -1,6 +1,17 @@
 ---
+import CaseOverviewVisual from "@/components/CaseOverviewVisual.astro";
 import SystemIcon from "@/components/SystemIcon.astro";
-import { caseDirections, caseUi, getCaseDirection } from "@/data/case-examples";
+import {
+  caseDirections,
+  getCaseDirection,
+  getCaseUi,
+  getPublicCaseTitle,
+  getPublicCaseSummary,
+  getPublicCaseTags,
+  getPublicDirectionEyebrow,
+  getPublicDirectionSummary,
+  getPublicDirectionTitle
+} from "@/data/case-examples";
 import { localizePath } from "@/data/i18n";
 import type { Locale } from "@/data/i18n";
 import Layout from "@/layouts/Layout.astro";
@@ -17,12 +28,31 @@ export function getStaticPaths() {
   }));
 }
 
-if (!Astro.props.locale) {
-  return Astro.redirect(`/ru/cases/${Astro.params.direction}/`);
-}
-
-const { locale = "ru", direction } = Astro.props as Props;
+const { locale = "en", direction } = Astro.props as Props;
+const caseUi = getCaseUi(locale);
+const caseAlternateLocales: Locale[] = ["en", "ro", "ru"];
+const publicDirectionTitle = getPublicDirectionTitle(direction, locale);
+const publicDirectionSummary = getPublicDirectionSummary(direction, locale);
+const publicDirectionEyebrow = getPublicDirectionEyebrow(direction, locale);
+const detailedExamples = direction.examples.filter((example) => example.status === "first-wave");
+const shortExamples = direction.examples.length - detailedExamples.length;
+const totalTags = new Set(direction.examples.flatMap((example) => example.tags)).size;
+const overviewLinks = direction.examples.slice(0, 4).map((example) => ({
+  title: getPublicCaseTitle(example, locale),
+  note:
+    getPublicCaseTags(example, locale).slice(0, 2).join(" · ") ||
+    (locale === "en" ? "direction page" : locale === "ro" ? "pagina directiei" : "страница направления"),
+  href: localizePath(`/cases/${direction.slug}/${example.slug}/`, locale)
+}));
 const detailedCaseLabel = (count: number) => {
+  if (locale === "en") {
+    return `${count} detailed ${count === 1 ? "case" : "cases"}`;
+  }
+
+  if (locale === "ro") {
+    return `${count} ${count === 1 ? "studiu detaliat" : "studii detaliate"}`;
+  }
+
   const mod10 = count % 10;
   const mod100 = count % 100;
 
@@ -38,45 +68,87 @@ const detailedCaseLabel = (count: number) => {
 };
 
 const statusLabel = {
-  "first-wave": "подробный кейс",
-  draft: "краткий пример",
-  "needs-sanitizing": "краткий пример",
-  archive: "архивный пример"
+  "first-wave": locale === "en" ? "detailed case" : locale === "ro" ? "studiu detaliat" : "подробный кейс",
+  draft: locale === "en" ? "compact example" : locale === "ro" ? "exemplu compact" : "краткий пример",
+  "needs-sanitizing": locale === "en" ? "compact example" : locale === "ro" ? "exemplu compact" : "краткий пример",
+  archive: locale === "en" ? "reference example" : locale === "ro" ? "exemplu de referinta" : "архивный пример"
+};
+
+const pageCopy = {
+  pages: locale === "en" ? "pages" : locale === "ro" ? "pagini" : "страниц",
+  detailedCases: locale === "en" ? "detailed cases" : locale === "ro" ? "studii detaliate" : "подробных кейсов",
+  compactExamples: locale === "en" ? "compact examples" : locale === "ro" ? "exemple compacte" : "кратких примеров",
+  workingTopics: locale === "en" ? "working topics" : locale === "ro" ? "teme de lucru" : "рабочих тем",
+  directionShape: locale === "en" ? "Direction shape" : locale === "ro" ? "Structura directiei" : "Состав направления",
+  overviewTitle: locale === "en" ? "What is inside the group" : locale === "ro" ? "Ce este in aceasta grupa" : "Что внутри группы",
+  overviewKicker:
+    locale === "en"
+      ? "pages, detailed cases and the closest entry points"
+      : locale === "ro"
+        ? "pagini, studii detaliate si intrari apropiate"
+        : "страницы, подробные кейсы и ближайшие входы",
+  overviewNote:
+    locale === "en"
+      ? "Related projects are collected here so the page shows a class of tasks, not just one example."
+      : locale === "ro"
+        ? "Aici sunt colectate proiecte apropiate, ca pagina sa arate o clasa de sarcini, nu doar un singur exemplu."
+        : "Здесь собраны близкие по смыслу проекты, чтобы было видно не один пример, а класс задач.",
+  sectionTitle: locale === "en" ? "What is included in this direction" : locale === "ro" ? "Ce intra in aceasta directie" : "Что входит в направление",
+  sectionDescription:
+    locale === "en"
+      ? "Each page below shows a separate type of system: the task, approach, workflow, proof points and business value."
+      : locale === "ro"
+        ? "Fiecare pagina de mai jos arata un tip separat de sistem: sarcina, abordarea, workflow-ul, dovezile si valoarea pentru business."
+        : "Каждая страница ниже показывает отдельный тип системы: задачу, подход, рабочий процесс, доказательства и ценность для бизнеса."
 };
 ---
 
 <Layout
-  title={`${direction.title} | ${caseUi.title} | AlfaRank`}
-  description={direction.summary}
+  title={`${publicDirectionTitle} | ${caseUi.title} | AlfaRank`}
+  description={publicDirectionSummary}
   locale={locale}
-  robots="noindex, nofollow"
+  alternateLocales={caseAlternateLocales}
 >
   <div class="case-library-page" data-no-translate>
     <section class="section case-library-hero case-library-hero--direction">
       <div class="case-library-hero__content">
         <a class="case-back-link" href={localizePath("/cases/", locale)}>{caseUi.backToDirections}</a>
-        <p class="eyebrow">{direction.eyebrow}</p>
-        <h1>{direction.title}</h1>
-        <p>{direction.summary}</p>
+        <p class="eyebrow">{publicDirectionEyebrow}</p>
+        <h1>{publicDirectionTitle}</h1>
+        <p>{publicDirectionSummary}</p>
         <div class="case-library-hero__tags">
-          <span>{direction.examples.length} страниц</span>
+          <span>{direction.examples.length} {pageCopy.pages}</span>
           <span>{detailedCaseLabel(direction.examples.filter((example) => example.status === "first-wave").length)}</span>
         </div>
       </div>
-      <aside class="case-library-note">
-        <SystemIcon name={direction.icon} />
-        <strong>Роль направления</strong>
-        <p>{direction.role}</p>
-      </aside>
+      <CaseOverviewVisual
+        variant="direction"
+        locale={locale}
+        icon={direction.icon}
+        label={pageCopy.directionShape}
+        title={pageCopy.overviewTitle}
+        kicker={pageCopy.overviewKicker}
+        primary={{
+          value: String(direction.examples.length),
+          label: pageCopy.pages,
+          note: pageCopy.overviewNote
+        }}
+        metrics={[
+          { value: String(detailedExamples.length), label: pageCopy.detailedCases },
+          { value: String(shortExamples), label: pageCopy.compactExamples },
+          { value: String(totalTags), label: pageCopy.workingTopics }
+        ]}
+        links={overviewLinks}
+      />
     </section>
 
     <section class="section" aria-labelledby="case-direction-pages-title">
       <div class="section-header">
         <div>
           <p class="eyebrow">{caseUi.directionPages}</p>
-          <h2 id="case-direction-pages-title">Что входит в направление</h2>
+          <h2 id="case-direction-pages-title">{pageCopy.sectionTitle}</h2>
         </div>
-        <p>Каждая страница ниже показывает отдельный тип системы: задачу, подход, рабочий процесс, доказательства и ценность для бизнеса.</p>
+        <p>{pageCopy.sectionDescription}</p>
       </div>
 
       <div class="case-card-grid case-card-grid--examples">
@@ -86,12 +158,12 @@ const statusLabel = {
               <SystemIcon name={direction.icon} />
               <div>
                 <p class="eyebrow">{statusLabel[example.status]}</p>
-                <h3>{example.title}</h3>
+                <h3>{getPublicCaseTitle(example, locale)}</h3>
               </div>
             </div>
-            <p>{example.summary}</p>
+            <p>{getPublicCaseSummary(example, locale)}</p>
             <div class="case-card__meta">
-              {example.tags.map((tag) => <span>{tag}</span>)}
+              {getPublicCaseTags(example, locale).map((tag) => <span>{tag}</span>)}
             </div>
             <a class="case-card__link" href={localizePath(`/cases/${direction.slug}/${example.slug}/`, locale)}>
               {caseUi.openExample}

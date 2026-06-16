@@ -2,7 +2,7 @@
 import CasesIndexPage from "@/pages/cases/index.astro";
 
 export function getStaticPaths() {
-  return [{ params: { locale: "ru" }, props: { locale: "ru" } }];
+  return ["ro", "ru"].map((locale) => ({ params: { locale }, props: { locale } }));
 }
 
 const { locale } = Astro.props;

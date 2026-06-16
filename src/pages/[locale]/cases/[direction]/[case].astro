@@ -3,11 +3,13 @@ import CasesExamplePage from "@/pages/cases/[direction]/[case].astro";
 import { caseDirections } from "@/data/case-examples";
 
 export function getStaticPaths() {
-  return caseDirections.flatMap((direction) =>
-    direction.examples.map((example) => ({
-      params: { locale: "ru", direction: direction.slug, case: example.slug },
-      props: { locale: "ru", direction, example }
-    }))
+  return ["ro", "ru"].flatMap((locale) =>
+    caseDirections.flatMap((direction) =>
+      direction.examples.map((example) => ({
+        params: { locale, direction: direction.slug, case: example.slug },
+        props: { locale, direction, example }
+      }))
+    )
   );
 }
 

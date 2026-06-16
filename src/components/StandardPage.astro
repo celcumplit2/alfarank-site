@@ -3,6 +3,7 @@ import ContactChannels from "@/components/ContactChannels.astro";
 import Layout from "@/layouts/Layout.astro";
 import { getCapabilities, getSolutions, localizePath, t } from "@/data/i18n";
 import type { Locale } from "@/data/i18n";
+import { getCaseDirections, getCaseUi, getPublicDirectionTitle } from "@/data/case-examples";
 
 export type StandardPageKey = "contact" | "privacy-policy" | "terms-and-conditions" | "cookie-policy" | "sitemap";
 
@@ -185,6 +186,8 @@ const standardPages = [
 
 const capabilities = getCapabilities(locale).slice(0, 7);
 const solutions = getSolutions(locale).slice(0, 7);
+const caseUi = getCaseUi(locale);
+const caseDirections = getCaseDirections(locale);
 
 const sitemapGroups = [
   {
@@ -195,6 +198,20 @@ const sitemapGroups = [
     title: t(locale, "solutions"),
     links: solutions.map((item) => ({ label: item.title, href: localizePath(`/solutions/${item.slug}/`, locale) }))
   },
+  ...(caseUi
+    ? [
+        {
+          title: caseUi.title,
+          links: [
+            { label: caseUi.title, href: localizePath("/cases/", locale) },
+            ...caseDirections.map((direction) => ({
+              label: getPublicDirectionTitle(direction, locale),
+              href: localizePath(`/cases/${direction.slug}/`, locale)
+            }))
+          ]
+        }
+      ]
+    : []),
   {
     title: locale === "ru" ? "Основные страницы" : locale === "ro" ? "Pagini principale" : "Main pages",
     links: [
