@@ -11747,8 +11747,16 @@ button:disabled {
 
 .lead-desk__toolbar-actions {
   display: flex;
+  grid-column: 1 / -1;
   gap: 10px;
   justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.lead-desk__toolbar-actions .button {
+  flex: 0 0 auto;
+  min-width: max-content;
+  white-space: nowrap;
 }
 
 .lead-desk__quick-filters {
@@ -16572,6 +16580,416 @@ button:disabled {
     display: none !important;
   }
 }
+/* Light pass for high-opacity glass surfaces on the brighter liquid background. */
+.page-system-map__metrics span {
+  background: rgba(1, 10, 28, 0.24);
+}
+
+.decision-orbit-core {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(17, 65, 113, 0.42), rgba(2, 17, 43, 0.5) 58%, rgba(1, 10, 28, 0.58) 73%, transparent 74%),
+    radial-gradient(circle at 50% 50%, rgba(105, 230, 255, 0.18), transparent 58%);
+  box-shadow:
+    inset 0 0 30px rgba(105, 230, 255, 0.08),
+    0 0 0 1px rgba(216, 251, 255, 0.22),
+    0 0 0 9px rgba(44, 180, 255, 0.07),
+    0 0 0 17px rgba(44, 180, 255, 0.032),
+    0 0 34px rgba(105, 230, 255, 0.34),
+    0 0 78px rgba(13, 113, 220, 0.22);
+}
+
+.decision-orbit-module {
+  background:
+    radial-gradient(circle at 20% 50%, rgba(105, 230, 255, 0.13), transparent 38%),
+    linear-gradient(118deg, rgba(7, 33, 73, 0.34), rgba(3, 19, 47, 0.38));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -1px 18px rgba(0, 16, 48, 0.2),
+    0 18px 44px -30px rgba(0, 7, 26, 0.48);
+}
+
+.decision-orbit-module:is(:hover, :focus-visible) {
+  background:
+    radial-gradient(circle at 20% 50%, rgba(105, 230, 255, 0.18), transparent 42%),
+    linear-gradient(118deg, rgba(9, 43, 88, 0.44), rgba(3, 21, 52, 0.48));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -1px 18px rgba(0, 16, 48, 0.22),
+    0 20px 52px -30px rgba(0, 7, 26, 0.54),
+    0 0 28px rgba(105, 230, 255, 0.14);
+}
+
+.decision-orbit-module__icon {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(216, 251, 255, 0.16), transparent 56%),
+    rgba(1, 16, 38, 0.3);
+}
+
+.decision-orbit-module__copy em {
+  background: rgba(1, 16, 38, 0.28);
+}
+
+.decision-orbit-benefits {
+  background:
+    linear-gradient(90deg, rgba(4, 29, 64, 0.24), rgba(1, 16, 38, 0.28)),
+    rgba(1, 16, 38, 0.22);
+}
+
+.growth-signal-funnel__core,
+.growth-signal-funnel__output,
+.landing-offer-core__center,
+.landing-offer-node,
+.landing-offer-core__signals {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.09), transparent 55%),
+    rgba(1, 16, 38, 0.34);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 18px 42px rgba(0, 7, 26, 0.14);
+}
+
+.landing-offer-node:hover {
+  background:
+    linear-gradient(135deg, rgba(105, 230, 255, 0.12), transparent 55%),
+    rgba(2, 24, 54, 0.4);
+}
+
+.before-after-engine__signals {
+  background:
+    linear-gradient(90deg, rgba(216, 251, 255, 0.08), rgba(1, 16, 38, 0.24) 30%, rgba(1, 16, 38, 0.2)),
+    rgba(1, 16, 38, 0.2);
+}
+
+.landing-process-grid__meta span {
+  background: rgba(1, 16, 38, 0.32);
+}
+
+.solution-mechanism__pressure {
+  background:
+    radial-gradient(circle at 10% 12%, rgba(255, 84, 101, 0.16), transparent 28%),
+    rgba(1, 16, 38, 0.34);
+}
+
+.solution-mechanism__output {
+  background:
+    radial-gradient(circle at 88% 84%, rgba(216, 251, 255, 0.15), transparent 32%),
+    rgba(1, 16, 38, 0.34);
+}
+
+.intake-reactor__bridge {
+  background:
+    radial-gradient(ellipse at 18% 50%, rgba(216, 251, 255, 0.16), transparent 42%),
+    radial-gradient(ellipse at 78% 50%, rgba(80, 210, 255, 0.12), transparent 42%),
+    linear-gradient(rgba(216, 251, 255, 0.034) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(216, 251, 255, 0.03) 1px, transparent 1px),
+    rgba(1, 16, 38, 0.34);
+}
+
+.quick-intake {
+  background:
+    radial-gradient(circle at 22% 28%, rgba(216, 251, 255, 0.16), transparent 28%),
+    linear-gradient(135deg, rgba(14, 165, 233, 0.12), transparent 42%),
+    rgba(1, 16, 38, 0.32);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 24px 70px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(216, 251, 255, 0.06);
+}
+
+.contact-channels {
+  background: rgba(3, 20, 46, 0.26);
+}
+
+.contact-channels__link {
+  background: rgba(3, 17, 40, 0.32);
+}
+
+.lead-proof-card {
+  background:
+    linear-gradient(135deg, rgba(216, 251, 255, 0.08), transparent 34%),
+    rgba(1, 16, 38, 0.34);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 22px 60px rgba(0, 0, 0, 0.1);
+}
+
+.lead-proof-patterns__footer {
+  background: rgba(3, 20, 46, 0.28);
+}
+
+.operating-spectrum__core,
+.spectrum-node,
+.solution-field__axis,
+.solution-feature,
+.solution-field__rail a,
+.tech-radar-copy,
+.market-node,
+.solution-map__core,
+.solution-map__node,
+.solution-map__output,
+.capability-mosaic__card,
+.landing-module-core,
+.landing-module {
+  background: rgba(1, 16, 38, 0.28);
+}
+
+.spectrum-node:hover,
+.solution-feature:hover,
+.solution-field__rail a:hover,
+.market-node:hover,
+.solution-map__node:hover,
+.capability-mosaic__card:hover {
+  background: rgba(3, 23, 54, 0.36);
+}
+
+.tech-radar {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(105, 230, 255, 0.12), transparent 16%),
+    radial-gradient(circle at 50% 50%, transparent 0 34%, rgba(216, 251, 255, 0.06) 34% 35%, transparent 35% 100%),
+    rgba(1, 16, 38, 0.3);
+}
+
+.tech-radar__core {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(105, 230, 255, 0.2), transparent 48%),
+    rgba(1, 16, 38, 0.34);
+}
+
+.command-core,
+.service-surface__core {
+  background:
+    linear-gradient(rgba(216, 251, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(216, 251, 255, 0.04) 1px, transparent 1px),
+    rgba(1, 16, 38, 0.34);
+  box-shadow:
+    0 0 0 4px rgba(216, 251, 255, 0.06),
+    0 0 34px rgba(216, 251, 255, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -1px 28px rgba(0, 16, 48, 0.2);
+}
+
+.route-engine__link::after,
+.route-pulse::before,
+.route-output::after {
+  background:
+    radial-gradient(circle at 50% 38%, rgba(216, 251, 255, 0.18), transparent 52%),
+    rgba(1, 16, 38, 0.34);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 0 0 3px rgba(1, 16, 38, 0.3),
+    0 0 18px rgba(216, 251, 255, 0.16);
+}
+
+.route-engine:has(.route-pulse[data-route-pair="1"]:is(:hover, :focus-visible), .route-output[data-route-pair="1"]:is(:hover, :focus-visible)) [data-route-pair="1"],
+.route-engine:has(.route-pulse[data-route-pair="2"]:is(:hover, :focus-visible), .route-output[data-route-pair="2"]:is(:hover, :focus-visible)) [data-route-pair="2"],
+.route-engine:has(.route-pulse[data-route-pair="3"]:is(:hover, :focus-visible), .route-output[data-route-pair="3"]:is(:hover, :focus-visible)) [data-route-pair="3"],
+.route-engine:has(.route-pulse[data-route-pair="4"]:is(:hover, :focus-visible), .route-output[data-route-pair="4"]:is(:hover, :focus-visible)) [data-route-pair="4"],
+.route-engine:has(.route-pulse[data-route-pair="5"]:is(:hover, :focus-visible), .route-output[data-route-pair="5"]:is(:hover, :focus-visible)) [data-route-pair="5"] {
+  background: rgba(3, 28, 62, 0.36);
+}
+
+.service-surface__signals {
+  background: rgba(1, 16, 38, 0.32);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 18px 42px rgba(0, 7, 26, 0.14);
+}
+
+.route-problem-card,
+.route-output-card {
+  background: rgba(1, 16, 38, 0.32);
+}
+
+.route-problem-card:hover,
+.route-output-card:hover {
+  background: rgba(3, 23, 54, 0.38);
+}
+
+.client-blueprint__stage--1 {
+  --blueprint-stage-fill-deep: rgba(1, 14, 34, 0.22);
+}
+
+.client-blueprint__stage--2 {
+  --blueprint-stage-fill-deep: rgba(1, 14, 34, 0.26);
+}
+
+.client-blueprint__stage--3 {
+  --blueprint-stage-fill-deep: rgba(1, 14, 34, 0.24);
+}
+
+.client-blueprint__stage--4 {
+  --blueprint-stage-fill-deep: rgba(1, 14, 34, 0.28);
+}
+
+.client-blueprint__connector {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(216, 251, 255, 0.2), transparent 58%),
+    linear-gradient(90deg, rgba(1, 16, 38, 0.34), rgba(3, 34, 70, 0.4), rgba(1, 16, 38, 0.34));
+}
+
+.client-blueprint__platform {
+  background:
+    radial-gradient(circle at 50% 20%, rgba(216, 251, 255, 0.2), transparent 46%),
+    linear-gradient(180deg, rgba(4, 42, 82, 0.32), rgba(1, 16, 38, 0.44));
+}
+
+.data-signal-map__core,
+.data-signal-node,
+.automation-tower__copy,
+.automation-floor,
+.ai-review-console__preview,
+.ai-review-step,
+.content-factory__core,
+.factory-station,
+.lead-reactor__core,
+.platform-blueprint__hub,
+.blueprint-layer {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 55%),
+    rgba(1, 16, 38, 0.34);
+}
+
+.blueprint-layer:hover {
+  background:
+    linear-gradient(135deg, rgba(105, 230, 255, 0.12), transparent 54%),
+    rgba(2, 24, 54, 0.4);
+}
+
+.private-access-form input {
+  background: rgba(1, 10, 28, 0.24);
+}
+
+.ar-select__button {
+  background:
+    radial-gradient(circle at 16% 10%, rgba(216, 251, 255, 0.12), transparent 46%),
+    linear-gradient(135deg, rgba(216, 251, 255, 0.09), rgba(1, 16, 38, 0.18)),
+    rgba(1, 16, 38, 0.26);
+}
+
+.ar-select__option {
+  background: rgba(4, 24, 54, 0.34);
+}
+
+.ar-select__option:hover,
+.ar-select__option:focus-visible {
+  background: rgba(8, 43, 82, 0.42);
+}
+
+.ar-select__option.is-selected {
+  background:
+    linear-gradient(90deg, rgba(105, 230, 255, 0.18), rgba(4, 24, 54, 0.38)),
+    rgba(4, 24, 54, 0.38);
+}
+
+.lead-desk__signal {
+  background: rgba(1, 16, 38, 0.22);
+}
+
+.lead-desk__auth,
+.lead-desk__toolbar,
+.lead-desk__queue,
+.lead-desk__side .glass-panel {
+  background:
+    linear-gradient(135deg, rgba(8, 45, 82, 0.24), rgba(1, 13, 32, 0.28)),
+    rgba(1, 16, 38, 0.24);
+}
+
+.lead-desk__check,
+.lead-desk__quick-filters,
+.lead-desk__ops,
+.lead-desk__ops-card,
+.lead-desk__lead,
+.lead-desk__empty,
+.lead-desk__recent-item,
+.lead-desk__event,
+.lead-desk__partner-card,
+.lead-desk__partner-source,
+.lead-desk__breakdowns article {
+  background: rgba(0, 14, 36, 0.24);
+}
+
+.lead-desk__lead-top > strong {
+  background: radial-gradient(circle, rgba(105, 230, 255, 0.18), rgba(0, 14, 36, 0.32) 64%);
+}
+
+.partner-program__shell {
+  background:
+    radial-gradient(circle at 24% 38%, rgba(105, 230, 255, 0.18), transparent 30%),
+    radial-gradient(circle at 78% 18%, rgba(125, 211, 252, 0.1), transparent 28%),
+    linear-gradient(124deg, rgba(4, 24, 58, 0.36), rgba(1, 10, 28, 0.18)),
+    rgba(1, 12, 32, 0.22);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.11),
+    0 30px 90px rgba(0, 0, 0, 0.14);
+}
+
+.partner-program__metrics,
+.partner-type-card,
+.partner-route__step,
+.partner-route__attribution {
+  background: rgba(1, 16, 38, 0.3);
+}
+
+.footer-orbit-core {
+  background:
+    radial-gradient(circle at 50% 38%, rgba(80, 210, 255, 0.16), transparent 50%),
+    linear-gradient(rgba(216, 251, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(216, 251, 255, 0.03) 1px, transparent 1px),
+    rgba(1, 14, 34, 0.34);
+}
+
+.footer-orbit-node {
+  background:
+    linear-gradient(135deg, rgba(216, 251, 255, 0.08), rgba(1, 16, 38, 0.32));
+}
+
+.footer-company__item,
+.footer-meta,
+.standard-page__card {
+  background: rgba(1, 16, 38, 0.26);
+}
+
+.contact-channels--footer .contact-channels__link {
+  background:
+    linear-gradient(135deg, rgba(216, 251, 255, 0.1), rgba(3, 23, 54, 0.2));
+}
+
+.contact-channels--footer .contact-channels__link:hover,
+.contact-channels--footer .contact-channels__link:focus-visible {
+  background:
+    radial-gradient(circle at 24% 50%, rgba(216, 251, 255, 0.2), transparent 38%),
+    linear-gradient(135deg, rgba(216, 251, 255, 0.18), rgba(8, 42, 82, 0.42));
+}
+
+.moldovagaz-direction-stack {
+  background:
+    radial-gradient(circle at 82% 22%, rgba(43, 181, 255, 0.16), transparent 28%),
+    radial-gradient(circle at 18% 72%, rgba(43, 181, 255, 0.12), transparent 34%),
+    linear-gradient(135deg, rgba(2, 14, 29, 0.36), rgba(3, 27, 52, 0.24));
+  box-shadow: 0 36px 90px rgba(0, 0, 0, 0.18);
+}
+
+.moldovagaz-direction-deck__tabs .moldovagaz-stack-layer__trigger,
+.moldovagaz-direction-deck__tabs .moldovagaz-stack-layer__trigger:is(:hover, :focus-visible),
+.moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .moldovagaz-stack-layer__trigger {
+  background:
+    radial-gradient(circle at var(--stack-accent, 80%) 12%, rgba(43, 181, 255, 0.16), transparent 34%),
+    linear-gradient(135deg, rgba(28, 62, 98, 0.42), rgba(10, 35, 63, 0.46)) !important;
+  box-shadow:
+    0 18px 38px rgba(0, 0, 0, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+.moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active {
+  background:
+    linear-gradient(90deg, rgba(255, 190, 75, 0.12), transparent 16%),
+    radial-gradient(circle at var(--stack-accent, 80%) 12%, rgba(43, 181, 255, 0.18), transparent 36%),
+    linear-gradient(135deg, rgba(20, 52, 84, 0.44), rgba(7, 30, 55, 0.48)) !important;
+  box-shadow:
+    -10px 0 0 rgba(255, 190, 75, 0.78),
+    0 30px 70px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
 
 /* Final wide scattered Moldovagaz deck. Keep this block last. */
 html body .moldovagaz-direction-stack[data-direction-deck] {
@@ -18089,10 +18507,10 @@ html body .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .mo
   background:
     linear-gradient(90deg, rgba(255, 190, 75, 0.12), transparent 16%),
     radial-gradient(circle at var(--stack-accent, 80%) 12%, rgba(43, 181, 255, 0.18), transparent 36%),
-    linear-gradient(135deg, rgba(20, 52, 84, 0.96), rgba(7, 30, 55, 0.96)) !important;
+    linear-gradient(135deg, rgba(20, 52, 84, 0.44), rgba(7, 30, 55, 0.48)) !important;
   box-shadow:
-    -10px 0 0 rgba(255, 190, 75, 0.84),
-    0 38px 92px rgba(0, 0, 0, 0.46),
+    -10px 0 0 rgba(255, 190, 75, 0.78),
+    0 30px 70px rgba(0, 0, 0, 0.22),
     inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
   opacity: 1 !important;
   overflow: hidden !important;
@@ -18113,9 +18531,9 @@ html body .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .mo
   padding: 11px 15px !important;
   background:
     radial-gradient(circle at var(--stack-accent, 80%) 12%, rgba(43, 181, 255, 0.16), transparent 34%),
-    linear-gradient(135deg, rgba(28, 62, 98, 0.92), rgba(10, 35, 63, 0.94)) !important;
+    linear-gradient(135deg, rgba(28, 62, 98, 0.42), rgba(10, 35, 63, 0.46)) !important;
   box-shadow:
-    0 22px 46px rgba(0, 0, 0, 0.3),
+    0 18px 38px rgba(0, 0, 0, 0.16),
     inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
   cursor: pointer !important;
   pointer-events: auto !important;
@@ -18129,9 +18547,9 @@ html body .moldovagaz-direction-deck__tabs .moldovagaz-stack-layer.is-active .mo
   border-color: rgba(216, 251, 255, 0.16) !important;
   background:
     radial-gradient(circle at var(--stack-accent, 80%) 12%, rgba(43, 181, 255, 0.16), transparent 34%),
-    linear-gradient(135deg, rgba(28, 62, 98, 0.92), rgba(10, 35, 63, 0.94)) !important;
+    linear-gradient(135deg, rgba(28, 62, 98, 0.42), rgba(10, 35, 63, 0.46)) !important;
   box-shadow:
-    0 22px 46px rgba(0, 0, 0, 0.3),
+    0 18px 38px rgba(0, 0, 0, 0.16),
     inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
   transform: none !important;
 }
