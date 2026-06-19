@@ -732,6 +732,17 @@ const detailPages = noviqDetailPages.map((page) => ({
       align-items: center;
     }
 
+    .noviq-scenario {
+      align-content: stretch;
+      grid-template-rows: auto auto minmax(8.1em, auto) auto minmax(0, 1fr);
+    }
+
+    .noviq-scenario > p:not(.noviq-scenario__outcome),
+    .noviq-scenario dl,
+    .noviq-scenario__outcome {
+      align-self: start;
+    }
+
     .noviq-scenario__head strong {
       min-height: 30px;
       display: inline-flex;
@@ -754,10 +765,11 @@ const detailPages = noviqDetailPages.map((page) => ({
 
     .noviq-scenario dl div,
     .noviq-summary-grid div {
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
       gap: 14px;
-      align-items: baseline;
+      align-items: center;
+      min-height: 44px;
       padding-top: 10px;
       border-top: 1px solid rgba(216, 251, 255, 0.13);
     }
@@ -1080,10 +1092,15 @@ const detailPages = noviqDetailPages.map((page) => ({
         text-align: left;
       }
 
+      .noviq-scenario {
+        grid-template-rows: auto;
+      }
+
       .noviq-scenario dl div,
       .noviq-summary-grid div {
+        grid-template-columns: 1fr;
         align-items: flex-start;
-        flex-direction: column;
+        min-height: auto;
       }
 
       .noviq-scenario dd,
