@@ -1,6 +1,13 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import { articleDate, articleDescription, articleTitle, formatArticleDate, getNovaArticleSummaries } from "@/lib/nova";
+import {
+  articleDate,
+  articleDescription,
+  articleImage,
+  articleTitle,
+  formatArticleDate,
+  getNovaArticleSummaries
+} from "@/lib/nova";
 
 const articles = await getNovaArticleSummaries();
 const conciseHeading = (value: string) => {
@@ -38,15 +45,22 @@ const conciseHeading = (value: string) => {
       {articles.map((article) => (
         <article class="nova-news-card">
           <a href={`/news/${article.slug}/`}>
-            <time datetime={articleDate(article)}>{formatArticleDate(articleDate(article))}</time>
-            {article.category && <span class="nova-news-card__category">{article.category.replaceAll("-", " ")}</span>}
-            <h2>{conciseHeading(articleTitle(article))}</h2>
-            <p>{articleDescription(article)}</p>
-            {article.seo?.tags && (
-              <ul>
-                {article.seo.tags.slice(0, 4).map((tag) => <li>{tag}</li>)}
-              </ul>
+            {articleImage(article) && (
+              <figure class="nova-news-card__image">
+                <img src={articleImage(article)} alt="" loading="lazy" decoding="async" />
+              </figure>
             )}
+            <div class="nova-news-card__body">
+              <time datetime={articleDate(article)}>{formatArticleDate(articleDate(article))}</time>
+              {article.category && <span class="nova-news-card__category">{article.category.replaceAll("-", " ")}</span>}
+              <h2>{conciseHeading(articleTitle(article))}</h2>
+              <p>{articleDescription(article)}</p>
+              {article.seo?.tags && (
+                <ul>
+                  {article.seo.tags.slice(0, 4).map((tag) => <li>{tag}</li>)}
+                </ul>
+              )}
+            </div>
           </a>
         </article>
       ))}

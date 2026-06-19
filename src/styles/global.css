@@ -16692,8 +16692,36 @@ button:disabled {
 }
 
 .nova-news-card a {
+  overflow: hidden;
   min-height: 310px;
-  padding: 22px;
+}
+
+.nova-news-card__image {
+  position: relative;
+  margin: 0;
+  border-bottom: 1px solid rgba(125, 211, 252, 0.18);
+  background: rgba(1, 16, 38, 0.78);
+}
+
+.nova-news-card__image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(1, 16, 38, 0) 55%, rgba(1, 16, 38, 0.58) 100%),
+    radial-gradient(circle at 22% 18%, rgba(216, 251, 255, 0.18), transparent 34%);
+  pointer-events: none;
+}
+
+.nova-news-card__image img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.nova-news-card__body {
+  padding: 20px 22px 22px;
 }
 
 .nova-news-card time {
