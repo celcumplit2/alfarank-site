@@ -1,0 +1,54 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { articleDate, articleDescription, articleTitle, formatArticleDate, getNovaArticleSummaries } from "@/lib/nova";
+
+const articles = await getNovaArticleSummaries();
+const conciseHeading = (value: string) => {
+  if (value.length <= 60) return value;
+  const candidates = [
+    value.split(/[—–-]/)[0]?.trim(),
+    value.split(":")[0]?.trim()
+  ].filter((candidate) => candidate && candidate.length >= 18 && candidate.length <= 60);
+  if (candidates[0]) return candidates[0];
+  const trimmed = value.slice(0, 57).replace(/\s+\S*$/, "");
+  return `${trimmed}...`;
+};
+---
+
+<Layout
+  title="AlfaRank News Analysis | AlfaRank"
+  description="Source-backed AlfaRank news analysis on automation, AI workflows, data systems, web platforms, and digital operations."
+>
+  <section class="section nova-news-index">
+    <header class="nova-news-index__hero">
+      <p class="eyebrow">News Analysis</p>
+      <h1>AlfaRank intelligence for digital operators.</h1>
+      <p>
+        Analytical coverage from the NOVA monitoring engine: source-backed market signals, operational consequences,
+        data points, and decision context for teams building automation and digital systems.
+      </p>
+      <nav class="nova-news-index__trust" aria-label="News trust pages">
+        <a href="/news/about/">About AlfaRank News</a>
+        <a href="/news/editorial-policy/">Editorial Policy</a>
+        <a href="/news/authors/andrei/">Author</a>
+      </nav>
+    </header>
+
+    <div class="nova-news-grid">
+      {articles.map((article) => (
+        <article class="nova-news-card">
+          <a href={`/news/${article.slug}/`}>
+            <time datetime={articleDate(article)}>{formatArticleDate(articleDate(article))}</time>
+            <h2>{conciseHeading(articleTitle(article))}</h2>
+            <p>{articleDescription(article)}</p>
+            {article.seo?.tags && (
+              <ul>
+                {article.seo.tags.slice(0, 4).map((tag) => <li>{tag}</li>)}
+              </ul>
+            )}
+          </a>
+        </article>
+      ))}
+    </div>
+  </section>
+</Layout>

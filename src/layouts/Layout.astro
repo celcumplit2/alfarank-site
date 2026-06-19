@@ -14,7 +14,7 @@ import {
   translateCopy
 } from "@/data/i18n";
 import type { Locale } from "@/data/i18n";
-import "@/styles/global.css";
+import globalStylesUrl from "@/styles/global.css?url";
 
 type Props = {
   title?: string;
@@ -23,6 +23,8 @@ type Props = {
   locale?: Locale;
   alternateLocales?: Locale[];
   robots?: string;
+  ogType?: "website" | "article";
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
 };
 
 const {
@@ -31,7 +33,9 @@ const {
   description = t(locale, "defaultDescription"),
   image = "/og-image.svg",
   alternateLocales = [...locales],
-  robots = "index, follow"
+  robots = "index, follow",
+  ogType = "website",
+  structuredData: pageStructuredData = []
 } = Astro.props;
 
 const siteUrl = Astro.site ?? new URL("https://alfarank.com");
@@ -65,7 +69,7 @@ const gtmScript = gtmId
 const gaScript = gaId
   ? `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.gtag=gtag;gtag('js',new Date());gtag('config',${JSON.stringify(gaId)},{send_page_view:false});`
   : "";
-const structuredData = JSON.stringify([
+const baseStructuredData = [
   {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -81,6 +85,10 @@ const structuredData = JSON.stringify([
     url: baseUrl,
     description: pageDescription
   }
+];
+const structuredData = JSON.stringify([
+  ...baseStructuredData,
+  ...(Array.isArray(pageStructuredData) ? pageStructuredData : [pageStructuredData]).filter(Boolean)
 ]);
 ---
 
@@ -95,9 +103,10 @@ const structuredData = JSON.stringify([
     {alternates.map((entry) => <link rel="alternate" hreflang={entry.locale} href={entry.href} />)}
     <link rel="alternate" hreflang="x-default" href={xDefaultUrl} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href={globalStylesUrl} />
     <meta property="og:site_name" content="AlfaRank" />
     <meta property="og:locale" content={localeOg[locale]} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDescription} />
     <meta property="og:url" content={canonicalUrl} />

@@ -1,0 +1,65 @@
+---
+import Layout from "@/layouts/Layout.astro";
+
+const title = "About AlfaRank News | AlfaRank";
+const description =
+  "AlfaRank News publishes source-backed analysis for automation, AI workflows, web platforms, data systems, and digital operations.";
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  name: title,
+  description,
+  url: "https://alfarank.com/news/about/",
+  publisher: {
+    "@type": "Organization",
+    name: "AlfaRank",
+    url: "https://alfarank.com"
+  }
+};
+---
+
+<Layout title={title} description={description} structuredData={structuredData}>
+  <article class="section nova-trust-page">
+    <header class="nova-trust-page__hero">
+      <p class="eyebrow">About the newsroom</p>
+      <h1>Analysis for digital operators.</h1>
+      <p>
+        AlfaRank News is the public editorial layer for NOVA-monitored topics. It focuses on practical consequences:
+        what a market signal, platform move, funding shift, product change, or automation trend means for teams that
+        build and operate digital systems.
+      </p>
+    </header>
+
+    <section class="nova-trust-grid">
+      <article>
+        <h2>What we cover</h2>
+        <p>
+          AI automation, software platforms, data pipelines, workflow tools, enterprise operations, content
+          infrastructure, integration risk, and technical market shifts that affect implementation decisions.
+        </p>
+      </article>
+      <article>
+        <h2>How NOVA is used</h2>
+        <p>
+          NOVA monitors sources, clusters events, extracts numeric facts, drafts analysis blocks, and prepares charts.
+          AlfaRank uses that output as an editorial production system, not as an unmanaged auto-publishing feed.
+        </p>
+      </article>
+      <article>
+        <h2>What readers get</h2>
+        <p>
+          Short analytical articles with context, decision implications, operational risks, market numbers, charts,
+          and watch signals for teams that need to act on technology news.
+        </p>
+      </article>
+      <article>
+        <h2>Editorial contact</h2>
+        <p>
+          For corrections, publication questions, or source issues, contact
+          <a href="mailto:andrei@alfarank.com">andrei@alfarank.com</a>.
+        </p>
+      </article>
+    </section>
+  </article>
+</Layout>

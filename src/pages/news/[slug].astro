@@ -1,0 +1,34 @@
+---
+import NovaArticle from "@/components/NovaArticle.astro";
+import Layout from "@/layouts/Layout.astro";
+import {
+  articleDescription,
+  articleTitle,
+  getNovaArticle,
+  getNovaArticleSummaries,
+  newsArticleSchema
+} from "@/lib/nova";
+
+export async function getStaticPaths() {
+  const articles = await getNovaArticleSummaries();
+  return articles.map((article) => ({
+    params: { slug: article.slug }
+  }));
+}
+
+const { slug } = Astro.params;
+const article = slug ? await getNovaArticle(slug) : undefined;
+
+if (!article) {
+  return Astro.redirect("/news/");
+}
+---
+
+<Layout
+  title={`${articleTitle(article)} | AlfaRank`}
+  description={articleDescription(article)}
+  ogType="article"
+  structuredData={newsArticleSchema(article)}
+>
+  <NovaArticle article={article} />
+</Layout>

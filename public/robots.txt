@@ -11,3 +11,4 @@ Disallow: /ro/access/
 Disallow: /ru/access/
 
 Sitemap: https://alfarank.com/sitemap.xml
+Sitemap: https://alfarank.com/news-sitemap.xml

@@ -1,0 +1,87 @@
+---
+import Layout from "@/layouts/Layout.astro";
+
+const title = "Editorial Policy | AlfaRank News";
+const description =
+  "How AlfaRank uses NOVA to monitor sources, verify facts, review AI-assisted drafts, and publish analytical news pages.";
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description,
+  url: "https://alfarank.com/news/editorial-policy/",
+  publisher: {
+    "@type": "Organization",
+    name: "AlfaRank",
+    url: "https://alfarank.com"
+  }
+};
+---
+
+<Layout title={title} description={description} structuredData={structuredData}>
+  <article class="section nova-trust-page">
+    <header class="nova-trust-page__hero">
+      <p class="eyebrow">Editorial standards</p>
+      <h1>How AlfaRank news analysis is produced.</h1>
+      <p>
+        AlfaRank publishes analytical coverage for digital operators, automation teams, and business builders. NOVA is
+        used as a monitoring and drafting system, but publication requires source checks, editorial review, and visible
+        reader value beyond a rewrite of the original source.
+      </p>
+    </header>
+
+    <section class="nova-trust-grid">
+      <article>
+        <h2>Source monitoring</h2>
+        <p>
+          NOVA monitors configured news feeds, search directions, and source pages for each connected site. Duplicate
+          events, stale items, insufficient article text, and weak source records are blocked before generation.
+        </p>
+      </article>
+      <article>
+        <h2>Fact handling</h2>
+        <p>
+          Numeric claims are extracted separately, deduplicated, and used only when they are present in source material.
+          Synthetic scores, fake percentages, and unsupported market claims are rejected by the publication gate.
+        </p>
+      </article>
+      <article>
+        <h2>AI assistance</h2>
+        <p>
+          NOVA may help with clustering, outlining, drafting, chart extraction, and formatting. The system is configured
+          to add context, consequences, comparisons, and watch signals rather than copy a source article.
+        </p>
+      </article>
+      <article>
+        <h2>Human responsibility</h2>
+        <p>
+          AlfaRank keeps human editorial responsibility for publication. Articles that fail quality checks, contain
+          visible technical fields, expose source URLs in the article body, or lack useful analysis are held for review.
+        </p>
+      </article>
+    </section>
+
+    <section class="nova-trust-panel">
+      <h2>Publication checks</h2>
+      <ul>
+        <li>Primary source and supporting context sources are separated.</li>
+        <li>Numbers used in charts must come from extracted source-backed facts.</li>
+        <li>Visible article pages must not show internal IDs, sourceRef fields, source tables, or raw source URLs.</li>
+        <li>Headings must read as editorial copy, not internal production labels.</li>
+        <li>Each block must add a distinct reader value: context, data, consequence, comparison, scenario, or decision signal.</li>
+      </ul>
+    </section>
+
+    <section class="nova-trust-panel">
+      <h2>Corrections and contact</h2>
+      <p>
+        If a factual issue, outdated number, attribution problem, or correction request is identified, AlfaRank reviews
+        the article and updates, retracts, or republishes the page when needed.
+      </p>
+      <p>
+        Editorial contact: <a href="mailto:andrei@alfarank.com">andrei@alfarank.com</a>
+      </p>
+    </section>
+  </article>
+</Layout>

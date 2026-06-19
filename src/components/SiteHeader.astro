@@ -16,8 +16,9 @@ const navItems = [
   { label: t(locale, "cases"), href: "/cases/" },
   { label: t(locale, "technologies"), href: "/technologies/" },
   { label: t(locale, "industries"), href: "/industries/" },
+  { label: "News", href: "/news/", global: true },
   { label: t(locale, "about"), href: "/about/" }
-].map((item) => ({ ...item, href: localizePath(item.href, locale) }));
+].map((item) => ({ ...item, href: item.global ? item.href : localizePath(item.href, locale) }));
 
 const homeHref = localizePath("/", locale);
 const startProjectHref = localizePath("/start-project/", locale);

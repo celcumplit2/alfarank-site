@@ -1,0 +1,63 @@
+---
+import Layout from "@/layouts/Layout.astro";
+
+const title = "Andrei | AlfaRank News";
+const description =
+  "Responsible editor and publisher for AlfaRank NOVA-assisted analytical news pages.";
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  name: title,
+  description,
+  url: "https://alfarank.com/news/authors/andrei/",
+  mainEntity: {
+    "@type": "Person",
+    name: "Andrei",
+    jobTitle: "Editor / Publisher",
+    url: "https://alfarank.com/news/authors/andrei/",
+    worksFor: {
+      "@type": "Organization",
+      name: "AlfaRank",
+      url: "https://alfarank.com"
+    }
+  }
+};
+---
+
+<Layout title={title} description={description} structuredData={structuredData}>
+  <article class="section nova-trust-page nova-author-page">
+    <header class="nova-trust-page__hero">
+      <p class="eyebrow">Author profile</p>
+      <h1>Andrei</h1>
+      <p>
+        Responsible editor and publisher for AlfaRank news analysis produced with the NOVA editorial system. The role
+        covers source configuration, publication review, factual issue handling, and operational quality control.
+      </p>
+    </header>
+
+    <section class="nova-trust-grid nova-author-grid">
+      <article>
+        <h2>Coverage focus</h2>
+        <p>
+          Automation, AI workflows, web platforms, data infrastructure, digital operations, content systems, and the
+          business consequences of software platform shifts.
+        </p>
+      </article>
+      <article>
+        <h2>Editorial role</h2>
+        <p>
+          Review generated analysis before publication, block weak or repetitive output, maintain source-backed numeric
+          standards, and keep the article page free from technical production artifacts.
+        </p>
+      </article>
+      <article>
+        <h2>Contact</h2>
+        <p>
+          For corrections, factual review, source concerns, or publication questions, email
+          <a href="mailto:andrei@alfarank.com">andrei@alfarank.com</a>.
+        </p>
+      </article>
+    </section>
+  </article>
+</Layout>

@@ -16580,6 +16580,479 @@ button:disabled {
     display: none !important;
   }
 }
+
+.nova-news-index,
+.nova-article {
+  --nova-accent-1: #7df9ff;
+  --nova-accent-2: #a7f3d0;
+  --nova-accent-3: #fef08a;
+  --nova-accent-4: #c4b5fd;
+}
+
+.nova-news-index__hero,
+.nova-article__hero {
+  max-width: 940px;
+  margin: 0 0 34px;
+}
+
+.nova-news-index__trust {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 22px;
+}
+
+.nova-news-index__trust a {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  border: 1px solid rgba(216, 251, 255, 0.22);
+  border-radius: 3px;
+  padding: 8px 11px;
+  color: rgba(224, 247, 255, 0.86);
+  background: rgba(216, 251, 255, 0.07);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.nova-news-index__hero p:not(.eyebrow),
+.nova-article__lead {
+  max-width: 820px;
+  color: rgba(224, 247, 255, 0.84);
+  font-size: clamp(18px, 2vw, 22px);
+  line-height: 1.55;
+}
+
+.nova-article__thesis {
+  max-width: 880px;
+  border-left: 2px solid rgba(125, 249, 255, 0.64);
+  margin: 20px 0 0;
+  padding: 4px 0 4px 18px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 18px;
+}
+
+.nova-news-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.nova-news-card a,
+.nova-summary,
+.nova-chart,
+.nova-callout,
+.nova-panel,
+.nova-data-points,
+.nova-timeline,
+.nova-matrix,
+.nova-scenarios,
+.nova-watch,
+.nova-analysis {
+  display: block;
+  border: 1px solid rgba(125, 211, 252, 0.22);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(rgba(125, 211, 252, 0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(125, 211, 252, 0.024) 1px, transparent 1px),
+    rgba(2, 18, 48, 0.42);
+  background-size: 36px 36px, 36px 36px, 100% 100%;
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: var(--glass-backdrop-filter);
+}
+
+.nova-news-card a {
+  min-height: 310px;
+  padding: 22px;
+}
+
+.nova-news-card time {
+  color: var(--blue);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.nova-news-card h2 {
+  margin: 12px 0;
+  font-size: clamp(24px, 2.6vw, 34px);
+}
+
+.nova-news-card ul,
+.nova-analysis ul {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 0;
+  margin: 18px 0 0;
+  list-style: none;
+}
+
+.nova-news-card li,
+.nova-analysis li {
+  border: 1px solid rgba(216, 251, 255, 0.2);
+  border-radius: 3px;
+  padding: 6px 9px;
+  color: rgba(224, 247, 255, 0.78);
+  background: rgba(216, 251, 255, 0.07);
+  font-size: 13px;
+}
+
+.nova-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0 0 24px;
+  padding: 14px;
+}
+
+.nova-summary p {
+  min-height: 100%;
+  margin: 0;
+  border-left: 2px solid rgba(216, 251, 255, 0.42);
+  padding: 8px 12px;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.nova-article__body {
+  display: grid;
+  gap: 24px;
+}
+
+.nova-chart,
+.nova-callout,
+.nova-panel,
+.nova-data-points,
+.nova-timeline,
+.nova-matrix,
+.nova-scenarios,
+.nova-watch,
+.nova-analysis {
+  padding: clamp(20px, 3vw, 30px);
+}
+
+.nova-chart header {
+  display: flex;
+  gap: 16px;
+  align-items: end;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.nova-chart h2,
+.nova-panel h2,
+.nova-data-points h2,
+.nova-timeline h2,
+.nova-matrix h2,
+.nova-scenarios h2,
+.nova-watch h2,
+.nova-analysis h2,
+.nova-callout h2 {
+  font-size: clamp(25px, 3vw, 38px);
+}
+
+.nova-chart header span {
+  color: rgba(216, 251, 255, 0.76);
+  font-size: 13px;
+  font-weight: 800;
+  text-align: right;
+}
+
+.nova-bars {
+  display: grid;
+  gap: 16px;
+}
+
+.nova-bar {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.45fr) minmax(180px, 1fr) minmax(86px, auto);
+  gap: 16px;
+  align-items: center;
+}
+
+.nova-bar span {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 760;
+}
+
+.nova-bar div {
+  height: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(216, 251, 255, 0.12);
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, rgba(216, 251, 255, 0.08), rgba(216, 251, 255, 0.02)),
+    rgba(0, 10, 30, 0.42);
+}
+
+.nova-bar i {
+  display: block;
+  width: var(--bar-level);
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--bar-accent), #ffffff);
+  box-shadow: 0 0 22px color-mix(in srgb, var(--bar-accent) 48%, transparent);
+}
+
+.nova-bar strong {
+  color: #ffffff;
+  font-size: 18px;
+  text-align: right;
+}
+
+.nova-metric-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.nova-metric-card {
+  display: grid;
+  min-height: 190px;
+  grid-template-columns: 108px minmax(0, 1fr);
+  gap: 18px;
+  align-items: center;
+  border: 1px solid rgba(216, 251, 255, 0.17);
+  border-radius: var(--radius);
+  padding: 18px;
+  background: rgba(1, 16, 38, 0.42);
+}
+
+.nova-metric-card__ring {
+  display: block;
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, rgba(2, 18, 48, 0.96) 0 54%, transparent 55%),
+    conic-gradient(var(--metric-accent) var(--metric-level), rgba(255, 255, 255, 0.16) 0);
+  box-shadow: 0 0 28px color-mix(in srgb, var(--metric-accent) 24%, transparent);
+}
+
+.nova-metric-card strong {
+  display: block;
+  color: #ffffff;
+  font-size: clamp(28px, 4vw, 46px);
+  line-height: 1;
+}
+
+.nova-metric-card p {
+  grid-column: 2;
+  margin: -46px 0 0;
+}
+
+.nova-callout {
+  border-color: rgba(167, 243, 208, 0.36);
+  background:
+    radial-gradient(42rem 18rem at 88% 22%, rgba(167, 243, 208, 0.13), transparent 68%),
+    rgba(2, 18, 48, 0.48);
+}
+
+.nova-grid-list,
+.nova-data-points > div,
+.nova-matrix > div,
+.nova-scenarios > div,
+.nova-watch > div {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.nova-grid-list li,
+.nova-data-points article,
+.nova-matrix article,
+.nova-scenarios article,
+.nova-watch article {
+  border: 1px solid rgba(216, 251, 255, 0.16);
+  border-radius: var(--radius);
+  padding: 16px;
+  background: rgba(1, 16, 38, 0.36);
+}
+
+.nova-data-points strong {
+  display: block;
+  color: var(--nova-accent-2);
+  font-size: clamp(25px, 3vw, 38px);
+  line-height: 1;
+}
+
+.nova-data-points span,
+.nova-matrix strong,
+.nova-scenarios strong,
+.nova-watch strong {
+  display: block;
+  margin: 10px 0 8px;
+  color: #ffffff;
+  font-size: 18px;
+}
+
+.nova-matrix span,
+.nova-scenarios span {
+  color: rgba(216, 251, 255, 0.8);
+}
+
+.nova-timeline ol {
+  display: grid;
+  gap: 12px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  counter-reset: nova-timeline;
+}
+
+.nova-timeline li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 14px;
+  border: 1px solid rgba(216, 251, 255, 0.16);
+  border-radius: var(--radius);
+  padding: 16px;
+  background: rgba(1, 16, 38, 0.36);
+  counter-increment: nova-timeline;
+}
+
+.nova-timeline li::before {
+  content: counter(nova-timeline, decimal-leading-zero);
+  display: grid;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+  border: 1px solid rgba(125, 249, 255, 0.44);
+  border-radius: 50%;
+  color: var(--nova-accent-1);
+  font-weight: 900;
+}
+
+.nova-timeline strong,
+.nova-timeline p {
+  grid-column: 2;
+}
+
+.nova-timeline p {
+  margin: 0;
+}
+
+.nova-analysis {
+  display: grid;
+  gap: 18px;
+}
+
+.nova-analysis article {
+  border-top: 1px solid rgba(216, 251, 255, 0.14);
+  padding-top: 18px;
+}
+
+.nova-analysis article:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.nova-trust-page {
+  display: grid;
+  gap: 24px;
+}
+
+.nova-trust-page__hero {
+  max-width: 900px;
+}
+
+.nova-trust-page__hero p:not(.eyebrow) {
+  max-width: 820px;
+  color: rgba(224, 247, 255, 0.84);
+  font-size: clamp(18px, 2vw, 22px);
+  line-height: 1.55;
+}
+
+.nova-trust-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.nova-trust-grid article,
+.nova-trust-panel {
+  border: 1px solid rgba(125, 211, 252, 0.22);
+  border-radius: var(--radius);
+  padding: clamp(20px, 3vw, 28px);
+  background:
+    linear-gradient(rgba(125, 211, 252, 0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(125, 211, 252, 0.024) 1px, transparent 1px),
+    rgba(2, 18, 48, 0.42);
+  background-size: 36px 36px, 36px 36px, 100% 100%;
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: var(--glass-backdrop-filter);
+}
+
+.nova-trust-grid h2,
+.nova-trust-panel h2 {
+  font-size: clamp(24px, 3vw, 36px);
+}
+
+.nova-trust-panel ul {
+  display: grid;
+  gap: 10px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.nova-trust-panel li {
+  border-left: 2px solid rgba(216, 251, 255, 0.34);
+  padding-left: 14px;
+}
+
+.nova-trust-page a {
+  color: var(--blue);
+  font-weight: 800;
+}
+
+@media (max-width: 820px) {
+  .nova-news-grid,
+  .nova-summary,
+  .nova-metric-cards,
+  .nova-grid-list,
+  .nova-data-points > div,
+  .nova-matrix > div,
+  .nova-scenarios > div,
+  .nova-watch > div,
+  .nova-trust-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nova-bar {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .nova-bar strong {
+    text-align: left;
+  }
+}
+
+@media (max-width: 560px) {
+  .nova-metric-card {
+    grid-template-columns: 1fr;
+  }
+
+  .nova-metric-card p {
+    grid-column: auto;
+    margin: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .site-header .desktop-nav,
+  .site-header > .header-actions {
+    display: none !important;
+  }
+
+  .site-header .mobile-menu {
+    display: block !important;
+  }
+}
 /* Light pass for high-opacity glass surfaces on the brighter liquid background. */
 .page-system-map__metrics span {
   background: rgba(1, 10, 28, 0.24);

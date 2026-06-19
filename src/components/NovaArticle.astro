@@ -1,0 +1,206 @@
+---
+import type { NovaArticle, NovaBlock, NovaChartDatum } from "@/lib/nova";
+
+type Props = {
+  article: NovaArticle;
+};
+
+const { article } = Astro.props;
+
+const blockPayload = (type: string) => article.blocks.find((block) => block.type === type)?.payload;
+const hero = blockPayload("hero");
+const summary = blockPayload("summary");
+const contentBlocks = article.blocks.filter((block) => !["hero", "image", "summary", "sources", "facts"].includes(block.type));
+
+const text = (value: unknown) => (typeof value === "string" ? value : "");
+const list = (value: unknown) => (Array.isArray(value) ? value : []);
+const records = (value: unknown) => (Array.isArray(value) ? value.filter((item): item is Record<string, unknown> => Boolean(item && typeof item === "object")) : []);
+const chartData = (block: NovaBlock) => records(block.payload.data) as NovaChartDatum[];
+const numericValue = (item: NovaChartDatum) => {
+  if (typeof item.value === "number") return item.value;
+  const parsed = Number.parseFloat(String(item.value ?? item.rawValue ?? "").replace(/,/g, ""));
+  return Number.isFinite(parsed) ? parsed : 0;
+};
+const level = (item: NovaChartDatum, items: NovaChartDatum[]) => {
+  const max = Math.max(...items.map(numericValue), 1);
+  return Math.max(8, Math.min(100, (numericValue(item) / max) * 100));
+};
+const cleanHeading = (value: unknown) => {
+  const heading = text(value);
+  if (/^(context|impact|consequences|timeline|decision matrix|why it matters)$/i.test(heading)) return "";
+  return heading;
+};
+const conciseHeading = (value: unknown, fallback = "Analysis") => {
+  const heading = text(value) || fallback;
+  if (heading.length <= 60) return heading;
+  const candidates = [
+    heading.split(/[—–-]/)[0]?.trim(),
+    heading.split(":")[0]?.trim(),
+    heading.replace(/^Analysis:\s*/i, "").split(/[—–-]/)[0]?.trim()
+  ].filter((candidate) => candidate && candidate.length >= 18 && candidate.length <= 60);
+  if (candidates[0]) return candidates[0];
+  const trimmed = heading.slice(0, 57).replace(/\s+\S*$/, "");
+  return `${trimmed}...`;
+};
+---
+
+<article class="nova-article">
+  <header class="nova-article__hero">
+    <p class="eyebrow">AlfaRank News Analysis</p>
+    <h1>{conciseHeading(hero?.title || article.title)}</h1>
+    {text(hero?.lead) && <p class="nova-article__lead">{text(hero?.lead)}</p>}
+    {text(hero?.thesis) && <p class="nova-article__thesis">{text(hero?.thesis)}</p>}
+  </header>
+
+  {list(summary?.items).length > 0 && (
+    <section class="nova-summary" aria-label="Article summary">
+      {list(summary?.items).slice(0, 5).map((item) => <p>{text(item)}</p>)}
+    </section>
+  )}
+
+  <div class="nova-article__body">
+    {contentBlocks.map((block) => (
+      <>
+        {block.type === "chart" && chartData(block).length > 0 && (
+          <section class:list={["nova-chart", `nova-chart--${text(block.payload.visual) || "bars"}`]} aria-label={text(block.payload.title)}>
+            <header>
+              <h2>{conciseHeading(block.payload.title, "Market data")}</h2>
+              {text(block.payload.unit) && <span>{text(block.payload.unit)}</span>}
+            </header>
+
+            {text(block.payload.visual) === "metric_cards" ? (
+              <div class="nova-metric-cards">
+                {chartData(block).slice(0, 4).map((item, index) => (
+                  <article class="nova-metric-card" style={`--metric-level: ${Math.min(100, Math.max(4, numericValue(item)))}%; --metric-accent: var(--nova-accent-${(index % 4) + 1});`}>
+                    <span class="nova-metric-card__ring" aria-hidden="true"></span>
+                    <strong>{item.rawValue || item.value}</strong>
+                    <p>{item.label}</p>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <div class="nova-bars">
+                {chartData(block).slice(0, 6).map((item, index) => (
+                  <div class="nova-bar" style={`--bar-level: ${level(item, chartData(block))}%; --bar-accent: var(--nova-accent-${(index % 4) + 1});`}>
+                    <span>{item.label}</span>
+                    <div aria-hidden="true"><i></i></div>
+                    <strong>{item.rawValue || item.value}</strong>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+        )}
+
+        {block.type === "why_it_matters" && text(block.payload.body) && (
+          <section class="nova-callout">
+            <h2>{conciseHeading(cleanHeading(block.payload.heading) || "Operational meaning")}</h2>
+            <p>{text(block.payload.body)}</p>
+          </section>
+        )}
+
+        {["context", "consequences", "impact"].includes(block.type) && (
+          <section class="nova-panel">
+            {cleanHeading(block.payload.heading) && <h2>{conciseHeading(cleanHeading(block.payload.heading))}</h2>}
+            {text(block.payload.body) && <p>{text(block.payload.body)}</p>}
+            {list(block.payload.items).length > 0 && (
+              <ul class="nova-grid-list">
+                {list(block.payload.items).map((item) => <li>{text(item)}</li>)}
+              </ul>
+            )}
+          </section>
+        )}
+
+        {block.type === "data_points" && records(block.payload.items).length > 0 && (
+          <section class="nova-data-points">
+            <h2>{conciseHeading(cleanHeading(block.payload.heading) || "Market numbers used in this analysis")}</h2>
+            <div>
+              {records(block.payload.items).slice(0, 8).map((item) => (
+                <article>
+                  <strong>{text(item.value)}</strong>
+                  <span>{text(item.label)}</span>
+                  {text(item.interpretation) && <p>{text(item.interpretation)}</p>}
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {block.type === "timeline" && records(block.payload.items).length > 0 && (
+          <section class="nova-timeline">
+            <h2>{conciseHeading(cleanHeading(block.payload.heading) || "Timeline")}</h2>
+            <ol>
+              {records(block.payload.items).map((item) => (
+                <li>
+                  <strong>{text(item.label)}</strong>
+                  <p>{text(item.detail)}</p>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )}
+
+        {block.type === "comparison_matrix" && records(block.payload.rows).length > 0 && (
+          <section class="nova-matrix">
+            <h2>{conciseHeading(cleanHeading(block.payload.heading) || "Decision matrix")}</h2>
+            <div>
+              {records(block.payload.rows).map((row) => (
+                <article>
+                  <strong>{text(row.axis)}</strong>
+                  <p>{text(row.currentEvent)}</p>
+                  <span>{text(row.implication)}</span>
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {block.type === "scenarios" && records(block.payload.items).length > 0 && (
+          <section class="nova-scenarios">
+            <h2>{conciseHeading(cleanHeading(block.payload.heading) || "Possible outcomes")}</h2>
+            <div>
+              {records(block.payload.items).map((item) => (
+                <article>
+                  <strong>{text(item.label)}</strong>
+                  <p>{text(item.signal)}</p>
+                  <span>{text(item.implication)}</span>
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {block.type === "watch_next" && records(block.payload.items).length > 0 && (
+          <section class="nova-watch">
+            <h2>{conciseHeading(cleanHeading(block.payload.heading) || "What operators should monitor next")}</h2>
+            <div>
+              {records(block.payload.items).map((item) => (
+                <article>
+                  <strong>{text(item.signal)}</strong>
+                  <p>{text(item.why)}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {block.type === "text" && records(block.payload.sections).length > 0 && (
+          <section class="nova-analysis">
+            {cleanHeading(block.payload.heading) && <h2>{conciseHeading(cleanHeading(block.payload.heading))}</h2>}
+            {records(block.payload.sections).map((section) => (
+              <article>
+                {text(section.heading) && <h3>{conciseHeading(section.heading)}</h3>}
+                {list(section.paragraphs).map((paragraph) => <p>{text(paragraph)}</p>)}
+                {list(section.bullets).length > 0 && (
+                  <ul>
+                    {list(section.bullets).map((bullet) => <li>{text(bullet)}</li>)}
+                  </ul>
+                )}
+              </article>
+            ))}
+          </section>
+        )}
+      </>
+    ))}
+  </div>
+</article>
