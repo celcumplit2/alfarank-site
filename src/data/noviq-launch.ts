@@ -117,7 +117,7 @@ export const noviqAddOns = [
   {
     id: "office-showroom",
     title: "Client showroom",
-    text: "Переговорная, экран, презентационная зона и видимость серьезного подрядчика.",
+    text: "Переговорная, экран, презентационная зона и понятный контрактный процесс.",
     monthly: 1200,
     setup: 9000
   },
@@ -167,7 +167,7 @@ export const noviqDetailPages = [
   },
   {
     href: noviqRoutes.investmentModel,
-    eyebrow: "Investment model",
+    eyebrow: "Funding model",
     title: "Runway, tranches и use of funds",
     text: "Какой чек нужен, куда идет капитал и какие milestones открывают следующий транш."
   }

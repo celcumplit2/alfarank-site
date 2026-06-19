@@ -33,8 +33,8 @@ const investmentHref = localizePath(noviqRoutes.investmentModel, locale);
         <p class="eyebrow">Noviq Systems / Sales engine</p>
         <h1>Офферы, воронка и unit economics</h1>
         <p>
-          Эта страница объясняет, чем управляет sales-команда: какие продукты продаются с телефона,
-          как они переходят друг в друга и какие цифры должны подтверждать спрос.
+          Sales-команда управляет продуктовой полкой, переходом audit -> rebuild/video и цифрами,
+          которые подтверждают спрос до масштабирования офиса и рекламы.
         </p>
         <div class="noviq-detail-actions">
           <a class="button primary" href={projectHref}>Назад к сценарию</a>
@@ -161,7 +161,7 @@ const investmentHref = localizePath(noviqRoutes.investmentModel, locale);
           <p class="eyebrow">Risks</p>
           <h2>Риски и защита</h2>
         </div>
-        <p>Этот блок заранее фиксирует, где может сломаться модель и как это контролируется.</p>
+        <p>Риск-контур фиксирует слабые места модели и правила контроля до масштабирования.</p>
       </div>
       <div class="noviq-risk-grid">
         {noviqRisks.map((risk) => (

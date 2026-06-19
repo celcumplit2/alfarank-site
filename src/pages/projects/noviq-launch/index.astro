@@ -21,7 +21,7 @@ type Props = {
 const { locale = "ru" } = Astro.props;
 const title = `${noviqCompanyName} Launch Plan | AlfaRank`;
 const description =
-  "Закрытая инвесторская модель запуска новой digital sales company: сценарии старта, бюджет продаж, реклама, офис и инвестиционный runway.";
+  "Закрытая модель запуска новой digital sales company: сценарии старта, бюджет продаж, реклама, офис и runway.";
 const calculatorModel = {
   costs: noviqCosts,
   scenarios: noviqScenarios,
@@ -47,7 +47,15 @@ const detailPages = noviqDetailPages.map((page) => ({
         </p>
         <div class="noviq-actions">
           <a class="button primary" href="#calculator">Собрать сценарий</a>
-          <a class="button secondary" href="#details">Открыть детализацию</a>
+          <a class="button secondary" href="#details">Sales engine / Funding model</a>
+        </div>
+        <div class="noviq-hero-detail-links" aria-label="Страницы детализации">
+          {detailPages.map((page) => (
+            <a href={page.href}>
+              <span>{page.eyebrow}</span>
+              <strong>{page.title}</strong>
+            </a>
+          ))}
         </div>
       </div>
 
@@ -81,7 +89,7 @@ const detailPages = noviqDetailPages.map((page) => ({
 
     <section class="section split-panel noviq-thesis">
       <article class="glass-panel private-slide-card">
-        <p class="eyebrow">Investment thesis</p>
+        <p class="eyebrow">Capital thesis</p>
         <h2>Капитал покупает коммерческую скорость</h2>
         <p>
           Главная проверка первого этапа не в том, можем ли мы разработать продукт. Проверка в том,
@@ -96,6 +104,29 @@ const detailPages = noviqDetailPages.map((page) => ({
           подписать контракт и показать, что компания выглядит устойчиво.
         </p>
       </article>
+    </section>
+
+    <section class="section noviq-detail-entry" id="details">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Lower level pages</p>
+          <h2>Две страницы с подробной моделью</h2>
+        </div>
+        <p>
+          На главной собраны сценарии и итоговый чек. Две нижние страницы раскрывают механику:
+          как работает sales engine и как распределяется первый funding round.
+        </p>
+      </div>
+      <div class="noviq-detail-grid">
+        {detailPages.map((page) => (
+          <a class="glass-panel noviq-detail-card" href={page.href}>
+            <span>{page.eyebrow}</span>
+            <h3>{page.title}</h3>
+            <p>{page.text}</p>
+            <strong class="noviq-detail-card__cta">Открыть страницу</strong>
+          </a>
+        ))}
+      </div>
     </section>
 
     <section class="section">
@@ -165,37 +196,15 @@ const detailPages = noviqDetailPages.map((page) => ({
       </div>
     </section>
 
-    <section class="section" id="details">
-      <div class="section-header">
-        <div>
-          <p class="eyebrow">Lower level pages</p>
-          <h2>Где раскрыты цифры</h2>
-        </div>
-        <p>
-          Главная страница остается понятной для первого чтения. Детальные расчеты вынесены ниже,
-          чтобы каждый слой модели можно было раскрывать отдельно без перегруза.
-        </p>
-      </div>
-      <div class="noviq-detail-grid">
-        {detailPages.map((page) => (
-          <a class="glass-panel noviq-detail-card" href={page.href}>
-            <span>{page.eyebrow}</span>
-            <h3>{page.title}</h3>
-            <p>{page.text}</p>
-          </a>
-        ))}
-      </div>
-    </section>
-
     <section class="section noviq-calculator" id="calculator">
       <div class="section-header">
         <div>
-          <p class="eyebrow">Investment constructor</p>
+          <p class="eyebrow">Funding constructor</p>
           <h2>Собрать инвестиционный сценарий</h2>
         </div>
         <p>
-          Конструктор показывает, как меняется required investment при выборе сценария,
-          runway, дополнительных sales-менеджеров и опций.
+          Конструктор пересчитывает required investment при выборе сценария, runway,
+          дополнительных sales-менеджеров и опций.
         </p>
       </div>
 
@@ -304,7 +313,7 @@ const detailPages = noviqDetailPages.map((page) => ({
         </p>
       </article>
       <article class="glass-panel private-slide-card">
-        <p class="eyebrow">Investor range</p>
+        <p class="eyebrow">Funding range</p>
         <h2>130k-160k EUR</h2>
         <p>
           Такой коридор закрывает Representative Launch, небольшой резерв и первые опции без перехода
@@ -454,6 +463,42 @@ const detailPages = noviqDetailPages.map((page) => ({
       margin-top: 28px;
     }
 
+    .noviq-hero-detail-links {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      max-width: 760px;
+      margin-top: 16px;
+    }
+
+    .noviq-hero-detail-links a {
+      display: grid;
+      gap: 6px;
+      min-height: 104px;
+      padding: 16px 18px;
+      color: var(--white);
+      text-decoration: none;
+      border: 1px solid rgba(216, 251, 255, 0.2);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 92% 0%, rgba(95, 211, 255, 0.16), transparent 42%),
+        rgba(6, 28, 60, 0.46);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .noviq-hero-detail-links span {
+      color: var(--pearl);
+      font-size: 0.72rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .noviq-hero-detail-links strong {
+      font-size: 1.02rem;
+      line-height: 1.18;
+      text-shadow: 0 2px 14px rgba(0, 7, 26, 0.42);
+    }
+
     .noviq-engine {
       position: relative;
       min-height: 560px;
@@ -573,6 +618,10 @@ const detailPages = noviqDetailPages.map((page) => ({
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
+    .noviq-detail-entry {
+      padding-top: clamp(28px, 4vw, 52px);
+    }
+
     .noviq-card,
     .noviq-detail-card {
       display: grid;
@@ -610,6 +659,14 @@ const detailPages = noviqDetailPages.map((page) => ({
       color: rgba(238, 248, 255, 0.88);
       line-height: 1.62;
       text-shadow: 0 1px 12px rgba(0, 7, 26, 0.34);
+    }
+
+    .noviq-detail-card__cta {
+      align-self: end;
+      margin-top: auto;
+      color: var(--white);
+      font-size: 0.92rem;
+      letter-spacing: 0;
     }
 
     .noviq-scenario__head {
@@ -681,6 +738,12 @@ const detailPages = noviqDetailPages.map((page) => ({
     .noviq-controls,
     .noviq-summary {
       padding: 24px;
+      background:
+        radial-gradient(circle at 82% 0%, rgba(216, 251, 255, 0.11), transparent 38%),
+        linear-gradient(135deg, rgba(5, 25, 54, 0.6), rgba(3, 16, 36, 0.52));
+      box-shadow:
+        0 22px 58px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.09);
     }
 
     .noviq-controls,
@@ -717,9 +780,10 @@ const detailPages = noviqDetailPages.map((page) => ({
       border-radius: var(--radius);
       padding: 14px;
       color: var(--text);
-      background: rgba(216, 251, 255, 0.06);
+      background: rgba(4, 18, 42, 0.38);
       text-align: left;
       cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
     }
 
     .noviq-picker__button span {
@@ -738,7 +802,9 @@ const detailPages = noviqDetailPages.map((page) => ({
 
     .noviq-picker__button.is-active {
       border-color: rgba(216, 251, 255, 0.72);
-      background: rgba(216, 251, 255, 0.16);
+      background:
+        radial-gradient(circle at 80% 0%, rgba(216, 251, 255, 0.16), transparent 42%),
+        rgba(6, 31, 64, 0.54);
       box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
     }
 
@@ -788,7 +854,7 @@ const detailPages = noviqDetailPages.map((page) => ({
       border: 1px solid rgba(216, 251, 255, 0.14);
       border-radius: var(--radius);
       padding: 14px;
-      background: rgba(216, 251, 255, 0.05);
+      background: rgba(4, 18, 42, 0.34);
       cursor: pointer;
     }
 
@@ -805,8 +871,9 @@ const detailPages = noviqDetailPages.map((page) => ({
     }
 
     .noviq-addon small {
-      color: var(--faint);
+      color: rgba(238, 248, 255, 0.78);
       line-height: 1.45;
+      text-shadow: 0 1px 10px rgba(0, 7, 26, 0.28);
     }
 
     .noviq-addon b {
@@ -929,6 +996,7 @@ const detailPages = noviqDetailPages.map((page) => ({
       .noviq-channel-grid,
       .noviq-scenario-grid,
       .noviq-detail-grid,
+      .noviq-hero-detail-links,
       .noviq-picker,
       .noviq-sales-model > div {
         grid-template-columns: 1fr;
