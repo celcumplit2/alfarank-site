@@ -3,6 +3,7 @@ import NovaArticle from "@/components/NovaArticle.astro";
 import Layout from "@/layouts/Layout.astro";
 import {
   articleDescription,
+  articleImage,
   articleTitle,
   getNovaArticle,
   getNovaArticleSummaries,
@@ -27,6 +28,7 @@ if (!article) {
 <Layout
   title={`${articleTitle(article)} | AlfaRank`}
   description={articleDescription(article)}
+  image={articleImage(article) || undefined}
   ogType="article"
   structuredData={newsArticleSchema(article)}
 >

@@ -39,6 +39,7 @@ const conciseHeading = (value: string) => {
         <article class="nova-news-card">
           <a href={`/news/${article.slug}/`}>
             <time datetime={articleDate(article)}>{formatArticleDate(articleDate(article))}</time>
+            {article.category && <span class="nova-news-card__category">{article.category.replaceAll("-", " ")}</span>}
             <h2>{conciseHeading(articleTitle(article))}</h2>
             <p>{articleDescription(article)}</p>
             {article.seo?.tags && (

@@ -20,6 +20,7 @@ export type NovaArticleSummary = {
   slug: string;
   status?: string;
   articleType?: string;
+  category?: string;
   seo?: {
     title?: string;
     description?: string;
@@ -31,6 +32,7 @@ export type NovaArticleSummary = {
     datePublished?: string;
     dateModified?: string;
     keywords?: string[];
+    image?: string;
     aiDisclosure?: string;
   };
   publishedAt?: string;
@@ -96,6 +98,10 @@ export function articleDate(article: NovaArticleSummary) {
   return article.meta?.datePublished || article.publishedAt || article.updatedAt || "";
 }
 
+export function articleImage(article: NovaArticleSummary) {
+  return article.meta?.image || "";
+}
+
 export function formatArticleDate(value?: string) {
   if (!value) return "";
   return new Intl.DateTimeFormat("en", {
@@ -133,6 +139,7 @@ export function newsArticleSchema(article: NovaArticle) {
       }
     },
     isAccessibleForFree: true,
-    keywords: article.meta?.keywords || article.seo?.tags || []
+    keywords: article.meta?.keywords || article.seo?.tags || [],
+    image: article.meta?.image ? [article.meta.image] : undefined
   };
 }
