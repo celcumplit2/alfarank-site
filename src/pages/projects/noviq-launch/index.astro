@@ -739,11 +739,12 @@ const detailPages = noviqDetailPages.map((page) => ({
     .noviq-summary {
       padding: 24px;
       background:
-        radial-gradient(circle at 82% 0%, rgba(216, 251, 255, 0.11), transparent 38%),
-        linear-gradient(135deg, rgba(5, 25, 54, 0.6), rgba(3, 16, 36, 0.52));
+        radial-gradient(circle at 84% 0%, rgba(95, 211, 255, 0.09), transparent 42%),
+        linear-gradient(140deg, #061426 0%, #071b35 58%, #040d1c 100%);
+      border-color: rgba(216, 251, 255, 0.16);
       box-shadow:
-        0 22px 58px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.09);
+        0 26px 72px rgba(0, 0, 0, 0.42),
+        inset 0 1px 0 rgba(255, 255, 255, 0.07);
     }
 
     .noviq-controls,
@@ -780,10 +781,12 @@ const detailPages = noviqDetailPages.map((page) => ({
       border-radius: var(--radius);
       padding: 14px;
       color: var(--text);
-      background: rgba(4, 18, 42, 0.38);
+      background: linear-gradient(180deg, rgba(7, 22, 42, 0.98), rgba(4, 14, 30, 0.96));
       text-align: left;
       cursor: pointer;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      box-shadow:
+        0 12px 28px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
     }
 
     .noviq-picker__button span {
@@ -803,9 +806,11 @@ const detailPages = noviqDetailPages.map((page) => ({
     .noviq-picker__button.is-active {
       border-color: rgba(216, 251, 255, 0.72);
       background:
-        radial-gradient(circle at 80% 0%, rgba(216, 251, 255, 0.16), transparent 42%),
-        rgba(6, 31, 64, 0.54);
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+        radial-gradient(circle at 80% 0%, rgba(216, 251, 255, 0.12), transparent 42%),
+        linear-gradient(180deg, rgba(10, 40, 72, 0.98), rgba(5, 20, 42, 0.98));
+      box-shadow:
+        0 14px 34px rgba(0, 0, 0, 0.24),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.16);
     }
 
     .noviq-range {
@@ -854,8 +859,9 @@ const detailPages = noviqDetailPages.map((page) => ({
       border: 1px solid rgba(216, 251, 255, 0.14);
       border-radius: var(--radius);
       padding: 14px;
-      background: rgba(4, 18, 42, 0.34);
+      background: linear-gradient(180deg, rgba(7, 22, 42, 0.95), rgba(4, 14, 30, 0.94));
       cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
     }
 
     .noviq-addon input {
@@ -893,7 +899,10 @@ const detailPages = noviqDetailPages.map((page) => ({
       border: 1px solid rgba(216, 251, 255, 0.24);
       border-radius: var(--radius);
       padding: 20px;
-      background: rgba(216, 251, 255, 0.12);
+      background:
+        radial-gradient(circle at 92% 0%, rgba(95, 211, 255, 0.11), transparent 42%),
+        linear-gradient(140deg, #081d36 0%, #061529 100%);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
     }
 
     .noviq-total strong {
@@ -926,7 +935,7 @@ const detailPages = noviqDetailPages.map((page) => ({
       border-radius: var(--radius);
       padding: 12px;
       color: var(--faint);
-      background: rgba(0, 0, 0, 0.12);
+      background: linear-gradient(180deg, rgba(6, 20, 38, 0.96), rgba(3, 12, 25, 0.94));
       font-size: 0.86rem;
     }
 
