@@ -1,0 +1,431 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import SystemIcon from "@/components/SystemIcon.astro";
+import { localizePath } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
+import {
+  calcNoviqScenarioMonthly,
+  formatNoviqEur,
+  noviqCompanyName,
+  noviqHiringRoadmap,
+  noviqRoutes,
+  noviqScenarios,
+  noviqTranches,
+  noviqUseOfFunds
+} from "@/data/noviq-launch";
+
+type Props = {
+  locale?: Locale;
+};
+
+const { locale = "ru" } = Astro.props;
+const projectHref = localizePath(noviqRoutes.root, locale);
+const salesHref = localizePath(noviqRoutes.salesEngine, locale);
+const recommendedScenario = noviqScenarios.find((scenario) => scenario.id === "representative-launch") ?? noviqScenarios[1];
+const recommendedMonthly = calcNoviqScenarioMonthly(recommendedScenario);
+const recommendedTotal = recommendedScenario.setup + recommendedMonthly * recommendedScenario.runway;
+---
+
+<Layout
+  title={`Investment Model | ${noviqCompanyName} | AlfaRank`}
+  description="Детализация инвестиционной модели Noviq Systems: use of funds, runway, транши, найм и milestones."
+  locale={locale}
+  robots="noindex, nofollow"
+>
+  <div class="private-project-page noviq-investment-page" data-no-translate>
+    <section class="section noviq-investment-hero">
+      <div>
+        <p class="eyebrow">Noviq Systems / Investment model</p>
+        <h1>Runway, tranches и use of funds</h1>
+        <p>
+          Инвестиционная модель строится вокруг коммерческой проверки. Первый чек покупает не абстрактную разработку,
+          а команду продаж, рекламные тесты, представительство и измеримый pipeline.
+        </p>
+        <div class="noviq-investment-actions">
+          <a class="button primary" href={projectHref}>Назад к сценарию</a>
+          <a class="button secondary" href={salesHref}>Sales engine</a>
+        </div>
+      </div>
+      <article class="glass-panel noviq-ticket-card">
+        <SystemIcon name="capital" />
+        <span>Recommended first ticket</span>
+        <strong>130k-160k EUR</strong>
+        <p>
+          Коридор покрывает Representative Launch, первые опции и резерв без перехода в слишком тяжелый Market Offensive.
+        </p>
+      </article>
+    </section>
+
+    <section class="section split-panel">
+      <article class="glass-panel private-slide-card">
+        <p class="eyebrow">Recommended scenario</p>
+        <h2>{recommendedScenario.name}</h2>
+        <p>{recommendedScenario.focus}</p>
+      </article>
+      <article class="glass-panel private-slide-card">
+        <p class="eyebrow">Budget frame</p>
+        <h2>{formatNoviqEur(recommendedTotal)}</h2>
+        <dl class="noviq-budget-frame">
+          <div>
+            <dt>Monthly burn</dt>
+            <dd>{formatNoviqEur(recommendedMonthly)}</dd>
+          </div>
+          <div>
+            <dt>Setup</dt>
+            <dd>{formatNoviqEur(recommendedScenario.setup)}</dd>
+          </div>
+          <div>
+            <dt>Runway</dt>
+            <dd>{recommendedScenario.runway} месяцев</dd>
+          </div>
+        </dl>
+      </article>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Use of funds</p>
+          <h2>Куда уходит первый чек</h2>
+        </div>
+        <p>
+          Распределение показывает, что капитал направлен в коммерческую проверку:
+          sales, реклама, офис, CRM, упаковка офферов и резерв.
+        </p>
+      </div>
+      <div class="noviq-funds-grid">
+        {noviqUseOfFunds.map((fund) => (
+          <article class="glass-panel noviq-fund-card" style={`--fund-share: ${fund.share}%;`}>
+            <div class="noviq-fund-card__top">
+              <h3>{fund.label}</h3>
+              <strong>{fund.share}%</strong>
+            </div>
+            <b aria-hidden="true"></b>
+            <p>{fund.text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Milestone funding</p>
+          <h2>Транши вместо одного большого риска</h2>
+        </div>
+        <p>
+          Такой формат снижает риск: каждый следующий транш открывается только после подтверждения
+          встреч, аудитов, контрактов и качества pipeline.
+        </p>
+      </div>
+      <div class="noviq-tranche-grid">
+        {noviqTranches.map((tranche) => (
+          <article class="glass-panel noviq-tranche-card">
+            <span>{tranche.name}</span>
+            <h3>{tranche.amount}</h3>
+            <p>{tranche.goal}</p>
+            <dl>
+              <div>
+                <dt>Period</dt>
+                <dd>{tranche.period}</dd>
+              </div>
+              <div>
+                <dt>Gate</dt>
+                <dd>{tranche.gate}</dd>
+              </div>
+            </dl>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Hiring roadmap</p>
+          <h2>Когда добирать людей</h2>
+        </div>
+        <p>
+          Разработка не становится первым расходом. Команда расширяется только там,
+          где продажи создают нагрузку или нужен контроль качества.
+        </p>
+      </div>
+      <ol class="noviq-hiring-list">
+        {noviqHiringRoadmap.map((hire) => (
+          <li class="glass-panel">
+            <span>{hire.month}</span>
+            <strong>{hire.role}</strong>
+            <p>{hire.reason}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="section split-panel">
+      <article class="glass-panel private-slide-card">
+        <p class="eyebrow">Investor logic</p>
+        <h2>Что доказывает запуск</h2>
+        <ul class="feature-list">
+          <li>Рынок готов платить за первичный аудит, а не только слушать бесплатную консультацию.</li>
+          <li>Часть аудитов переходит в сайт, platform migration или video package.</li>
+          <li>Sales manager economics дает шанс покрывать burn по мере роста команды.</li>
+          <li>Founder bottleneck контролируется через prepayment и постепенный найм delivery support.</li>
+        </ul>
+      </article>
+      <article class="glass-panel private-slide-card">
+        <p class="eyebrow">Decision frame</p>
+        <h2>Когда масштабировать</h2>
+        <p>
+          Масштабирование имеет смысл только после повторяемой воронки: стабильные встречи,
+          оплаченные аудиты, первые rebuild/video contracts и прозрачная CRM-статистика по каждому менеджеру.
+        </p>
+      </article>
+    </section>
+  </div>
+
+  <style>
+    .noviq-investment-page :is(h1, h2, h3, p, a, span, strong, small, li, dt, dd) {
+      letter-spacing: 0;
+    }
+
+    .noviq-investment-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, 0.5fr);
+      gap: clamp(24px, 4vw, 52px);
+      align-items: center;
+      padding-top: clamp(32px, 5vw, 72px);
+    }
+
+    .noviq-investment-hero h1 {
+      max-width: 780px;
+      margin: 0;
+      font-size: clamp(2.8rem, 5.5vw, 5.3rem);
+      line-height: 0.98;
+      text-wrap: balance;
+    }
+
+    .noviq-investment-hero p:not(.eyebrow),
+    .noviq-ticket-card p {
+      max-width: 760px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .noviq-investment-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 26px;
+    }
+
+    .noviq-ticket-card {
+      display: grid;
+      gap: 14px;
+      padding: 26px;
+      background:
+        radial-gradient(circle at 82% 0%, rgba(216, 251, 255, 0.12), transparent 38%),
+        linear-gradient(135deg, rgba(5, 25, 54, 0.58), rgba(3, 16, 36, 0.5));
+      box-shadow:
+        0 22px 58px rgba(0, 0, 0, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.09);
+    }
+
+    .noviq-ticket-card .system-icon {
+      width: 54px;
+      height: 54px;
+    }
+
+    .noviq-ticket-card span,
+    .noviq-tranche-card span {
+      color: var(--pearl);
+      font-size: 0.76rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .noviq-ticket-card strong {
+      color: #fff;
+      font-size: clamp(2.1rem, 4vw, 3.1rem);
+      line-height: 1;
+    }
+
+    .noviq-budget-frame,
+    .noviq-tranche-card dl {
+      display: grid;
+      gap: 10px;
+      margin: 16px 0 0;
+    }
+
+    .noviq-budget-frame div,
+    .noviq-tranche-card dl div {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      border-top: 1px solid rgba(216, 251, 255, 0.13);
+      padding-top: 10px;
+    }
+
+    .noviq-budget-frame dt,
+    .noviq-tranche-card dt {
+      color: var(--faint);
+      font-size: 0.76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .noviq-budget-frame dd,
+    .noviq-tranche-card dd {
+      margin: 0;
+      color: #fff;
+      font-weight: 900;
+      text-align: right;
+    }
+
+    .noviq-funds-grid,
+    .noviq-tranche-grid {
+      display: grid;
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .noviq-funds-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .noviq-tranche-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .noviq-fund-card,
+    .noviq-tranche-card {
+      display: grid;
+      align-content: start;
+      gap: 14px;
+      min-height: 230px;
+      padding: 22px;
+      background:
+        radial-gradient(circle at 82% 0%, rgba(216, 251, 255, 0.11), transparent 38%),
+        linear-gradient(135deg, rgba(5, 25, 54, 0.56), rgba(3, 16, 36, 0.48));
+      box-shadow:
+        0 20px 54px rgba(0, 0, 0, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .noviq-fund-card__top {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: baseline;
+    }
+
+    .noviq-fund-card h3,
+    .noviq-tranche-card h3 {
+      margin: 0;
+      color: #fff;
+      font-size: 1.35rem;
+      line-height: 1.16;
+      text-shadow: 0 2px 16px rgba(0, 7, 26, 0.48);
+    }
+
+    .noviq-fund-card__top strong {
+      color: var(--pearl);
+      font-size: 1.45rem;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .noviq-fund-card > b {
+      display: block;
+      width: 100%;
+      height: 9px;
+      border: 1px solid rgba(216, 251, 255, 0.2);
+      border-radius: 999px;
+      background:
+        linear-gradient(90deg, rgba(216, 251, 255, 0.9) var(--fund-share), rgba(216, 251, 255, 0.08) 0);
+    }
+
+    .noviq-fund-card p,
+    .noviq-tranche-card p {
+      margin: 0;
+      color: rgba(238, 248, 255, 0.88);
+      line-height: 1.6;
+      text-shadow: 0 1px 12px rgba(0, 7, 26, 0.34);
+    }
+
+    .noviq-hiring-list {
+      display: grid;
+      gap: 12px;
+      margin: 24px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .noviq-hiring-list li {
+      display: grid;
+      grid-template-columns: 86px minmax(180px, 0.35fr) minmax(0, 1fr);
+      gap: 16px;
+      align-items: center;
+      padding: 18px;
+    }
+
+    .noviq-hiring-list span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      border: 1px solid rgba(216, 251, 255, 0.2);
+      border-radius: var(--radius);
+      color: var(--pearl);
+      font-weight: 900;
+    }
+
+    .noviq-hiring-list strong {
+      color: #fff;
+      font-size: 1.08rem;
+    }
+
+    .noviq-hiring-list p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    @media (max-width: 1100px) {
+      .noviq-investment-hero {
+        grid-template-columns: 1fr;
+      }
+
+      .noviq-funds-grid,
+      .noviq-tranche-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 760px) {
+      .noviq-investment-hero h1 {
+        font-size: clamp(2.1rem, 9vw, 2.8rem);
+        line-height: 1.04;
+      }
+
+      .noviq-funds-grid,
+      .noviq-tranche-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .noviq-hiring-list li {
+        grid-template-columns: 1fr;
+      }
+
+      .noviq-budget-frame div,
+      .noviq-tranche-card dl div {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .noviq-budget-frame dd,
+      .noviq-tranche-card dd {
+        text-align: left;
+      }
+    }
+  </style>
+</Layout>

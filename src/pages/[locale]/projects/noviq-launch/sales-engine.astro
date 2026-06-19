@@ -1,0 +1,12 @@
+---
+import SalesEnginePage from "@/pages/projects/noviq-launch/sales-engine.astro";
+
+export function getStaticPaths() {
+  return ["ru", "ro"].map((locale) => ({
+    params: { locale },
+    props: { locale }
+  }));
+}
+---
+
+<SalesEnginePage locale={Astro.props.locale} />

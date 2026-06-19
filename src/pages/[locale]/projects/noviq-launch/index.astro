@@ -1,0 +1,12 @@
+---
+import NoviqLaunchPage from "@/pages/projects/noviq-launch/index.astro";
+
+export function getStaticPaths() {
+  return ["ru", "ro"].map((locale) => ({
+    params: { locale },
+    props: { locale }
+  }));
+}
+---
+
+<NoviqLaunchPage locale={Astro.props.locale} />

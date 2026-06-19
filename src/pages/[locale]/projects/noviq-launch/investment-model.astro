@@ -1,0 +1,12 @@
+---
+import InvestmentModelPage from "@/pages/projects/noviq-launch/investment-model.astro";
+
+export function getStaticPaths() {
+  return ["ru", "ro"].map((locale) => ({
+    params: { locale },
+    props: { locale }
+  }));
+}
+---
+
+<InvestmentModelPage locale={Astro.props.locale} />

@@ -1,0 +1,958 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import SystemIcon from "@/components/SystemIcon.astro";
+import { localizePath } from "@/data/i18n";
+import type { Locale } from "@/data/i18n";
+import {
+  calcNoviqScenarioMonthly,
+  formatNoviqEur,
+  noviqAddOns,
+  noviqChannels,
+  noviqCompanyName,
+  noviqCosts,
+  noviqDetailPages,
+  noviqScenarios
+} from "@/data/noviq-launch";
+
+type Props = {
+  locale?: Locale;
+};
+
+const { locale = "ru" } = Astro.props;
+const title = `${noviqCompanyName} Launch Plan | AlfaRank`;
+const description =
+  "Закрытая инвесторская модель запуска новой digital sales company: сценарии старта, бюджет продаж, реклама, офис и инвестиционный runway.";
+const calculatorModel = {
+  costs: noviqCosts,
+  scenarios: noviqScenarios,
+  addOns: noviqAddOns,
+  defaultScenario: "representative-launch"
+};
+const detailPages = noviqDetailPages.map((page) => ({
+  ...page,
+  href: localizePath(page.href, locale)
+}));
+---
+
+<Layout title={title} description={description} locale={locale} robots="noindex, nofollow">
+  <div class="private-project-page noviq-page" data-no-translate>
+    <section class="section noviq-hero">
+      <div class="noviq-hero__copy">
+        <p class="eyebrow">Working name: {noviqCompanyName}</p>
+        <h1>Sales-first запуск Noviq Systems</h1>
+        <p>
+          Первая стадия не покупает большую разработку. Founder закрывает MVP, presale и техническую сборку,
+          а инвестиции направляются в менеджеров продаж, рекламу, офис-представительство и упаковку офферов
+          Whitespace и Vidorix.app.
+        </p>
+        <div class="noviq-actions">
+          <a class="button primary" href="#calculator">Собрать сценарий</a>
+          <a class="button secondary" href="#details">Открыть детализацию</a>
+        </div>
+      </div>
+
+      <div class="noviq-engine" aria-label="Launch engine">
+        <article class="noviq-engine__core">
+          <span>Founder-led build</span>
+          <strong>sales-first launch</strong>
+        </article>
+        <article class="noviq-orbit noviq-orbit--sales">
+          <SystemIcon name="lead" />
+          <span>Sales cell</span>
+          <strong>3-10 managers</strong>
+        </article>
+        <article class="noviq-orbit noviq-orbit--ads">
+          <SystemIcon name="monitor" />
+          <span>Paid traffic</span>
+          <strong>EUR 2k-28k / month</strong>
+        </article>
+        <article class="noviq-orbit noviq-orbit--office">
+          <SystemIcon name="space" />
+          <span>Representative office</span>
+          <strong>client meetings</strong>
+        </article>
+        <article class="noviq-orbit noviq-orbit--offer">
+          <SystemIcon name="flow" />
+          <span>Offers</span>
+          <strong>audit / rebuild / video</strong>
+        </article>
+      </div>
+    </section>
+
+    <section class="section split-panel noviq-thesis">
+      <article class="glass-panel private-slide-card">
+        <p class="eyebrow">Investment thesis</p>
+        <h2>Капитал покупает коммерческую скорость</h2>
+        <p>
+          Главная проверка первого этапа не в том, можем ли мы разработать продукт. Проверка в том,
+          сколько компаний готовы покупать аудит, переделку сайта или видео-пакет после контакта с sales-командой.
+        </p>
+      </article>
+      <article class="glass-panel private-slide-card">
+        <p class="eyebrow">Operating logic</p>
+        <h2>Офис работает как trust layer</h2>
+        <p>
+          Офис нужен не как центр разработки, а как представительство: пригласить клиента, провести презентацию,
+          подписать контракт и показать, что компания выглядит устойчиво.
+        </p>
+      </article>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Commercial routes</p>
+          <h2>Что продаем в первые месяцы</h2>
+        </div>
+        <p>
+          Три коммерческих входа позволяют не ждать большого продукта: диагностируем сайт, продаем rebuild
+          и отдельно монетизируем видео-пакеты.
+        </p>
+      </div>
+      <div class="noviq-channel-grid">
+        {noviqChannels.map((channel) => (
+          <article class="glass-panel noviq-card">
+            <SystemIcon name={channel.icon} />
+            <span>{channel.label}</span>
+            <h3>{channel.title}</h3>
+            <p>{channel.text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section" id="scenarios">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Launch scenarios</p>
+          <h2>Четыре сценария старта</h2>
+        </div>
+        <p>
+          Сценарии отличаются не разработкой, а скоростью коммерческой проверки: сколько sales-ресурса,
+          рекламы и runway мы покупаем первым чеком.
+        </p>
+      </div>
+      <div class="noviq-scenario-grid">
+        {noviqScenarios.map((scenario) => {
+          const monthly = calcNoviqScenarioMonthly(scenario);
+          const total = scenario.setup + monthly * scenario.runway;
+          return (
+            <article class="glass-panel noviq-card noviq-scenario">
+              <div class="noviq-scenario__head">
+                <span>{scenario.label}</span>
+                <strong>{scenario.salesReps} sales</strong>
+              </div>
+              <h3>{scenario.name}</h3>
+              <p>{scenario.focus}</p>
+              <dl>
+                <div>
+                  <dt>Monthly burn</dt>
+                  <dd>{formatNoviqEur(monthly)}</dd>
+                </div>
+                <div>
+                  <dt>Setup</dt>
+                  <dd>{formatNoviqEur(scenario.setup)}</dd>
+                </div>
+                <div>
+                  <dt>{scenario.runway} month runway</dt>
+                  <dd>{formatNoviqEur(total)}</dd>
+                </div>
+              </dl>
+              <p class="noviq-scenario__outcome">{scenario.outcome}</p>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+
+    <section class="section" id="details">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Lower level pages</p>
+          <h2>Где раскрыты цифры</h2>
+        </div>
+        <p>
+          Главная страница остается понятной для первого чтения. Детальные расчеты вынесены ниже,
+          чтобы каждый слой модели можно было раскрывать отдельно без перегруза.
+        </p>
+      </div>
+      <div class="noviq-detail-grid">
+        {detailPages.map((page) => (
+          <a class="glass-panel noviq-detail-card" href={page.href}>
+            <span>{page.eyebrow}</span>
+            <h3>{page.title}</h3>
+            <p>{page.text}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="section noviq-calculator" id="calculator">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Investment constructor</p>
+          <h2>Собрать инвестиционный сценарий</h2>
+        </div>
+        <p>
+          Конструктор показывает, как меняется required investment при выборе сценария,
+          runway, дополнительных sales-менеджеров и опций.
+        </p>
+      </div>
+
+      <div class="noviq-calculator__layout">
+        <form class="glass-panel noviq-controls" data-launch-controls>
+          <fieldset>
+            <legend>Базовый сценарий</legend>
+            <div class="noviq-picker" role="group" aria-label="Выбор сценария">
+              {noviqScenarios.map((scenario) => (
+                <button
+                  type="button"
+                  class:list={["noviq-picker__button", scenario.id === calculatorModel.defaultScenario && "is-active"]}
+                  data-scenario-option={scenario.id}
+                  aria-pressed={scenario.id === calculatorModel.defaultScenario ? "true" : "false"}
+                >
+                  <span>{scenario.label}</span>
+                  <strong>{scenario.name}</strong>
+                </button>
+              ))}
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Дополнительные sales-менеджеры</legend>
+            <div class="noviq-range">
+              <input type="range" min="0" max="6" value="0" step="1" data-extra-reps />
+              <output data-extra-reps-output>+0</output>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Runway</legend>
+            <select data-runway-select>
+              <option value="3">3 месяца</option>
+              <option value="6" selected>6 месяцев</option>
+              <option value="9">9 месяцев</option>
+              <option value="12">12 месяцев</option>
+            </select>
+          </fieldset>
+
+          <fieldset>
+            <legend>Дополнительные опции</legend>
+            <div class="noviq-addon-list">
+              {noviqAddOns.map((addon) => (
+                <label class="noviq-addon">
+                  <input type="checkbox" value={addon.id} data-addon-option />
+                  <span>
+                    <strong>{addon.title}</strong>
+                    <small>{addon.text}</small>
+                  </span>
+                  <b>{formatNoviqEur(addon.setup)} setup / {formatNoviqEur(addon.monthly)} мес.</b>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+        </form>
+
+        <aside class="glass-panel noviq-summary" aria-live="polite">
+          <p class="eyebrow">Selected plan</p>
+          <h3 data-output="scenarioName">Representative Launch</h3>
+          <div class="noviq-total">
+            <span>Required investment</span>
+            <strong data-output="total">EUR 0</strong>
+          </div>
+          <dl class="noviq-summary-grid">
+            <div>
+              <dt>Monthly burn</dt>
+              <dd data-output="monthly">EUR 0</dd>
+            </div>
+            <div>
+              <dt>Setup budget</dt>
+              <dd data-output="setup">EUR 0</dd>
+            </div>
+            <div>
+              <dt>Runway</dt>
+              <dd data-output="runway">6 месяцев</dd>
+            </div>
+            <div>
+              <dt>Sales managers</dt>
+              <dd data-output="salesReps">5</dd>
+            </div>
+          </dl>
+          <div class="noviq-sales-model">
+            <h4>Sales capacity per month</h4>
+            <div>
+              <span><b data-output="calls">0</b> contacted</span>
+              <span><b data-output="meetings">0</b> meetings</span>
+              <span><b data-output="audits">0</b> audits</span>
+              <span><b data-output="siteDeals">0</b> rebuilds</span>
+              <span><b data-output="videoDeals">0</b> video packs</span>
+              <span><b data-output="targetRevenue">EUR 0</b> sales target</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section split-panel">
+      <article class="glass-panel private-slide-card">
+        <p class="eyebrow">Recommended first ticket</p>
+        <h2>Representative Launch</h2>
+        <p>
+          Базовая рекомендация: стартовать не с минимального sales cell, а с представительного запуска
+          на 5 sales-менеджеров и 6 месяцев runway. Это дает офис, лидогенерацию и достаточно контактов,
+          чтобы подтвердить реальный pipeline.
+        </p>
+      </article>
+      <article class="glass-panel private-slide-card">
+        <p class="eyebrow">Investor range</p>
+        <h2>130k-160k EUR</h2>
+        <p>
+          Такой коридор закрывает Representative Launch, небольшой резерв и первые опции без перехода
+          в слишком тяжелый Market Offensive.
+        </p>
+      </article>
+    </section>
+  </div>
+
+  <script is:inline define:vars={{ model: calculatorModel }}>
+    (() => {
+      const controls = document.querySelector("[data-launch-controls]");
+      if (!controls) return;
+
+      const scenarioButtons = Array.from(controls.querySelectorAll("[data-scenario-option]"));
+      const addonInputs = Array.from(controls.querySelectorAll("[data-addon-option]"));
+      const extraRepsInput = controls.querySelector("[data-extra-reps]");
+      const extraRepsOutput = controls.querySelector("[data-extra-reps-output]");
+      const runwaySelect = controls.querySelector("[data-runway-select]");
+      const scenarioById = new Map(model.scenarios.map((scenario) => [scenario.id, scenario]));
+      const addonById = new Map(model.addOns.map((addon) => [addon.id, addon]));
+      let selectedScenarioId = model.defaultScenario;
+
+      const money = (value) =>
+        new Intl.NumberFormat("ru-RU", {
+          style: "currency",
+          currency: "EUR",
+          maximumFractionDigits: 0
+        }).format(value);
+      const number = (value) =>
+        new Intl.NumberFormat("ru-RU", { maximumFractionDigits: 0 }).format(value);
+      const output = (name) => document.querySelector(`[data-output="${name}"]`);
+      const calcBaseMonthly = (scenario) =>
+        scenario.salesReps * model.costs.salesRepMonthly +
+        scenario.salesReps * model.costs.salesToolMonthly +
+        scenario.salesLeadMonthly +
+        scenario.specialistMonthly +
+        scenario.accountMonthly +
+        scenario.adsMonthly +
+        scenario.officeMonthly +
+        scenario.opsMonthly +
+        scenario.bufferMonthly;
+
+      const selectedAddons = () =>
+        addonInputs
+          .filter((input) => input.checked)
+          .map((input) => addonById.get(input.value))
+          .filter(Boolean);
+
+      const render = () => {
+        const scenario = scenarioById.get(selectedScenarioId) || model.scenarios[0];
+        const extraReps = Number(extraRepsInput?.value || 0);
+        const runway = Number(runwaySelect?.value || scenario.runway);
+        const addons = selectedAddons();
+        const addonMonthly = addons.reduce((sum, addon) => sum + addon.monthly, 0);
+        const addonSetup = addons.reduce((sum, addon) => sum + addon.setup, 0);
+        const salesReps = scenario.salesReps + extraReps;
+        const monthly =
+          calcBaseMonthly(scenario) +
+          extraReps * (model.costs.salesRepMonthly + model.costs.salesToolMonthly) +
+          addonMonthly;
+        const setup = scenario.setup + extraReps * model.costs.extraRepSetup + addonSetup;
+        const total = setup + monthly * runway;
+        const calls = salesReps * model.costs.callsPerRepMonth;
+        const meetings = calls * model.costs.meetingRate;
+        const audits = meetings * model.costs.auditCloseRate;
+        const siteDeals = audits * model.costs.siteCloseRate;
+        const videoDeals = audits * model.costs.videoCloseRate;
+        const targetRevenue =
+          audits * model.costs.auditPrice +
+          siteDeals * model.costs.sitePrice +
+          videoDeals * model.costs.videoPrice;
+
+        if (extraRepsOutput) extraRepsOutput.textContent = `+${extraReps}`;
+        output("scenarioName").textContent = scenario.name;
+        output("monthly").textContent = money(monthly);
+        output("setup").textContent = money(setup);
+        output("runway").textContent = `${runway} месяцев`;
+        output("total").textContent = money(total);
+        output("salesReps").textContent = number(salesReps);
+        output("calls").textContent = number(calls);
+        output("meetings").textContent = number(meetings);
+        output("audits").textContent = number(audits);
+        output("siteDeals").textContent = number(siteDeals);
+        output("videoDeals").textContent = number(videoDeals);
+        output("targetRevenue").textContent = money(targetRevenue);
+      };
+
+      const setScenario = (scenarioId) => {
+        selectedScenarioId = scenarioId;
+        const scenario = scenarioById.get(scenarioId);
+        if (runwaySelect && scenario) runwaySelect.value = String(scenario.runway);
+        scenarioButtons.forEach((button) => {
+          const active = button.getAttribute("data-scenario-option") === scenarioId;
+          button.classList.toggle("is-active", active);
+          button.setAttribute("aria-pressed", active ? "true" : "false");
+        });
+        render();
+      };
+
+      scenarioButtons.forEach((button) => {
+        button.addEventListener("click", () => setScenario(button.getAttribute("data-scenario-option")));
+      });
+      controls.addEventListener("input", render);
+      controls.addEventListener("change", render);
+      setScenario(selectedScenarioId);
+    })();
+  </script>
+
+  <style>
+    .noviq-page {
+      color: var(--text);
+    }
+
+    .noviq-page :is(h1, h2, h3, h4, p, a, span, strong, small, li, dt, dd, label, legend, button, select, output) {
+      letter-spacing: 0;
+    }
+
+    .noviq-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 0.96fr) minmax(360px, 0.82fr);
+      gap: clamp(24px, 4vw, 56px);
+      align-items: center;
+      padding-top: clamp(32px, 5vw, 72px);
+    }
+
+    .noviq-hero__copy h1 {
+      max-width: 780px;
+      margin: 0;
+      font-size: clamp(3rem, 6vw, 5.8rem);
+      line-height: 0.96;
+      text-wrap: balance;
+    }
+
+    .noviq-hero__copy p:not(.eyebrow) {
+      max-width: 760px;
+      margin: 24px 0 0;
+      color: var(--muted);
+      font-size: 1.08rem;
+      line-height: 1.75;
+    }
+
+    .noviq-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .noviq-engine {
+      position: relative;
+      min-height: 560px;
+      border: 1px solid rgba(216, 251, 255, 0.2);
+      border-radius: var(--radius);
+      background:
+        radial-gradient(circle at 50% 44%, rgba(216, 251, 255, 0.14), transparent 28%),
+        linear-gradient(135deg, rgba(7, 26, 56, 0.78), rgba(2, 12, 30, 0.62));
+      box-shadow: var(--glass-shadow);
+      overflow: hidden;
+    }
+
+    .noviq-engine::before,
+    .noviq-engine::after {
+      content: "";
+      position: absolute;
+      inset: 14%;
+      border: 1px solid rgba(216, 251, 255, 0.14);
+      transform: rotate(-10deg);
+    }
+
+    .noviq-engine::after {
+      inset: 25%;
+      transform: rotate(13deg);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .noviq-engine__core,
+    .noviq-orbit {
+      position: absolute;
+      z-index: 2;
+      display: grid;
+      gap: 8px;
+      border: 1px solid rgba(216, 251, 255, 0.22);
+      border-radius: var(--radius);
+      padding: 18px;
+      background: rgba(4, 16, 31, 0.78);
+      backdrop-filter: blur(8px);
+    }
+
+    .noviq-engine__core {
+      left: 50%;
+      top: 50%;
+      width: min(74%, 310px);
+      min-height: 136px;
+      place-items: center;
+      text-align: center;
+      transform: translate(-50%, -50%);
+      background: rgba(216, 251, 255, 0.12);
+    }
+
+    .noviq-engine__core span,
+    .noviq-orbit span,
+    .noviq-card > span,
+    .noviq-scenario__head span,
+    .noviq-detail-card span,
+    .noviq-total span {
+      color: var(--pearl);
+      font-size: 0.76rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .noviq-engine__core strong {
+      max-width: 230px;
+      font-size: 1.8rem;
+      line-height: 1.05;
+    }
+
+    .noviq-orbit {
+      width: 210px;
+      min-height: 142px;
+    }
+
+    .noviq-orbit .system-icon {
+      width: 38px;
+      height: 38px;
+    }
+
+    .noviq-orbit--sales {
+      left: 8%;
+      top: 8%;
+    }
+
+    .noviq-orbit--ads {
+      right: 7%;
+      top: 8%;
+    }
+
+    .noviq-orbit--office {
+      left: 11%;
+      bottom: 10%;
+    }
+
+    .noviq-orbit--offer {
+      right: 8%;
+      bottom: 11%;
+    }
+
+    .noviq-channel-grid,
+    .noviq-scenario-grid,
+    .noviq-detail-grid {
+      display: grid;
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .noviq-channel-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .noviq-scenario-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .noviq-detail-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .noviq-card,
+    .noviq-detail-card {
+      display: grid;
+      align-content: start;
+      gap: 14px;
+      min-height: 250px;
+      padding: 22px;
+      text-decoration: none;
+      background:
+        radial-gradient(circle at 82% 0%, rgba(216, 251, 255, 0.11), transparent 38%),
+        linear-gradient(135deg, rgba(5, 25, 54, 0.56), rgba(3, 16, 36, 0.48));
+      box-shadow:
+        0 20px 54px rgba(0, 0, 0, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .noviq-card .system-icon {
+      width: 44px;
+      height: 44px;
+    }
+
+    .noviq-card h3,
+    .noviq-detail-card h3,
+    .noviq-summary h3 {
+      margin: 0;
+      font-size: 1.35rem;
+      line-height: 1.16;
+      text-shadow: 0 2px 16px rgba(0, 7, 26, 0.48);
+    }
+
+    .noviq-card p,
+    .noviq-detail-card p,
+    .noviq-summary p {
+      margin: 0;
+      color: rgba(238, 248, 255, 0.88);
+      line-height: 1.62;
+      text-shadow: 0 1px 12px rgba(0, 7, 26, 0.34);
+    }
+
+    .noviq-scenario__head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .noviq-scenario__head strong {
+      min-height: 30px;
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid rgba(216, 251, 255, 0.24);
+      border-radius: 3px;
+      padding: 6px 10px;
+      color: var(--pearl);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .noviq-scenario dl,
+    .noviq-summary-grid {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+    }
+
+    .noviq-scenario dl div,
+    .noviq-summary-grid div {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: baseline;
+      padding-top: 10px;
+      border-top: 1px solid rgba(216, 251, 255, 0.13);
+    }
+
+    .noviq-scenario dt,
+    .noviq-summary-grid dt {
+      color: var(--faint);
+      font-size: 0.76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .noviq-scenario dd,
+    .noviq-summary-grid dd {
+      margin: 0;
+      color: #fff;
+      font-weight: 900;
+      text-align: right;
+    }
+
+    .noviq-scenario__outcome {
+      padding-top: 14px;
+      border-top: 1px solid rgba(216, 251, 255, 0.18);
+    }
+
+    .noviq-calculator__layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(340px, 0.9fr);
+      gap: 18px;
+      align-items: start;
+      margin-top: 24px;
+    }
+
+    .noviq-controls,
+    .noviq-summary {
+      padding: 24px;
+    }
+
+    .noviq-controls,
+    .noviq-summary,
+    .noviq-sales-model {
+      display: grid;
+      gap: 18px;
+    }
+
+    .noviq-controls fieldset {
+      min-width: 0;
+      margin: 0;
+      border: 0;
+      padding: 0;
+    }
+
+    .noviq-controls legend {
+      margin-bottom: 10px;
+      color: var(--pearl);
+      font-size: 0.8rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .noviq-picker {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .noviq-picker__button {
+      min-height: 92px;
+      border: 1px solid rgba(216, 251, 255, 0.16);
+      border-radius: var(--radius);
+      padding: 14px;
+      color: var(--text);
+      background: rgba(216, 251, 255, 0.06);
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .noviq-picker__button span {
+      display: block;
+      color: var(--faint);
+      font-size: 0.72rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .noviq-picker__button strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 1rem;
+    }
+
+    .noviq-picker__button.is-active {
+      border-color: rgba(216, 251, 255, 0.72);
+      background: rgba(216, 251, 255, 0.16);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+    }
+
+    .noviq-range {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 70px;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .noviq-range input[type="range"] {
+      width: 100%;
+      accent-color: #d8fbff;
+    }
+
+    .noviq-range output,
+    .noviq-controls select {
+      min-height: 42px;
+      border: 1px solid rgba(216, 251, 255, 0.22);
+      border-radius: var(--radius);
+      color: var(--text);
+      background: rgba(4, 16, 31, 0.82);
+    }
+
+    .noviq-range output {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+    }
+
+    .noviq-controls select {
+      width: 100%;
+      padding: 0 12px;
+    }
+
+    .noviq-addon-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .noviq-addon {
+      display: grid;
+      grid-template-columns: 24px minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: start;
+      border: 1px solid rgba(216, 251, 255, 0.14);
+      border-radius: var(--radius);
+      padding: 14px;
+      background: rgba(216, 251, 255, 0.05);
+      cursor: pointer;
+    }
+
+    .noviq-addon input {
+      width: 18px;
+      height: 18px;
+      margin-top: 3px;
+      accent-color: #d8fbff;
+    }
+
+    .noviq-addon span {
+      display: grid;
+      gap: 4px;
+    }
+
+    .noviq-addon small {
+      color: var(--faint);
+      line-height: 1.45;
+    }
+
+    .noviq-addon b {
+      color: var(--pearl);
+      font-size: 0.82rem;
+      text-align: right;
+    }
+
+    .noviq-summary {
+      position: sticky;
+      top: 90px;
+    }
+
+    .noviq-total {
+      display: grid;
+      gap: 8px;
+      border: 1px solid rgba(216, 251, 255, 0.24);
+      border-radius: var(--radius);
+      padding: 20px;
+      background: rgba(216, 251, 255, 0.12);
+    }
+
+    .noviq-total strong {
+      font-size: clamp(2rem, 4vw, 3.1rem);
+      line-height: 1;
+    }
+
+    .noviq-sales-model {
+      padding-top: 16px;
+      border-top: 1px solid rgba(216, 251, 255, 0.18);
+    }
+
+    .noviq-sales-model h4 {
+      margin: 0;
+      font-size: 1.05rem;
+    }
+
+    .noviq-sales-model > div {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .noviq-sales-model span {
+      min-height: 82px;
+      display: grid;
+      align-content: center;
+      gap: 6px;
+      border: 1px solid rgba(216, 251, 255, 0.14);
+      border-radius: var(--radius);
+      padding: 12px;
+      color: var(--faint);
+      background: rgba(0, 0, 0, 0.12);
+      font-size: 0.86rem;
+    }
+
+    .noviq-sales-model b {
+      color: #fff;
+      font-size: 1.35rem;
+    }
+
+    @media (max-width: 1100px) {
+      .noviq-hero,
+      .noviq-calculator__layout {
+        grid-template-columns: 1fr;
+      }
+
+      .noviq-scenario-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .noviq-summary {
+        position: static;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .noviq-hero__copy h1 {
+        font-size: clamp(2.1rem, 9vw, 2.8rem);
+        line-height: 1.04;
+      }
+
+      .noviq-engine {
+        min-height: 820px;
+      }
+
+      .noviq-orbit {
+        left: 50%;
+        right: auto;
+        width: min(92%, 280px);
+        min-height: 126px;
+        padding: 14px;
+        transform: translateX(-50%);
+      }
+
+      .noviq-orbit--sales {
+        top: 20px;
+      }
+
+      .noviq-orbit--ads {
+        top: 162px;
+      }
+
+      .noviq-orbit--office {
+        top: 500px;
+        bottom: auto;
+      }
+
+      .noviq-orbit--offer {
+        top: 642px;
+        bottom: auto;
+      }
+
+      .noviq-engine__core {
+        top: 325px;
+        width: min(72%, 270px);
+        transform: translateX(-50%);
+      }
+
+      .noviq-channel-grid,
+      .noviq-scenario-grid,
+      .noviq-detail-grid,
+      .noviq-picker,
+      .noviq-sales-model > div {
+        grid-template-columns: 1fr;
+      }
+
+      .noviq-addon {
+        grid-template-columns: 24px minmax(0, 1fr);
+      }
+
+      .noviq-addon b {
+        grid-column: 2;
+        text-align: left;
+      }
+
+      .noviq-scenario dl div,
+      .noviq-summary-grid div {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .noviq-scenario dd,
+      .noviq-summary-grid dd {
+        text-align: left;
+      }
+    }
+  </style>
+</Layout>
