@@ -16635,6 +16635,9 @@ button:disabled {
 .nova-article__image {
   position: relative;
   overflow: hidden;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: min(68vh, 640px);
   margin: 0 0 24px;
   border: 1px solid rgba(125, 211, 252, 0.22);
   border-radius: var(--radius);
@@ -16645,8 +16648,10 @@ button:disabled {
 .nova-article__image img {
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: 100%;
+  max-width: none;
   object-fit: cover;
+  object-position: center;
 }
 
 .nova-article__image figcaption {
@@ -17077,6 +17082,10 @@ button:disabled {
 }
 
 @media (max-width: 560px) {
+  .nova-article__image {
+    max-height: 54vh;
+  }
+
   .nova-metric-card {
     grid-template-columns: 1fr;
   }

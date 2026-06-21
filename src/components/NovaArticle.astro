@@ -18,6 +18,9 @@ const contentBlocks = article.blocks.filter((block) => !["hero", "image", "summa
 
 const text = (value: unknown) => (typeof value === "string" ? value : "");
 const imageUrl = text(image?.url || image?.publicUrl);
+const imageSize = text(image?.size).match(/^(\d+)x(\d+)$/);
+const imageWidth = imageSize ? Number(imageSize[1]) : undefined;
+const imageHeight = imageSize ? Number(imageSize[2]) : undefined;
 const list = (value: unknown) => (Array.isArray(value) ? value : []);
 const records = (value: unknown) => (Array.isArray(value) ? value.filter((item): item is Record<string, unknown> => Boolean(item && typeof item === "object")) : []);
 const chartData = (block: NovaBlock) => records(block.payload.data) as NovaChartDatum[];
@@ -69,7 +72,14 @@ const conciseHeading = (value: unknown, fallback = "Analysis") => {
 
   {imageUrl && (
     <figure class="nova-article__image">
-      <img src={imageUrl} alt={text(image?.alt) || article.title} loading="eager" decoding="async" />
+      <img
+        src={imageUrl}
+        alt={text(image?.alt) || article.title}
+        width={imageWidth}
+        height={imageHeight}
+        loading="eager"
+        decoding="async"
+      />
       {image?.aiGenerated && <figcaption>{label("AI-generated editorial image")}</figcaption>}
     </figure>
   )}
