@@ -41,10 +41,6 @@ const exactText: TranslationDictionary = {
     ro: "Autor",
     ru: "Автор"
   },
-  "AI-generated editorial image": {
-    ro: "Imagine editoriala generata cu AI",
-    ru: "Редакционное изображение, созданное AI"
-  },
   "Article summary": {
     ro: "Rezumatul articolului",
     ru: "Краткое содержание статьи"
