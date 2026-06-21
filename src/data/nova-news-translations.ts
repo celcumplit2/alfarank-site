@@ -1,4 +1,4 @@
-import { translateCopy } from "@/data/i18n";
+import { generatedNovaNewsTranslations } from "@/data/nova-news-generated-translations";
 import type { NewsLocale, NovaArticle, NovaArticleSummary } from "@/lib/nova";
 
 type LocalizedText = Partial<Record<Exclude<NewsLocale, "en">, string>>;
@@ -403,32 +403,6 @@ const exactText: TranslationDictionary = {
   }
 };
 
-const ruTermPairs: Array<[RegExp, string]> = [
-  [/\bworkflow automation\b/gi, "автоматизация процессов"],
-  [/\bworkflow\b/gi, "workflow"],
-  [/\bworkflows\b/gi, "процессы"],
-  [/\boperators\b/gi, "операторы"],
-  [/\bgovernance\b/gi, "управление"],
-  [/\bdata governance\b/gi, "управление данными"],
-  [/\bplatform dependency\b/gi, "зависимость от платформы"],
-  [/\bautomation\b/gi, "автоматизация"],
-  [/\benterprise\b/gi, "корпоративный"],
-  [/\bintegration\b/gi, "интеграция"]
-];
-
-const roTermPairs: Array<[RegExp, string]> = [
-  [/\bworkflow automation\b/gi, "automatizarea fluxurilor"],
-  [/\bworkflows\b/gi, "fluxuri de lucru"],
-  [/\bworkflow\b/gi, "workflow"],
-  [/\boperators\b/gi, "operatori"],
-  [/\bgovernance\b/gi, "guvernanta"],
-  [/\bdata governance\b/gi, "guvernanta datelor"],
-  [/\bplatform dependency\b/gi, "dependenta de platforma"],
-  [/\bautomation\b/gi, "automatizare"],
-  [/\benterprise\b/gi, "enterprise"],
-  [/\bintegration\b/gi, "integrare"]
-];
-
 const structuralKeys = new Set([
   "id",
   "slug",
@@ -444,21 +418,37 @@ const structuralKeys = new Set([
   "datePublished",
   "dateModified",
   "publishedAt",
-  "updatedAt"
+  "updatedAt",
+  "type",
+  "variantId",
+  "imageStrategy",
+  "mode",
+  "provider",
+  "model",
+  "size",
+  "quality",
+  "contentType",
+  "generatedAt",
+  "chartType",
+  "visual",
+  "sourceIds",
+  "siteId",
+  "clusterId",
+  "sourceItemId",
+  "language",
+  "createdAt",
+  "articleSection",
+  "aiDisclosure",
+  "role",
+  "bio"
 ]);
-
-const applyPairs = (value: string, pairs: Array<[RegExp, string]>) =>
-  pairs.reduce((result, [pattern, replacement]) => result.replace(pattern, replacement), value);
-
-const fallbackTranslate = (value: string, locale: NewsLocale) => {
-  if (locale === "en") return value;
-  const translated = translateCopy(locale, value);
-  return applyPairs(translated, locale === "ru" ? ruTermPairs : roTermPairs);
-};
 
 const translateString = (value: string, locale: NewsLocale) => {
   if (locale === "en") return value;
-  return exactText[value]?.[locale] ?? fallbackTranslate(value, locale);
+  const exact = exactText[value]?.[locale];
+  const generated = generatedNovaNewsTranslations[value]?.[locale];
+  if (value.length > 120 && generated) return generated;
+  return exact ?? generated ?? value;
 };
 
 const translateValue = (value: unknown, locale: NewsLocale, key = ""): unknown => {
