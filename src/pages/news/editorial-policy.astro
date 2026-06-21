@@ -3,7 +3,7 @@ import Layout from "@/layouts/Layout.astro";
 
 const title = "Editorial Policy | AlfaRank News";
 const description =
-  "How AlfaRank uses NOVA to monitor sources, verify facts, review AI-assisted drafts, and publish analytical news pages.";
+  "How AlfaRank uses NOVA to monitor sources, verify facts, prepare material, and publish analytical news pages.";
 
 const structuredData = {
   "@context": "https://schema.org",
@@ -25,9 +25,9 @@ const structuredData = {
       <p class="eyebrow">Editorial standards</p>
       <h1>How AlfaRank news analysis is produced.</h1>
       <p>
-        AlfaRank publishes analytical coverage for digital operators, automation teams, and business builders. NOVA is
-        used as a monitoring and drafting system, but publication requires source checks, editorial review, and visible
-        reader value beyond a rewrite of the original source.
+        AlfaRank publishes analytical coverage for digital operators, automation teams, and business builders. NOVA
+        helps monitor sources and prepare material. Publication goes through source verification, editorial editing,
+        and a check that the article is useful for readers.
       </p>
     </header>
 
@@ -35,29 +35,29 @@ const structuredData = {
       <article>
         <h2>Source monitoring</h2>
         <p>
-          NOVA monitors configured news feeds, search directions, and source pages for each connected site. Duplicate
-          events, stale items, insufficient article text, and weak source records are blocked before generation.
+          NOVA tracks news streams, search topics, and source pages for AlfaRank News coverage. Duplicate, outdated,
+          or weakly supported items do not become articles.
         </p>
       </article>
       <article>
         <h2>Fact handling</h2>
         <p>
-          Numeric claims are extracted separately, deduplicated, and used only when they are present in source material.
-          Synthetic scores, fake percentages, and unsupported market claims are rejected by the publication gate.
+          Figures are checked against source material and used only when the evidence is clear. Unsupported estimates
+          and market statements are not published.
         </p>
       </article>
       <article>
         <h2>AI assistance</h2>
         <p>
-          NOVA may help with clustering, outlining, drafting, chart extraction, and formatting. The system is configured
-          to add context, consequences, comparisons, and watch signals rather than copy a source article.
+          NOVA may help group topics, structure material, extract charts, and format pages. The final article must add
+          context, consequences, comparisons, and decision signals.
         </p>
       </article>
       <article>
-        <h2>Human responsibility</h2>
+        <h2>Editorial responsibility</h2>
         <p>
-          AlfaRank keeps human editorial responsibility for publication. Articles that fail quality checks, contain
-          visible technical fields, expose source URLs in the article body, or lack useful analysis are held for review.
+          Publishing remains an AlfaRank editorial responsibility. Editors check the material and send it back for
+          corrections when needed.
         </p>
       </article>
     </section>
@@ -65,11 +65,11 @@ const structuredData = {
     <section class="nova-trust-panel">
       <h2>Publication checks</h2>
       <ul>
-        <li>Primary source and supporting context sources are separated.</li>
-        <li>Numbers used in charts must come from extracted source-backed facts.</li>
-        <li>Visible article pages must not show internal IDs, sourceRef fields, source tables, or raw source URLs.</li>
-        <li>Headings must read as editorial copy, not internal production labels.</li>
-        <li>Each block must add a distinct reader value: context, data, consequence, comparison, scenario, or decision signal.</li>
+        <li>The article is based on a primary source and relevant context.</li>
+        <li>Numbers and charts are checked against confirmed data.</li>
+        <li>The published text keeps only reader-facing facts, conclusions, and source links.</li>
+        <li>Headlines use clear editorial language.</li>
+        <li>Each section explains what happened, why it matters, and what may change next.</li>
       </ul>
     </section>
 
