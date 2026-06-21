@@ -7,23 +7,30 @@ import {
   articleTitle,
   getNovaArticle,
   getNovaArticleSummaries,
-  newsArticleSchema
+  newsArticleSchema,
+  newsPath
 } from "@/lib/nova";
 import type { NewsLocale } from "@/lib/nova";
 
 export async function getStaticPaths() {
-  const articles = await getNovaArticleSummaries("en");
-  return articles.map((article) => ({
-    params: { slug: article.slug }
-  }));
+  const paths = [];
+  for (const locale of ["ro", "ru"] as const) {
+    const articles = await getNovaArticleSummaries(locale);
+    paths.push(...articles.map((article) => ({ params: { locale, slug: article.slug }, props: { locale } })));
+  }
+  return paths;
 }
 
-const locale: NewsLocale = "en";
+type Props = {
+  locale: NewsLocale;
+};
+
+const { locale } = Astro.props;
 const { slug } = Astro.params;
 const article = slug ? await getNovaArticle(slug, locale) : undefined;
 
 if (!article) {
-  return Astro.redirect("/news/");
+  return Astro.redirect(newsPath("/news/", locale));
 }
 ---
 
@@ -31,6 +38,7 @@ if (!article) {
   title={`${articleTitle(article)} | AlfaRank`}
   description={articleDescription(article)}
   image={articleImage(article) || undefined}
+  locale={locale}
   ogType="article"
   structuredData={newsArticleSchema(article, locale)}
 >

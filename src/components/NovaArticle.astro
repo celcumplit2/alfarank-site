@@ -1,11 +1,14 @@
 ---
-import type { NovaArticle, NovaBlock, NovaChartDatum } from "@/lib/nova";
+import { translateNewsText } from "@/data/nova-news-translations";
+import type { NewsLocale, NovaArticle, NovaBlock, NovaChartDatum } from "@/lib/nova";
 
 type Props = {
   article: NovaArticle;
+  locale?: NewsLocale;
 };
 
-const { article } = Astro.props;
+const { article, locale = "en" } = Astro.props;
+const label = (value: string) => translateNewsText(value, locale);
 
 const blockPayload = (type: string) => article.blocks.find((block) => block.type === type)?.payload;
 const hero = blockPayload("hero");
@@ -29,7 +32,17 @@ const level = (item: NovaChartDatum, items: NovaChartDatum[]) => {
 };
 const cleanHeading = (value: unknown) => {
   const heading = text(value);
-  if (/^(context|impact|consequences|timeline|decision matrix|why it matters)$/i.test(heading)) return "";
+  const genericHeadings = [
+    "context",
+    "impact",
+    "consequences",
+    "timeline",
+    "decision matrix",
+    "why it matters",
+    label("Timeline").toLowerCase(),
+    label("Decision matrix").toLowerCase()
+  ];
+  if (genericHeadings.includes(heading.toLowerCase())) return "";
   return heading;
 };
 const conciseHeading = (value: unknown, fallback = "Analysis") => {
@@ -48,7 +61,7 @@ const conciseHeading = (value: unknown, fallback = "Analysis") => {
 
 <article class="nova-article">
   <header class="nova-article__hero">
-    <p class="eyebrow">AlfaRank News Analysis</p>
+    <p class="eyebrow">{label("AlfaRank News Analysis")}</p>
     <h1>{conciseHeading(hero?.title || article.title)}</h1>
     {text(hero?.lead) && <p class="nova-article__lead">{text(hero?.lead)}</p>}
     {text(hero?.thesis) && <p class="nova-article__thesis">{text(hero?.thesis)}</p>}
@@ -57,12 +70,12 @@ const conciseHeading = (value: unknown, fallback = "Analysis") => {
   {imageUrl && (
     <figure class="nova-article__image">
       <img src={imageUrl} alt={text(image?.alt) || article.title} loading="eager" decoding="async" />
-      {image?.aiGenerated && <figcaption>AI-generated editorial image</figcaption>}
+      {image?.aiGenerated && <figcaption>{label("AI-generated editorial image")}</figcaption>}
     </figure>
   )}
 
   {list(summary?.items).length > 0 && (
-    <section class="nova-summary" aria-label="Article summary">
+    <section class="nova-summary" aria-label={label("Article summary")}>
       {list(summary?.items).slice(0, 5).map((item) => <p>{text(item)}</p>)}
     </section>
   )}
@@ -73,7 +86,7 @@ const conciseHeading = (value: unknown, fallback = "Analysis") => {
         {block.type === "chart" && chartData(block).length > 0 && (
           <section class:list={["nova-chart", `nova-chart--${text(block.payload.visual) || "bars"}`]} aria-label={text(block.payload.title)}>
             <header>
-              <h2>{conciseHeading(block.payload.title, "Market data")}</h2>
+              <h2>{conciseHeading(block.payload.title, label("Market data"))}</h2>
               {text(block.payload.unit) && <span>{text(block.payload.unit)}</span>}
             </header>
 
@@ -103,7 +116,7 @@ const conciseHeading = (value: unknown, fallback = "Analysis") => {
 
         {block.type === "why_it_matters" && text(block.payload.body) && (
           <section class="nova-callout">
-            <h2>{conciseHeading(cleanHeading(block.payload.heading) || "Operational meaning")}</h2>
+            <h2>{conciseHeading(cleanHeading(block.payload.heading) || label("Operational meaning"))}</h2>
             <p>{text(block.payload.body)}</p>
           </section>
         )}
@@ -122,7 +135,7 @@ const conciseHeading = (value: unknown, fallback = "Analysis") => {
 
         {block.type === "data_points" && records(block.payload.items).length > 0 && (
           <section class="nova-data-points">
-            <h2>{conciseHeading(cleanHeading(block.payload.heading) || "Market numbers used in this analysis")}</h2>
+            <h2>{conciseHeading(cleanHeading(block.payload.heading) || label("Market numbers used in this analysis"))}</h2>
             <div>
               {records(block.payload.items).slice(0, 8).map((item) => (
                 <article>
@@ -137,7 +150,7 @@ const conciseHeading = (value: unknown, fallback = "Analysis") => {
 
         {block.type === "timeline" && records(block.payload.items).length > 0 && (
           <section class="nova-timeline">
-            <h2>{conciseHeading(cleanHeading(block.payload.heading) || "Timeline")}</h2>
+            <h2>{conciseHeading(cleanHeading(block.payload.heading) || label("Timeline"))}</h2>
             <ol>
               {records(block.payload.items).map((item) => (
                 <li>
@@ -151,7 +164,7 @@ const conciseHeading = (value: unknown, fallback = "Analysis") => {
 
         {block.type === "comparison_matrix" && records(block.payload.rows).length > 0 && (
           <section class="nova-matrix">
-            <h2>{conciseHeading(cleanHeading(block.payload.heading) || "Decision matrix")}</h2>
+            <h2>{conciseHeading(cleanHeading(block.payload.heading) || label("Decision matrix"))}</h2>
             <div>
               {records(block.payload.rows).map((row) => (
                 <article>
@@ -166,7 +179,7 @@ const conciseHeading = (value: unknown, fallback = "Analysis") => {
 
         {block.type === "scenarios" && records(block.payload.items).length > 0 && (
           <section class="nova-scenarios">
-            <h2>{conciseHeading(cleanHeading(block.payload.heading) || "Possible outcomes")}</h2>
+            <h2>{conciseHeading(cleanHeading(block.payload.heading) || label("Possible outcomes"))}</h2>
             <div>
               {records(block.payload.items).map((item) => (
                 <article>
@@ -181,7 +194,7 @@ const conciseHeading = (value: unknown, fallback = "Analysis") => {
 
         {block.type === "watch_next" && records(block.payload.items).length > 0 && (
           <section class="nova-watch">
-            <h2>{conciseHeading(cleanHeading(block.payload.heading) || "What operators should monitor next")}</h2>
+            <h2>{conciseHeading(cleanHeading(block.payload.heading) || label("What operators should monitor next"))}</h2>
             <div>
               {records(block.payload.items).map((item) => (
                 <article>

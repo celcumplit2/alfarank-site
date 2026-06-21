@@ -1,7 +1,13 @@
+import { localizePath } from "@/data/i18n";
+import { translateNovaArticle, translateNovaArticleSummary } from "@/data/nova-news-translations";
+import type { Locale } from "@/data/i18n";
+
 const NOVA_API_BASE = import.meta.env.NOVA_PUBLIC_API_BASE || "https://nova.alfarank.com/api/public";
 const NOVA_SITE_ID = import.meta.env.NOVA_ALFARANK_SITE_ID || "alfarank-site";
 const NOVA_PUBLIC_TOKEN =
   import.meta.env.NOVA_ALFARANK_PUBLIC_TOKEN || "public-d9d90ebc1d6748678d349cc1ab8918db";
+
+export type NewsLocale = Extract<Locale, "en" | "ro" | "ru">;
 
 export type NovaChartDatum = {
   label?: string;
@@ -64,26 +70,31 @@ const novaUrl = (path: string) => {
   return url;
 };
 
-export const normalizeArticleUrl = (slug: string) => `https://alfarank.com/news/${slug}/`;
+export const newsPath = (path: string, locale: NewsLocale = "en") => localizePath(path, locale);
 
-export async function getNovaArticleSummaries() {
+export const normalizeArticleUrl = (slug: string, locale: NewsLocale = "en") =>
+  `https://alfarank.com${newsPath(`/news/${slug}/`, locale)}`;
+
+export async function getNovaArticleSummaries(locale: NewsLocale = "en") {
   const response = await fetch(novaUrl("/articles"));
   if (!response.ok) {
     throw new Error(`NOVA articles request failed: ${response.status}`);
   }
 
   const data = (await response.json()) as NovaListResponse;
-  return (data.articles || []).filter((article) => article.slug && article.status === "published");
+  return (data.articles || [])
+    .filter((article) => article.slug && article.status === "published")
+    .map((article) => translateNovaArticleSummary(article, locale));
 }
 
-export async function getNovaArticle(slug: string) {
+export async function getNovaArticle(slug: string, locale: NewsLocale = "en") {
   const response = await fetch(novaUrl(`/articles/${encodeURIComponent(slug)}`));
   if (!response.ok) {
     throw new Error(`NOVA article request failed for ${slug}: ${response.status}`);
   }
 
   const data = (await response.json()) as NovaArticleResponse;
-  return data.article;
+  return data.article ? translateNovaArticle(data.article, locale) : undefined;
 }
 
 export function articleTitle(article: NovaArticleSummary) {
@@ -102,19 +113,42 @@ export function articleImage(article: NovaArticleSummary) {
   return article.meta?.image || "";
 }
 
-export function formatArticleDate(value?: string) {
+export function articleCategory(article: NovaArticleSummary, locale: NewsLocale = "en") {
+  const labels: Record<NewsLocale, Record<string, string>> = {
+    en: {},
+    ro: {
+      "ai-automation": "automatizare AI",
+      "digital-operations": "operatiuni digitale",
+      "data-systems": "sisteme de date",
+      "web-platforms": "platforme web",
+      automation: "automatizare"
+    },
+    ru: {
+      "ai-automation": "AI-автоматизация",
+      "digital-operations": "цифровые операции",
+      "data-systems": "системы данных",
+      "web-platforms": "веб-платформы",
+      automation: "автоматизация"
+    }
+  };
+
+  if (!article.category) return "";
+  return labels[locale][article.category] ?? article.category.replaceAll("-", " ");
+}
+
+export function formatArticleDate(value?: string, locale: NewsLocale = "en") {
   if (!value) return "";
-  return new Intl.DateTimeFormat("en", {
+  return new Intl.DateTimeFormat(locale, {
     month: "short",
     day: "numeric",
     year: "numeric"
   }).format(new Date(value));
 }
 
-export function newsArticleSchema(article: NovaArticle) {
+export function newsArticleSchema(article: NovaArticle, locale: NewsLocale = "en") {
   const title = articleTitle(article);
   const description = articleDescription(article);
-  const url = normalizeArticleUrl(article.slug);
+  const url = normalizeArticleUrl(article.slug, locale);
   return {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
@@ -127,7 +161,7 @@ export function newsArticleSchema(article: NovaArticle) {
     author: {
       "@type": "Person",
       name: "Andrei",
-      url: "https://alfarank.com/news/authors/andrei/"
+      url: `https://alfarank.com${newsPath("/news/authors/andrei/", locale)}`
     },
     publisher: {
       "@type": "Organization",

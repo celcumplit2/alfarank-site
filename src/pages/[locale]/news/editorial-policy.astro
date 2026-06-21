@@ -1,0 +1,114 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { newsPath } from "@/lib/nova";
+import type { NewsLocale } from "@/lib/nova";
+
+export function getStaticPaths() {
+  return (["ro", "ru"] as const).map((locale) => ({ params: { locale }, props: { locale } }));
+}
+
+type Props = {
+  locale: NewsLocale;
+};
+
+const { locale } = Astro.props;
+const copy = {
+  ro: {
+    title: "Politica editoriala | AlfaRank News",
+    description:
+      "Cum foloseste AlfaRank NOVA pentru monitorizarea surselor, verificarea faptelor, revizuirea drafturilor asistate de AI si publicarea analizelor.",
+    eyebrow: "Standarde editoriale",
+    h1: "Cum este produsa analiza AlfaRank News.",
+    intro:
+      "AlfaRank publica analiza pentru operatori digitali, echipe de automatizare si constructori de business. NOVA este folosita pentru monitorizare si draftare, dar publicarea cere verificarea surselor, revizie editoriala si valoare clara pentru cititor.",
+    cards: [
+      ["Monitorizarea surselor", "NOVA monitorizeaza feeduri, directii de cautare si pagini sursa pentru fiecare site conectat. Evenimentele duplicate, vechi sau cu surse slabe sunt blocate inainte de generare."],
+      ["Gestionarea faptelor", "Cifrele sunt extrase separat, deduplicate si folosite doar cand exista in materialul sursa. Scorurile sintetice si afirmatiile de piata fara suport sunt respinse."],
+      ["Asistenta AI", "NOVA poate ajuta la grupare, schita, draft, extragerea graficelor si formatare. Sistemul este configurat sa adauge context, consecinte si semnale, nu sa copieze un articol sursa."],
+      ["Responsabilitate umana", "AlfaRank pastreaza responsabilitatea editoriala umana pentru publicare. Articolele care nu trec verificarile de calitate sunt retinute pentru revizie."]
+    ],
+    checksTitle: "Verificari inainte de publicare",
+    checks: [
+      "Sursa principala si sursele de context sunt separate.",
+      "Cifrele din grafice trebuie sa provina din fapte sustinute de surse.",
+      "Paginile publice nu trebuie sa afiseze ID-uri interne, campuri sourceRef sau URL-uri brute.",
+      "Titlurile trebuie sa fie copy editorial, nu etichete interne de productie.",
+      "Fiecare bloc trebuie sa adauge valoare distincta: context, date, consecinta, comparatie, scenariu sau semnal decizional."
+    ],
+    contactTitle: "Corecturi si contact",
+    contact: "Daca este identificata o problema factuala, un numar depasit sau o cerere de corectare, AlfaRank revizuieste articolul si il actualizeaza, retrage sau republica atunci cand este necesar."
+  },
+  ru: {
+    title: "Редакционная политика | AlfaRank News",
+    description:
+      "Как AlfaRank использует NOVA для мониторинга источников, проверки фактов, редакции AI-assisted черновиков и публикации аналитических новостей.",
+    eyebrow: "Редакционные стандарты",
+    h1: "Как создается новостная аналитика AlfaRank.",
+    intro:
+      "AlfaRank публикует аналитические материалы для операторов цифровых систем, команд автоматизации и бизнес-билдеров. NOVA используется для мониторинга и подготовки черновиков, но публикация требует проверки источников, редакционного контроля и понятной ценности для читателя.",
+    cards: [
+      ["Мониторинг источников", "NOVA отслеживает настроенные news feeds, поисковые направления и source pages для каждого подключенного сайта. Дубли, устаревшие события и слабые источники блокируются до генерации."],
+      ["Работа с фактами", "Числовые утверждения извлекаются отдельно, дедуплицируются и используются только если они есть в исходном материале. Синтетические оценки и неподтвержденные рыночные claims отклоняются."],
+      ["AI-помощь", "NOVA может помогать с кластеризацией, структурой, черновиком, извлечением графиков и форматированием. Система настроена добавлять контекст, последствия и сигналы, а не копировать source article."],
+      ["Ответственность человека", "AlfaRank сохраняет человеческую редакционную ответственность за публикацию. Материалы, которые не проходят quality checks, удерживаются на ревью."]
+    ],
+    checksTitle: "Проверки перед публикацией",
+    checks: [
+      "Основной источник и контекстные источники разделены.",
+      "Цифры в графиках должны происходить из фактов, подтвержденных источниками.",
+      "Публичные страницы не должны показывать внутренние ID, поля sourceRef или сырые URL источников.",
+      "Заголовки должны выглядеть как редакционный copy, а не внутренние производственные labels.",
+      "Каждый блок должен добавлять отдельную ценность: контекст, данные, последствия, сравнение, сценарий или сигнал для решения."
+    ],
+    contactTitle: "Исправления и контакт",
+    contact: "Если найдена фактическая ошибка, устаревшая цифра, проблема атрибуции или запрос на исправление, AlfaRank пересматривает материал и обновляет, снимает или публикует его заново при необходимости."
+  }
+}[locale];
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: copy.title,
+  description: copy.description,
+  url: `https://alfarank.com${newsPath("/news/editorial-policy/", locale)}`,
+  publisher: {
+    "@type": "Organization",
+    name: "AlfaRank",
+    url: "https://alfarank.com"
+  }
+};
+---
+
+<Layout title={copy.title} description={copy.description} locale={locale} structuredData={structuredData}>
+  <article class="section nova-trust-page">
+    <header class="nova-trust-page__hero">
+      <p class="eyebrow">{copy.eyebrow}</p>
+      <h1>{copy.h1}</h1>
+      <p>{copy.intro}</p>
+    </header>
+
+    <section class="nova-trust-grid">
+      {copy.cards.map(([title, body]) => (
+        <article>
+          <h2>{title}</h2>
+          <p>{body}</p>
+        </article>
+      ))}
+    </section>
+
+    <section class="nova-trust-panel">
+      <h2>{copy.checksTitle}</h2>
+      <ul>
+        {copy.checks.map((item) => <li>{item}</li>)}
+      </ul>
+    </section>
+
+    <section class="nova-trust-panel">
+      <h2>{copy.contactTitle}</h2>
+      <p>{copy.contact}</p>
+      <p>
+        <a href="mailto:andrei@alfarank.com">andrei@alfarank.com</a>
+      </p>
+    </section>
+  </article>
+</Layout>

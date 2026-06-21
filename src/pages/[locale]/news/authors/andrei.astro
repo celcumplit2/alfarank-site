@@ -1,0 +1,82 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { newsPath } from "@/lib/nova";
+import type { NewsLocale } from "@/lib/nova";
+
+export function getStaticPaths() {
+  return (["ro", "ru"] as const).map((locale) => ({ params: { locale }, props: { locale } }));
+}
+
+type Props = {
+  locale: NewsLocale;
+};
+
+const { locale } = Astro.props;
+const copy = {
+  ro: {
+    title: "Andrei | AlfaRank News",
+    description: "Editor si publisher responsabil pentru paginile analitice AlfaRank News asistate de NOVA.",
+    eyebrow: "Profil autor",
+    intro:
+      "Editor si publisher responsabil pentru analiza AlfaRank News produsa cu sistemul editorial NOVA. Rolul include configurarea surselor, revizia publicarii, gestionarea corecturilor si controlul calitatii operationale.",
+    cards: [
+      ["Focus editorial", "Automatizare, workflow AI, platforme web, infrastructura de date, operatiuni digitale, sisteme de continut si consecintele de business ale schimbarilor software."],
+      ["Rol editorial", "Revizuirea analizei generate inainte de publicare, blocarea outputului slab sau repetitiv si mentinerea standardelor numerice sustinute de surse."],
+      ["Contact", "Pentru corecturi, verificari factuale, probleme de sursa sau intrebari de publicare:"]
+    ]
+  },
+  ru: {
+    title: "Andrei | AlfaRank News",
+    description: "Ответственный редактор и publisher аналитических страниц AlfaRank News, подготовленных с помощью NOVA.",
+    eyebrow: "Профиль автора",
+    intro:
+      "Ответственный редактор и publisher новостной аналитики AlfaRank, производимой с помощью редакционной системы NOVA. Роль включает настройку источников, проверку публикаций, работу с фактическими вопросами и операционный контроль качества.",
+    cards: [
+      ["Фокус покрытия", "Автоматизация, AI workflows, веб-платформы, data infrastructure, цифровые операции, content systems и бизнес-последствия software-сдвигов."],
+      ["Редакционная роль", "Проверять сгенерированную аналитику до публикации, блокировать слабый или повторяющийся output и поддерживать стандарты чисел, подтвержденных источниками."],
+      ["Контакт", "Для исправлений, проверки фактов, вопросов по источникам или публикации:"]
+    ]
+  }
+}[locale];
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  name: copy.title,
+  description: copy.description,
+  url: `https://alfarank.com${newsPath("/news/authors/andrei/", locale)}`,
+  mainEntity: {
+    "@type": "Person",
+    name: "Andrei",
+    jobTitle: "Editor / Publisher",
+    url: `https://alfarank.com${newsPath("/news/authors/andrei/", locale)}`,
+    worksFor: {
+      "@type": "Organization",
+      name: "AlfaRank",
+      url: "https://alfarank.com"
+    }
+  }
+};
+---
+
+<Layout title={copy.title} description={copy.description} locale={locale} structuredData={structuredData}>
+  <article class="section nova-trust-page nova-author-page">
+    <header class="nova-trust-page__hero">
+      <p class="eyebrow">{copy.eyebrow}</p>
+      <h1>Andrei</h1>
+      <p>{copy.intro}</p>
+    </header>
+
+    <section class="nova-trust-grid nova-author-grid">
+      {copy.cards.map(([title, body], index) => (
+        <article>
+          <h2>{title}</h2>
+          <p>
+            {body}
+            {index === 2 && <> <a href="mailto:andrei@alfarank.com">andrei@alfarank.com</a>.</>}
+          </p>
+        </article>
+      ))}
+    </section>
+  </article>
+</Layout>

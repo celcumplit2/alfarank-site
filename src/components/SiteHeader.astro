@@ -9,6 +9,7 @@ type Props = {
 };
 
 const { locale = "en", alternateLocales = [...locales] } = Astro.props;
+const newsLabel = locale === "ru" ? "Новости" : locale === "ro" ? "Stiri" : "News";
 const navItems = [
   { label: t(locale, "capabilities"), href: "/capabilities/" },
   { label: t(locale, "solutions"), href: "/solutions/" },
@@ -16,9 +17,9 @@ const navItems = [
   { label: t(locale, "cases"), href: "/cases/" },
   { label: t(locale, "technologies"), href: "/technologies/" },
   { label: t(locale, "industries"), href: "/industries/" },
-  { label: "News", href: "/news/", global: true },
+  { label: newsLabel, href: "/news/" },
   { label: t(locale, "about"), href: "/about/" }
-].map((item) => ({ ...item, href: item.global ? item.href : localizePath(item.href, locale) }));
+].map((item) => ({ ...item, href: localizePath(item.href, locale) }));
 
 const homeHref = localizePath("/", locale);
 const startProjectHref = localizePath("/start-project/", locale);

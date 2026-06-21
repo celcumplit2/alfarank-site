@@ -1,9 +1,10 @@
 import { allBaseRoutes, alternatePaths, allLocalizedRoutes } from "@/data/i18n";
 import { articleDate, getNovaArticleSummaries, normalizeArticleUrl } from "@/lib/nova";
+import type { NewsLocale } from "@/lib/nova";
 
 const baseUrl = "https://alfarank.com";
 const lastmod = "2026-05-27";
-const newsStaticRoutes = ["/news/", "/news/about/", "/news/editorial-policy/", "/news/authors/andrei/"];
+const newsLocales: NewsLocale[] = ["en", "ro", "ru"];
 
 const escapeXml = (value: string) =>
   value
@@ -37,15 +38,12 @@ ${alternates}
 export async function GET() {
   const articles = await getNovaArticleSummaries();
   const newsRoutes = [
-    ...newsStaticRoutes.map((route) => `  <url>
-    <loc>${baseUrl}${route}</loc>
-    <lastmod>${escapeXml(articleDate(articles[0]) || lastmod)}</lastmod>
-  </url>`),
-    ...articles.map(
-      (article) => `  <url>
-    <loc>${escapeXml(normalizeArticleUrl(article.slug))}</loc>
+    ...articles.flatMap((article) =>
+      newsLocales.map((locale) => `  <url>
+    <loc>${escapeXml(normalizeArticleUrl(article.slug, locale))}</loc>
     <lastmod>${escapeXml(article.updatedAt || articleDate(article) || lastmod)}</lastmod>
   </url>`
+      )
     )
   ].join("\n");
 

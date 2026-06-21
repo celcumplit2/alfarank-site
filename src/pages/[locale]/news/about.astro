@@ -1,0 +1,82 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { newsPath } from "@/lib/nova";
+import type { NewsLocale } from "@/lib/nova";
+
+export function getStaticPaths() {
+  return (["ro", "ru"] as const).map((locale) => ({ params: { locale }, props: { locale } }));
+}
+
+type Props = {
+  locale: NewsLocale;
+};
+
+const { locale } = Astro.props;
+const copy = {
+  ro: {
+    title: "Despre AlfaRank News | AlfaRank",
+    description:
+      "AlfaRank News publica analiza bazata pe surse despre automatizare, workflow AI, platforme web, sisteme de date si operatiuni digitale.",
+    eyebrow: "Despre redactie",
+    h1: "Analiza pentru operatori digitali.",
+    intro:
+      "AlfaRank News este stratul editorial public pentru subiectele monitorizate de NOVA. Accentul este pe consecinte practice: ce inseamna un semnal de piata, o miscare de platforma, o schimbare de produs sau o tendinta de automatizare pentru echipele care construiesc si opereaza sisteme digitale.",
+    cards: [
+      ["Ce acoperim", "Automatizare AI, platforme software, pipeline-uri de date, instrumente workflow, operatiuni enterprise, infrastructura de continut, risc de integrare si schimbari tehnice de piata."],
+      ["Cum este folosit NOVA", "NOVA monitorizeaza surse, grupeaza evenimente, extrage fapte numerice, pregateste blocuri de analiza si grafice. AlfaRank foloseste acest output ca sistem editorial, nu ca flux automat necontrolat."],
+      ["Ce primesc cititorii", "Articole analitice scurte cu context, implicatii decizionale, riscuri operationale, cifre de piata, grafice si semnale de urmarit."],
+      ["Contact editorial", "Pentru corecturi, intrebari de publicare sau probleme de sursa, scrieti la"]
+    ]
+  },
+  ru: {
+    title: "О новостях AlfaRank | AlfaRank",
+    description:
+      "AlfaRank News публикует аналитику с опорой на источники об автоматизации, AI-процессах, веб-платформах, системах данных и цифровых операциях.",
+    eyebrow: "О редакции",
+    h1: "Аналитика для операторов цифровых систем.",
+    intro:
+      "AlfaRank News - публичный редакционный слой для тем, которые отслеживает NOVA. Фокус на практических последствиях: что рыночный сигнал, движение платформы, изменение продукта или тренд автоматизации значит для команд, которые строят и эксплуатируют цифровые системы.",
+    cards: [
+      ["Что мы покрываем", "AI-автоматизацию, software-платформы, data pipeline, workflow-инструменты, корпоративные операции, контентную инфраструктуру, интеграционные риски и технические рыночные сдвиги."],
+      ["Как используется NOVA", "NOVA отслеживает источники, группирует события, извлекает числовые факты, готовит аналитические блоки и графики. AlfaRank использует этот output как редакционную систему, а не как неуправляемый автопаблишинг."],
+      ["Что получает читатель", "Короткие аналитические статьи с контекстом, последствиями для решений, операционными рисками, рыночными цифрами, графиками и сигналами для мониторинга."],
+      ["Редакционный контакт", "Для исправлений, вопросов публикации или проблем с источниками пишите на"]
+    ]
+  }
+}[locale];
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  name: copy.title,
+  description: copy.description,
+  url: `https://alfarank.com${newsPath("/news/about/", locale)}`,
+  publisher: {
+    "@type": "Organization",
+    name: "AlfaRank",
+    url: "https://alfarank.com"
+  }
+};
+---
+
+<Layout title={copy.title} description={copy.description} locale={locale} structuredData={structuredData}>
+  <article class="section nova-trust-page">
+    <header class="nova-trust-page__hero">
+      <p class="eyebrow">{copy.eyebrow}</p>
+      <h1>{copy.h1}</h1>
+      <p>{copy.intro}</p>
+    </header>
+
+    <section class="nova-trust-grid">
+      {copy.cards.map(([title, body], index) => (
+        <article>
+          <h2>{title}</h2>
+          <p>
+            {body}
+            {index === 3 && <> <a href="mailto:andrei@alfarank.com">andrei@alfarank.com</a>.</>}
+          </p>
+        </article>
+      ))}
+    </section>
+  </article>
+</Layout>

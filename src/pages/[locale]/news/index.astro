@@ -1,5 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import { translateNewsText } from "@/data/nova-news-translations";
 import {
   articleCategory,
   articleDate,
@@ -9,11 +10,23 @@ import {
   getNovaArticleSummaries,
   newsPath
 } from "@/lib/nova";
-import { translateNewsText } from "@/data/nova-news-translations";
 import type { NewsLocale } from "@/lib/nova";
 
-const locale: NewsLocale = "en";
+export function getStaticPaths() {
+  return (["ro", "ru"] as const).map((locale) => ({ params: { locale }, props: { locale } }));
+}
+
+type Props = {
+  locale: NewsLocale;
+};
+
+const { locale } = Astro.props;
 const articles = await getNovaArticleSummaries(locale);
+const title = `${translateNewsText("AlfaRank News Analysis", locale)} | AlfaRank`;
+const description = translateNewsText(
+  "Source-backed AlfaRank news analysis on automation, AI workflows, data systems, web platforms, and digital operations.",
+  locale
+);
 const conciseHeading = (value: string) => {
   if (value.length <= 60) return value;
   const candidates = [
@@ -26,22 +39,18 @@ const conciseHeading = (value: string) => {
 };
 ---
 
-<Layout
-  title="AlfaRank News Analysis | AlfaRank"
-  description="Source-backed AlfaRank news analysis on automation, AI workflows, data systems, web platforms, and digital operations."
->
+<Layout title={title} description={description} locale={locale}>
   <section class="section nova-news-index">
     <header class="nova-news-index__hero">
-      <p class="eyebrow">News Analysis</p>
-      <h1>AlfaRank intelligence for digital operators.</h1>
+      <p class="eyebrow">{translateNewsText("News Analysis", locale)}</p>
+      <h1>{translateNewsText("AlfaRank intelligence for digital operators.", locale)}</h1>
       <p>
-        Analytical coverage from the NOVA monitoring engine: source-backed market signals, operational consequences,
-        data points, and decision context for teams building automation and digital systems.
+        {translateNewsText("Analytical coverage from the NOVA monitoring engine: source-backed market signals, operational consequences, data points, and decision context for teams building automation and digital systems.", locale)}
       </p>
-      <nav class="nova-news-index__trust" aria-label="News trust pages">
-        <a href="/news/about/">About AlfaRank News</a>
-        <a href="/news/editorial-policy/">Editorial Policy</a>
-        <a href="/news/authors/andrei/">Author</a>
+      <nav class="nova-news-index__trust" aria-label={translateNewsText("News trust pages", locale)}>
+        <a href={newsPath("/news/about/", locale)}>{translateNewsText("About AlfaRank News", locale)}</a>
+        <a href={newsPath("/news/editorial-policy/", locale)}>{translateNewsText("Editorial Policy", locale)}</a>
+        <a href={newsPath("/news/authors/andrei/", locale)}>{translateNewsText("Author", locale)}</a>
       </nav>
     </header>
 
