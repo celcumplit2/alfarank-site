@@ -10,16 +10,42 @@ type Props = {
 
 const { locale = "en", alternateLocales = [...locales] } = Astro.props;
 const newsLabel = locale === "ru" ? "Новости" : locale === "ro" ? "Stiri" : "News";
-const navItems = [
+
+type NavItem = {
+  label: string;
+  href: string;
+};
+
+const localizeNavItems = (items: NavItem[]) =>
+  items.map((item) => ({ ...item, href: localizePath(item.href, locale) }));
+
+const workNavItems = localizeNavItems([
   { label: t(locale, "capabilities"), href: "/capabilities/" },
   { label: t(locale, "solutions"), href: "/solutions/" },
-  { label: t(locale, "systems"), href: "/systems/" },
+  { label: t(locale, "systems"), href: "/systems/" }
+]);
+
+const resourceNavItems = localizeNavItems([
   { label: t(locale, "cases"), href: "/cases/" },
   { label: t(locale, "technologies"), href: "/technologies/" },
-  { label: t(locale, "industries"), href: "/industries/" },
+  { label: t(locale, "industries"), href: "/industries/" }
+]);
+
+const directNavItems = localizeNavItems([
   { label: newsLabel, href: "/news/" },
   { label: t(locale, "about"), href: "/about/" }
-].map((item) => ({ ...item, href: localizePath(item.href, locale) }));
+]);
+
+const navGroups = [
+  {
+    label: locale === "ru" ? "Работы" : locale === "ro" ? "Directii" : "Work",
+    items: workNavItems
+  },
+  {
+    label: locale === "ru" ? "Материалы" : locale === "ro" ? "Resurse" : "Resources",
+    items: resourceNavItems
+  }
+];
 
 const homeHref = localizePath("/", locale);
 const startProjectHref = localizePath("/start-project/", locale);
@@ -40,7 +66,18 @@ const languageNames: Record<Locale, string> = {
     <BrandLogo />
   </a>
   <nav class="site-nav desktop-nav" aria-label={t(locale, "primaryNavigation")}>
-    {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
+    {navGroups.map((group) => (
+      <details class="site-nav-group">
+        <summary>
+          <span>{group.label}</span>
+          <span class="site-nav-group__chevron" aria-hidden="true">▾</span>
+        </summary>
+        <div class="site-nav-group__menu">
+          {group.items.map((item) => <a href={item.href}>{item.label}</a>)}
+        </div>
+      </details>
+    ))}
+    {directNavItems.map((item) => <a href={item.href}>{item.label}</a>)}
   </nav>
   <div class="header-actions">
     <details class="language-switcher" data-no-translate>
@@ -62,7 +99,13 @@ const languageNames: Record<Locale, string> = {
   <details class="mobile-menu">
     <summary>{t(locale, "menu")}</summary>
     <nav class="mobile-nav" aria-label={t(locale, "mobileNavigation")}>
-      {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
+      {navGroups.map((group) => (
+        <div class="mobile-nav-group">
+          <span class="mobile-nav-group__label">{group.label}</span>
+          {group.items.map((item) => <a href={item.href}>{item.label}</a>)}
+        </div>
+      ))}
+      {directNavItems.map((item) => <a href={item.href}>{item.label}</a>)}
       <details class="language-switcher mobile-language-switcher" data-no-translate>
         <summary aria-label={t(locale, "language")}>
           <span>{localeLabels[locale]}</span>
