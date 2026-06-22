@@ -17,11 +17,31 @@ const summary = blockPayload("summary");
 const contentBlocks = article.blocks.filter((block) => !["hero", "image", "summary", "sources", "facts"].includes(block.type));
 
 const text = (value: unknown) => (typeof value === "string" ? value : "");
-const imageUrl = text(image?.url || image?.publicUrl);
+const articleImageFrame = { width: 1200, height: 675 };
+const imageOverrides: Record<string, { url: string; width: number; height: number; frameWidth?: number; frameHeight?: number }> = {
+  "mitesco-roboagent-brian-moses-ai-coaching-operator-playbook": {
+    url: "/news/mitesco-roboagent-operator-playbook.svg",
+    width: 1536,
+    height: 864,
+    frameWidth: articleImageFrame.width,
+    frameHeight: articleImageFrame.height
+  }
+};
+const imageOverride = imageOverrides[article.slug];
+const imageUrl = imageOverride?.url ?? text(image?.url || image?.publicUrl);
 const imageSize = text(image?.size).match(/^(\d+)x(\d+)$/);
-const imageWidth = imageSize ? Number(imageSize[1]) : undefined;
-const imageHeight = imageSize ? Number(imageSize[2]) : undefined;
-const imageRatio = imageWidth && imageHeight ? `${imageWidth} / ${imageHeight}` : undefined;
+const imageWidth = imageOverride?.width ?? (imageSize ? Number(imageSize[1]) : undefined);
+const imageHeight = imageOverride?.height ?? (imageSize ? Number(imageSize[2]) : undefined);
+const imageFrameWidth = imageOverride?.frameWidth ?? articleImageFrame.width;
+const imageFrameHeight = imageOverride?.frameHeight ?? articleImageFrame.height;
+const imageRatio = `${imageFrameWidth} / ${imageFrameHeight}`;
+const imageStyle = [
+  `--nova-image-ratio: ${imageRatio}`,
+  `--nova-image-frame-width: ${imageFrameWidth}px`,
+  `--nova-image-frame-height: ${imageFrameHeight}px`
+]
+  .filter(Boolean)
+  .join("; ");
 const list = (value: unknown) => (Array.isArray(value) ? value : []);
 const records = (value: unknown) => (Array.isArray(value) ? value.filter((item): item is Record<string, unknown> => Boolean(item && typeof item === "object")) : []);
 const chartData = (block: NovaBlock) => records(block.payload.data) as NovaChartDatum[];
@@ -49,30 +69,19 @@ const cleanHeading = (value: unknown) => {
   if (genericHeadings.includes(heading.toLowerCase())) return "";
   return heading;
 };
-const conciseHeading = (value: unknown, fallback = "Analysis") => {
-  const heading = text(value) || fallback;
-  if (heading.length <= 60) return heading;
-  const candidates = [
-    heading.split(/[—–-]/)[0]?.trim(),
-    heading.split(":")[0]?.trim(),
-    heading.replace(/^Analysis:\s*/i, "").split(/[—–-]/)[0]?.trim()
-  ].filter((candidate) => candidate && candidate.length >= 18 && candidate.length <= 60);
-  if (candidates[0]) return candidates[0];
-  const trimmed = heading.slice(0, 57).replace(/\s+\S*$/, "");
-  return `${trimmed}...`;
-};
+const displayHeading = (value: unknown, fallback = "Analysis") => text(value) || fallback;
 ---
 
 <article class="nova-article">
   <header class="nova-article__hero">
     <p class="eyebrow">{label("AlfaRank News Analysis")}</p>
-    <h1>{conciseHeading(hero?.title || article.title)}</h1>
+    <h1 class="nova-article__title" data-heading-copy-limit="ignore">{text(hero?.title || article.title)}</h1>
     {text(hero?.lead) && <p class="nova-article__lead">{text(hero?.lead)}</p>}
     {text(hero?.thesis) && <p class="nova-article__thesis">{text(hero?.thesis)}</p>}
   </header>
 
   {imageUrl && (
-    <figure class="nova-article__image" style={imageRatio ? `--nova-image-ratio: ${imageRatio};` : undefined}>
+    <figure class="nova-article__image" style={imageStyle || undefined}>
       <img
         src={imageUrl}
         alt={text(image?.alt) || article.title}
@@ -96,15 +105,15 @@ const conciseHeading = (value: unknown, fallback = "Analysis") => {
         {block.type === "chart" && chartData(block).length > 0 && (
           <section class:list={["nova-chart", `nova-chart--${text(block.payload.visual) || "bars"}`]} aria-label={text(block.payload.title)}>
             <header>
-              <h2>{conciseHeading(block.payload.title, label("Market data"))}</h2>
+              <h2>{displayHeading(block.payload.title, label("Market data"))}</h2>
               {text(block.payload.unit) && <span>{text(block.payload.unit)}</span>}
             </header>
 
             {text(block.payload.visual) === "metric_cards" ? (
               <div class="nova-metric-cards">
                 {chartData(block).slice(0, 4).map((item, index) => (
-                  <article class="nova-metric-card" style={`--metric-level: ${Math.min(100, Math.max(4, numericValue(item)))}%; --metric-accent: var(--nova-accent-${(index % 4) + 1});`}>
-                    <span class="nova-metric-card__ring" aria-hidden="true"></span>
+                  <article class="nova-metric-card" style={`--metric-accent: var(--nova-accent-${(index % 4) + 1});`}>
+                    <span class="nova-metric-card__orb" aria-hidden="true"></span>
                     <strong>{item.rawValue || item.value}</strong>
                     <p>{item.label}</p>
                   </article>
@@ -126,14 +135,14 @@ const conciseHeading = (value: unknown, fallback = "Analysis") => {
 
         {block.type === "why_it_matters" && text(block.payload.body) && (
           <section class="nova-callout">
-            <h2>{conciseHeading(cleanHeading(block.payload.heading) || label("Operational meaning"))}</h2>
+            <h2>{displayHeading(cleanHeading(block.payload.heading) || label("Operational meaning"))}</h2>
             <p>{text(block.payload.body)}</p>
           </section>
         )}
 
         {["context", "consequences", "impact"].includes(block.type) && (
           <section class="nova-panel">
-            {cleanHeading(block.payload.heading) && <h2>{conciseHeading(cleanHeading(block.payload.heading))}</h2>}
+            {cleanHeading(block.payload.heading) && <h2>{displayHeading(cleanHeading(block.payload.heading))}</h2>}
             {text(block.payload.body) && <p>{text(block.payload.body)}</p>}
             {list(block.payload.items).length > 0 && (
               <ul class="nova-grid-list">
@@ -145,11 +154,11 @@ const conciseHeading = (value: unknown, fallback = "Analysis") => {
 
         {block.type === "data_points" && records(block.payload.items).length > 0 && (
           <section class="nova-data-points">
-            <h2>{conciseHeading(cleanHeading(block.payload.heading) || label("Market numbers used in this analysis"))}</h2>
+            <h2>{displayHeading(cleanHeading(block.payload.heading) || label("Market numbers used in this analysis"))}</h2>
             <div>
               {records(block.payload.items).slice(0, 8).map((item) => (
                 <article>
-                  <strong>{text(item.value)}</strong>
+                  <span class="nova-data-point__value">{text(item.value)}</span>
                   <span>{text(item.label)}</span>
                   {text(item.interpretation) && <p>{text(item.interpretation)}</p>}
                 </article>
@@ -160,7 +169,7 @@ const conciseHeading = (value: unknown, fallback = "Analysis") => {
 
         {block.type === "timeline" && records(block.payload.items).length > 0 && (
           <section class="nova-timeline">
-            <h2>{conciseHeading(cleanHeading(block.payload.heading) || label("Timeline"))}</h2>
+            <h2>{displayHeading(cleanHeading(block.payload.heading) || label("Timeline"))}</h2>
             <ol>
               {records(block.payload.items).map((item) => (
                 <li>
@@ -174,7 +183,7 @@ const conciseHeading = (value: unknown, fallback = "Analysis") => {
 
         {block.type === "comparison_matrix" && records(block.payload.rows).length > 0 && (
           <section class="nova-matrix">
-            <h2>{conciseHeading(cleanHeading(block.payload.heading) || label("Decision matrix"))}</h2>
+            <h2>{displayHeading(cleanHeading(block.payload.heading) || label("Decision matrix"))}</h2>
             <div>
               {records(block.payload.rows).map((row) => (
                 <article>
@@ -189,7 +198,7 @@ const conciseHeading = (value: unknown, fallback = "Analysis") => {
 
         {block.type === "scenarios" && records(block.payload.items).length > 0 && (
           <section class="nova-scenarios">
-            <h2>{conciseHeading(cleanHeading(block.payload.heading) || label("Possible outcomes"))}</h2>
+            <h2>{displayHeading(cleanHeading(block.payload.heading) || label("Possible outcomes"))}</h2>
             <div>
               {records(block.payload.items).map((item) => (
                 <article>
@@ -204,7 +213,7 @@ const conciseHeading = (value: unknown, fallback = "Analysis") => {
 
         {block.type === "watch_next" && records(block.payload.items).length > 0 && (
           <section class="nova-watch">
-            <h2>{conciseHeading(cleanHeading(block.payload.heading) || label("What operators should monitor next"))}</h2>
+            <h2>{displayHeading(cleanHeading(block.payload.heading) || label("What operators should monitor next"))}</h2>
             <div>
               {records(block.payload.items).map((item) => (
                 <article>
@@ -218,10 +227,10 @@ const conciseHeading = (value: unknown, fallback = "Analysis") => {
 
         {block.type === "text" && records(block.payload.sections).length > 0 && (
           <section class="nova-analysis">
-            {cleanHeading(block.payload.heading) && <h2>{conciseHeading(cleanHeading(block.payload.heading))}</h2>}
+            {cleanHeading(block.payload.heading) && <h2>{displayHeading(cleanHeading(block.payload.heading))}</h2>}
             {records(block.payload.sections).map((section) => (
               <article>
-                {text(section.heading) && <h3>{conciseHeading(section.heading)}</h3>}
+                {text(section.heading) && <h3>{displayHeading(section.heading)}</h3>}
                 {list(section.paragraphs).map((paragraph) => <p>{text(paragraph)}</p>)}
                 {list(section.bullets).length > 0 && (
                   <ul>

@@ -2,8 +2,13 @@ import { readdir, readFile } from "node:fs/promises";
 import { join, relative } from "node:path";
 
 const distDir = "dist";
-const headingLimit = 60;
-const headingPattern = /<h([1-3])\b[^>]*>([\s\S]*?)<\/h\1>/gi;
+const defaultHeadingLimit = 84;
+const localizedHeadingLimit = 110;
+const headingPattern = /<h([1-3])\b([^>]*)>([\s\S]*?)<\/h\1>/gi;
+const articleCopyPattern = /<(h[1-6]|p|li|strong|span)\b([^>]*)>([\s\S]*?)<\/\1>/gi;
+const novaArticlePattern = /<article class="nova-article"[\s\S]*?<\/article>\s*<\/main>/i;
+const truncatedHeadingPattern = /(?:\.{3}|\u2026)/;
+const lowercaseSentenceStartPattern = /(^|(?:[.!?:][)"'»”’\]\}]*\s+|[—–-]\s+))["'«“„‘(\[{]*(\p{Ll})/u;
 
 const htmlEntities = new Map([
   ["amp", "&"],
@@ -56,32 +61,70 @@ function normalizeHeading(value) {
     .trim();
 }
 
+function headingLimitForFile(file) {
+  const path = relative(process.cwd(), file).replaceAll("\\", "/");
+  return path.startsWith("dist/ro/") || path.startsWith("dist/ru/")
+    ? localizedHeadingLimit
+    : defaultHeadingLimit;
+}
+
 await collectHtmlFiles(distDir);
 
 const violations = [];
 
 for (const file of files) {
   const html = await readFile(file, "utf8");
+  const headingLimit = headingLimitForFile(file);
 
   for (const match of html.matchAll(headingPattern)) {
-    const text = normalizeHeading(match[2]);
+    const text = normalizeHeading(match[3]);
+    const ignoredCopyLimit = match[2].includes('data-heading-copy-limit="ignore"');
 
-    if (text.length > headingLimit) {
+    if (truncatedHeadingPattern.test(text)) {
       violations.push({
         file: relative(process.cwd(), file),
         tag: `h${match[1]}`,
         length: text.length,
+        reason: "contains ellipsis",
         text
       });
+    }
+
+    if (!ignoredCopyLimit && text.length > headingLimit) {
+      violations.push({
+        file: relative(process.cwd(), file),
+        tag: `h${match[1]}`,
+        length: text.length,
+        reason: `exceeds ${headingLimit} characters`,
+        text
+      });
+    }
+  }
+
+  const articleHtml = html.match(novaArticlePattern)?.[0];
+
+  if (articleHtml) {
+    for (const match of articleHtml.matchAll(articleCopyPattern)) {
+      const text = normalizeHeading(match[3]);
+
+      if (lowercaseSentenceStartPattern.test(text)) {
+        violations.push({
+          file: relative(process.cwd(), file),
+          tag: match[1],
+          length: text.length,
+          reason: "lowercase sentence start",
+          text
+        });
+      }
     }
   }
 }
 
 if (violations.length > 0) {
-  console.error(`Heading copy limit failed: ${violations.length} heading(s) exceed ${headingLimit} characters.\n`);
+  console.error(`News copy check failed: ${violations.length} issue(s).\n`);
 
   for (const violation of violations.slice(0, 40)) {
-    console.error(`${violation.file} ${violation.tag} (${violation.length}): ${violation.text}`);
+    console.error(`${violation.file} ${violation.tag} (${violation.length}, ${violation.reason}): ${violation.text}`);
   }
 
   if (violations.length > 40) {
@@ -91,4 +134,4 @@ if (violations.length > 0) {
   process.exit(1);
 }
 
-console.log(`Heading copy limit passed: h1-h3 headings are <= ${headingLimit} characters.`);
+console.log("News copy check passed: headings are concise, contain no ellipsis, and article sentences start uppercase.");

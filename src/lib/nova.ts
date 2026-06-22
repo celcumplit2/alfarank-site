@@ -1,5 +1,5 @@
 import { localizePath } from "@/data/i18n";
-import { translateNovaArticle, translateNovaArticleSummary } from "@/data/nova-news-translations";
+import { normalizeSentenceStarts, translateNovaArticle, translateNovaArticleSummary } from "@/data/nova-news-translations";
 import type { Locale } from "@/data/i18n";
 
 const NOVA_API_BASE = import.meta.env.NOVA_PUBLIC_API_BASE || "https://nova.alfarank.com/api/public";
@@ -63,6 +63,339 @@ type NovaArticleResponse = {
   article?: NovaArticle;
 };
 
+const generatedHeadingOverrides: Record<string, string> = {
+  "RPA Acceleration: Efficiency, Complexity, and Decision Risks for Digital Operators": "RPA Acceleration Risks",
+  "AI-Powered Workflow Automation: Opportunity and Uncertainty for Digital Operators": "Automation Opportunity and Uncertainty",
+  "AlphaSense Enterprise Metrics: Funding vs. Revenue vs. Customer Penetration": "AlphaSense Metrics Snapshot",
+  "Procurement Process Improvements with Agentic AI vs. Manual/Legacy Methods": "Procurement Automation Gains",
+  "Operator Decisions: Where to Automate, Where to Retain Human-in-the-Loop": "Automation Decision Boundaries",
+  "Architecture Shift: From Fragmented Collection to Automated AI Readiness": "Architecture Shift",
+  "Practical Steps and Decision Signals for Content Workflow Operators": "Operator Decision Signals",
+  "Pega's AI Platform Overhaul: A New Playbook for Workflow Automation": "Pega Workflow Automation Playbook",
+  "Workflow Automation Market Timeline and Maturity Shift (2025–2031)": "Automation Market Timeline",
+  "Analysis: Two-Way Native Integrations Rewrite the B2B Workflow Map": "B2B Workflow Map",
+  "Updating Decision Models: Autonomous and Assistive AI in the SOC": "SOC Decision Models",
+  "AI Automation and Workflow Market Adoption Snapshot (2025–2031)": "AI Workflow Adoption Snapshot",
+  "Key Workflow Upgrades from RoboAgent & Brian Moses Partnership": "RoboAgent Workflow Upgrades",
+  "KnowledgeLake Milestones: User Scale and Industry Recognition": "KnowledgeLake Milestones",
+  "How to Rethink AI Integration in Content-Driven SOC Workflows": "Rethinking SOC AI Integration",
+  "Historical Sequence: From Chatbots to Data-Layered Automation": "From Chatbots to Data Layers"
+};
+
+const articleHeadingTopics: Record<string, Record<NewsLocale, string>> = {
+  "mitesco-roboagent-brian-moses-ai-coaching-operator-playbook": {
+    en: "Mitesco RoboAgent coaching",
+    ro: "Coachingul RoboAgent Mitesco",
+    ru: "Сделка Mitesco и RoboAgent"
+  },
+  "knowledgelake-ceo-appointment-timeline-impact-analysis": {
+    en: "KnowledgeLake CEO transition",
+    ro: "Tranzitia CEO KnowledgeLake",
+    ru: "Смена CEO KnowledgeLake"
+  },
+  "intezer-soc-operating-layer-enterprise-ai-agent-adoption": {
+    en: "Intezer SOC operating layer",
+    ro: "Stratul SOC Intezer",
+    ru: "SOC-слой Intezer"
+  },
+  "digicode-ai-procurement-multi-agent-decision": {
+    en: "Digicode procurement agents",
+    ro: "Agentii de achizitii Digicode",
+    ru: "Агенты закупок Digicode"
+  },
+  "alphasense-ai-workflow-opportunity-risk-2026": {
+    en: "AlphaSense AI funding",
+    ro: "Finantarea AI AlphaSense",
+    ru: "AI-раунд AlphaSense"
+  },
+  "ai-saas-workflow-actor-productivity-governance-risk": {
+    en: "SaaS workflow actors",
+    ro: "SaaS ca actor de workflow",
+    ru: "SaaS как участник workflow"
+  },
+  "databricks-genie-one-ai-automation-risk-opportunity": {
+    en: "Databricks Genie One",
+    ro: "Databricks Genie One",
+    ru: "Databricks Genie One"
+  },
+  "pega-ai-platform-costs-governance-integration-analysis": {
+    en: "Pega AI pricing shift",
+    ro: "Schimbarea AI Pega",
+    ru: "AI-сдвиг Pega"
+  },
+  "ai-development-enterprise-workflow-judgment-market-analysis-2026": {
+    en: "AI development bottlenecks",
+    ro: "Blocajele dezvoltarii AI",
+    ru: "Узкие места AI-разработки"
+  },
+  "servicenow-ai-workflow-partnerships-digital-operations-steps": {
+    en: "ServiceNow AI alliances",
+    ro: "Aliantele AI ServiceNow",
+    ru: "AI-альянсы ServiceNow"
+  },
+  "rpa-growth-risk-digital-ops-analysis": {
+    en: "RPA market surge",
+    ro: "Cresterea pietei RPA",
+    ru: "Рост рынка RPA"
+  },
+  "cloudflare-acquires-voidzero-operator-toolchain-impact": {
+    en: "Cloudflare VoidZero deal",
+    ro: "Acordul Cloudflare VoidZero",
+    ru: "Сделка Cloudflare VoidZero"
+  },
+  "natgashub-databricks-integration-pipeline-data-ai-governance-risks": {
+    en: "NatGasHub Databricks data flow",
+    ro: "Fluxul NatGasHub Databricks",
+    ru: "Поток данных NatGasHub Databricks"
+  },
+  "enterprise-agentic-ai-timeline-data-foundations": {
+    en: "Enterprise agentic AI",
+    ro: "AI agentic in enterprise",
+    ru: "Агентный AI в enterprise"
+  },
+  "zoominfo-konnectify-two-way-integration-b2b-workflow-timeline": {
+    en: "ZoomInfo Konnectify integration",
+    ro: "Integrarea ZoomInfo Konnectify",
+    ru: "Интеграция ZoomInfo Konnectify"
+  }
+};
+
+type HeadingTemplate = Record<NewsLocale, (topic: string) => string>;
+
+const headingTemplates: Record<string, HeadingTemplate> = {
+  "Why it matters": {
+    en: (topic) => `Why it matters for ${topic}`,
+    ro: (topic) => `De ce conteaza ${topic}`,
+    ru: (topic) => `${topic}: Почему это важно`
+  },
+  Impact: {
+    en: (topic) => `${topic}: Operator impact`,
+    ro: (topic) => `${topic}: Impact operational`,
+    ru: (topic) => `${topic}: Влияние на операторов`
+  },
+  Context: {
+    en: (topic) => `${topic}: Background context`,
+    ro: (topic) => `${topic}: Context`,
+    ru: (topic) => `${topic}: Контекст`
+  },
+  Consequences: {
+    en: (topic) => `${topic}: Operational consequences`,
+    ro: (topic) => `${topic}: Consecinte operationale`,
+    ru: (topic) => `${topic}: Операционные последствия`
+  },
+  "Data points": {
+    en: (topic) => `${topic}: Key data`,
+    ro: (topic) => `${topic}: Date cheie`,
+    ru: (topic) => `${topic}: Ключевые данные`
+  },
+  "Evidence-backed metrics": {
+    en: (topic) => `${topic}: Evidence metrics`,
+    ro: (topic) => `${topic}: Metrici verificate`,
+    ru: (topic) => `${topic}: Проверенные метрики`
+  },
+  "Decision matrix": {
+    en: (topic) => `${topic}: Decision criteria`,
+    ro: (topic) => `${topic}: Criterii de decizie`,
+    ru: (topic) => `${topic}: Критерии решений`
+  },
+  "Comparison matrix": {
+    en: (topic) => `${topic}: Comparison criteria`,
+    ro: (topic) => `${topic}: Criterii de comparatie`,
+    ru: (topic) => `${topic}: Критерии сравнения`
+  },
+  Scenarios: {
+    en: (topic) => `${topic}: Possible outcomes`,
+    ro: (topic) => `${topic}: Scenarii posibile`,
+    ru: (topic) => `${topic}: Возможные сценарии`
+  },
+  "Watch next": {
+    en: (topic) => `${topic}: Signals to watch`,
+    ro: (topic) => `${topic}: Semnale de urmarit`,
+    ru: (topic) => `${topic}: Что отслеживать`
+  },
+  "What to watch next": {
+    en: (topic) => `${topic}: Signals to watch`,
+    ro: (topic) => `${topic}: Semnale de urmarit`,
+    ru: (topic) => `${topic}: Что отслеживать`
+  },
+  Timeline: {
+    en: (topic) => `${topic}: Timeline`,
+    ro: (topic) => `${topic}: Cronologie`,
+    ru: (topic) => `${topic}: Хронология`
+  },
+  "Reported data behind the story": {
+    en: (topic) => `${topic}: Source data`,
+    ro: (topic) => `${topic}: Date din surse`,
+    ru: (topic) => `${topic}: Данные источников`
+  },
+  "Numbers behind the shift": {
+    en: (topic) => `${topic}: Shift numbers`,
+    ro: (topic) => `${topic}: Cifrele schimbarii`,
+    ru: (topic) => `${topic}: Цифры сдвига`
+  },
+  "Market context at a glance": {
+    en: (topic) => `${topic}: Market context`,
+    ro: (topic) => `${topic}: Context de piata`,
+    ru: (topic) => `${topic}: Рыночный контекст`
+  }
+};
+
+const normalizedHeadingTranslations: Record<string, Partial<Record<NewsLocale, string>>> = {
+  "RPA Acceleration Risks": {
+    ro: "Riscurile accelerarii RPA",
+    ru: "Риски ускорения RPA"
+  },
+  "Automation Opportunity and Uncertainty": {
+    ro: "Oportunitate si incertitudine in automatizare",
+    ru: "Возможности и неопределенность автоматизации"
+  },
+  "AlphaSense Metrics Snapshot": {
+    ro: "Instantaneu al metricilor AlphaSense",
+    ru: "Сводка метрик AlphaSense"
+  },
+  "Procurement Automation Gains": {
+    ro: "Castiguri din automatizarea achizitiilor",
+    ru: "Эффект автоматизации закупок"
+  },
+  "Automation Decision Boundaries": {
+    ro: "Limite de decizie pentru automatizare",
+    ru: "Границы решений по автоматизации"
+  },
+  "Architecture Shift": {
+    ro: "Schimbare de arhitectura",
+    ru: "Архитектурный сдвиг"
+  },
+  "Operator Decision Signals": {
+    ro: "Semnale de decizie pentru operatori",
+    ru: "Сигналы решений для операторов"
+  },
+  "Pega Workflow Automation Playbook": {
+    ro: "Playbook Pega pentru automatizarea workflow",
+    ru: "Playbook Pega для автоматизации workflow"
+  },
+  "Automation Market Timeline": {
+    ro: "Cronologia pietei de automatizare",
+    ru: "Хронология рынка автоматизации"
+  },
+  "B2B Workflow Map": {
+    ro: "Harta workflow B2B",
+    ru: "Карта B2B workflow"
+  },
+  "SOC Decision Models": {
+    ro: "Modele de decizie SOC",
+    ru: "Модели решений SOC"
+  },
+  "AI Workflow Adoption Snapshot": {
+    ro: "Instantaneu al adoptarii workflow AI",
+    ru: "Сводка внедрения AI workflow"
+  },
+  "RoboAgent Workflow Upgrades": {
+    ro: "Upgrade-uri workflow RoboAgent",
+    ru: "Улучшения workflow RoboAgent"
+  },
+  "KnowledgeLake Milestones": {
+    ro: "Repere KnowledgeLake",
+    ru: "Вехи KnowledgeLake"
+  },
+  "Rethinking SOC AI Integration": {
+    ro: "Regandirea integrarii AI in SOC",
+    ru: "Переосмысление AI-интеграции в SOC"
+  },
+  "From Chatbots to Data Layers": {
+    ro: "De la chatbots la straturi de date",
+    ru: "От чатботов к слоям данных"
+  }
+};
+
+const compactHeadingTopic = (value: string) => {
+  const topic = value
+    .replace(/\s+\|\s+AlfaRank$/i, "")
+    .split(/[—–-]/)[0]
+    .split(":")[0]
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (topic.length <= 42) return topic;
+  return topic.split(/\s+/).slice(0, 6).join(" ");
+};
+
+const headingTopicForArticle = (article: NovaArticle, locale: NewsLocale) =>
+  articleHeadingTopics[article.slug]?.[locale] ?? compactHeadingTopic(articleTitle(article));
+
+const personalizedHeading = (original: unknown, topic: string, locale: NewsLocale) => {
+  if (typeof original !== "string") return "";
+  const key = generatedHeadingOverrides[original] ?? original;
+  const template = headingTemplates[key];
+  return template ? template[locale](topic) : "";
+};
+
+const translatedNormalizedHeading = (original: unknown, locale: NewsLocale) => {
+  if (locale === "en" || typeof original !== "string") return "";
+  const key = generatedHeadingOverrides[original] ?? original;
+  return normalizedHeadingTranslations[key]?.[locale] ?? "";
+};
+
+const personalizeHeadingValue = (translatedValue: unknown, sourceValue: unknown, topic: string, locale: NewsLocale, key = ""): unknown => {
+  if (typeof translatedValue === "string") {
+    if (key === "heading" || key === "title") {
+      return personalizedHeading(sourceValue, topic, locale) || translatedNormalizedHeading(sourceValue, locale) || translatedValue;
+    }
+
+    return translatedValue;
+  }
+
+  if (Array.isArray(translatedValue)) {
+    const sourceItems = Array.isArray(sourceValue) ? sourceValue : [];
+    return translatedValue.map((item, index) => personalizeHeadingValue(item, sourceItems[index], topic, locale, key));
+  }
+
+  if (translatedValue && typeof translatedValue === "object") {
+    const sourceObject = sourceValue && typeof sourceValue === "object" ? (sourceValue as Record<string, unknown>) : {};
+    return Object.fromEntries(
+      Object.entries(translatedValue).map(([entryKey, entryValue]) => [
+        entryKey,
+        personalizeHeadingValue(entryValue, sourceObject[entryKey], topic, locale, entryKey)
+      ])
+    );
+  }
+
+  return translatedValue;
+};
+
+const personalizeArticleHeadings = (article: NovaArticle, sourceArticle: NovaArticle, locale: NewsLocale): NovaArticle => {
+  const topic = headingTopicForArticle(article, locale);
+  if (!topic) return article;
+
+  return {
+    ...article,
+    blocks: article.blocks.map((block, index) => {
+      const sourceBlock = sourceArticle.blocks[index];
+      return {
+        ...block,
+        payload: personalizeHeadingValue(block.payload, sourceBlock?.payload, topic, locale) as Record<string, unknown>
+      };
+    })
+  };
+};
+
+const normalizeGeneratedHeadings = (value: unknown): unknown => {
+  if (typeof value === "string") {
+    return generatedHeadingOverrides[value] ?? value;
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((item) => normalizeGeneratedHeadings(item));
+  }
+
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, item]) => [key, normalizeGeneratedHeadings(item)])
+    );
+  }
+
+  return value;
+};
+
 const novaUrl = (path: string) => {
   const url = new URL(`${NOVA_API_BASE.replace(/\/$/, "")}${path}`);
   url.searchParams.set("siteId", NOVA_SITE_ID);
@@ -94,7 +427,11 @@ export async function getNovaArticle(slug: string, locale: NewsLocale = "en") {
   }
 
   const data = (await response.json()) as NovaArticleResponse;
-  return data.article ? translateNovaArticle(data.article, locale) : undefined;
+  if (!data.article) return undefined;
+
+  const normalizedArticle = normalizeGeneratedHeadings(data.article) as NovaArticle;
+  const translatedArticle = translateNovaArticle(normalizedArticle, locale);
+  return personalizeArticleHeadings(translatedArticle, normalizedArticle, locale);
 }
 
 export function articleTitle(article: NovaArticleSummary) {
@@ -133,7 +470,7 @@ export function articleCategory(article: NovaArticleSummary, locale: NewsLocale 
   };
 
   if (!article.category) return "";
-  return labels[locale][article.category] ?? article.category.replaceAll("-", " ");
+  return normalizeSentenceStarts(labels[locale][article.category] ?? article.category.replaceAll("-", " "), locale);
 }
 
 export function formatArticleDate(value?: string, locale: NewsLocale = "en") {

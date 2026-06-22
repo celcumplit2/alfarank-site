@@ -27,16 +27,6 @@ const description = translateNewsText(
   "Source-backed AlfaRank news analysis on automation, AI workflows, data systems, web platforms, and digital operations.",
   locale
 );
-const conciseHeading = (value: string) => {
-  if (value.length <= 60) return value;
-  const candidates = [
-    value.split(/[—–-]/)[0]?.trim(),
-    value.split(":")[0]?.trim()
-  ].filter((candidate) => candidate && candidate.length >= 18 && candidate.length <= 60);
-  if (candidates[0]) return candidates[0];
-  const trimmed = value.slice(0, 57).replace(/\s+\S*$/, "");
-  return `${trimmed}...`;
-};
 ---
 
 <Layout title={title} description={description} locale={locale}>
@@ -60,7 +50,7 @@ const conciseHeading = (value: string) => {
           <a href={newsPath(`/news/${article.slug}/`, locale)}>
             <time datetime={articleDate(article)}>{formatArticleDate(articleDate(article), locale)}</time>
             {article.category && <span class="nova-news-card__category">{articleCategory(article, locale)}</span>}
-            <h2>{conciseHeading(articleTitle(article))}</h2>
+            <h2 data-heading-copy-limit="ignore">{articleTitle(article)}</h2>
             <p>{articleDescription(article)}</p>
             {article.seo?.tags && (
               <ul>

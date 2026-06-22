@@ -443,16 +443,30 @@ const structuralKeys = new Set([
   "bio"
 ]);
 
+const sentenceLocales: Record<NewsLocale, string> = {
+  en: "en",
+  ro: "ro-RO",
+  ru: "ru-RU"
+};
+
+const sentenceStartPattern = /(^|(?:[.!?:][)"'»”’\]\}]*\s+|[—–-]\s+))(["'«“„‘(\[{]*)(\p{Ll})/gu;
+
+export const normalizeSentenceStarts = (value: string, locale: NewsLocale = "en") =>
+  value.replace(
+    sentenceStartPattern,
+    (_, prefix: string, opening: string, letter: string) =>
+      `${prefix}${opening}${letter.toLocaleUpperCase(sentenceLocales[locale])}`
+  );
+
 const translateString = (value: string, locale: NewsLocale) => {
-  if (locale === "en") return value;
+  if (locale === "en") return normalizeSentenceStarts(value, locale);
   const exact = exactText[value]?.[locale];
   const generated = generatedNovaNewsTranslations[value]?.[locale];
-  if (value.length > 120 && generated) return generated;
-  return exact ?? generated ?? value;
+  const translated = value.length > 120 && generated ? generated : exact ?? generated ?? value;
+  return normalizeSentenceStarts(translated, locale);
 };
 
 const translateValue = (value: unknown, locale: NewsLocale, key = ""): unknown => {
-  if (locale === "en") return value;
   if (typeof value === "string") return structuralKeys.has(key) ? value : translateString(value, locale);
   if (Array.isArray(value)) return value.map((item) => translateValue(item, locale, key));
   if (value && typeof value === "object") {
@@ -466,11 +480,9 @@ const translateValue = (value: unknown, locale: NewsLocale, key = ""): unknown =
 export const translateNewsText = translateString;
 
 export const translateNovaArticleSummary = (article: NovaArticleSummary, locale: NewsLocale): NovaArticleSummary => {
-  if (locale === "en") return article;
   return translateValue(article, locale) as NovaArticleSummary;
 };
 
 export const translateNovaArticle = (article: NovaArticle, locale: NewsLocale): NovaArticle => {
-  if (locale === "en") return article;
   return translateValue(article, locale) as NovaArticle;
 };
