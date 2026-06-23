@@ -34,7 +34,9 @@ const imageWidth = imageOverride?.width ?? (imageSize ? Number(imageSize[1]) : u
 const imageHeight = imageOverride?.height ?? (imageSize ? Number(imageSize[2]) : undefined);
 const imageFrameWidth = imageOverride?.frameWidth ?? articleImageFrame.width;
 const imageFrameHeight = imageOverride?.frameHeight ?? articleImageFrame.height;
-const imageRatio = `${imageFrameWidth} / ${imageFrameHeight}`;
+const imageRatioWidth = imageOverride?.frameWidth ?? imageWidth ?? articleImageFrame.width;
+const imageRatioHeight = imageOverride?.frameHeight ?? imageHeight ?? articleImageFrame.height;
+const imageRatio = `${imageRatioWidth} / ${imageRatioHeight}`;
 const imageStyle = [
   `--nova-image-ratio: ${imageRatio}`,
   `--nova-image-frame-width: ${imageFrameWidth}px`,
