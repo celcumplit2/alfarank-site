@@ -8,7 +8,8 @@ const headingPattern = /<h([1-3])\b([^>]*)>([\s\S]*?)<\/h\1>/gi;
 const articleCopyPattern = /<(h[1-6]|p|li|strong|span)\b([^>]*)>([\s\S]*?)<\/\1>/gi;
 const novaArticlePattern = /<article class="nova-article"[\s\S]*?<\/article>\s*<\/main>/i;
 const truncatedHeadingPattern = /(?:\.{3}|\u2026)/;
-const lowercaseSentenceStartPattern = /(^|(?:[.!?:][)"'»”’\]\}]*\s+|[—–-]\s+))["'«“„‘(\[{]*(\p{Ll})/u;
+const lowercaseSentenceStartPattern = /(^|(?:[.!?;:][)"'»”’\]\}]*\s+|[—–-]\s+))["'«“„‘(\[{]*(\p{Ll})/u;
+const trustPagePattern = /<article class="section nova-trust-page"[\s\S]*?<\/article>\s*<\/main>/i;
 const repeatedColonPrefixLimit = 2;
 const bannedHeadingPatterns = [
   {
@@ -68,6 +69,10 @@ function normalizeHeading(value) {
     .trim();
 }
 
+function shouldCheckSentenceStarts(text) {
+  return !/^(?:https?:\/\/|[\w.+-]+@[\w.-]+|[\w.-]+\.[a-z]{2,})$/i.test(text);
+}
+
 function headingLimitForFile(file) {
   const path = relative(process.cwd(), file).replaceAll("\\", "/");
   return path.startsWith("dist/ro/") || path.startsWith("dist/ru/")
@@ -108,7 +113,7 @@ for (const file of files) {
     }
   }
 
-  const articleHtml = html.match(novaArticlePattern)?.[0];
+  const articleHtml = html.match(novaArticlePattern)?.[0] ?? html.match(trustPagePattern)?.[0];
 
   if (articleHtml) {
     const articleHeadings = [];
@@ -154,7 +159,7 @@ for (const file of files) {
     for (const match of articleHtml.matchAll(articleCopyPattern)) {
       const text = normalizeHeading(match[3]);
 
-      if (lowercaseSentenceStartPattern.test(text)) {
+      if (shouldCheckSentenceStarts(text) && lowercaseSentenceStartPattern.test(text)) {
         violations.push({
           file: relative(process.cwd(), file),
           tag: match[1],

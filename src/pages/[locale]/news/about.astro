@@ -1,5 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import { normalizeSentenceStarts } from "@/data/nova-news-translations";
 import { newsPath } from "@/lib/nova";
 import type { NewsLocale } from "@/lib/nova";
 
@@ -45,6 +46,8 @@ const copy = {
   }
 }[locale];
 
+const clean = (value: string) => normalizeSentenceStarts(value, locale);
+
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "AboutPage",
@@ -62,17 +65,17 @@ const structuredData = {
 <Layout title={copy.title} description={copy.description} locale={locale} structuredData={structuredData}>
   <article class="section nova-trust-page">
     <header class="nova-trust-page__hero">
-      <p class="eyebrow">{copy.eyebrow}</p>
-      <h1>{copy.h1}</h1>
-      <p>{copy.intro}</p>
+      <p class="eyebrow">{clean(copy.eyebrow)}</p>
+      <h1>{clean(copy.h1)}</h1>
+      <p>{clean(copy.intro)}</p>
     </header>
 
     <section class="nova-trust-grid">
       {copy.cards.map(([title, body], index) => (
         <article>
-          <h2>{title}</h2>
+          <h2>{clean(title)}</h2>
           <p>
-            {body}
+            {clean(body)}
             {index === 3 && <> <a href="mailto:andrei@alfarank.com">andrei@alfarank.com</a>.</>}
           </p>
         </article>

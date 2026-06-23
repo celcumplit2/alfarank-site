@@ -806,7 +806,7 @@ const sentenceLocales: Record<NewsLocale, string> = {
   ru: "ru-RU"
 };
 
-const sentenceStartPattern = /(^|(?:[.!?:][)"'»”’\]\}]*\s+|[—–-]\s+))(["'«“„‘(\[{]*)(\p{Ll})/gu;
+const sentenceStartPattern = /(^|(?:[.!?;:][)"'»”’\]\}]*\s+|[—–-]\s+))(["'«“„‘(\[{]*)(\p{Ll})/gu;
 
 export const normalizeSentenceStarts = (value: string, locale: NewsLocale = "en") =>
   value.replace(

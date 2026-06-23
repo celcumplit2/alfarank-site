@@ -1,5 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import { normalizeSentenceStarts } from "@/data/nova-news-translations";
 import { newsPath } from "@/lib/nova";
 import type { NewsLocale } from "@/lib/nova";
 
@@ -65,6 +66,8 @@ const copy = {
   }
 }[locale];
 
+const clean = (value: string) => normalizeSentenceStarts(value, locale);
+
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "WebPage",
@@ -82,30 +85,30 @@ const structuredData = {
 <Layout title={copy.title} description={copy.description} locale={locale} structuredData={structuredData}>
   <article class="section nova-trust-page">
     <header class="nova-trust-page__hero">
-      <p class="eyebrow">{copy.eyebrow}</p>
-      <h1>{copy.h1}</h1>
-      <p>{copy.intro}</p>
+      <p class="eyebrow">{clean(copy.eyebrow)}</p>
+      <h1>{clean(copy.h1)}</h1>
+      <p>{clean(copy.intro)}</p>
     </header>
 
     <section class="nova-trust-grid">
       {copy.cards.map(([title, body]) => (
         <article>
-          <h2>{title}</h2>
-          <p>{body}</p>
+          <h2>{clean(title)}</h2>
+          <p>{clean(body)}</p>
         </article>
       ))}
     </section>
 
     <section class="nova-trust-panel">
-      <h2>{copy.checksTitle}</h2>
+      <h2>{clean(copy.checksTitle)}</h2>
       <ul>
-        {copy.checks.map((item) => <li>{item}</li>)}
+        {copy.checks.map((item) => <li>{clean(item)}</li>)}
       </ul>
     </section>
 
     <section class="nova-trust-panel">
-      <h2>{copy.contactTitle}</h2>
-      <p>{copy.contact}</p>
+      <h2>{clean(copy.contactTitle)}</h2>
+      <p>{clean(copy.contact)}</p>
       <p>
         <a href="mailto:andrei@alfarank.com">andrei@alfarank.com</a>
       </p>

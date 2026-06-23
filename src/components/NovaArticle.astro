@@ -1,5 +1,5 @@
 ---
-import { translateNewsText } from "@/data/nova-news-translations";
+import { normalizeSentenceStarts, translateNewsText } from "@/data/nova-news-translations";
 import type { NewsLocale, NovaArticle, NovaBlock, NovaChartDatum } from "@/lib/nova";
 
 type Props = {
@@ -16,7 +16,11 @@ const image = blockPayload("image");
 const summary = blockPayload("summary");
 const contentBlocks = article.blocks.filter((block) => !["hero", "image", "summary", "sources", "facts"].includes(block.type));
 
-const text = (value: unknown) => (typeof value === "string" ? value : "");
+const rawText = (value: unknown) => (typeof value === "string" ? value : "");
+const text = (value: unknown) => {
+  const valueText = rawText(value);
+  return valueText ? normalizeSentenceStarts(valueText, locale) : "";
+};
 const articleImageFrame = { width: 1200, height: 675 };
 const imageOverrides: Record<string, { url: string; width: number; height: number; frameWidth?: number; frameHeight?: number }> = {
   "mitesco-roboagent-brian-moses-ai-coaching-operator-playbook": {
@@ -28,8 +32,8 @@ const imageOverrides: Record<string, { url: string; width: number; height: numbe
   }
 };
 const imageOverride = imageOverrides[article.slug];
-const imageUrl = imageOverride?.url ?? text(image?.url || image?.publicUrl);
-const imageSize = text(image?.size).match(/^(\d+)x(\d+)$/);
+const imageUrl = imageOverride?.url ?? rawText(image?.url || image?.publicUrl);
+const imageSize = rawText(image?.size).match(/^(\d+)x(\d+)$/);
 const imageWidth = imageOverride?.width ?? (imageSize ? Number(imageSize[1]) : undefined);
 const imageHeight = imageOverride?.height ?? (imageSize ? Number(imageSize[2]) : undefined);
 const imageFrameWidth = imageOverride?.frameWidth ?? articleImageFrame.width;
@@ -105,13 +109,13 @@ const displayHeading = (value: unknown, fallback = "Analysis") => text(value) ||
     {contentBlocks.map((block) => (
       <>
         {block.type === "chart" && chartData(block).length > 0 && (
-          <section class:list={["nova-chart", `nova-chart--${text(block.payload.visual) || "bars"}`]} aria-label={text(block.payload.title)}>
+          <section class:list={["nova-chart", `nova-chart--${rawText(block.payload.visual) || "bars"}`]} aria-label={text(block.payload.title)}>
             <header>
               <h2>{displayHeading(block.payload.title, label("Market data"))}</h2>
               {text(block.payload.unit) && <span>{text(block.payload.unit)}</span>}
             </header>
 
-            {text(block.payload.visual) === "metric_cards" ? (
+            {rawText(block.payload.visual) === "metric_cards" ? (
               <div class="nova-metric-cards">
                 {chartData(block).slice(0, 4).map((item, index) => (
                   <article class="nova-metric-card" style={`--metric-accent: var(--nova-accent-${(index % 4) + 1});`}>
