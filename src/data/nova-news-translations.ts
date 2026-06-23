@@ -234,8 +234,8 @@ const exactText: TranslationDictionary = {
     ru: "Анализ: что делать операторам после партнерства Mitesco с Brian Moses для добавления эксклюзивного coaching и workflow-автоматизации в RoboAgent. Ключевые сигналы, риски и следующие шаги."
   },
   "Operator Playbook: Mitesco’s RoboAgent Adds Exclusive Coaching for Real Estate AI Workflows": {
-    ro: "Playbook pentru operatori: RoboAgent de la Mitesco adauga coaching exclusiv pentru workflow-uri AI in real estate",
-    ru: "Playbook для операторов: RoboAgent от Mitesco добавляет эксклюзивный coaching для AI workflow в недвижимости"
+    ro: "RoboAgent de la Mitesco adauga coaching exclusiv pentru workflow-uri AI in real estate",
+    ru: "RoboAgent от Mitesco добавляет эксклюзивный коучинг для AI-процессов в недвижимости"
   },
   "Teams running digital agent workflows should audit current coaching integrations and monitor the impact of Mitesco’s new AI-powered, content-driven RoboAgent partnership. Assess the implications for productivity, lead conversion, and automation—then track subsequent agent adoption signals.": {
     ro: "Echipele care opereaza workflow-uri digitale pentru agenti trebuie sa auditeze integrarile de coaching existente si sa monitorizeze impactul noului parteneriat RoboAgent al Mitesco, bazat pe AI si continut. Evaluati efectul asupra productivitatii, conversiei lead-urilor si automatizarii, apoi urmariti semnalele de adoptare.",
@@ -274,8 +274,8 @@ const exactText: TranslationDictionary = {
     ru: "Практическое руководство для enterprise-операторов по внедрению AI-агентов в SOC: покрытие, точность и forensic automation с Model Context Protocol от Intezer."
   },
   "Operator Playbook: Deploying AI Agents in Enterprise SOCs with Intezer's New Operating Layer": {
-    ro: "Playbook pentru operatori: implementarea agentilor AI in SOC enterprise cu noul strat operational Intezer",
-    ru: "Playbook для операторов: внедрение AI-агентов в enterprise SOC с новым операционным слоем Intezer"
+    ro: "Implementarea agentilor AI in SOC enterprise cu noul strat operational Intezer",
+    ru: "Внедрение AI-агентов в enterprise SOC с новым операционным слоем Intezer"
   },
   "SOC teams evaluating AI agents should re-examine their architecture: direct tool integrations miss scalable benefits, while a forensic operating layer like Intezer’s unlocks compounding knowledge, higher alert coverage, and readiness for real-world automation.": {
     ro: "Echipele SOC care evalueaza agenti AI trebuie sa-si reexamineze arhitectura: integrarile directe cu instrumente rateaza beneficiile scalabile, in timp ce un strat operational forensic precum Intezer deblocheaza acumularea de cunostinte, acoperire mai mare a alertelor si pregatire pentru automatizare reala.",

@@ -70,7 +70,7 @@ const generatedHeadingOverrides: Record<string, string> = {
   "Procurement Process Improvements with Agentic AI vs. Manual/Legacy Methods": "Procurement Automation Gains",
   "Operator Decisions: Where to Automate, Where to Retain Human-in-the-Loop": "Automation Decision Boundaries",
   "Architecture Shift: From Fragmented Collection to Automated AI Readiness": "Architecture Shift",
-  "Practical Steps and Decision Signals for Content Workflow Operators": "Operator Decision Signals",
+  "Practical Steps and Decision Signals for Content Workflow Operators": "Workflow Decision Signals",
   "Pega's AI Platform Overhaul: A New Playbook for Workflow Automation": "Pega Workflow Automation Playbook",
   "Workflow Automation Market Timeline and Maturity Shift (2025–2031)": "Automation Market Timeline",
   "Analysis: Two-Way Native Integrations Rewrite the B2B Workflow Map": "B2B Workflow Map",
@@ -162,81 +162,126 @@ const articleHeadingTopics: Record<string, Record<NewsLocale, string>> = {
 
 type HeadingTemplate = Record<NewsLocale, (topic: string) => string>;
 
+const articleSectionHeadingOverrides: Record<string, Record<string, Record<NewsLocale, string>>> = {
+  "mitesco-roboagent-brian-moses-ai-coaching-operator-playbook": {
+    Impact: {
+      en: "How the RoboAgent deal changes adoption",
+      ro: "Cum schimba acordul adoptarea RoboAgent",
+      ru: "Как сделка меняет внедрение RoboAgent"
+    },
+    Consequences: {
+      en: "What changes for agent workflows",
+      ro: "Ce se schimba in workflow-urile agentilor",
+      ru: "Что меняется в рабочих процессах агентов"
+    },
+    "Data points": {
+      en: "Data behind the coaching layer",
+      ro: "Date despre stratul de coaching",
+      ru: "Данные о coaching-слое RoboAgent"
+    },
+    "Comparison matrix": {
+      en: "Criteria for evaluating the partnership",
+      ro: "Criterii pentru evaluarea parteneriatului",
+      ru: "Критерии оценки партнерства"
+    },
+    "Decision matrix": {
+      en: "Criteria for evaluating the partnership",
+      ro: "Criterii pentru evaluarea parteneriatului",
+      ru: "Критерии оценки партнерства"
+    },
+    "Watch next": {
+      en: "Signals to monitor after launch",
+      ro: "Semnale de urmarit dupa lansare",
+      ru: "Сигналы после запуска"
+    },
+    "What to watch next": {
+      en: "Signals to monitor after launch",
+      ro: "Semnale de urmarit dupa lansare",
+      ru: "Сигналы после запуска"
+    },
+    Timeline: {
+      en: "Mitesco and Brian Moses rollout timeline",
+      ro: "Cronologia lansarii Mitesco si Brian Moses",
+      ru: "Хронология запуска Mitesco и Brian Moses"
+    }
+  }
+};
+
 const headingTemplates: Record<string, HeadingTemplate> = {
   "Why it matters": {
     en: (topic) => `Why it matters for ${topic}`,
     ro: (topic) => `De ce conteaza ${topic}`,
-    ru: (topic) => `${topic}: Почему это важно`
+    ru: (topic) => `Почему это важно для ${topic}`
   },
   Impact: {
-    en: (topic) => `${topic}: Operator impact`,
-    ro: (topic) => `${topic}: Impact operational`,
-    ru: (topic) => `${topic}: Влияние на операторов`
+    en: () => "Workflow impact",
+    ro: () => "Impact asupra workflow-ului",
+    ru: () => "Влияние на рабочие процессы"
   },
   Context: {
-    en: (topic) => `${topic}: Background context`,
-    ro: (topic) => `${topic}: Context`,
-    ru: (topic) => `${topic}: Контекст`
+    en: (topic) => `Context behind ${topic}`,
+    ro: (topic) => `Context pentru ${topic}`,
+    ru: (topic) => `Контекст вокруг ${topic}`
   },
   Consequences: {
-    en: (topic) => `${topic}: Operational consequences`,
-    ro: (topic) => `${topic}: Consecinte operationale`,
-    ru: (topic) => `${topic}: Операционные последствия`
+    en: () => "Operational consequences",
+    ro: () => "Consecinte operationale",
+    ru: () => "Операционные последствия"
   },
   "Data points": {
-    en: (topic) => `${topic}: Key data`,
-    ro: (topic) => `${topic}: Date cheie`,
-    ru: (topic) => `${topic}: Ключевые данные`
+    en: () => "Key data behind the update",
+    ro: () => "Date cheie din actualizare",
+    ru: () => "Ключевые данные обновления"
   },
   "Evidence-backed metrics": {
-    en: (topic) => `${topic}: Evidence metrics`,
-    ro: (topic) => `${topic}: Metrici verificate`,
-    ru: (topic) => `${topic}: Проверенные метрики`
+    en: () => "Evidence-backed metrics",
+    ro: () => "Metrici verificate",
+    ru: () => "Проверенные метрики"
   },
   "Decision matrix": {
-    en: (topic) => `${topic}: Decision criteria`,
-    ro: (topic) => `${topic}: Criterii de decizie`,
-    ru: (topic) => `${topic}: Критерии решений`
+    en: () => "Decision criteria",
+    ro: () => "Criterii de decizie",
+    ru: () => "Критерии решения"
   },
   "Comparison matrix": {
-    en: (topic) => `${topic}: Comparison criteria`,
-    ro: (topic) => `${topic}: Criterii de comparatie`,
-    ru: (topic) => `${topic}: Критерии сравнения`
+    en: () => "Comparison criteria",
+    ro: () => "Criterii de comparatie",
+    ru: () => "Критерии сравнения"
   },
   Scenarios: {
-    en: (topic) => `${topic}: Possible outcomes`,
-    ro: (topic) => `${topic}: Scenarii posibile`,
-    ru: (topic) => `${topic}: Возможные сценарии`
+    en: () => "Possible outcomes",
+    ro: () => "Scenarii posibile",
+    ru: () => "Возможные сценарии"
   },
   "Watch next": {
-    en: (topic) => `${topic}: Signals to watch`,
-    ro: (topic) => `${topic}: Semnale de urmarit`,
-    ru: (topic) => `${topic}: Что отслеживать`
+    en: () => "Signals to watch",
+    ro: () => "Semnale de urmarit",
+    ru: () => "Что отслеживать"
   },
   "What to watch next": {
-    en: (topic) => `${topic}: Signals to watch`,
-    ro: (topic) => `${topic}: Semnale de urmarit`,
-    ru: (topic) => `${topic}: Что отслеживать`
+    en: () => "Signals to watch",
+    ro: () => "Semnale de urmarit",
+    ru: () => "Что отслеживать"
   },
   Timeline: {
-    en: (topic) => `${topic}: Timeline`,
-    ro: (topic) => `${topic}: Cronologie`,
-    ru: (topic) => `${topic}: Хронология`
+    en: () => "Timeline",
+    ro: () => "Cronologie",
+    ru: () => "Хронология"
   },
   "Reported data behind the story": {
-    en: (topic) => `${topic}: Source data`,
-    ro: (topic) => `${topic}: Date din surse`,
-    ru: (topic) => `${topic}: Данные источников`
+    en: () => "Source data behind the story",
+    ro: () => "Date din surse",
+    ru: () => "Данные источников"
   },
   "Numbers behind the shift": {
-    en: (topic) => `${topic}: Shift numbers`,
-    ro: (topic) => `${topic}: Cifrele schimbarii`,
-    ru: (topic) => `${topic}: Цифры сдвига`
+    en: () => "Numbers behind the shift",
+    ro: () => "Cifrele schimbarii",
+    ru: () => "Цифры сдвига"
   },
   "Market context at a glance": {
-    en: (topic) => `${topic}: Market context`,
-    ro: (topic) => `${topic}: Context de piata`,
-    ru: (topic) => `${topic}: Рыночный контекст`
+    en: () => "Market context at a glance",
+    ro: () => "Context de piata",
+    ru: () => "Рыночный контекст"
   }
 };
 
@@ -265,9 +310,13 @@ const normalizedHeadingTranslations: Record<string, Partial<Record<NewsLocale, s
     ro: "Schimbare de arhitectura",
     ru: "Архитектурный сдвиг"
   },
+  "Workflow Decision Signals": {
+    ro: "Semnale pentru decizie",
+    ru: "Сигналы для принятия решений"
+  },
   "Operator Decision Signals": {
-    ro: "Semnale de decizie pentru operatori",
-    ru: "Сигналы решений для операторов"
+    ro: "Semnale pentru decizie",
+    ru: "Сигналы для принятия решений"
   },
   "Pega Workflow Automation Playbook": {
     ro: "Playbook Pega pentru automatizarea workflow",
@@ -322,9 +371,11 @@ const compactHeadingTopic = (value: string) => {
 const headingTopicForArticle = (article: NovaArticle, locale: NewsLocale) =>
   articleHeadingTopics[article.slug]?.[locale] ?? compactHeadingTopic(articleTitle(article));
 
-const personalizedHeading = (original: unknown, topic: string, locale: NewsLocale) => {
+const personalizedHeading = (original: unknown, topic: string, locale: NewsLocale, articleSlug = "") => {
   if (typeof original !== "string") return "";
   const key = generatedHeadingOverrides[original] ?? original;
+  const articleOverride = articleSectionHeadingOverrides[articleSlug]?.[key]?.[locale];
+  if (articleOverride) return articleOverride;
   const template = headingTemplates[key];
   return template ? template[locale](topic) : "";
 };
@@ -335,10 +386,17 @@ const translatedNormalizedHeading = (original: unknown, locale: NewsLocale) => {
   return normalizedHeadingTranslations[key]?.[locale] ?? "";
 };
 
-const personalizeHeadingValue = (translatedValue: unknown, sourceValue: unknown, topic: string, locale: NewsLocale, key = ""): unknown => {
+const personalizeHeadingValue = (
+  translatedValue: unknown,
+  sourceValue: unknown,
+  topic: string,
+  locale: NewsLocale,
+  articleSlug = "",
+  key = ""
+): unknown => {
   if (typeof translatedValue === "string") {
     if (key === "heading" || key === "title") {
-      return personalizedHeading(sourceValue, topic, locale) || translatedNormalizedHeading(sourceValue, locale) || translatedValue;
+      return personalizedHeading(sourceValue, topic, locale, articleSlug) || translatedNormalizedHeading(sourceValue, locale) || translatedValue;
     }
 
     return translatedValue;
@@ -346,7 +404,7 @@ const personalizeHeadingValue = (translatedValue: unknown, sourceValue: unknown,
 
   if (Array.isArray(translatedValue)) {
     const sourceItems = Array.isArray(sourceValue) ? sourceValue : [];
-    return translatedValue.map((item, index) => personalizeHeadingValue(item, sourceItems[index], topic, locale, key));
+    return translatedValue.map((item, index) => personalizeHeadingValue(item, sourceItems[index], topic, locale, articleSlug, key));
   }
 
   if (translatedValue && typeof translatedValue === "object") {
@@ -354,7 +412,7 @@ const personalizeHeadingValue = (translatedValue: unknown, sourceValue: unknown,
     return Object.fromEntries(
       Object.entries(translatedValue).map(([entryKey, entryValue]) => [
         entryKey,
-        personalizeHeadingValue(entryValue, sourceObject[entryKey], topic, locale, entryKey)
+        personalizeHeadingValue(entryValue, sourceObject[entryKey], topic, locale, articleSlug, entryKey)
       ])
     );
   }
@@ -372,7 +430,7 @@ const personalizeArticleHeadings = (article: NovaArticle, sourceArticle: NovaArt
       const sourceBlock = sourceArticle.blocks[index];
       return {
         ...block,
-        payload: personalizeHeadingValue(block.payload, sourceBlock?.payload, topic, locale) as Record<string, unknown>
+        payload: personalizeHeadingValue(block.payload, sourceBlock?.payload, topic, locale, article.slug) as Record<string, unknown>
       };
     })
   };

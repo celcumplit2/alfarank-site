@@ -9,6 +9,13 @@ const articleCopyPattern = /<(h[1-6]|p|li|strong|span)\b([^>]*)>([\s\S]*?)<\/\1>
 const novaArticlePattern = /<article class="nova-article"[\s\S]*?<\/article>\s*<\/main>/i;
 const truncatedHeadingPattern = /(?:\.{3}|\u2026)/;
 const lowercaseSentenceStartPattern = /(^|(?:[.!?:][)"'»”’\]\}]*\s+|[—–-]\s+))["'«“„‘(\[{]*(\p{Ll})/u;
+const repeatedColonPrefixLimit = 2;
+const bannedHeadingPatterns = [
+  {
+    pattern: /playbook\s+для\s+операторов:/i,
+    reason: "contains literal operator playbook phrasing"
+  }
+];
 
 const htmlEntities = new Map([
   ["amp", "&"],
@@ -104,6 +111,46 @@ for (const file of files) {
   const articleHtml = html.match(novaArticlePattern)?.[0];
 
   if (articleHtml) {
+    const articleHeadings = [];
+
+    for (const match of articleHtml.matchAll(headingPattern)) {
+      const text = normalizeHeading(match[3]);
+      articleHeadings.push({ tag: `h${match[1]}`, text });
+
+      for (const bannedHeading of bannedHeadingPatterns) {
+        if (bannedHeading.pattern.test(text)) {
+          violations.push({
+            file: relative(process.cwd(), file),
+            tag: `h${match[1]}`,
+            length: text.length,
+            reason: bannedHeading.reason,
+            text
+          });
+        }
+      }
+    }
+
+    const colonPrefixes = new Map();
+
+    for (const heading of articleHeadings) {
+      const prefix = heading.text.match(/^([^:]{8,58}):\s+\S/)?.[1]?.toLowerCase();
+      if (!prefix) continue;
+
+      colonPrefixes.set(prefix, [...(colonPrefixes.get(prefix) ?? []), heading]);
+    }
+
+    for (const [prefix, headings] of colonPrefixes) {
+      if (headings.length <= repeatedColonPrefixLimit) continue;
+
+      violations.push({
+        file: relative(process.cwd(), file),
+        tag: headings.map((heading) => heading.tag).join(","),
+        length: headings.length,
+        reason: "repeated colon heading prefix",
+        text: `${prefix}: (${headings.length} headings)`
+      });
+    }
+
     for (const match of articleHtml.matchAll(articleCopyPattern)) {
       const text = normalizeHeading(match[3]);
 
