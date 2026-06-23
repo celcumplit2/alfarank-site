@@ -1,5 +1,6 @@
 import { localizePath } from "@/data/i18n";
-import { normalizeSentenceStarts, translateNovaArticle, translateNovaArticleSummary } from "@/data/nova-news-translations";
+import { normalizeSentenceStarts } from "@/data/nova-news-translations";
+import { translateNovaArticleSummaryWithLang, translateNovaArticleWithLang } from "@/lib/lang";
 import type { Locale } from "@/data/i18n";
 
 const NOVA_API_BASE = import.meta.env.NOVA_PUBLIC_API_BASE || "https://nova.alfarank.com/api/public";
@@ -520,9 +521,8 @@ export async function getNovaArticleSummaries(locale: NewsLocale = "en") {
   }
 
   const data = (await response.json()) as NovaListResponse;
-  return (data.articles || [])
-    .filter((article) => article.slug && article.status === "published")
-    .map((article) => translateNovaArticleSummary(article, locale));
+  const articles = (data.articles || []).filter((article) => article.slug && article.status === "published");
+  return Promise.all(articles.map((article) => translateNovaArticleSummaryWithLang(article, locale)));
 }
 
 export async function getNovaArticle(slug: string, locale: NewsLocale = "en") {
@@ -535,7 +535,7 @@ export async function getNovaArticle(slug: string, locale: NewsLocale = "en") {
   if (!data.article) return undefined;
 
   const normalizedArticle = normalizeGeneratedHeadings(data.article) as NovaArticle;
-  const translatedArticle = translateNovaArticle(normalizedArticle, locale);
+  const translatedArticle = await translateNovaArticleWithLang(normalizedArticle, locale);
   return personalizeArticleHeadings(translatedArticle, normalizedArticle, locale);
 }
 

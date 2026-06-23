@@ -8,7 +8,7 @@ const headingPattern = /<h([1-3])\b([^>]*)>([\s\S]*?)<\/h\1>/gi;
 const articleCopyPattern = /<(h[1-6]|p|li|strong|span)\b([^>]*)>([\s\S]*?)<\/\1>/gi;
 const novaArticlePattern = /<article class="nova-article"[\s\S]*?<\/article>\s*<\/main>/i;
 const truncatedHeadingPattern = /(?:\.{3}|\u2026)/;
-const lowercaseSentenceStartPattern = /(^|(?:[.!?;:][)"'»”’\]\}]*\s+|[—–-]\s+))["'«“„‘(\[{]*(\p{Ll})/u;
+const lowercaseSentenceStartPattern = /(^|(?:[.!?;][)"'»”’\]\}]*\s+|[—–-]\s+))["'«“„‘(\[{]*(\p{Ll})/u;
 const trustPagePattern = /<article class="section nova-trust-page"[\s\S]*?<\/article>\s*<\/main>/i;
 const repeatedColonPrefixLimit = 2;
 const bannedHeadingPatterns = [

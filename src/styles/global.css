@@ -16753,7 +16753,7 @@ button:disabled {
   position: relative;
   overflow: hidden;
   display: block;
-  width: min(100%, var(--nova-image-frame-width, 1200px));
+  width: 100%;
   max-width: 100%;
   margin: 0 0 24px;
   aspect-ratio: var(--nova-image-ratio, 16 / 9);

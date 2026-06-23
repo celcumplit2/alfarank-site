@@ -120,8 +120,8 @@ const displayHeading = (value: unknown, fallback = "Analysis") => text(value) ||
                 {chartData(block).slice(0, 4).map((item, index) => (
                   <article class="nova-metric-card" style={`--metric-accent: var(--nova-accent-${(index % 4) + 1});`}>
                     <span class="nova-metric-card__orb" aria-hidden="true"></span>
-                    <strong>{item.rawValue || item.value}</strong>
-                    <p>{item.label}</p>
+                    <strong>{text(item.rawValue || item.value)}</strong>
+                    <p>{text(item.label)}</p>
                   </article>
                 ))}
               </div>
@@ -129,9 +129,9 @@ const displayHeading = (value: unknown, fallback = "Analysis") => text(value) ||
               <div class="nova-bars">
                 {chartData(block).slice(0, 6).map((item, index) => (
                   <div class="nova-bar" style={`--bar-level: ${level(item, chartData(block))}%; --bar-accent: var(--nova-accent-${(index % 4) + 1});`}>
-                    <span>{item.label}</span>
+                    <span>{text(item.label)}</span>
                     <div aria-hidden="true"><i></i></div>
-                    <strong>{item.rawValue || item.value}</strong>
+                    <strong>{text(item.rawValue || item.value)}</strong>
                   </div>
                 ))}
               </div>
