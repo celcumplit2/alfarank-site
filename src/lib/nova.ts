@@ -83,6 +83,11 @@ const generatedHeadingOverrides: Record<string, string> = {
 };
 
 const articleHeadingTopics: Record<string, Record<NewsLocale, string>> = {
+  "deepmind-ai-agent-controls-upside-risk": {
+    en: "DeepMind agent controls",
+    ro: "Controalele agentilor DeepMind",
+    ru: "контроля AI-агентов DeepMind"
+  },
   "mitesco-roboagent-brian-moses-ai-coaching-operator-playbook": {
     en: "Mitesco RoboAgent coaching",
     ro: "Coachingul RoboAgent Mitesco",
@@ -163,6 +168,48 @@ const articleHeadingTopics: Record<string, Record<NewsLocale, string>> = {
 type HeadingTemplate = Record<NewsLocale, (topic: string) => string>;
 
 const articleSectionHeadingOverrides: Record<string, Record<string, Record<NewsLocale, string>>> = {
+  "deepmind-ai-agent-controls-upside-risk": {
+    Impact: {
+      en: "How controls change agent deployment",
+      ro: "Cum schimba controalele implementarea agentilor",
+      ru: "Как контроль меняет внедрение AI-агентов"
+    },
+    Consequences: {
+      en: "What changes for security operations",
+      ro: "Ce se schimba in operatiunile de securitate",
+      ru: "Что меняется в операциях безопасности"
+    },
+    "Data points": {
+      en: "Data behind the safeguard roadmap",
+      ro: "Date despre foaia de parcurs a protectiilor",
+      ru: "Данные о дорожной карте защиты"
+    },
+    "Comparison matrix": {
+      en: "Criteria for evaluating agent controls",
+      ro: "Criterii pentru evaluarea controalelor agentilor",
+      ru: "Критерии оценки контроля агентов"
+    },
+    "Decision matrix": {
+      en: "Criteria for evaluating agent controls",
+      ro: "Criterii pentru evaluarea controalelor agentilor",
+      ru: "Критерии оценки контроля агентов"
+    },
+    Scenarios: {
+      en: "Agent deployment scenarios",
+      ro: "Scenarii de implementare a agentilor",
+      ru: "Сценарии внедрения AI-агентов"
+    },
+    "Watch next": {
+      en: "Signals to monitor in agent security",
+      ro: "Semnale de urmarit in securitatea agentilor",
+      ru: "Сигналы в безопасности AI-агентов"
+    },
+    "What to watch next": {
+      en: "Signals to monitor in agent security",
+      ro: "Semnale de urmarit in securitatea agentilor",
+      ru: "Сигналы в безопасности AI-агентов"
+    }
+  },
   "mitesco-roboagent-brian-moses-ai-coaching-operator-playbook": {
     Impact: {
       en: "How the RoboAgent deal changes adoption",

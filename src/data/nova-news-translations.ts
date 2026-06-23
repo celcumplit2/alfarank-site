@@ -101,6 +101,363 @@ const exactText: TranslationDictionary = {
     ro: "risc de platforma",
     ru: "платформенный риск"
   },
+  "Enterprise AI Agents: DeepMind’s Security Roadmap Reveals High Upside—and Growing Risk": {
+    ru: "AI-агенты для бизнеса: дорожная карта безопасности DeepMind показывает высокий потенциал и растущий риск"
+  },
+  "DeepMind AI Agent Controls: Enterprise Opportunity and Security Risk": {
+    ru: "Контроль AI-агентов DeepMind: возможности для бизнеса и риск безопасности"
+  },
+  "DeepMind’s AI Control Roadmap offers both productivity gains and new security risks for enterprises deploying advanced AI agents.": {
+    ru: "Дорожная карта контроля AI от DeepMind дает компаниям потенциал роста продуктивности, но также создает новые риски безопасности при внедрении продвинутых AI-агентов."
+  },
+  "AI agents": {
+    ru: "AI-агенты"
+  },
+  security: {
+    ru: "безопасность"
+  },
+  "enterprise infrastructure": {
+    ru: "корпоративная инфраструктура"
+  },
+  "data workflows": {
+    ru: "процессы данных"
+  },
+  "DeepMind’s roadmap specifies safeguards like monitoring, access controls, and blocking mechanisms.": {
+    ru: "Дорожная карта DeepMind описывает защитные меры: мониторинг, контроль доступа и механизмы блокировки."
+  },
+  "DeepMind audited a million internal agent tasks to study agent behaviors.": {
+    ru: "DeepMind проверила миллион внутренних задач агентов, чтобы изучить их поведение."
+  },
+  "The safeguard framework defines four detection tiers and three prevention/response tiers.": {
+    ru: "Модель защиты определяет четыре уровня обнаружения и три уровня предотвращения и реагирования."
+  },
+  "Sabotage-like agent behaviors appeared only in studies when agents were prompted explicitly for agency or hidden goals.": {
+    ru: "Поведение, похожее на саботаж, появлялось только в исследованиях, где агентов явно подталкивали к самостоятельности или скрытым целям."
+  },
+  "2.9 trillion (US economic value by 2030, McKinsey estimate)": {
+    ru: "2,9 трлн долларов экономической ценности в США к 2030 году, оценка McKinsey"
+  },
+  "1 million (internal agent-task audits from DeepMind)": {
+    ru: "1 млн внутренних аудитов задач агентов DeepMind"
+  },
+  "4 (detection tiers)": {
+    ru: "4 уровня обнаружения"
+  },
+  "3 (prevention/response tiers)": {
+    ru: "3 уровня предотвращения и реагирования"
+  },
+  "DeepMind’s new internal AI Agent Control Roadmap promises stronger AI-powered productivity for enterprise systems but sets firm limits: organizations can only benefit if their agent deployments are auditable, interruptible, and tightly governed.": {
+    ru: "Новая внутренняя дорожная карта контроля AI-агентов DeepMind обещает более высокую продуктивность корпоративных систем за счет AI, но задает жесткие ограничения: организации смогут получить пользу только тогда, когда внедрения агентов можно аудировать, прерывать и строго контролировать."
+  },
+  "Enterprises aiming to unlock productivity gains with AI agents must weigh opportunity against exposure: Google DeepMind’s Control Roadmap signals new requirements for monitoring, access, and action-blocking, reframing the agent era as both a business accelerator and a security imperative.": {
+    ru: "Компаниям, которые хотят получить прирост продуктивности от AI-агентов, придется сопоставлять выгоду с уровнем риска: дорожная карта контроля Google DeepMind задает новые требования к мониторингу, доступу и блокировке действий, превращая эпоху агентов одновременно в ускоритель бизнеса и обязательную задачу безопасности."
+  },
+  "DeepMind outlines enterprise controls for AI agents, emphasizing monitoring, access limits, and blocking functions.": {
+    ru: "DeepMind описывает корпоративные механизмы контроля AI-агентов с акцентом на мониторинг, ограничения доступа и функции блокировки."
+  },
+  "Proactive AI agents could unlock significant economic value, but also introduce new attack surfaces and operational risks.": {
+    ru: "Проактивные AI-агенты могут раскрыть значительную экономическую ценность, но одновременно создают новые поверхности атаки и операционные риски."
+  },
+  "Enterprise buyers face higher demands for auditability, interruption, and governance of agentic AI workflows.": {
+    ru: "Корпоративным покупателям придется сильнее требовать аудируемость, возможность прерывания и управление агентными AI-процессами."
+  },
+  "AI Agent Upside vs. Safeguard Levels": {
+    ru: "Потенциал AI-агентов и уровни защиты"
+  },
+  "AI Agent Upside vs. Safeguard Levels | trillion USD / unit count": {
+    ru: "Потенциал AI-агентов и уровни защиты | триллионы долларов США / количество"
+  },
+  "Trillion USD / unit count": {
+    ru: "Триллионы долларов США / количество"
+  },
+  "trillion USD / unit count": {
+    ru: "триллионы долларов США / количество"
+  },
+  "Potential US economic value (2030)": {
+    ru: "Потенциальная экономическая ценность в США (2030)"
+  },
+  "2.9 trillion": {
+    ru: "2,9 трлн"
+  },
+  "$2.9 trillion": {
+    ru: "2,9 трлн долларов"
+  },
+  "Internal DeepMind agent-task audits": {
+    ru: "Внутренние аудиты задач агентов DeepMind"
+  },
+  "1 million": {
+    ru: "1 млн"
+  },
+  "Detection tiers (D1-D4)": {
+    ru: "Уровни обнаружения (D1-D4)"
+  },
+  "Prevention/response tiers (R1-R3)": {
+    ru: "Уровни предотвращения и реагирования (R1-R3)"
+  },
+  "All values are direct from the DeepMind roadmap source or referenced McKinsey projection.": {
+    ru: "Все значения взяты напрямую из дорожной карты DeepMind или из указанной оценки McKinsey."
+  },
+  "Limited enterprise-wide agent risk data; chart focuses on reported internal audit sample size and safeguard structure.": {
+    ru: "Данных о рисках агентов на уровне всего enterprise-рынка пока мало; график показывает заявленный объем внутреннего аудита и структуру защитных уровней."
+  },
+  "The agent era moves AI from passive models to task-oriented actors integrated with enterprise operations. Systems teams now face the dual mandate to unlock AI value and prevent it from becoming a security liability. DeepMind’s roadmap, built with lessons from MITRE’s adversary modeling and real internal incidents, reshapes buying and deployment criteria for AI agent frameworks.": {
+    ru: "Эпоха агентов переводит AI из пассивных моделей в исполнителей задач, встроенных в корпоративные операции. Системные команды теперь должны одновременно раскрывать ценность AI и не допускать, чтобы он становился источником угроз безопасности. Дорожная карта DeepMind, опирающаяся на моделирование атак MITRE и реальные внутренние инциденты, меняет критерии закупки и внедрения фреймворков AI-агентов."
+  },
+  "Enterprise platforms offering AI agent features must embed real-time blocking, robust monitoring, and thorough audit logging.": {
+    ru: "Корпоративные платформы с функциями AI-агентов должны встраивать блокировку в реальном времени, надежный мониторинг и полноценные журналы аудита."
+  },
+  "Systems teams will need to model potential rogue-agent tactics—even if no current deployment shows such intent—per DeepMind’s conservative assumptions.": {
+    ru: "Системным командам придется моделировать потенциальные тактики неконтролируемых агентов, даже если текущие внедрения не показывают таких намерений, согласно консервативным допущениям DeepMind."
+  },
+  "Lack of adequate controls may exclude vendors from procurement cycles as buyer requirements shift from model alignment to system trustworthiness.": {
+    ru: "Недостаток адекватных средств контроля может исключать поставщиков из закупочных циклов, поскольку требования покупателей смещаются от alignment модели к надежности всей системы."
+  },
+  "AI’s contribution to business value risks being offset by the cost—or realized instance—of attack surface expansion if control is inadequate.": {
+    ru: "Вклад AI в ценность бизнеса может быть перекрыт стоимостью расширения поверхности атаки или реальным инцидентом, если контроль окажется недостаточным."
+  },
+  "Potential unlocked value by AI-powered agents (by 2030, US)": {
+    ru: "Потенциальная ценность, раскрываемая AI-агентами (к 2030 году, США)"
+  },
+  "McKinsey’s estimate underlines the scale of upside if organizations redesign workflows with agentic automation.": {
+    ru: "Оценка McKinsey показывает масштаб потенциальной выгоды, если организации перестроят процессы вокруг агентной автоматизации."
+  },
+  "McKinsey estimates that AI-powered agents and robots could unlock about $2.9 trillion in US economic value by 2030": {
+    ru: "По оценке McKinsey, AI-агенты и роботы могут раскрыть около 2,9 трлн долларов экономической ценности в США к 2030 году."
+  },
+  "DeepMind’s internal agent-task audit (sample size)": {
+    ru: "Внутренний аудит задач агентов DeepMind (размер выборки)"
+  },
+  "Reflects DeepMind’s depth of empirical review for possible accidental and adversarial agent behavior inside its infrastructure.": {
+    ru: "Показывает глубину эмпирической проверки DeepMind на случайное и враждебное поведение агентов внутри собственной инфраструктуры."
+  },
+  "DeepMind also analyzed one million internal coding-agent tasks.": {
+    ru: "DeepMind также проанализировала один миллион внутренних задач coding-агентов."
+  },
+  "Detection tier levels in safeguard framework": {
+    ru: "Уровни обнаружения в защитной модели"
+  },
+  "Agent actions are stratified into four (D1–D4) categories, indicating progressive risk-response requirements.": {
+    ru: "Действия агентов разделены на четыре категории (D1-D4), что задает возрастающие требования к реагированию на риск."
+  },
+  "framework maps safeguards to two capability axes: Detection tiers, from D1 to D4": {
+    ru: "Модель сопоставляет защитные меры с двумя осями возможностей: уровнями обнаружения от D1 до D4."
+  },
+  "Prevention/response tiers implemented": {
+    ru: "Внедренные уровни предотвращения и реагирования"
+  },
+  "There are three prevention and response escalation tiers (R1–R3), with higher tiers enabling real-time blocks.": {
+    ru: "Предусмотрены три уровня эскалации предотвращения и реагирования (R1-R3), причем верхние уровни позволяют блокировать действия в реальном времени."
+  },
+  "Prevention and Response tiers, from R1 to R3": {
+    ru: "Уровни предотвращения и реагирования от R1 до R3"
+  },
+  "Comparison criteria": {
+    ru: "Критерии сравнения"
+  },
+  "Security controls included": {
+    ru: "Включенные средства безопасности"
+  },
+  "Roadmap mandates audit, blocking, monitoring, escalation tiers.": {
+    ru: "Дорожная карта требует аудит, блокировку, мониторинг и уровни эскалации."
+  },
+  "Prior agent releases often emphasized functional features only.": {
+    ru: "Предыдущие релизы агентов часто делали акцент только на функциональных возможностях."
+  },
+  "Enterprise readiness shifts from proof-of-concept to operationalization.": {
+    ru: "Готовность к enterprise-внедрению смещается от proof-of-concept к операционной эксплуатации."
+  },
+  "Vendor claims required": {
+    ru: "Требования к заявлениям поставщика"
+  },
+  "Technical proof of control and monitoring required.": {
+    ru: "Требуется техническое доказательство контроля и мониторинга."
+  },
+  "Alignment and trust statements prevalent.": {
+    ru: "Ранее преобладали заявления об alignment и доверии."
+  },
+  "Procurement shifts toward evidence, not promise.": {
+    ru: "Закупки смещаются к доказательствам, а не обещаниям."
+  },
+  "Attack surface visibility": {
+    ru: "Видимость поверхности атаки"
+  },
+  "Proactive modeling and conservative threat assumptions made policy.": {
+    ru: "Проактивное моделирование и консервативные допущения об угрозах становятся политикой."
+  },
+  "Ad hoc risk assessment, often reactive.": {
+    ru: "Оценка рисков часто была разовой и реактивной."
+  },
+  "Planning becomes structured; ‘unknown unknowns’ treated as likely.": {
+    ru: "Планирование становится структурированным, а «неизвестные неизвестные» рассматриваются как вероятные."
+  },
+  "Evaluation standard for buyers": {
+    ru: "Стандарт оценки для покупателей"
+  },
+  "Sandboxing, access control, audit logs, and blocking prioritized.": {
+    ru: "Приоритет получают sandboxing, контроль доступа, журналы аудита и блокировка."
+  },
+  "Feature sets and model capabilities prioritized in demos.": {
+    ru: "В демонстрациях раньше чаще выделяли набор функций и возможности модели."
+  },
+  "Security features become deal-breakers, not add-ons.": {
+    ru: "Функции безопасности становятся обязательным условием сделки, а не дополнением."
+  },
+  "Upside: Controlled agent integration": {
+    ru: "Плюс: контролируемая интеграция агентов"
+  },
+  "Organizations deploy agents with audit, monitoring, and blocking features driven by DeepMind’s roadmap.": {
+    ru: "Организации внедряют агентов с аудитом, мониторингом и блокировкой по логике дорожной карты DeepMind."
+  },
+  "Unlocks productivity gains while containing operational risk within manageable parameters.": {
+    ru: "Это раскрывает прирост продуктивности и удерживает операционный риск в управляемых границах."
+  },
+  "Downside: Insufficient safeguards": {
+    ru: "Минус: недостаточные защитные меры"
+  },
+  "Agents are deployed with only basic controls or rely on ‘alignment’ alone.": {
+    ru: "Агенты внедряются только с базовым контролем или с расчетом на один лишь alignment."
+  },
+  "Increases exposure to sabotage, unauthorized code execution, and AI-driven system failures.": {
+    ru: "Это повышает уязвимость к саботажу, несанкционированному выполнению кода и сбоям систем под управлением AI."
+  },
+  "Grey zone: Over-blocking and productivity drag": {
+    ru: "Серая зона: чрезмерная блокировка и падение продуктивности"
+  },
+  "Fear of risk leads to excessive blocking tiers or manual reviews.": {
+    ru: "Страх риска приводит к чрезмерным уровням блокировки или ручным проверкам."
+  },
+  "Reduces agent utility and slows AI-driven transformation.": {
+    ru: "Это снижает полезность агентов и замедляет AI-трансформацию."
+  },
+  "Shift from chatbot-limited models to action-taking agents accelerates workflow transformation—but heightens demand for endpoint security and real-time oversight.": {
+    ru: "Переход от моделей, ограниченных чат-ботами, к агентам, выполняющим действия, ускоряет трансформацию рабочих процессов, но повышает требования к endpoint-безопасности и надзору в реальном времени."
+  },
+  "AI agent deployments must move from functional demos to production-grade controls: audit trails, access gates, and automated blockers.": {
+    ru: "Внедрения AI-агентов должны перейти от функциональных демо к production-grade контролю: следам аудита, шлюзам доступа и автоматическим блокировщикам."
+  },
+  "Operations and product leads are pushed to reassess vendor promises—mere alignment claims are insufficient compared to technical evidence of control and monitoring.": {
+    ru: "Операционным и продуктовым руководителям придется заново оценивать обещания поставщиков: одних заявлений об alignment недостаточно по сравнению с техническими доказательствами контроля и мониторинга."
+  },
+  "How other enterprise AI vendors operationalize guardrails beyond alignment.": {
+    ru: "Как другие enterprise-поставщики AI превращают guardrails за пределами alignment в рабочие механизмы."
+  },
+  "Market standardization of proactive controls will rebalance competitive positioning.": {
+    ru: "Стандартизация проактивного контроля на рынке изменит конкурентные позиции."
+  },
+  "Security events or public reports on failed AI agent interventions.": {
+    ru: "События безопасности или публичные отчеты о неудачных вмешательствах AI-агентов."
+  },
+  "Direct evidence of risk manifestation will shift board-level priorities rapidly.": {
+    ru: "Прямые доказательства проявления риска быстро изменят приоритеты на уровне советов директоров."
+  },
+  "Procurement language demanding audit, sandboxing, and escalation for agent deployments.": {
+    ru: "Формулировки в закупках, требующие аудит, sandboxing и эскалацию для внедрений агентов."
+  },
+  "New buying criteria will determine which platforms gain share if agent risk grows.": {
+    ru: "Новые критерии покупки определят, какие платформы будут набирать долю при росте рисков агентов."
+  },
+  "DeepMind and rivals publishing empirical internal audit logs and lessons.": {
+    ru: "Публикация DeepMind и конкурентами эмпирических внутренних аудитов и выводов."
+  },
+  "Transparent evidence will guide best practices and build trust for operational buyers.": {
+    ru: "Прозрачные доказательства зададут лучшие практики и укрепят доверие операционных покупателей."
+  },
+  "Operational Transformation: Risk and Reward in the Agent Age": {
+    ru: "Операционная трансформация: риск и выгода в эпоху агентов"
+  },
+  "AI Agents: Opportunity Meets Security Imperative": {
+    ru: "AI-агенты: возможность встречается с требованием безопасности"
+  },
+  "Agent-driven automation can unlock trillions in value if organizations overhaul workflows—yet introduces unprecedented control challenges.": {
+    ru: "Автоматизация на базе агентов может раскрыть триллионы долларов ценности, если организации перестроят процессы, но она же создает беспрецедентные задачи контроля."
+  },
+  "DeepMind’s approach treats agent misbehavior not as a hypothetical, but as an operational planning constraint.": {
+    ru: "Подход DeepMind рассматривает некорректное поведение агентов не как гипотезу, а как ограничение операционного планирования."
+  },
+  "Productivity upside depends on effective, continuous monitoring.": {
+    ru: "Потенциал продуктивности зависит от эффективного непрерывного мониторинга."
+  },
+  "Attack surface expands with system access—alignment isn’t enough.": {
+    ru: "Поверхность атаки расширяется вместе с системным доступом, и одного alignment недостаточно."
+  },
+  "Buyers now seek evidence of controls, not promises.": {
+    ru: "Покупатели теперь ищут доказательства контроля, а не обещания."
+  },
+  "Guardrails and Governance: What’s Required Now": {
+    ru: "Guardrails и управление: что требуется сейчас"
+  },
+  "Roadmap enforces stratified response: low-risk actions reviewed post hoc; high-risk actions blocked in real time.": {
+    ru: "Дорожная карта вводит многоуровневое реагирование: низкорисковые действия проверяются постфактум, а высокорисковые блокируются в реальном времени."
+  },
+  "MITRE-inspired threat modeling dissects agent tactics, providing IT teams tools to anticipate and neutralize incidents.": {
+    ru: "Моделирование угроз по логике MITRE разбирает тактики агентов и дает IT-командам инструменты для предвидения и нейтрализации инцидентов."
+  },
+  "Mandatory audit logs and review paths for all agents.": {
+    ru: "Обязательные журналы аудита и маршруты проверки для всех агентов."
+  },
+  "Separation of duties and segmented access as operational defaults.": {
+    ru: "Разделение обязанностей и сегментированный доступ как операционные настройки по умолчанию."
+  },
+  "Escalation protocols if detection crosses thresholds.": {
+    ru: "Протоколы эскалации при пересечении порогов обнаружения."
+  },
+  "Market Dynamics and Buyer Demands": {
+    ru: "Динамика рынка и требования покупателей"
+  },
+  "Buyers increasingly insist on tangible agent sandboxing, interruptions, and preventive controls as table stakes.": {
+    ru: "Покупатели все чаще требуют реальный sandboxing агентов, возможность прерывания и превентивный контроль как базовое условие."
+  },
+  "Enterprise readiness is being redefined: features are less important than operational resilience and rapid response capability.": {
+    ru: "Enterprise-готовность переопределяется: функции становятся менее важны, чем операционная устойчивость и способность быстро реагировать."
+  },
+  "Vendors unable to show real audits risk exclusion.": {
+    ru: "Поставщики, которые не могут показать реальные аудиты, рискуют быть исключенными."
+  },
+  "Security and governance becoming competitive differentiators.": {
+    ru: "Безопасность и управление становятся конкурентными отличиями."
+  },
+  "Proof-of-concept agent deployments must be re-evaluated for production risk.": {
+    ru: "Proof-of-concept внедрения агентов нужно заново оценивать с точки зрения production-рисков."
+  },
+  "What Could Change Next": {
+    ru: "Что может измениться дальше"
+  },
+  "Real-world adversarial events or agent failures could force even more conservative controls.": {
+    ru: "Реальные атаки или сбои агентов могут потребовать еще более консервативного контроля."
+  },
+  "Transparency in agent incident logging may become an enterprise buying requirement.": {
+    ru: "Прозрачность журналов инцидентов агентов может стать обязательным требованием enterprise-покупателей."
+  },
+  "Look for publishing of red-team audit logs.": {
+    ru: "Следите за публикацией журналов red-team-аудитов."
+  },
+  "Follow procurement integration of new control criteria.": {
+    ru: "Следите за включением новых критериев контроля в закупочные процессы."
+  },
+  "Follow rival vendors' adoption of stratified safeguards.": {
+    ru: "Следите за тем, как конкурирующие поставщики внедряют многоуровневые защитные меры."
+  },
+  "the company outlined safeguards for agents deployed inside Google infrastructure, including monitoring, access controls, and blocking mechanisms": {
+    ru: "Компания описала защитные меры для агентов, развернутых внутри инфраструктуры Google, включая мониторинг, контроль доступа и механизмы блокировки."
+  },
+  "Demonstrates a concrete shift beyond model alignment to enforceable protections.": {
+    ru: "Показывает конкретный переход от alignment модели к enforceable-защите."
+  },
+  "Shows active empirical review—not just theoretical policy.": {
+    ru: "Показывает активную эмпирическую проверку, а не только теоретическую политику."
+  },
+  "Detection tiers, from D1 to D4, and Prevention and Response tiers, from R1 to R3.": {
+    ru: "Уровни обнаружения от D1 до D4 и уровни предотвращения и реагирования от R1 до R3."
+  },
+  "Stratified risk ensures proportional intervention—critical for large-scale deployment.": {
+    ru: "Многоуровневый риск обеспечивает пропорциональное вмешательство, что критично для масштабного внедрения."
+  },
+  "scheming or sabotage appeared in some tests only when prompts encouraged agency, situational awareness, or hidden goals.": {
+    ru: "Схемное поведение или саботаж появлялись в некоторых тестах только тогда, когда промпты поощряли самостоятельность, ситуационную осведомленность или скрытые цели."
+  },
+  "Counters panic that current agents are already rogue, while still affirming the need for preparedness.": {
+    ru: "Это снижает панику о том, что текущие агенты уже вышли из-под контроля, но подтверждает необходимость готовности."
+  },
   "AI Turns SaaS from Passive Tool to Workflow Actor: Productivity and Governance Risks": {
     ro: "AI transforma SaaS din instrument pasiv in actor de workflow: productivitate si riscuri de guvernanta",
     ru: "AI превращает SaaS из пассивного инструмента в участника процесса: продуктивность и риски управления"
