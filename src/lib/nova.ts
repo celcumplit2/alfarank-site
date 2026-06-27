@@ -80,7 +80,8 @@ const generatedHeadingOverrides: Record<string, string> = {
   "Key Workflow Upgrades from RoboAgent & Brian Moses Partnership": "RoboAgent Workflow Upgrades",
   "KnowledgeLake Milestones: User Scale and Industry Recognition": "KnowledgeLake Milestones",
   "How to Rethink AI Integration in Content-Driven SOC Workflows": "Rethinking SOC AI Integration",
-  "Historical Sequence: From Chatbots to Data-Layered Automation": "From Chatbots to Data Layers"
+  "Historical Sequence: From Chatbots to Data-Layered Automation": "From Chatbots to Data Layers",
+  "Decision Brief: Evaluating Taipei AI\u2019s NextRise Consequences for Digital Systems Operators": "Taipei AI Decision Brief"
 };
 
 const articleHeadingTopics: Record<string, Record<NewsLocale, string>> = {
