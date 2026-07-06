@@ -81,7 +81,8 @@ const generatedHeadingOverrides: Record<string, string> = {
   "KnowledgeLake Milestones: User Scale and Industry Recognition": "KnowledgeLake Milestones",
   "How to Rethink AI Integration in Content-Driven SOC Workflows": "Rethinking SOC AI Integration",
   "Historical Sequence: From Chatbots to Data-Layered Automation": "From Chatbots to Data Layers",
-  "Decision Brief: Evaluating Taipei AI\u2019s NextRise Consequences for Digital Systems Operators": "Taipei AI Decision Brief"
+  "Decision Brief: Evaluating Taipei AI\u2019s NextRise Consequences for Digital Systems Operators": "Taipei AI Decision Brief",
+  "Operationalizing Creativity: How AI Workflows Are Replacing Asset Generation as the Enterprise Bottleneck": "Creative Operations Bottleneck"
 };
 
 const articleHeadingTopics: Record<string, Record<NewsLocale, string>> = {
@@ -89,6 +90,11 @@ const articleHeadingTopics: Record<string, Record<NewsLocale, string>> = {
     en: "DeepMind agent controls",
     ro: "Controalele agentilor DeepMind",
     ru: "контроля AI-агентов DeepMind"
+  },
+  "ai-creative-operations-enterprise-marketing-shift": {
+    en: "creative operations",
+    ro: "operatiuni creative",
+    ru: "creative operations"
   },
   "mitesco-roboagent-brian-moses-ai-coaching-operator-playbook": {
     en: "Mitesco RoboAgent coaching",
@@ -169,7 +175,16 @@ const articleHeadingTopics: Record<string, Record<NewsLocale, string>> = {
 
 type HeadingTemplate = Record<NewsLocale, (topic: string) => string>;
 
+const creativeOperationsBottleneckHeading: Record<NewsLocale, string> = {
+  en: "Creative operations bottleneck",
+  ro: "Blocajul operatiunilor creative",
+  ru: "Creative operations: узкое место"
+};
+
 const articleSectionHeadingOverrides: Record<string, Record<string, Record<NewsLocale, string>>> = {
+  "ai-creative-operations-enterprise-marketing-shift": {
+    "Creative Operations Bottleneck": creativeOperationsBottleneckHeading
+  },
   "deepmind-ai-agent-controls-upside-risk": {
     Impact: {
       en: "How controls change agent deployment",
@@ -402,7 +417,30 @@ const normalizedHeadingTranslations: Record<string, Partial<Record<NewsLocale, s
   "From Chatbots to Data Layers": {
     ro: "De la chatbots la straturi de date",
     ru: "От чатботов к слоям данных"
+  },
+  "Creative Operations Bottleneck": {
+    ro: creativeOperationsBottleneckHeading.ro,
+    ru: creativeOperationsBottleneckHeading.ru
   }
+};
+
+const compactLocalizedGeneratedHeading = (value: string, locale: NewsLocale, articleSlug: string, key: string) => {
+  if (articleSlug !== "ai-creative-operations-enterprise-marketing-shift" || key !== "heading") return "";
+
+  const plain = value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+
+  if (
+    plain.includes("operationalizing creativity") ||
+    plain.includes("operationalizarea creativitatii") ||
+    plain.includes("операционализация креатива")
+  ) {
+    return creativeOperationsBottleneckHeading[locale];
+  }
+
+  return "";
 };
 
 const compactHeadingTopic = (value: string) => {
@@ -445,7 +483,12 @@ const personalizeHeadingValue = (
 ): unknown => {
   if (typeof translatedValue === "string") {
     if (key === "heading" || key === "title") {
-      return personalizedHeading(sourceValue, topic, locale, articleSlug) || translatedNormalizedHeading(sourceValue, locale) || translatedValue;
+      return (
+        personalizedHeading(sourceValue, topic, locale, articleSlug) ||
+        translatedNormalizedHeading(sourceValue, locale) ||
+        compactLocalizedGeneratedHeading(translatedValue, locale, articleSlug, key) ||
+        translatedValue
+      );
     }
 
     return translatedValue;

@@ -3,9 +3,6 @@ Allow: /
 Disallow: /projects/
 Disallow: /ro/projects/
 Disallow: /ru/projects/
-Disallow: /cases/
-Disallow: /ro/cases/
-Disallow: /ru/cases/
 Disallow: /access/
 Disallow: /ro/access/
 Disallow: /ru/access/
