@@ -1,10 +1,8 @@
 import { allBaseRoutes, alternatePaths, allLocalizedRoutes } from "@/data/i18n";
-import { articleDate, getNovaArticleSummaries, normalizeArticleUrl } from "@/lib/nova";
-import type { NewsLocale } from "@/lib/nova";
 
 const baseUrl = "https://alfarank.com";
-const lastmod = "2026-05-27";
-const newsLocales: NewsLocale[] = ["en", "ro", "ru"];
+const lastmod = "2026-07-09";
+const excludedSitemapRoutes = new Set(["/start-project/thank-you/", "/ro/start-project/thank-you/", "/ru/start-project/thank-you/"]);
 
 const escapeXml = (value: string) =>
   value
@@ -15,7 +13,7 @@ const escapeXml = (value: string) =>
     .replace(/'/g, "&apos;");
 
 const localizedRouteXml = () => {
-  const routes = allLocalizedRoutes();
+  const routes = allLocalizedRoutes().filter((route) => !excludedSitemapRoutes.has(route));
   return routes
     .map(
       (route) => {
@@ -36,21 +34,9 @@ ${alternates}
 };
 
 export async function GET() {
-  const articles = await getNovaArticleSummaries();
-  const newsRoutes = [
-    ...articles.flatMap((article) =>
-      newsLocales.map((locale) => `  <url>
-    <loc>${escapeXml(normalizeArticleUrl(article.slug, locale))}</loc>
-    <lastmod>${escapeXml(article.updatedAt || articleDate(article) || lastmod)}</lastmod>
-  </url>`
-      )
-    )
-  ].join("\n");
-
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${localizedRouteXml()}
-${newsRoutes}
 </urlset>
 `;
 

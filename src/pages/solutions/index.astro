@@ -12,6 +12,13 @@ type Props = {
 
 const { locale = "en" } = Astro.props;
 const solutions = getSolutions(locale);
+const siteUrl = Astro.site ?? new URL("https://alfarank.com");
+const pagePath = localizePath("/solutions/", locale);
+const pageUrl = new URL(pagePath, siteUrl).toString();
+const pageDescription = translateCopy(
+  locale,
+  "Solution pages connect operational, marketing, content, and data problems to the infrastructure required to solve them."
+);
 
 const problemRouteRows = [
   {
@@ -55,9 +62,54 @@ const localizedProblemRouteRows = problemRouteRows.map((row) => ({
   outputText: translateCopy(locale, row.outputText),
   outputHref: localizePath(row.outputHref, locale)
 }));
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: translateCopy(locale, "Solutions | AlfaRank"),
+    description: pageDescription,
+    url: pageUrl,
+    inLanguage: locale
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: translateCopy(locale, "AlfaRank solution routes"),
+    itemListElement: solutions.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.title,
+      description: item.summary,
+      url: new URL(localizePath(`/solutions/${item.slug}/`, locale), siteUrl).toString()
+    }))
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "AlfaRank",
+        item: new URL(localizePath("/", locale), siteUrl).toString()
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: translateCopy(locale, "Solutions"),
+        item: pageUrl
+      }
+    ]
+  }
+];
 ---
 
-<Layout title="Solutions | AlfaRank" locale={locale}>
+<Layout
+  title={translateCopy(locale, "Solutions | AlfaRank")}
+  description={pageDescription}
+  locale={locale}
+  structuredData={structuredData}
+>
   <PageHero
     eyebrow="Solutions"
     title="Business problems translated into working systems."

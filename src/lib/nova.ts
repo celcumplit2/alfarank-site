@@ -82,7 +82,8 @@ const generatedHeadingOverrides: Record<string, string> = {
   "How to Rethink AI Integration in Content-Driven SOC Workflows": "Rethinking SOC AI Integration",
   "Historical Sequence: From Chatbots to Data-Layered Automation": "From Chatbots to Data Layers",
   "Decision Brief: Evaluating Taipei AI\u2019s NextRise Consequences for Digital Systems Operators": "Taipei AI Decision Brief",
-  "Operationalizing Creativity: How AI Workflows Are Replacing Asset Generation as the Enterprise Bottleneck": "Creative Operations Bottleneck"
+  "Operationalizing Creativity: How AI Workflows Are Replacing Asset Generation as the Enterprise Bottleneck": "Creative Operations Bottleneck",
+  "Operators Face Workflow Gains and Security Headaches in Claude Cowork\u2019s Expansion": "Claude Cowork Workflow Risks"
 };
 
 const articleHeadingTopics: Record<string, Record<NewsLocale, string>> = {
@@ -178,12 +179,21 @@ type HeadingTemplate = Record<NewsLocale, (topic: string) => string>;
 const creativeOperationsBottleneckHeading: Record<NewsLocale, string> = {
   en: "Creative operations bottleneck",
   ro: "Blocajul operatiunilor creative",
-  ru: "Creative operations: узкое место"
+  ru: "Creative operations: \u0443\u0437\u043a\u043e\u0435 \u043c\u0435\u0441\u0442\u043e"
+};
+
+const claudeCoworkWorkflowHeading: Record<NewsLocale, string> = {
+  en: "Claude Cowork workflow and security risks",
+  ro: "Claude Cowork: workflow si risc de securitate",
+  ru: "Claude Cowork: workflow \u0438 \u0440\u0438\u0441\u043a \u0431\u0435\u0437\u043e\u043f\u0430\u0441\u043d\u043e\u0441\u0442\u0438"
 };
 
 const articleSectionHeadingOverrides: Record<string, Record<string, Record<NewsLocale, string>>> = {
   "ai-creative-operations-enterprise-marketing-shift": {
     "Creative Operations Bottleneck": creativeOperationsBottleneckHeading
+  },
+  "claude-cowork-web-mobile-enterprise-decision-analysis": {
+    "Claude Cowork Workflow Risks": claudeCoworkWorkflowHeading
   },
   "deepmind-ai-agent-controls-upside-risk": {
     Impact: {
@@ -435,7 +445,7 @@ const compactLocalizedGeneratedHeading = (value: string, locale: NewsLocale, art
   if (
     plain.includes("operationalizing creativity") ||
     plain.includes("operationalizarea creativitatii") ||
-    plain.includes("операционализация креатива")
+    plain.includes("\u043e\u043f\u0435\u0440\u0430\u0446\u0438\u043e\u043d\u0430\u043b\u0438\u0437\u0430\u0446\u0438\u044f \u043a\u0440\u0435\u0430\u0442\u0438\u0432\u0430")
   ) {
     return creativeOperationsBottleneckHeading[locale];
   }

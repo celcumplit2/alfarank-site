@@ -16,7 +16,8 @@ When a phase is completed, update its status and add a short note.
 - Stack: Astro static site with Cloudflare Pages Functions for the project form.
 - Visual system: dark liquid background, glass panels, large system glyph cards.
 - Current branch state at plan creation: `main`, ahead of `origin/main`.
-- Latest documented checkpoint: lead-generation landing page system checkpoint.
+- Latest documented checkpoint: Search Console indexing and sitemap cleanup
+  checkpoint on 2026-07-09.
 - Local preview target used during the checkpoint: `http://127.0.0.1:4323/`.
 - Active lead-generation task: `docs/lead-generation-readiness.md`.
 
@@ -212,6 +213,23 @@ Completion check:
 - Leads can be acted on without manually inspecting the database.
 
 ### 6. SEO, Metadata, Indexing: 65% -> 100%
+
+Status note - 2026-07-09:
+
+- Search Console currently indexes only `/` and `/ru/`; `/ro/` and the priority
+  commercial routes need post-deploy inspection and recrawl.
+- The largest GSC issue is 409 `Crawled - currently not indexed` URLs, mostly
+  old root-level article history plus unindexed current routes.
+- Sitemaps were accepted, but the live sitemap footprint was too broad for the
+  current indexing stage. The main sitemap now focuses on durable site routes,
+  while the Google News sitemap keeps only fresh articles and a compact
+  `priority-sitemap.xml` has been added for the first commercial indexing push.
+- Legacy `/feed/` URLs now return `410 Gone`; thank-you routes are noindex and
+  excluded from sitemap output.
+- `/capabilities/`, `/solutions/`, `/systems/`, and campaign LP pages now have
+  stronger page-level structured data for the first indexing push.
+- The recovery report is `docs/indexing-recovery-report.md`; production still
+  needs to be updated before Search Console indexing requests should be pushed.
 
 Required work:
 

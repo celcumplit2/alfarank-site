@@ -25,6 +25,9 @@ export function getStaticPaths() {
 const { offer, locale = "en" } = Astro.props as Props;
 const sourcePath = localizePath(`/lp/${offer.slug}/`, locale);
 const title = `${offer.title} | AlfaRank`;
+const siteUrl = Astro.site ?? new URL("https://alfarank.com");
+const pageUrl = new URL(sourcePath, siteUrl).toString();
+const baseUrl = new URL("/", siteUrl).toString();
 const isLeadOffer = offer.slug === "automate-lead-processing";
 const isContentOffer = offer.slug === "ai-content-workflow";
 const isCommerceOffer = offer.slug === "ecommerce-feed-system";
@@ -157,9 +160,77 @@ const wordpressLayers = [
   { label: "Reports", signal: "Visibility", detail: "Status, quality, output", icon: "ranking", href: "/solutions/build-data-monitoring-system/" },
   { label: "Deploy", signal: "Launch", detail: "Hosting, QA, handover", icon: "product", href: "/technologies/" }
 ];
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: offer.title,
+    description: offer.summary,
+    serviceType: offer.eyebrow,
+    url: pageUrl,
+    provider: {
+      "@type": "Organization",
+      name: "AlfaRank",
+      url: baseUrl
+    },
+    audience: {
+      "@type": "Audience",
+      audienceType: offer.audience
+    },
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: offer.desiredOutput,
+      itemListElement: offer.modules.map((module, index) => ({
+        "@type": "Offer",
+        position: index + 1,
+        itemOffered: {
+          "@type": "Service",
+          name: module.title,
+          description: module.text
+        }
+      }))
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: offer.faq.map((entry) => ({
+      "@type": "Question",
+      name: entry.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: entry.answer
+      }
+    }))
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "AlfaRank",
+        item: baseUrl
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: translateCopy(locale, "Solutions"),
+        item: new URL(localizePath("/solutions/", locale), siteUrl).toString()
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: offer.title,
+        item: pageUrl
+      }
+    ]
+  }
+];
 ---
 
-<Layout title={title} description={offer.summary} locale={locale}>
+<Layout title={title} description={offer.summary} locale={locale} structuredData={structuredData}>
   <PageHero
     eyebrow={offer.eyebrow}
     title={offer.title}

@@ -1,5 +1,48 @@
 # Development Checkpoints
 
+## 2026-07-09 - Search Console indexing and sitemap cleanup
+
+Checkpoint status:
+
+- Search Console was checked for `sc-domain:alfarank.com`.
+- Current Google visibility is limited to 2 indexed pages: `/` and `/ru/`.
+- Performance is still brand-only: 3 clicks, 39 impressions, 7.7% CTR, and
+  average position 11.2 in the available 3-month web search view.
+- No visible football/sports queries or current football/sports sitemap URLs
+  were found during the check.
+- Manual actions and security issues are clean; HTTPS has 0 reported
+  non-HTTPS URLs; Core Web Vitals has insufficient field data.
+
+Implemented changes:
+
+- Added `docs/search-console-status.md` with the GSC status, query/page rows,
+  indexation reasons, sitemap findings, quality checks, and next actions.
+- Added `docs/indexing-recovery-report.md` with the timeline, live production
+  mismatch, URL Inspection findings, root cause, and ordered recovery protocol.
+- Simplified the main XML sitemap so it contains durable localized site routes
+  instead of expanding every NOVA news article into the main sitemap.
+- Added `priority-sitemap.xml` for the compact first indexing push.
+- Limited `news-sitemap.xml` to articles published within the last 48 hours.
+- Set `/start-project/thank-you/` and localized thank-you pages to
+  `noindex, nofollow` and excluded them from sitemap output.
+- Added a `410 Gone` response for legacy `/feed/` URLs in the Pages middleware
+  so old WordPress feed remnants can leave Search Console more cleanly.
+- Strengthened `/capabilities/`, `/solutions/`, and `/systems/` with
+  page-specific descriptions plus collection, item-list, and breadcrumb schema.
+- Strengthened campaign LP pages with service, offer catalog, FAQ, and
+  breadcrumb schema through the shared LP template.
+- Verified the generated XML output: 357 main sitemap URLs, 174 priority
+  sitemap URLs, 27 news sitemap URLs, 0 article URLs in the main sitemap, 0
+  thank-you URLs, 0 feed URLs, and 0 football/sports URL matches.
+- Noted that deployment must be done from a synchronized build because local
+  `main` was 4 commits behind `origin/main` during the audit.
+
+Next action:
+
+- Deploy the recovery build, submit `priority-sitemap.xml`, resubmit the main
+  and news sitemaps, inspect `/ro/` and priority commercial pages, then validate
+  the indexing issue after Google has processed the cleaner sitemap footprint.
+
 ## 2026-06-02 - Cloudflare lead env sync summary
 
 Checkpoint status:

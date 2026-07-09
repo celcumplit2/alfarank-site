@@ -4,6 +4,8 @@ import type { NewsLocale, NovaArticle, NovaArticleSummary } from "@/lib/nova";
 type LocalizedText = Partial<Record<Exclude<NewsLocale, "en">, string>>;
 type TranslationDictionary = Record<string, LocalizedText>;
 
+const generatedText = generatedNovaNewsTranslations as TranslationDictionary;
+
 const exactText: TranslationDictionary = {
   "News Analysis": {
     ro: "Analiza stirilor",
@@ -818,7 +820,7 @@ export const normalizeSentenceStarts = (value: string, locale: NewsLocale = "en"
 const translateString = (value: string, locale: NewsLocale) => {
   if (locale === "en") return normalizeSentenceStarts(value, locale);
   const exact = exactText[value]?.[locale];
-  const generated = generatedNovaNewsTranslations[value]?.[locale];
+  const generated = generatedText[value]?.[locale];
   const translated = value.length > 120 && generated ? generated : exact ?? generated ?? value;
   return normalizeSentenceStarts(translated, locale);
 };
