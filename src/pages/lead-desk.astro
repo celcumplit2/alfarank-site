@@ -45,7 +45,17 @@ const formVariants = ["quick-intake", "start-project", "partner-program", ...lan
       <p class="form-status" data-lead-auth-status>Enter the Cloudflare `LEAD_REPORT_TOKEN` to load live data.</p>
     </form>
 
-    <div class="lead-desk__toolbar glass-panel">
+    <button
+      class="button secondary lead-desk__filter-toggle"
+      type="button"
+      aria-controls="lead-desk-filters lead-desk-quick-filters"
+      aria-expanded="false"
+      data-lead-mobile-filter-toggle
+    >
+      Filters
+    </button>
+
+    <div class="lead-desk__toolbar glass-panel is-mobile-collapsed" id="lead-desk-filters" data-lead-mobile-filter-panel>
       <label class="field">
         <span>Rows</span>
         <select name="limit" data-lead-limit>
@@ -180,7 +190,13 @@ const formVariants = ["quick-intake", "start-project", "partner-program", ...lan
       </div>
     </div>
 
-    <div class="lead-desk__quick-filters glass-panel" data-lead-quick-filters aria-label="Lead queue shortcuts">
+    <div
+      class="lead-desk__quick-filters glass-panel is-mobile-collapsed"
+      id="lead-desk-quick-filters"
+      data-lead-mobile-filter-panel
+      data-lead-quick-filters
+      aria-label="Lead queue shortcuts"
+    >
       <button class="button secondary" type="button" data-lead-quick-filter="response_sla:overdue">Overdue</button>
       <button class="button secondary" type="button" data-lead-quick-filter="response_sla:due_soon">Due soon</button>
       <button class="button secondary" type="button" data-lead-quick-filter="follow_up_sla:stale">Stale follow-up</button>
@@ -357,6 +373,8 @@ const formVariants = ["quick-intake", "start-project", "partner-program", ...lan
         filterOwner: root.querySelector("[data-lead-filter-owner]"),
         filterNeedsOwner: root.querySelector("[data-lead-filter-needs-owner]"),
         filterNeedsNextAction: root.querySelector("[data-lead-filter-needs-next-action]"),
+        mobileFilterToggle: root.querySelector("[data-lead-mobile-filter-toggle]"),
+        mobileFilterPanels: root.querySelectorAll("[data-lead-mobile-filter-panel]"),
         quickFilters: root.querySelector("[data-lead-quick-filters]"),
         refresh: root.querySelector("[data-lead-refresh]"),
         exportButton: root.querySelector("[data-lead-export]"),
@@ -603,6 +621,14 @@ const formVariants = ["quick-intake", "start-project", "partner-program", ...lan
         } catch {
           setStatus("Could not copy the view link in this browser mode.", "error");
         }
+      };
+
+      const setLeadMobileFiltersOpen = (open) => {
+        if (!elements.mobileFilterToggle || !elements.mobileFilterPanels?.length) return;
+        elements.mobileFilterPanels.forEach((panel) => {
+          panel.classList.toggle("is-mobile-collapsed", !open);
+        });
+        elements.mobileFilterToggle.setAttribute("aria-expanded", String(open));
       };
 
       const filterChanged = () => {
@@ -1263,6 +1289,9 @@ const formVariants = ["quick-intake", "start-project", "partner-program", ...lan
       elements.refresh.addEventListener("click", loadReport);
       elements.exportButton.addEventListener("click", exportCsv);
       elements.copyViewButton.addEventListener("click", copyViewLink);
+      elements.mobileFilterToggle?.addEventListener("click", () => {
+        setLeadMobileFiltersOpen(elements.mobileFilterToggle.getAttribute("aria-expanded") !== "true");
+      });
       elements.limit.addEventListener("change", filterChanged);
       elements.includeTest.addEventListener("change", filterChanged);
       [
@@ -1301,6 +1330,7 @@ const formVariants = ["quick-intake", "start-project", "partner-program", ...lan
         if (rangeButton) {
           applyDateRange(rangeButton.dataset.leadDateRange || "");
           filterChanged();
+          if (window.matchMedia("(max-width: 760px)").matches) setLeadMobileFiltersOpen(false);
           return;
         }
 
@@ -1349,6 +1379,7 @@ const formVariants = ["quick-intake", "start-project", "partner-program", ...lan
         }
 
         filterChanged();
+        if (window.matchMedia("(max-width: 760px)").matches) setLeadMobileFiltersOpen(false);
       });
 
       root.addEventListener("click", async (event) => {

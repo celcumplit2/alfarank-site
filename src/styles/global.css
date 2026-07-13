@@ -1,5 +1,5 @@
 :root {
-  color-scheme: dark;
+  color-scheme: only light;
   --bg: #041b4a;
   --text: #ffffff;
   --muted: rgba(255, 255, 255, 0.84);
@@ -503,9 +503,10 @@ select {
 .liquid-background {
   position: fixed;
   inset: -18vh -14vw;
-  z-index: -2;
+  z-index: 0;
   isolation: isolate;
   overflow: hidden;
+  pointer-events: none;
   background-color: #164c7d;
   background-image:
     linear-gradient(rgba(212, 236, 255, 0.052) 1px, transparent 1px),
@@ -573,6 +574,8 @@ select {
 }
 
 .site-shell {
+  position: relative;
+  z-index: 1;
   width: min(1180px, calc(100% - 32px));
   min-height: 100vh;
   margin: 0 auto;
@@ -11537,6 +11540,31 @@ html[lang="ru"] .command-field {
   z-index: 80;
 }
 
+.ar-native-select {
+  position: relative;
+  z-index: 6;
+  width: 100%;
+  min-width: 0;
+}
+
+.ar-native-select.is-open {
+  z-index: 90;
+}
+
+select.ar-native-select__native {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: 0 !important;
+  min-height: 0 !important;
+  border: 0 !important;
+  padding: 0 !important;
+  clip-path: inset(50%) !important;
+  opacity: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+}
+
 .ar-select__button {
   position: relative;
   display: flex;
@@ -11561,7 +11589,46 @@ html[lang="ru"] .command-field {
   cursor: pointer;
 }
 
+.ar-native-select__button {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-height: 44px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid rgba(216, 251, 255, 0.2);
+  border-radius: 4px;
+  padding: 11px 42px 11px 13px;
+  color: var(--text);
+  text-align: left;
+  font: inherit;
+  background:
+    radial-gradient(circle at 16% 10%, rgba(216, 251, 255, 0.12), transparent 46%),
+    linear-gradient(135deg, rgba(216, 251, 255, 0.09), rgba(1, 16, 38, 0.28)),
+    rgba(1, 16, 38, 0.5);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -1px 18px rgba(0, 16, 48, 0.24),
+    0 18px 34px -30px rgba(0, 7, 26, 0.44);
+  cursor: pointer;
+}
+
 .ar-select__button::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid #69e6ff;
+  border-bottom: 2px solid #69e6ff;
+  transform: translateY(-64%) rotate(45deg);
+  filter: drop-shadow(0 0 8px rgba(105, 230, 255, 0.5));
+  transition: transform 160ms ease;
+}
+
+.ar-native-select__button::after {
   content: "";
   position: absolute;
   top: 50%;
@@ -11585,7 +11652,28 @@ html[lang="ru"] .command-field {
     inset 0 1px 0 rgba(255, 255, 255, 0.16);
 }
 
+.ar-native-select.is-open .ar-native-select__button,
+.ar-native-select__button:focus-visible {
+  border-color: rgba(216, 251, 255, 0.44);
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(216, 251, 255, 0.1),
+    0 0 26px rgba(105, 230, 255, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+.ar-native-select.is-invalid .ar-native-select__button {
+  border-color: rgba(255, 132, 145, 0.58);
+  box-shadow:
+    0 0 0 3px rgba(255, 132, 145, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
 .ar-select.is-open .ar-select__button::after {
+  transform: translateY(-28%) rotate(225deg);
+}
+
+.ar-native-select.is-open .ar-native-select__button::after {
   transform: translateY(-28%) rotate(225deg);
 }
 
@@ -11595,6 +11683,16 @@ html[lang="ru"] .command-field {
   color: #ffffff;
   font-size: 15px;
   font-weight: 700;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.ar-native-select__value {
+  display: block;
+  min-width: 0;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 750;
   line-height: 1.25;
   overflow-wrap: anywhere;
 }
@@ -11630,7 +11728,46 @@ html[lang="ru"] .command-field {
   visibility: hidden;
 }
 
+.ar-native-select__menu {
+  position: absolute;
+  inset-inline: 0;
+  top: calc(100% + 8px);
+  display: grid;
+  max-height: min(330px, 52vh);
+  gap: 6px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 1px solid rgba(216, 251, 255, 0.28);
+  border-radius: 6px;
+  padding: 8px;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(105, 230, 255, 0.16), transparent 42%),
+    linear-gradient(rgba(216, 251, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(216, 251, 255, 0.035) 1px, transparent 1px),
+    rgba(1, 13, 32, 0.98);
+  background-size: 100% 100%, 14px 14px, 14px 14px, 100% 100%;
+  box-shadow:
+    0 24px 48px -24px rgba(0, 7, 26, 0.86),
+    0 0 0 1px rgba(216, 251, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-6px);
+  transition:
+    opacity 140ms ease,
+    transform 140ms ease,
+    visibility 140ms ease;
+  visibility: hidden;
+}
+
 .ar-select.is-open .ar-select__menu {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+  visibility: visible;
+}
+
+.ar-native-select.is-open .ar-native-select__menu {
   opacity: 1;
   pointer-events: auto;
   transform: translateY(0);
@@ -11654,8 +11791,34 @@ html[lang="ru"] .command-field {
   line-height: 1.25;
 }
 
+.ar-native-select__option {
+  display: flex;
+  width: 100%;
+  min-height: 40px;
+  align-items: center;
+  border: 1px solid rgba(216, 251, 255, 0.12);
+  border-radius: 4px;
+  padding: 9px 11px;
+  color: rgba(224, 247, 255, 0.86);
+  text-align: left;
+  background: rgba(4, 24, 54, 0.76);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 720;
+  line-height: 1.25;
+}
+
 .ar-select__option:hover,
 .ar-select__option:focus-visible {
+  border-color: rgba(105, 230, 255, 0.42);
+  color: #ffffff;
+  outline: none;
+  background: rgba(8, 43, 82, 0.88);
+  box-shadow: 0 0 20px rgba(105, 230, 255, 0.1);
+}
+
+.ar-native-select__option:hover,
+.ar-native-select__option:focus-visible {
   border-color: rgba(105, 230, 255, 0.42);
   color: #ffffff;
   outline: none;
@@ -11669,6 +11832,29 @@ html[lang="ru"] .command-field {
   background:
     linear-gradient(90deg, rgba(105, 230, 255, 0.18), rgba(4, 24, 54, 0.82)),
     rgba(4, 24, 54, 0.86);
+}
+
+.ar-native-select__option.is-selected {
+  border-color: rgba(105, 230, 255, 0.48);
+  color: #d8fbff;
+  background:
+    linear-gradient(90deg, rgba(105, 230, 255, 0.18), rgba(4, 24, 54, 0.82)),
+    rgba(4, 24, 54, 0.86);
+}
+
+.ar-native-select__option:disabled,
+.ar-native-select__option[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+.ar-native-select__button:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.ar-native-select.is-empty .ar-native-select__value {
+  color: rgba(224, 247, 255, 0.68);
 }
 
 .field input::placeholder,
@@ -11822,6 +12008,24 @@ button:disabled {
 
 .lead-desk__toolbar .field {
   margin: 0;
+}
+
+.lead-desk__filter-toggle {
+  display: none;
+}
+
+.lead-desk__filter-toggle::after {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateY(-22%) rotate(45deg);
+  transition: transform 160ms ease;
+}
+
+.lead-desk__filter-toggle[aria-expanded="true"]::after {
+  transform: translateY(18%) rotate(225deg);
 }
 
 .lead-desk__check {
@@ -12771,6 +12975,17 @@ button:disabled {
 
   .lead-desk__signal {
     width: 100%;
+  }
+
+  .lead-desk__filter-toggle {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .lead-desk__toolbar.is-mobile-collapsed,
+  .lead-desk__quick-filters.is-mobile-collapsed {
+    display: none;
   }
 
   .lead-desk__toolbar {
@@ -15111,12 +15326,26 @@ button:disabled {
     margin-bottom: 54px;
   }
 
+  .system-hero__copy {
+    width: 100%;
+    max-width: min(100%, 390px);
+  }
+
   .system-hero::before {
     mask-image: linear-gradient(180deg, #000 0%, #000 78%, transparent 100%);
   }
 
   .system-hero h1 {
-    font-size: clamp(40px, 12vw, 56px);
+    width: 100%;
+    max-width: 100%;
+    font-size: clamp(38px, 10.5vw, 50px);
+    overflow-wrap: anywhere;
+    white-space: normal;
+    word-break: normal;
+  }
+
+  .system-hero__line {
+    display: inline;
   }
 
   .system-map {
