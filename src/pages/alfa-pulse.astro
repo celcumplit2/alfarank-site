@@ -1,297 +1,973 @@
 ---
-import Layout from "@/layouts/Layout.astro";
+import ContactChannels from "@/components/ContactChannels.astro";
+import TurnstileField from "@/components/TurnstileField.astro";
+import { localizePath } from "@/data/i18n";
 import type { Locale } from "@/data/i18n";
+import Layout from "@/layouts/Layout.astro";
 
 type Props = {
   locale?: Locale;
 };
 
-const { locale = "en" } = Astro.props;
+type PulseCard = {
+  title: string;
+  text: string;
+};
 
-const offers: Record<Locale, {
+type PulseStep = {
+  label: string;
+  title: string;
+  text: string;
+};
+
+type PulseCopy = {
   metaTitle: string;
   metaDescription: string;
   eyebrow: string;
   title: string;
   lead: string;
-  promiseTitle: string;
-  bullets: string[];
-  modelTitle: string;
-  modelText: string;
-  metrics: string[];
-  download: string;
-  open: string;
+  primaryCta: string;
+  downloadCta: string;
+  openPdf: string;
+  pdfLabel: string;
   pdf: string;
   cover: string;
-  previewLabel: string;
-}> = {
+  previewAlt: string;
+  metrics: string[];
+  leakage: {
+    eyebrow: string;
+    title: string;
+    text: string;
+    cards: PulseCard[];
+    closing: string;
+  };
+  connects: {
+    eyebrow: string;
+    title: string;
+    text: string;
+    flow: PulseCard[];
+    core: string;
+  };
+  website: {
+    eyebrow: string;
+    title: string;
+    text: string;
+    cards: PulseCard[];
+  };
+  first90: {
+    eyebrow: string;
+    title: string;
+    text: string;
+    steps: PulseStep[];
+    effect: string;
+  };
+  boundaries: {
+    eyebrow: string;
+    title: string;
+    text: string;
+    coreTitle: string;
+    separateTitle: string;
+    core: string[];
+    separate: string[];
+    note: string;
+  };
+  commercial: {
+    eyebrow: string;
+    title: string;
+    text: string;
+    cards: PulseCard[];
+    conclusion: string;
+  };
+  form: {
+    eyebrow: string;
+    title: string;
+    text: string;
+    name: string;
+    email: string;
+    company: string;
+    problem: string;
+    contact: string;
+    submit: string;
+    sending: string;
+    status: string;
+    validation: string;
+    projectType: string;
+    desiredOutput: string;
+    desiredResult: string;
+    integrations: string;
+    honeypot: string;
+  };
+};
+
+const { locale = "en" } = Astro.props;
+
+const offers: Record<Locale, PulseCopy> = {
   en: {
     metaTitle: "ALFA Pulse Commercial Offer | AlfaRank",
-    metaDescription: "ALFA Pulse commercial offer PDF for connecting website, advertising, CRM, sales and revenue into one management layer.",
+    metaDescription:
+      "ALFA Pulse connects website, advertising, CRM, sales handling and real revenue into one managed digital sales contour.",
     eyebrow: "ALFA Pulse / Digital Revenue Operations",
-    title: "ALFA Pulse commercial offer",
+    title: "One management contour for digital sales",
     lead:
-      "A management layer that connects the website, advertising, CRM, sales handling and actual revenue into one controlled digital contour.",
-    promiseTitle: "What the company gets",
-    bullets: [
-      "website control as the first conversion point",
-      "connection between ads, forms, CRM, sales and revenue",
-      "visibility into where digital creates revenue or leaks budget",
-      "budget recommendations based on actual commercial result"
-    ],
-    modelTitle: "Commercial model",
-    modelText:
-      "Instead of paying for a fragmented digital department, the company pays for a management contour that shows the link between budget and revenue.",
-    metrics: ["Website", "Advertising", "CRM", "Sales", "Revenue"],
-    download: "Download PDF",
-    open: "Open PDF",
+      "AlfaRank connects ALFA Pulse above your website, advertising, CRM and sales. We do not replace your systems - we connect them into a contour where lead source, handling quality and actual revenue become visible.",
+    primaryCta: "Leave Contacts",
+    downloadCta: "Download PDF",
+    openPdf: "Open PDF",
+    pdfLabel: "Commercial proposal PDF",
     pdf: "/offers/alfa-pulse/alfa-pulse-offer-en.pdf",
     cover: "/offers/alfa-pulse/alfa-pulse-cover-en.png",
-    previewLabel: "English PDF"
+    previewAlt: "ALFA Pulse commercial offer cover",
+    metrics: ["Traffic", "Website", "Lead", "CRM", "Sales", "Revenue"],
+    leakage: {
+      eyebrow: "01 / Leakage points",
+      title: "Where your digital system loses money",
+      text:
+        "Budget is usually lost not inside one channel, but between channels: advertising sees a lead, the website sees an event, CRM sees a deal, yet the commercial result is not connected.",
+      cards: [
+        {
+          title: "Advertising optimizes for leads",
+          text: "Google receives the conversion signal, but often does not know which leads became revenue."
+        },
+        {
+          title: "The website leaks traffic",
+          text: "Forms, speed, page structure and events can waste budget before CRM sees the lead."
+        },
+        {
+          title: "CRM stays isolated",
+          text: "Statuses, rejection reasons and deal values rarely flow back into advertising algorithms."
+        },
+        {
+          title: "Sales and marketing argue",
+          text: "Without connected data, the discussion stays at bad leads versus sales does not close."
+        }
+      ],
+      closing: "ALFA Pulse connects these data points and shows where digital creates revenue and where budget leaks."
+    },
+    connects: {
+      eyebrow: "02 / What ALFA Pulse connects",
+      title: "Your systems become one management layer",
+      text:
+        "Website, ad accounts, CRM and sales keep working, while one controllable operating logic appears between them.",
+      flow: [
+        { title: "Ads", text: "campaign, creative, UTM" },
+        { title: "Website", text: "page, form, event" },
+        { title: "CRM", text: "status, manager, SLA" },
+        { title: "Sales", text: "touch, rejection reason" },
+        { title: "Revenue", text: "amount, margin, LTV" }
+      ],
+      core: "One client revenue contour"
+    },
+    website: {
+      eyebrow: "03 / Website as conversion layer",
+      title: "The website becomes the controlled conversion point",
+      text:
+        "Paid traffic lands on your website first. That is why AlfaRank controls not only advertising, but also landing pages, forms, events and analytics.",
+      cards: [
+        { title: "Landing pages", text: "Pages for specific campaigns, segments and offers." },
+        { title: "Forms & events", text: "Forms, events, thank-you pages and micro-conversions." },
+        { title: "Tracking hygiene", text: "UTM, sources, call tracking and clean analytics." },
+        { title: "Speed & trust", text: "Speed, structure, trust signals and basic SEO logic." },
+        { title: "CRM connection", text: "Every important website signal is tied to source and client." },
+        { title: "Web Layer upgrade", text: "Website migration or upgrade may be included in the starting package." }
+      ]
+    },
+    first90: {
+      eyebrow: "04 / First 90 days",
+      title: "We create order and give management control",
+      text:
+        "At the start we do not expand the task list. We identify current losses, connect data and build a decision contour based on facts.",
+      steps: [
+        {
+          label: "0-15 days",
+          title: "Audit losses",
+          text: "Website, advertising, CRM, forms, events and current leakage points."
+        },
+        {
+          label: "16-45 days",
+          title: "Connect control",
+          text: "Tracking, dashboard, handling SLA and feedback to advertising."
+        },
+        {
+          label: "46-90 days",
+          title: "Optimize by revenue",
+          text: "Page and budget optimization, with sales value sent back into advertising."
+        }
+      ],
+      effect: "Target effect - 20-30% improvement in digital sales efficiency without proportional budget growth."
+    },
+    boundaries: {
+      eyebrow: "05 / Offer boundaries",
+      title: "Contour management, not unlimited tasks",
+      text:
+        "AlfaRank takes responsibility for managing the digital revenue contour. Additional directions are connected separately so the contract stays transparent.",
+      coreTitle: "Core contour",
+      separateTitle: "Connected separately",
+      core: [
+        "Website control as conversion layer",
+        "Ads, forms, CRM and sales connection",
+        "Lead quality and loss reasons",
+        "Executive dashboard",
+        "Budget recommendations by actual revenue"
+      ],
+      separate: [
+        "Social media and content plan",
+        "Product content, cards and descriptions",
+        "Image and video generation",
+        "Complex portals, e-commerce and ERP integrations",
+        "Daily administration of every channel"
+      ],
+      note: "Social media, content, product cards, images and video can be connected as separate modules."
+    },
+    commercial: {
+      eyebrow: "06 / Commercial model",
+      title: "The commercial model is built around results",
+      text:
+        "Instead of paying for a fragmented digital department, your company pays for a management contour that shows the link between budget and revenue.",
+      cards: [
+        { title: "Retainer", text: "Monthly fee for the agreed management contour." },
+        { title: "12 months", text: "Term for data, implementation, optimization and effect evaluation." },
+        { title: "Web Layer", text: "Website migration or upgrade may be included in the starting package." },
+        { title: "Add-ons", text: "Social media, content, product content, visual/AI production and integrations are connected separately." }
+      ],
+      conclusion:
+        "ALFA Pulse becomes the upper management layer for your digital field: the website becomes the conversion point, CRM becomes the feedback source, and advertising is optimized by real money."
+    },
+    form: {
+      eyebrow: "Interested in ALFA Pulse",
+      title: "Leave contacts and we will connect the next step",
+      text:
+        "Send a short signal. The request will go into the existing AlfaRank lead system with ALFA Pulse as the offer source.",
+      name: "Name",
+      email: "Email",
+      company: "Company optional",
+      problem: "What should ALFA Pulse help clarify first?",
+      contact: "Phone, messenger or extra context optional",
+      submit: "Send Request",
+      sending: "Sending request...",
+      status: "Sending ALFA Pulse request with source context...",
+      validation: "Check the highlighted field and try again.",
+      projectType: "Digital revenue operations",
+      desiredOutput: "ALFA Pulse management contour",
+      desiredResult: "Connect website, advertising, CRM, sales and revenue into one management layer.",
+      integrations: "Website, advertising accounts, CRM, analytics, sales process",
+      honeypot: "Company website"
+    }
   },
   ro: {
-    metaTitle: "Oferta comercială ALFA Pulse | AlfaRank",
-    metaDescription: "Oferta comercială ALFA Pulse în format PDF pentru conectarea site-ului, publicității, CRM-ului, vânzărilor și venitului real.",
-    eyebrow: "ALFA Pulse / managementul vânzărilor digitale",
-    title: "Oferta comercială ALFA Pulse",
+    metaTitle: "Oferta comerciala ALFA Pulse | AlfaRank",
+    metaDescription:
+      "ALFA Pulse conecteaza site-ul, publicitatea, CRM-ul, vanzarile si venitul real intr-un circuit unic de management.",
+    eyebrow: "ALFA Pulse / managementul vanzarilor digitale",
+    title: "Un circuit unic pentru vanzarile digitale",
     lead:
-      "Un strat de management care conectează site-ul, publicitatea, CRM-ul, procesarea vânzărilor și venitul real într-un circuit digital unic.",
-    promiseTitle: "Ce primește compania",
-    bullets: [
-      "controlul site-ului ca primul punct de conversie",
-      "legătura dintre publicitate, formulare, CRM, vânzări și venit",
-      "vizibilitate asupra locurilor unde digitalul aduce bani sau pierde buget",
-      "recomandări de buget pe baza rezultatului real"
-    ],
-    modelTitle: "Forma comercială",
-    modelText:
-      "În loc să plătească un departament digital fragmentat, compania plătește un circuit de management care arată legătura dintre buget și venit.",
-    metrics: ["Site", "Publicitate", "CRM", "Vânzări", "Venit"],
-    download: "Descarcă PDF",
-    open: "Deschide PDF",
+      "AlfaRank conecteaza ALFA Pulse peste site, publicitate, CRM si vanzari. Nu inlocuim sistemele existente - le conectam intr-un circuit unde se vad sursa lead-ului, calitatea procesarii si venitul real.",
+    primaryCta: "Lasati contacte",
+    downloadCta: "Descarca PDF",
+    openPdf: "Deschide PDF",
+    pdfLabel: "Oferta comerciala PDF",
     pdf: "/offers/alfa-pulse/alfa-pulse-offer-ro.pdf",
     cover: "/offers/alfa-pulse/alfa-pulse-cover-ro.png",
-    previewLabel: "PDF în română"
+    previewAlt: "Coperta ofertei comerciale ALFA Pulse",
+    metrics: ["Trafic", "Site", "Lead", "CRM", "Vanzari", "Venit"],
+    leakage: {
+      eyebrow: "01 / Puncte de pierdere",
+      title: "Unde sistemul digital pierde bani",
+      text:
+        "Bugetul se pierde de obicei nu intr-un singur canal, ci intre canale: publicitatea vede lead-ul, site-ul vede evenimentul, CRM-ul vede vanzarea, dar rezultatul comercial nu este unit.",
+      cards: [
+        {
+          title: "Publicitatea optimizeaza lead-uri",
+          text: "Google primeste semnalul de cerere, dar nu stie mereu care lead-uri au devenit bani."
+        },
+        {
+          title: "Site-ul pierde trafic",
+          text: "Formularele, viteza, structura paginilor si evenimentele pot consuma bugetul inainte de CRM."
+        },
+        {
+          title: "CRM-ul ramane izolat",
+          text: "Statusurile, motivele de refuz si sumele tranzactiilor se intorc rar in algoritmii de publicitate."
+        },
+        {
+          title: "Vanzarile si marketingul se contrazic",
+          text: "Fara date integrate, discutia ramane la lead-uri slabe si vanzarile nu finalizeaza."
+        }
+      ],
+      closing: "Rolul ALFA Pulse este sa conecteze aceste date si sa arate unde digitalul aduce bani si unde pierde buget."
+    },
+    connects: {
+      eyebrow: "02 / Ce conecteaza ALFA Pulse",
+      title: "Sistemele dvs. devin un strat unic de management",
+      text:
+        "Site-ul, conturile de publicitate, CRM-ul si vanzarile continua sa functioneze, dar intre ele apare o logica unica de control.",
+      flow: [
+        { title: "Publicitate", text: "campanie, creativ, UTM" },
+        { title: "Site", text: "pagina, formular, eveniment" },
+        { title: "CRM", text: "status, manager, SLA" },
+        { title: "Vanzari", text: "contact, motiv de refuz" },
+        { title: "Venit", text: "suma, marja, LTV" }
+      ],
+      core: "Circuitul unic al clientului"
+    },
+    website: {
+      eyebrow: "03 / Site-ul ca conversion layer",
+      title: "Site-ul devine punctul controlat de conversie",
+      text:
+        "Traficul platit ajunge mai intai pe site-ul dvs. De aceea AlfaRank controleaza nu doar publicitatea, ci si landing pages, formularele, evenimentele si analitica.",
+      cards: [
+        { title: "Landing pages", text: "Pagini pentru campanii, segmente si oferte concrete." },
+        { title: "Forms & events", text: "Formulare, evenimente, thank-you pages si micro-conversii." },
+        { title: "Tracking hygiene", text: "UTM, surse, call tracking si analytics corect." },
+        { title: "Speed & trust", text: "Viteza, structura, incredere si logica SEO de baza." },
+        { title: "CRM connection", text: "Fiecare semnal important de pe site este legat de sursa si client." },
+        { title: "Web Layer upgrade", text: "Migrarea sau actualizarea site-ului poate intra in pachetul initial." }
+      ]
+    },
+    first90: {
+      eyebrow: "04 / Primele 90 de zile",
+      title: "Punem ordine si oferim control",
+      text:
+        "La inceput nu marim lista de sarcini. Fixam pierderile curente, conectam datele si construim un circuit de decizii bazat pe fapte.",
+      steps: [
+        {
+          label: "0-15 zile",
+          title: "Auditam pierderile",
+          text: "Site, publicitate, CRM, formulare, evenimente si pierderi curente."
+        },
+        {
+          label: "16-45 zile",
+          title: "Conectam controlul",
+          text: "Tracking, dashboard, SLA de procesare si feedback catre publicitate."
+        },
+        {
+          label: "46-90 zile",
+          title: "Optimizam dupa venit",
+          text: "Optimizarea paginilor si bugetului, cu valoarea vanzarilor trimisa inapoi in publicitate."
+        }
+      ],
+      effect: "Efect tinta - cresterea eficientei vanzarilor digitale cu 20-30% fara cresterea proportionala a bugetului."
+    },
+    boundaries: {
+      eyebrow: "05 / Limitele ofertei",
+      title: "Managementul circuitului, nu sarcini nelimitate",
+      text:
+        "AlfaRank isi asuma controlul digital revenue contour. Directiile suplimentare se conecteaza separat, pentru ca termenii contractului sa ramana clari.",
+      coreTitle: "Intra in nucleu",
+      separateTitle: "Se conecteaza separat",
+      core: [
+        "Controlul site-ului ca conversion layer",
+        "Conectarea publicitatii, formularelor, CRM si vanzarilor",
+        "Lead quality si cauzele pierderilor",
+        "Dashboard pentru management",
+        "Recomandari de buget dupa venit real"
+      ],
+      separate: [
+        "Social media si plan de continut",
+        "Product content, fise si descrieri",
+        "Generare de imagini si video",
+        "Portaluri complexe, e-commerce si integrari ERP",
+        "Administrarea zilnica a tuturor canalelor"
+      ],
+      note: "Social media, continutul, fisele de produs, imaginile si video pot fi conectate ca module separate."
+    },
+    commercial: {
+      eyebrow: "06 / Forma comerciala",
+      title: "Modelul comercial este construit in jurul rezultatului",
+      text:
+        "In loc sa platiti un departament digital fragmentat, compania dvs. plateste un circuit de management care arata legatura dintre buget si venit.",
+      cards: [
+        { title: "Retainer", text: "Plata lunara pentru circuitul de management agreat." },
+        { title: "12 luni", text: "Termen pentru date, implementare, optimizare si evaluarea efectului." },
+        { title: "Web Layer", text: "Migrarea sau actualizarea site-ului poate intra in pachetul initial." },
+        { title: "Add-ons", text: "Social media, continut, product content, visual/AI production si integrari se conecteaza separat." }
+      ],
+      conclusion:
+        "ALFA Pulse devine stratul superior de management pentru campul digital al companiei dvs. Site-ul devine punct de conversie, CRM-ul devine sursa de feedback, iar publicitatea se optimizeaza dupa bani reali."
+    },
+    form: {
+      eyebrow: "Interes pentru ALFA Pulse",
+      title: "Lasati contacte si conectam urmatorul pas",
+      text:
+        "Trimiteti un semnal scurt. Cererea intra in sistemul existent de lead-uri AlfaRank cu ALFA Pulse ca sursa a ofertei.",
+      name: "Nume",
+      email: "Email",
+      company: "Companie optional",
+      problem: "Ce trebuie sa clarifice ALFA Pulse mai intai?",
+      contact: "Telefon, messenger sau context suplimentar optional",
+      submit: "Trimite cererea",
+      sending: "Se trimite cererea...",
+      status: "Trimitem cererea ALFA Pulse cu contextul sursei...",
+      validation: "Verificati campul marcat si incercati din nou.",
+      projectType: "Digital revenue operations",
+      desiredOutput: "Circuit de management ALFA Pulse",
+      desiredResult: "Conectarea site-ului, publicitatii, CRM-ului, vanzarilor si venitului intr-un strat unic de management.",
+      integrations: "Site, conturi de publicitate, CRM, analytics, proces de vanzari",
+      honeypot: "Site-ul companiei"
+    }
   },
   ru: {
     metaTitle: "Коммерческое предложение ALFA Pulse | AlfaRank",
-    metaDescription: "Коммерческое предложение ALFA Pulse в PDF: сайт, реклама, CRM, продажи и выручка в одном управляемом digital-контуре.",
+    metaDescription:
+      "ALFA Pulse связывает сайт, рекламу, CRM, продажи и фактическую выручку в единый управляемый контур digital-продаж.",
     eyebrow: "ALFA Pulse / управление digital-продажами",
-    title: "Коммерческое предложение ALFA Pulse",
+    title: "Единый контур управления digital-продажами",
     lead:
-      "Управляющий слой, который связывает сайт, рекламу, CRM, обработку продаж и фактическую выручку в единый цифровой контур.",
-    promiseTitle: "Что получает компания",
-    bullets: [
-      "контроль сайта как первой точки конверсии",
-      "связь рекламы, форм, CRM, продаж и выручки",
-      "понимание, где digital приносит деньги, а где теряет бюджет",
-      "рекомендации по бюджету на основе реального результата"
-    ],
-    modelTitle: "Коммерческая форма",
-    modelText:
-      "Вместо оплаты разрозненного digital-отдела компания оплачивает контур управления, который показывает связь бюджета с выручкой.",
-    metrics: ["Сайт", "Реклама", "CRM", "Продажи", "Выручка"],
-    download: "Скачать PDF",
-    open: "Открыть PDF",
+      "AlfaRank подключает ALFA Pulse поверх сайта, рекламы, CRM и продаж. Мы не заменяем ваши системы - мы связываем их в контур, где видны источник лида, качество обработки и фактическая выручка.",
+    primaryCta: "Оставить контакты",
+    downloadCta: "Скачать PDF",
+    openPdf: "Открыть PDF",
+    pdfLabel: "Коммерческое предложение PDF",
     pdf: "/offers/alfa-pulse/alfa-pulse-offer-ru.pdf",
     cover: "/offers/alfa-pulse/alfa-pulse-cover-ru.png",
-    previewLabel: "PDF на русском"
+    previewAlt: "Обложка коммерческого предложения ALFA Pulse",
+    metrics: ["Трафик", "Сайт", "Лид", "CRM", "Продажи", "Выручка"],
+    leakage: {
+      eyebrow: "01 / Точки потерь",
+      title: "Где ваша digital-система теряет деньги",
+      text:
+        "Бюджет чаще всего теряется не в одном канале, а между каналами: реклама видит лид, сайт видит событие, CRM видит сделку, но единый коммерческий результат не собирается.",
+      cards: [
+        {
+          title: "Реклама оптимизируется по лидам",
+          text: "Google получает сигнал о заявке, но не всегда знает, какие заявки стали деньгами."
+        },
+        {
+          title: "Сайт теряет часть трафика",
+          text: "Формы, скорость, структура страниц и события могут съедать бюджет до попадания лида в CRM."
+        },
+        {
+          title: "CRM живет отдельно",
+          text: "Статусы, причины отказа и суммы сделок редко возвращаются обратно в рекламные алгоритмы."
+        },
+        {
+          title: "Продажи и маркетинг спорят",
+          text: "Без сквозных данных спор сводится к лидам плохого качества и продажам, которые не дожимают."
+        }
+      ],
+      closing: "Задача ALFA Pulse - соединить эти данные и показать, где digital реально приносит деньги, а где теряет бюджет."
+    },
+    connects: {
+      eyebrow: "02 / Что подключает ALFA Pulse",
+      title: "Ваши системы становятся единым слоем управления",
+      text:
+        "Сайт, рекламные кабинеты, CRM и продажи продолжают работать, но между ними появляется единая управляемая логика.",
+      flow: [
+        { title: "Реклама", text: "кампания, креатив, UTM" },
+        { title: "Сайт", text: "страница, форма, событие" },
+        { title: "CRM", text: "статус, менеджер, SLA" },
+        { title: "Продажи", text: "контакт, причина отказа" },
+        { title: "Выручка", text: "сумма, маржа, LTV" }
+      ],
+      core: "Единый контур клиента"
+    },
+    website: {
+      eyebrow: "03 / Сайт как слой конверсии",
+      title: "Сайт становится контролируемой точкой конверсии",
+      text:
+        "Платный трафик приходит сначала на ваш сайт. Поэтому AlfaRank берет под контроль не только рекламу, но и посадочные страницы, формы, события и аналитику.",
+      cards: [
+        { title: "Landing pages", text: "Страницы под конкретные кампании, сегменты и офферы." },
+        { title: "Forms & events", text: "Формы, события, thank-you pages и микроконверсии." },
+        { title: "Tracking hygiene", text: "UTM, источники, call tracking и корректная аналитика." },
+        { title: "Speed & trust", text: "Скорость, структура, доверие и базовая SEO-логика." },
+        { title: "CRM connection", text: "Каждый важный сигнал с сайта связан с источником и клиентом." },
+        { title: "Web Layer upgrade", text: "Миграция или обновление сайта может входить в стартовый пакет." }
+      ]
+    },
+    first90: {
+      eyebrow: "04 / Первые 90 дней",
+      title: "Наводим порядок и даем управляемость",
+      text:
+        "На старте мы не раздуваем список работ. Мы фиксируем текущие потери, подключаем данные и формируем контур решений по фактам.",
+      steps: [
+        {
+          label: "0-15 дней",
+          title: "Аудит потерь",
+          text: "Сайт, реклама, CRM, формы, события и текущие точки потерь."
+        },
+        {
+          label: "16-45 дней",
+          title: "Подключение контроля",
+          text: "Tracking, dashboard, SLA обработки и обратная связь в рекламу."
+        },
+        {
+          label: "46-90 дней",
+          title: "Оптимизация по выручке",
+          text: "Оптимизация страниц и бюджета, передача ценности продаж обратно в рекламу."
+        }
+      ],
+      effect: "Целевой эффект - рост эффективности digital-продаж на 20-30% без пропорционального увеличения бюджета."
+    },
+    boundaries: {
+      eyebrow: "05 / Границы оффера",
+      title: "Управление контуром, а не бесконечные задачи",
+      text:
+        "AlfaRank берет ответственность за управляемость digital revenue contour. Дополнительные направления подключаются отдельно, чтобы контракт оставался прозрачным.",
+      coreTitle: "Входит в базовый контур",
+      separateTitle: "Подключается отдельно",
+      core: [
+        "Контроль сайта как слоя конверсии",
+        "Связка рекламы, форм, CRM и продаж",
+        "Качество лидов и причины потерь",
+        "Панель управления для руководства",
+        "Рекомендации бюджета по фактической выручке"
+      ],
+      separate: [
+        "Соцсети и контент-план",
+        "Product content, карточки и описания",
+        "Генерация изображений и видео",
+        "Сложные порталы, e-commerce и ERP-интеграции",
+        "Ежедневное администрирование всех каналов"
+      ],
+      note: "Соцсети, контент, карточки товаров, изображения и видео можно подключать как отдельные модули."
+    },
+    commercial: {
+      eyebrow: "06 / Коммерческая форма",
+      title: "Коммерческая модель строится вокруг результата",
+      text:
+        "Вместо оплаты разрозненного digital-отдела ваша компания оплачивает контур управления, который показывает связь бюджета с выручкой.",
+      cards: [
+        { title: "Retainer", text: "Ежемесячная оплата за согласованный контур управления." },
+        { title: "12 месяцев", text: "Срок для данных, внедрения, оптимизации и оценки эффекта." },
+        { title: "Web Layer", text: "Миграция или обновление сайта может входить в стартовый пакет." },
+        { title: "Add-ons", text: "Соцсети, контент, product content, visual/AI production и интеграции подключаются отдельно." }
+      ],
+      conclusion:
+        "ALFA Pulse становится верхним слоем управления вашим digital-полем: сайт становится точкой конверсии, CRM - источником обратной связи, реклама - каналом, который оптимизируется по реальным деньгам."
+    },
+    form: {
+      eyebrow: "Интерес к ALFA Pulse",
+      title: "Оставьте контакты, и мы подключим следующий шаг",
+      text:
+        "Отправьте короткий сигнал. Заявка попадет в существующую lead-систему AlfaRank с ALFA Pulse как источником оффера.",
+      name: "Имя",
+      email: "Email",
+      company: "Компания необязательно",
+      problem: "Что ALFA Pulse должен прояснить в первую очередь?",
+      contact: "Телефон, мессенджер или дополнительный контекст необязательно",
+      submit: "Отправить заявку",
+      sending: "Отправляем заявку...",
+      status: "Отправляем заявку ALFA Pulse с контекстом источника...",
+      validation: "Проверьте выделенное поле и попробуйте еще раз.",
+      projectType: "Digital revenue operations",
+      desiredOutput: "Контур управления ALFA Pulse",
+      desiredResult: "Связать сайт, рекламу, CRM, продажи и выручку в единый слой управления.",
+      integrations: "Сайт, рекламные кабинеты, CRM, аналитика, процесс продаж",
+      honeypot: "Сайт компании"
+    }
   }
 };
 
 const copy = offers[locale] ?? offers.en;
+const sourcePath = localizePath("/alfa-pulse/", locale);
+const formVariant = "alfa-pulse-offer";
 ---
 
-<Layout title={copy.metaTitle} description={copy.metaDescription} locale={locale}>
-  <section class="section pulse-offer" data-no-translate>
-    <div class="pulse-offer__shell">
-      <div class="pulse-offer__hero">
-        <div class="pulse-offer__copy">
-          <p class="eyebrow">{copy.eyebrow}</p>
-          <h1>{copy.title}</h1>
-          <p>{copy.lead}</p>
-        </div>
-
-        <div class="pulse-offer__actions" aria-label={copy.previewLabel}>
-          <a class="button primary" href={copy.pdf} download>{copy.download}</a>
-          <a class="button secondary" href={copy.pdf} target="_blank" rel="noreferrer">{copy.open}</a>
+<Layout title={copy.metaTitle} description={copy.metaDescription} image={copy.cover} locale={locale}>
+  <div class="pulse-page" data-no-translate>
+    <section class="section pulse-hero" aria-labelledby="pulse-title">
+      <div class="pulse-hero__copy">
+        <p class="eyebrow">{copy.eyebrow}</p>
+        <h1 id="pulse-title">{copy.title}</h1>
+        <p class="pulse-hero__lead">{copy.lead}</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#pulse-contact">{copy.primaryCta}</a>
+          <a class="button secondary" href={copy.pdf} download>{copy.downloadCta}</a>
+          <a class="button secondary" href={copy.pdf} target="_blank" rel="noreferrer">{copy.openPdf}</a>
         </div>
       </div>
 
-      <div class="pulse-offer__body">
-        <article class="pulse-offer__content">
-          <div class="pulse-offer__signal-row" aria-label="ALFA Pulse contour">
-            {copy.metrics.map((metric) => <span>{metric}</span>)}
-          </div>
+      <aside class="pulse-document-card" aria-label={copy.pdfLabel}>
+        <div class="pulse-document-card__head">
+          <span>{copy.pdfLabel}</span>
+          <strong>PDF</strong>
+        </div>
+        <a href={copy.pdf} target="_blank" rel="noreferrer" aria-label={copy.openPdf}>
+          <img src={copy.cover} alt={copy.previewAlt} loading="eager" />
+        </a>
+      </aside>
+    </section>
 
-          <div class="pulse-offer__detail-grid">
-            <section class="pulse-offer__detail">
-              <h2>{copy.promiseTitle}</h2>
-              <ul>
-                {copy.bullets.map((bullet) => <li>{bullet}</li>)}
-              </ul>
-            </section>
-            <section class="pulse-offer__detail">
-              <h2>{copy.modelTitle}</h2>
-              <p>{copy.modelText}</p>
-            </section>
-          </div>
+    <section class="section pulse-contour" aria-label="ALFA Pulse contour">
+      <div class="pulse-contour__metrics">
+        {copy.metrics.map((metric) => <span>{metric}</span>)}
+      </div>
+      <article class="pulse-contour__core">
+        <span>ALFA Pulse</span>
+        <strong>{copy.connects.core}</strong>
+      </article>
+    </section>
+
+    <section class="section pulse-content-section" aria-labelledby="pulse-leakage-title">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">{copy.leakage.eyebrow}</p>
+          <h2 id="pulse-leakage-title">{copy.leakage.title}</h2>
+        </div>
+        <p>{copy.leakage.text}</p>
+      </div>
+      <div class="pulse-card-grid pulse-card-grid--four">
+        {copy.leakage.cards.map((card) => (
+          <article class="glass-panel pulse-info-card">
+            <h3>{card.title}</h3>
+            <p>{card.text}</p>
+          </article>
+        ))}
+      </div>
+      <p class="pulse-section-note">{copy.leakage.closing}</p>
+    </section>
+
+    <section class="section pulse-content-section" aria-labelledby="pulse-connects-title">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">{copy.connects.eyebrow}</p>
+          <h2 id="pulse-connects-title">{copy.connects.title}</h2>
+        </div>
+        <p>{copy.connects.text}</p>
+      </div>
+      <div class="pulse-flow">
+        {copy.connects.flow.map((item) => (
+          <article>
+            <strong>{item.title}</strong>
+            <span>{item.text}</span>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section pulse-content-section" aria-labelledby="pulse-website-title">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">{copy.website.eyebrow}</p>
+          <h2 id="pulse-website-title">{copy.website.title}</h2>
+        </div>
+        <p>{copy.website.text}</p>
+      </div>
+      <div class="pulse-card-grid">
+        {copy.website.cards.map((card) => (
+          <article class="glass-panel pulse-info-card">
+            <h3>{card.title}</h3>
+            <p>{card.text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section pulse-content-section" aria-labelledby="pulse-days-title">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">{copy.first90.eyebrow}</p>
+          <h2 id="pulse-days-title">{copy.first90.title}</h2>
+        </div>
+        <p>{copy.first90.text}</p>
+      </div>
+      <div class="pulse-timeline">
+        {copy.first90.steps.map((step, index) => (
+          <article class="glass-panel pulse-step">
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <small>{step.label}</small>
+            <h3>{step.title}</h3>
+            <p>{step.text}</p>
+          </article>
+        ))}
+      </div>
+      <p class="pulse-section-note pulse-section-note--accent">{copy.first90.effect}</p>
+    </section>
+
+    <section class="section pulse-content-section" aria-labelledby="pulse-boundaries-title">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">{copy.boundaries.eyebrow}</p>
+          <h2 id="pulse-boundaries-title">{copy.boundaries.title}</h2>
+        </div>
+        <p>{copy.boundaries.text}</p>
+      </div>
+      <div class="pulse-boundaries">
+        <article class="glass-panel">
+          <h3>{copy.boundaries.coreTitle}</h3>
+          <ul>
+            {copy.boundaries.core.map((item) => <li>{item}</li>)}
+          </ul>
         </article>
-
-        <aside class="pulse-offer__document" aria-label={copy.previewLabel}>
-          <div class="pulse-offer__document-head">
-            <span>{copy.previewLabel}</span>
-            <strong>PDF</strong>
-          </div>
-          <a href={copy.pdf} target="_blank" rel="noreferrer" aria-label={copy.open}>
-            <img src={copy.cover} alt={copy.previewLabel} loading="eager" />
-          </a>
-        </aside>
+        <article class="glass-panel">
+          <h3>{copy.boundaries.separateTitle}</h3>
+          <ul>
+            {copy.boundaries.separate.map((item) => <li>{item}</li>)}
+          </ul>
+        </article>
       </div>
-    </div>
-  </section>
+      <p class="pulse-section-note">{copy.boundaries.note}</p>
+    </section>
+
+    <section class="section pulse-content-section" aria-labelledby="pulse-commercial-title">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">{copy.commercial.eyebrow}</p>
+          <h2 id="pulse-commercial-title">{copy.commercial.title}</h2>
+        </div>
+        <p>{copy.commercial.text}</p>
+      </div>
+      <div class="pulse-card-grid pulse-card-grid--four">
+        {copy.commercial.cards.map((card) => (
+          <article class="glass-panel pulse-info-card">
+            <h3>{card.title}</h3>
+            <p>{card.text}</p>
+          </article>
+        ))}
+      </div>
+      <p class="pulse-section-note">{copy.commercial.conclusion}</p>
+    </section>
+
+    <section class="section split-panel pulse-contact-section" id="pulse-contact">
+      <form
+        class="glass-panel pulse-contact-form"
+        method="post"
+        action="/api/start-project"
+        data-track-source
+        data-conversion-form={formVariant}
+        data-sending-label={copy.form.sending}
+        data-sending-status={copy.form.status}
+        data-validation-status={copy.form.validation}
+      >
+        <input type="hidden" name="source_path" value={sourcePath} />
+        <input type="hidden" name="landing_page" value={sourcePath} />
+        <input type="hidden" name="landing_offer" value="alfa-pulse" />
+        <input type="hidden" name="form_variant" value={formVariant} />
+        <input type="hidden" name="locale" value={locale} />
+        <input type="hidden" name="referrer" />
+        <input type="hidden" name="lead_channel" />
+        <input type="hidden" name="partner_ref" />
+        <input type="hidden" name="project_type" value={copy.form.projectType} />
+        <input type="hidden" name="desired_output" value={copy.form.desiredOutput} />
+        <input type="hidden" name="desired_result" value={copy.form.desiredResult} />
+        <input type="hidden" name="integrations" value={copy.form.integrations} />
+        <input type="hidden" name="utm_source" />
+        <input type="hidden" name="utm_medium" />
+        <input type="hidden" name="utm_campaign" />
+        <input type="hidden" name="utm_term" />
+        <input type="hidden" name="utm_content" />
+        <div class="spam-field" aria-hidden="true">
+          <label for="pulse-company-website">{copy.form.honeypot}</label>
+          <input id="pulse-company-website" name="company_website" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <div class="pulse-contact-form__head">
+          <p class="eyebrow">{copy.form.eyebrow}</p>
+          <h2>{copy.form.title}</h2>
+          <p>{copy.form.text}</p>
+        </div>
+
+        <div class="form-grid pulse-form-grid">
+          <div class="field">
+            <label for="pulse-name">{copy.form.name}</label>
+            <input id="pulse-name" name="name" autocomplete="name" required />
+          </div>
+          <div class="field">
+            <label for="pulse-email">{copy.form.email}</label>
+            <input id="pulse-email" name="email" type="email" autocomplete="email" required />
+          </div>
+          <div class="field full">
+            <label for="pulse-company">{copy.form.company}</label>
+            <input id="pulse-company" name="company" autocomplete="organization" />
+          </div>
+          <div class="field full">
+            <label for="pulse-problem">{copy.form.problem}</label>
+            <textarea id="pulse-problem" name="business_problem" required></textarea>
+          </div>
+          <div class="field full">
+            <label for="pulse-contact-details">{copy.form.contact}</label>
+            <textarea id="pulse-contact-details" name="contact_details"></textarea>
+          </div>
+        </div>
+
+        <TurnstileField />
+        <div class="section-actions">
+          <button class="button primary" type="submit">{copy.form.submit}</button>
+          <a class="button secondary" href={copy.pdf} download>{copy.downloadCta}</a>
+        </div>
+        <ContactChannels locale={locale} />
+        <p class="form-status" data-form-status aria-live="polite"></p>
+      </form>
+
+      <aside class="glass-panel pulse-download-panel">
+        <p class="eyebrow">{copy.pdfLabel}</p>
+        <h2>{copy.downloadCta}</h2>
+        <p>{copy.metaDescription}</p>
+        <div class="section-actions">
+          <a class="button primary" href={copy.pdf} download>{copy.downloadCta}</a>
+          <a class="button secondary" href={copy.pdf} target="_blank" rel="noreferrer">{copy.openPdf}</a>
+        </div>
+      </aside>
+    </section>
+  </div>
+
+  <script is:inline>
+    (() => {
+      const params = new URLSearchParams(window.location.search);
+      const aliases = {
+        landing_page: ["landing_page", "lp"],
+        landing_offer: ["landing_offer", "offer"],
+        partner_ref: ["partner_ref", "partner", "ref", "affiliate", "affiliate_id"],
+        utm_source: ["utm_source"],
+        utm_medium: ["utm_medium"],
+        utm_campaign: ["utm_campaign"],
+        utm_term: ["utm_term"],
+        utm_content: ["utm_content"]
+      };
+      const firstParam = (keys) => keys.map((key) => params.get(key)).find(Boolean) || "";
+      const inferLeadChannel = () => {
+        if (params.get("lead_channel")) return params.get("lead_channel");
+        if (firstParam(aliases.partner_ref)) return "partner";
+        const medium = (params.get("utm_medium") || "").toLowerCase();
+        if (["cpc", "ppc", "paid", "paid-search", "paid-social", "display"].includes(medium)) return "paid";
+        if (params.get("utm_source")) return "campaign";
+        if (document.referrer) return "referral";
+        return "direct";
+      };
+
+      document.querySelectorAll("form[data-track-source]").forEach((form) => {
+        const source = form.querySelector("[name='source_path']");
+        if (source) source.value = `${window.location.pathname}${window.location.search}`;
+        const referrer = form.querySelector("[name='referrer']");
+        if (referrer) referrer.value = document.referrer || "";
+        const leadChannel = form.querySelector("[name='lead_channel']");
+        if (leadChannel) leadChannel.value = inferLeadChannel();
+
+        Object.entries(aliases).forEach(([name, keys]) => {
+          const input = form.querySelector(`[name='${name}']`);
+          if (!input) return;
+          const value = firstParam(keys);
+          if (value) input.value = value;
+          if (name === "landing_page" && !input.value) input.value = window.location.pathname;
+        });
+      });
+    })();
+  </script>
 </Layout>
 
 <style>
-  .pulse-offer {
-    width: 100%;
-    max-width: 100%;
-    overflow-x: clip;
-    padding-top: clamp(18px, 3vw, 42px);
-  }
-
-  .pulse-offer,
-  .pulse-offer * {
+  .pulse-page,
+  .pulse-page * {
     box-sizing: border-box;
     min-width: 0;
   }
 
-  .pulse-offer__shell {
-    position: relative;
-    width: 100%;
-    max-width: 100%;
+  .pulse-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 0.46fr);
+    gap: clamp(22px, 4vw, 52px);
+    align-items: end;
+    padding: clamp(26px, 5vw, 62px);
     overflow: hidden;
-    border: 1px solid rgba(216, 251, 255, 0.14);
+    border: 1px solid rgba(216, 251, 255, 0.16);
     border-radius: 4px;
     background:
-      radial-gradient(circle at 10% 0%, rgba(216, 251, 255, 0.14), transparent 34%),
-      linear-gradient(135deg, rgba(10, 40, 78, 0.54), rgba(4, 18, 45, 0.72));
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 26px 72px rgba(0, 12, 34, 0.34);
+      linear-gradient(rgba(216, 251, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(216, 251, 255, 0.045) 1px, transparent 1px),
+      linear-gradient(135deg, rgba(11, 54, 102, 0.66), rgba(3, 18, 42, 0.78));
+    background-size: 58px 58px, 58px 58px, auto;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 28px 72px rgba(0, 12, 34, 0.32);
   }
 
-  .pulse-offer__shell::before,
-  .pulse-offer__shell::after {
-    content: "";
-    position: absolute;
-    pointer-events: none;
+  .pulse-hero__copy {
+    max-width: 920px;
   }
 
-  .pulse-offer__shell::before {
-    inset: 0;
-    opacity: 0.34;
-    background-image:
-      linear-gradient(rgba(216, 251, 255, 0.07) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(216, 251, 255, 0.06) 1px, transparent 1px);
-    background-size: 72px 72px;
+  .pulse-hero h1 {
+    max-width: 900px;
+    margin-bottom: 20px;
+    font-size: clamp(42px, 6.4vw, 86px);
+    line-height: 0.98;
   }
 
-  .pulse-offer__shell::after {
-    left: -12%;
-    right: -8%;
-    bottom: -24%;
-    height: 48%;
-    border-top: 1px solid rgba(216, 251, 255, 0.30);
-    border-radius: 50% 50% 0 0;
-    background: linear-gradient(180deg, rgba(216, 251, 255, 0.16), rgba(4, 25, 62, 0.06));
-    transform: rotate(-3deg);
-  }
-
-  .pulse-offer__hero,
-  .pulse-offer__body {
-    position: relative;
-    z-index: 1;
-  }
-
-  .pulse-offer__hero {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 28px;
-    align-items: end;
-    padding: clamp(24px, 5vw, 56px);
-    border-bottom: 1px solid rgba(216, 251, 255, 0.11);
-  }
-
-  .pulse-offer__copy {
-    max-width: 820px;
-  }
-
-  .pulse-offer__copy h1 {
-    margin: 0;
-    max-width: 760px;
-    color: #fff;
-    font-size: clamp(40px, 5.3vw, 72px);
-    line-height: 1;
-    letter-spacing: 0;
-    text-shadow: 0 2px 2px rgba(0, 18, 72, 0.55), 0 8px 22px rgba(0, 30, 120, 0.35);
-  }
-
-  .pulse-offer__copy p:not(.eyebrow) {
-    max-width: 720px;
-    margin: 22px 0 0;
-    color: rgba(255, 255, 255, 0.82);
-    font-size: clamp(17px, 1.65vw, 21px);
+  .pulse-hero__lead {
+    max-width: 780px;
+    margin: 0 0 26px;
+    color: rgba(255, 255, 255, 0.84);
+    font-size: clamp(17px, 1.6vw, 22px);
     line-height: 1.5;
   }
 
-  .pulse-offer__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: flex-end;
-    width: min(320px, 100%);
-  }
-
-  .pulse-offer__actions .button {
-    width: 100%;
-  }
-
-  .pulse-offer__body {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 0.68fr);
-    gap: clamp(20px, 4vw, 48px);
-    align-items: start;
-    padding: 0 clamp(18px, 5vw, 56px) clamp(24px, 5vw, 56px);
-  }
-
-  .pulse-offer__content,
-  .pulse-offer__document {
-    border: 1px solid rgba(128, 199, 255, 0.22);
+  .pulse-document-card,
+  .pulse-download-panel,
+  .pulse-contact-form,
+  .pulse-boundaries .glass-panel,
+  .pulse-info-card,
+  .pulse-step {
+    border: 1px solid rgba(162, 226, 255, 0.2);
     border-radius: 4px;
     background:
-      linear-gradient(135deg, rgba(14, 38, 66, 0.36), rgba(7, 22, 39, 0.22)),
-      rgba(4, 16, 31, 0.24);
-    box-shadow: inset 0 1px 14px rgba(255, 255, 255, 0.10), 0 22px 46px -28px rgba(0, 21, 78, 0.34);
+      linear-gradient(135deg, rgba(14, 48, 88, 0.38), rgba(3, 18, 42, 0.44)),
+      rgba(4, 18, 42, 0.48);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 20px 50px -36px rgba(0, 7, 26, 0.62);
   }
 
-  .pulse-offer__content {
-    padding: clamp(22px, 4vw, 42px);
+  .pulse-document-card {
+    overflow: hidden;
   }
 
-  .pulse-offer__signal-row {
+  .pulse-document-card__head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(216, 251, 255, 0.14);
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 12px;
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .pulse-document-card__head strong {
+    color: #d8fbff;
+  }
+
+  .pulse-document-card a {
+    display: block;
+    padding: 14px;
+  }
+
+  .pulse-document-card img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: contain;
+    object-position: center top;
+    border: 1px solid rgba(216, 251, 255, 0.18);
+    border-radius: 3px;
+    background: rgba(2, 14, 34, 0.62);
+  }
+
+  .pulse-contour {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 0.32fr);
+    gap: 14px;
+    align-items: stretch;
+  }
+
+  .pulse-contour__metrics,
+  .pulse-contour__core {
+    border: 1px solid rgba(216, 251, 255, 0.14);
+    border-radius: 4px;
+    background: rgba(3, 20, 46, 0.42);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  .pulse-contour__metrics {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     gap: 6px;
     padding: 6px;
-    border: 1px solid rgba(216, 251, 255, 0.16);
-    border-radius: 4px;
-    background: rgba(3, 18, 45, 0.48);
   }
 
-  .pulse-offer__signal-row span {
-    min-height: 42px;
+  .pulse-contour__metrics span {
+    min-height: 58px;
     display: grid;
     place-items: center;
-    border: 1px solid rgba(216, 251, 255, 0.14);
+    padding: 10px;
+    border: 1px solid rgba(216, 251, 255, 0.12);
     border-radius: 3px;
     color: #d8fbff;
     background: rgba(216, 251, 255, 0.06);
@@ -300,139 +976,209 @@ const copy = offers[locale] ?? offers.en;
     text-align: center;
   }
 
-  .pulse-offer__detail-grid {
+  .pulse-contour__core {
     display: grid;
-    grid-template-columns: 1.12fr 0.88fr;
-    gap: 14px;
-    margin-top: 18px;
+    align-content: center;
+    gap: 6px;
+    padding: 18px;
   }
 
-  .pulse-offer__detail {
-    min-height: 190px;
-    padding: 20px;
+  .pulse-contour__core span,
+  .pulse-step small {
+    color: rgba(216, 251, 255, 0.74);
+    font-size: 12px;
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .pulse-contour__core strong {
+    color: #fff;
+    font-size: clamp(20px, 2vw, 28px);
+    line-height: 1.12;
+  }
+
+  .pulse-content-section {
+    content-visibility: visible;
+    contain-intrinsic-size: none;
+  }
+
+  .pulse-card-grid,
+  .pulse-boundaries,
+  .pulse-timeline {
+    display: grid;
+    gap: 14px;
+  }
+
+  .pulse-card-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .pulse-card-grid--four,
+  .pulse-timeline {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .pulse-timeline {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .pulse-info-card,
+  .pulse-step,
+  .pulse-boundaries .glass-panel,
+  .pulse-download-panel,
+  .pulse-contact-form {
+    padding: clamp(18px, 2.4vw, 28px);
+  }
+
+  .pulse-info-card h3,
+  .pulse-step h3,
+  .pulse-boundaries h3 {
+    margin-top: 0;
+  }
+
+  .pulse-info-card p,
+  .pulse-step p,
+  .pulse-boundaries li,
+  .pulse-download-panel p,
+  .pulse-contact-form p {
+    color: rgba(235, 249, 255, 0.78);
+  }
+
+  .pulse-section-note {
+    margin: 16px 0 0;
+    padding: 16px 18px;
+    border-left: 2px solid rgba(216, 251, 255, 0.42);
+    color: rgba(255, 255, 255, 0.82);
+    background: rgba(3, 20, 46, 0.36);
+  }
+
+  .pulse-section-note--accent {
+    border-color: rgba(255, 207, 112, 0.82);
+    color: #fff;
+  }
+
+  .pulse-flow {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 8px;
+    padding: 8px;
     border: 1px solid rgba(216, 251, 255, 0.14);
     border-radius: 4px;
-    background: rgba(3, 18, 45, 0.34);
+    background: rgba(3, 20, 46, 0.38);
   }
 
-  .pulse-offer__detail h2 {
-    margin: 0;
+  .pulse-flow article {
+    display: grid;
+    gap: 8px;
+    min-height: 118px;
+    align-content: center;
+    padding: 16px;
+    border: 1px solid rgba(216, 251, 255, 0.14);
+    border-radius: 3px;
+    background: rgba(216, 251, 255, 0.055);
+  }
+
+  .pulse-flow strong {
     color: #fff;
-    font-size: 21px;
-    line-height: 1.2;
+    font-size: 17px;
   }
 
-  .pulse-offer__detail p,
-  .pulse-offer__detail li {
-    color: rgba(255, 255, 255, 0.84);
-    font-size: 15px;
-    line-height: 1.5;
+  .pulse-flow span {
+    color: rgba(216, 251, 255, 0.72);
+    font-size: 13px;
+    line-height: 1.4;
   }
 
-  .pulse-offer__detail p {
-    margin: 14px 0 0;
+  .pulse-step span {
+    display: block;
+    margin-bottom: 10px;
+    color: rgba(255, 207, 112, 0.92);
+    font-size: 22px;
+    font-weight: 900;
   }
 
-  .pulse-offer__detail ul {
-    margin: 14px 0 0;
+  .pulse-boundaries {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pulse-boundaries ul {
+    display: grid;
+    gap: 10px;
+    margin: 0;
     padding-left: 18px;
   }
 
-  .pulse-offer__document {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+  .pulse-contact-section {
+    align-items: start;
   }
 
-  .pulse-offer__document-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px 16px;
-    border-bottom: 1px solid rgba(216, 251, 255, 0.13);
-    color: rgba(255, 255, 255, 0.74);
-    font-size: 12px;
-    font-weight: 850;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+  .pulse-contact-form {
+    display: grid;
+    gap: 18px;
   }
 
-  .pulse-offer__document-head strong {
-    color: #d8fbff;
+  .pulse-contact-form__head {
+    max-width: 680px;
   }
 
-  .pulse-offer__document a {
-    display: block;
-    padding: 16px;
+  .pulse-contact-form__head h2,
+  .pulse-download-panel h2 {
+    margin-bottom: 10px;
   }
 
-  .pulse-offer__document img {
-    display: block;
-    width: 100%;
-    height: auto;
-    aspect-ratio: 16 / 9;
-    object-fit: contain;
-    object-position: center top;
-    background: rgba(3, 18, 45, 0.62);
-    border: 1px solid rgba(216, 251, 255, 0.16);
-    border-radius: 3px;
-    box-shadow: 0 18px 40px rgba(0, 10, 30, 0.34);
+  .pulse-form-grid {
+    margin-top: 4px;
   }
 
-  @media (max-width: 1080px) {
-    .pulse-offer__hero,
-    .pulse-offer__body {
+  .pulse-download-panel {
+    display: grid;
+    gap: 16px;
+  }
+
+  .pulse-download-panel p {
+    margin: 0;
+  }
+
+  @media (max-width: 1120px) {
+    .pulse-hero,
+    .pulse-contour,
+    .pulse-contact-section {
       grid-template-columns: 1fr;
     }
 
-    .pulse-offer__actions {
-      justify-content: flex-start;
+    .pulse-card-grid,
+    .pulse-card-grid--four {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
-  @media (max-width: 720px) {
-    .pulse-offer {
-      padding-top: 18px;
+  @media (max-width: 780px) {
+    .pulse-hero {
+      padding: 22px 16px;
     }
 
-    .pulse-offer__hero,
-    .pulse-offer__content,
-    .pulse-offer__body {
-      padding-left: 14px;
-      padding-right: 14px;
-    }
-
-    .pulse-offer__hero {
-      gap: 22px;
-    }
-
-    .pulse-offer__copy h1 {
-      font-size: clamp(36px, 10vw, 44px);
+    .pulse-hero h1 {
+      font-size: clamp(36px, 10vw, 48px);
       line-height: 1.04;
     }
 
-    .pulse-offer__copy p:not(.eyebrow) {
-      font-size: 17px;
-      line-height: 1.48;
-    }
-
-    .pulse-offer__signal-row,
-    .pulse-offer__detail-grid {
+    .pulse-contour__metrics,
+    .pulse-flow,
+    .pulse-card-grid,
+    .pulse-card-grid--four,
+    .pulse-timeline,
+    .pulse-boundaries,
+    .pulse-form-grid {
       grid-template-columns: 1fr;
     }
 
-    .pulse-offer__document img {
-      max-height: 360px;
-    }
-  }
-
-  @media (max-width: 420px) {
-    .pulse-offer__copy h1 {
-      font-size: 35px;
+    .pulse-contour__metrics span {
+      min-height: 44px;
     }
 
-    .pulse-offer__detail {
-      padding: 16px;
+    .pulse-flow article {
+      min-height: 0;
     }
   }
 </style>
