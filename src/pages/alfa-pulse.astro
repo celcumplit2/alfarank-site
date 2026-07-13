@@ -560,6 +560,7 @@ const offers: Record<Locale, PulseCopy> = {
 const copy = offers[locale] ?? offers.en;
 const sourcePath = localizePath("/alfa-pulse/", locale);
 const formVariant = "alfa-pulse-offer";
+const documentCardLabel = copy.pdfLabel.replace(/\s+PDF$/i, "");
 ---
 
 <Layout title={copy.metaTitle} description={copy.metaDescription} image={copy.cover} locale={locale}>
@@ -578,7 +579,7 @@ const formVariant = "alfa-pulse-offer";
 
       <aside class="pulse-document-card" aria-label={copy.pdfLabel}>
         <div class="pulse-document-card__head">
-          <span>{copy.pdfLabel}</span>
+          <span>{documentCardLabel}</span>
           <strong>PDF</strong>
         </div>
         <a href={copy.pdf} target="_blank" rel="noreferrer" aria-label={copy.openPdf}>
