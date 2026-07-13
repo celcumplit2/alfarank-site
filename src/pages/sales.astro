@@ -1,0 +1,1868 @@
+---
+import BrandLogo from "@/components/BrandLogo.astro";
+import LiquidBackground from "@/components/LiquidBackground.astro";
+import globalStylesUrl from "@/styles/global.css?url";
+import nativeSelectsUrl from "@/scripts/native-selects.js?url";
+
+const segments = ["B2B услуги", "Локальный бизнес", "E-commerce", "Образование", "Медицина", "Другое"];
+const clientStatuses = ["Новый", "Контакт", "Встреча назначена", "Встреча проведена", "КП отправлено", "Переговоры", "Клиент", "Отказ", "Пауза"];
+const actionTypes = ["Поиск контакта", "Звонок", "Сообщение", "Встреча", "Повторный контакт", "КП отправлено", "Переговоры", "Другое"];
+const actionStatuses = ["Запланировано", "В работе", "Сделано", "Перенесено", "Отменено"];
+const priorities = ["Высокий", "Средний", "Низкий"];
+const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
+---
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="description" content="Внутренний AlfaRank Sales Tracker." />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href={globalStylesUrl} />
+    <script type="module" src={nativeSelectsUrl}></script>
+    <title>Sales Tracker | AlfaRank</title>
+  </head>
+  <body class="sales-body">
+    <LiquidBackground />
+    <main class="sales-app" data-sales-app data-no-translate>
+      <header class="sales-topbar">
+        <a class="sales-brand" href="/sales/" aria-label="AlfaRank Sales Tracker">
+          <BrandLogo />
+          <span>Sales Tracker</span>
+        </a>
+        <div class="sales-session" data-session-panel>
+          <span data-session-name>Не выполнен вход</span>
+          <button class="sales-button sales-button--ghost" type="button" data-logout hidden>Выйти</button>
+        </div>
+      </header>
+
+      <section class="sales-login" data-login-panel>
+        <div>
+          <span class="sales-eyebrow">Внутренний контур</span>
+          <h1>Ежедневные действия по компаниям</h1>
+          <p>
+            Быстрый рабочий слой поверх Excel-модели: кто следующий, что сделать сегодня,
+            где просрочка и какие контакты закрыты результатом.
+          </p>
+        </div>
+        <form class="sales-login-card" data-login-form>
+          <label>
+            <span>Пользователь</span>
+            <select name="username">
+              <option value="pavel">pavel / Павел</option>
+              <option value="slava">slava / Слава</option>
+              <option value="andrey">andrey / Андрей</option>
+            </select>
+          </label>
+          <label>
+            <span>Пароль</span>
+            <input name="pin" type="password" autocomplete="current-password" placeholder="локальный пароль" />
+          </label>
+          <button class="sales-button sales-button--primary" type="submit">Открыть трекер</button>
+          <p class="sales-status" data-login-status>Для продакшена пароли задаются через Cloudflare env.</p>
+        </form>
+      </section>
+
+      <section class="sales-workspace" data-workspace hidden>
+        <div class="sales-tabs" role="tablist" aria-label="Разделы sales tracker">
+          <button class="sales-tab is-active" type="button" data-tab="dashboard">Панель</button>
+          <button class="sales-tab" type="button" data-tab="clients">Клиенты</button>
+          <button class="sales-tab" type="button" data-tab="actions">Действия</button>
+          <button class="sales-tab" type="button" data-tab="weekly">Итоги недели</button>
+          <button class="sales-tab" type="button" data-tab="guide">Регламент</button>
+          <button class="sales-tab" type="button" data-tab="settings">Настройки</button>
+        </div>
+
+        <button
+          class="sales-filter-toggle"
+          type="button"
+          aria-controls="sales-filterbar"
+          aria-expanded="false"
+          data-mobile-filter-toggle
+        >
+          <span>Сортировка</span>
+          <strong data-mobile-filter-summary>Сегодня</strong>
+        </button>
+
+        <div class="sales-filterbar is-mobile-collapsed" id="sales-filterbar" data-mobile-filterbar>
+          <label>
+            <span>Рабочая дата</span>
+            <input type="date" data-today />
+          </label>
+          <label>
+            <span>Режим действий</span>
+            <select data-action-mode>
+              <option value="today">Сегодня</option>
+              <option value="overdue">Просрочено</option>
+              <option value="week">Следующие 7 дней</option>
+              <option value="all">Все</option>
+            </select>
+          </label>
+          <label>
+            <span>Статус</span>
+            <select data-action-filter-status>
+              <option value="">Все</option>
+              {actionStatuses.map((status) => <option value={status}>{status}</option>)}
+            </select>
+          </label>
+          <label>
+            <span>Тип</span>
+            <select data-action-filter-type>
+              <option value="">Все</option>
+              {actionTypes.map((type) => <option value={type}>{type}</option>)}
+            </select>
+          </label>
+          <label>
+            <span>Компания</span>
+            <input data-action-filter-company placeholder="поиск" />
+          </label>
+          <button class="sales-button" type="button" data-refresh>Обновить</button>
+        </div>
+
+        <section class="sales-view is-active" data-view="dashboard">
+          <div class="sales-metrics" data-metrics></div>
+          <div class="sales-grid sales-grid--dashboard">
+            <section class="sales-panel">
+              <div class="sales-panel-head">
+                <div>
+                  <span class="sales-eyebrow">План первой недели</span>
+                  <h2>Фокус по дням</h2>
+                </div>
+              </div>
+              <div class="sales-table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Дата</th>
+                      <th>Фокус</th>
+                      <th>Новые</th>
+                      <th>Контакты</th>
+                      <th>Встречи</th>
+                      <th>КП</th>
+                      <th>Результат</th>
+                    </tr>
+                  </thead>
+                  <tbody data-plan-days></tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="sales-panel">
+              <div class="sales-panel-head">
+                <div>
+                  <span class="sales-eyebrow">Ближайшие</span>
+                  <h2>Следующие действия</h2>
+                </div>
+              </div>
+              <div class="sales-list" data-upcoming-actions></div>
+            </section>
+          </div>
+
+          <section class="sales-panel">
+            <div class="sales-panel-head">
+              <div>
+                <span class="sales-eyebrow">История</span>
+                <h2>Последние изменения</h2>
+              </div>
+            </div>
+            <div class="sales-list sales-list--compact" data-audit-list></div>
+          </section>
+        </section>
+
+        <section class="sales-view" data-view="clients">
+          <div class="sales-grid sales-grid--forms">
+            <form class="sales-panel sales-form" data-quick-add-form>
+              <div class="sales-panel-head">
+                <div>
+                  <span class="sales-eyebrow">30 секунд</span>
+                  <h2>Компания + первое действие</h2>
+                </div>
+              </div>
+              <label>
+                <span>Компания</span>
+                <input name="company_name" required />
+              </label>
+              <label>
+                <span>Сегмент</span>
+                <select name="segment">{segments.map((segment) => <option value={segment}>{segment}</option>)}</select>
+              </label>
+              <label>
+                <span>Контакт</span>
+                <input name="contact_name" />
+              </label>
+              <label>
+                <span>Что сделать</span>
+                <input name="task" required placeholder="Позвонить и назначить встречу" />
+              </label>
+              <label>
+                <span>Дата</span>
+                <input name="action_date" type="date" required />
+              </label>
+              <label>
+                <span>Потенциал</span>
+                <select name="potential">{priorities.map((priority) => <option value={priority}>{priority}</option>)}</select>
+              </label>
+              <label data-quick-owner-field hidden>
+                <span>Менеджер</span>
+                <select name="owner_id" data-quick-owner-select></select>
+              </label>
+              <button class="sales-button sales-button--primary" type="submit">Добавить</button>
+            </form>
+
+            <form class="sales-panel sales-form" data-client-form>
+              <div class="sales-panel-head">
+                <div>
+                  <span class="sales-eyebrow">Карточка</span>
+                  <h2 data-client-form-title>Новый клиент</h2>
+                </div>
+                <button class="sales-button sales-button--ghost" type="button" data-client-reset>Очистить</button>
+              </div>
+              <input name="id" type="hidden" />
+              <label>
+                <span>Компания</span>
+                <input name="company_name" required />
+              </label>
+              <label>
+                <span>Сегмент</span>
+                <select name="segment">{segments.map((segment) => <option value={segment}>{segment}</option>)}</select>
+              </label>
+              <label>
+                <span>Статус</span>
+                <select name="status">{clientStatuses.map((status) => <option value={status}>{status}</option>)}</select>
+              </label>
+              <label>
+                <span>Потенциал</span>
+                <select name="potential">{priorities.map((priority) => <option value={priority}>{priority}</option>)}</select>
+              </label>
+              <label data-client-owner-field hidden>
+                <span>Менеджер</span>
+                <select name="owner_id" data-client-owner-select></select>
+              </label>
+              <label>
+                <span>Сайт</span>
+                <input name="website" />
+              </label>
+              <label>
+                <span>Город</span>
+                <input name="city" />
+              </label>
+              <label>
+                <span>Контакт</span>
+                <input name="contact_name" />
+              </label>
+              <label>
+                <span>Должность</span>
+                <input name="contact_role" />
+              </label>
+              <label class="sales-wide">
+                <span>Телефон / Email</span>
+                <input name="contact_details" />
+              </label>
+              <label>
+                <span>Следующее действие</span>
+                <input name="next_action" required />
+              </label>
+              <label>
+                <span>Дата следующего</span>
+                <input name="next_action_at" type="date" required />
+              </label>
+              <label class="sales-wide">
+                <span>Комментарий</span>
+                <textarea name="comment"></textarea>
+              </label>
+              <button class="sales-button sales-button--primary" type="submit">Сохранить клиента</button>
+            </form>
+          </div>
+
+          <section class="sales-panel">
+            <div class="sales-panel-head">
+              <div>
+                <span class="sales-eyebrow">База</span>
+                <h2>Клиенты</h2>
+              </div>
+              <div class="sales-inline-filters">
+                <input data-client-search placeholder="поиск клиента" />
+                <select data-client-status>
+                  <option value="">Все статусы</option>
+                  {clientStatuses.map((status) => <option value={status}>{status}</option>)}
+                </select>
+                <select data-client-segment>
+                  <option value="">Все сегменты</option>
+                  {segments.map((segment) => <option value={segment}>{segment}</option>)}
+                </select>
+              </div>
+            </div>
+            <div class="sales-table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Компания</th>
+                    <th>Сегмент</th>
+                    <th>Статус</th>
+                    <th>Следующий шаг</th>
+                    <th>Дата</th>
+                    <th>Потенциал</th>
+                    <th>Менеджер</th>
+                    <th>Открыто</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody data-clients-table></tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+        <section class="sales-view" data-view="actions">
+          <div class="sales-grid sales-grid--forms">
+            <form class="sales-panel sales-form sales-form--action" data-action-form>
+              <div class="sales-panel-head">
+                <div>
+                  <span class="sales-eyebrow">Действие</span>
+                  <h2 data-action-form-title>Новое действие</h2>
+                </div>
+                <button class="sales-button sales-button--ghost" type="button" data-action-reset>Очистить</button>
+              </div>
+              <input name="id" type="hidden" />
+              <label>
+                <span>Дата</span>
+                <input name="action_date" type="date" required />
+              </label>
+              <label>
+                <span>Клиент</span>
+                <select name="client_id" data-action-client-select required>
+                  <option value="" disabled selected>Выберите клиента</option>
+                </select>
+              </label>
+              <div class="sales-client-lock sales-wide" data-action-client-summary>
+                Выберите клиента из базы. Компания и контакт подтянутся из карточки клиента.
+              </div>
+              <label>
+                <span>Приоритет</span>
+                <select name="priority">{priorities.map((priority) => <option value={priority}>{priority}</option>)}</select>
+              </label>
+              <label>
+                <span>Тип</span>
+                <select name="action_type">{actionTypes.map((type) => <option value={type}>{type}</option>)}</select>
+              </label>
+              <label>
+                <span>Статус</span>
+                <select name="status">{actionStatuses.map((status) => <option value={status}>{status}</option>)}</select>
+              </label>
+              <label class="sales-wide">
+                <span>Что конкретно сделать</span>
+                <textarea name="task" required></textarea>
+              </label>
+              <label class="sales-wide">
+                <span>Результат</span>
+                <textarea name="result" placeholder="Обязательно для статуса Сделано"></textarea>
+              </label>
+              <label>
+                <span>Следующий шаг</span>
+                <input name="next_step" />
+              </label>
+              <label>
+                <span>Дата следующего шага</span>
+                <input name="next_step_date" type="date" />
+              </label>
+              <label>
+                <span>Если завершено</span>
+                <select name="final_client_status">{terminalStatuses.map((status) => <option value={status}>{status || "Не завершать клиента"}</option>)}</select>
+              </label>
+              <label class="sales-check">
+                <input name="help_required" type="checkbox" />
+                <span>Нужна помощь</span>
+              </label>
+              <label class="sales-wide">
+                <span>Два варианта решения</span>
+                <textarea name="solution_options" placeholder={"1. ...\n2. ..."}></textarea>
+              </label>
+              <button class="sales-button sales-button--primary" type="submit">Сохранить действие</button>
+            </form>
+
+            <section class="sales-panel">
+              <div class="sales-panel-head">
+                <div>
+                  <span class="sales-eyebrow">Рабочая очередь</span>
+                  <h2>Действия</h2>
+                </div>
+              </div>
+              <div class="sales-table-wrap sales-table-wrap--tall">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Дата</th>
+                      <th>Компания</th>
+                      <th>Приоритет</th>
+                      <th>Тип</th>
+                      <th>Задача</th>
+                      <th>Статус</th>
+                      <th>Следующий шаг</th>
+                      <th>Менеджер</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody data-actions-table></tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="sales-view" data-view="weekly">
+          <section class="sales-panel">
+            <div class="sales-panel-head">
+              <div>
+                <span class="sales-eyebrow">Контроль</span>
+                <h2>Итоги недели</h2>
+              </div>
+            </div>
+            <div class="sales-table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Неделя с</th>
+                    <th>Менеджер</th>
+                    <th>Новые компании</th>
+                    <th>Действия</th>
+                    <th>Встречи</th>
+                    <th>КП</th>
+                    <th>Клиенты</th>
+                    <th>Просрочено</th>
+                    <th>Комментарий менеджера</th>
+                    <th>Комментарий руководителя</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody data-weekly-table></tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+        <section class="sales-view" data-view="guide">
+          <div class="sales-guide-layout">
+            <section class="sales-panel">
+              <div class="sales-panel-head">
+                <div>
+                  <span class="sales-eyebrow">Рабочий цикл</span>
+                  <h2>Как вести день</h2>
+                </div>
+              </div>
+              <ol class="sales-guide-steps">
+                <li>
+                  <strong>Открой рабочую дату.</strong>
+                  <span>В начале дня поставь сегодняшнюю дату и режим действий “Сегодня”. Сначала разбираются просроченные, затем сегодняшние.</span>
+                </li>
+                <li>
+                  <strong>Проверь панель.</strong>
+                  <span>Смотри количество компаний, встреч, КП, просрочек и ближайшие действия. Это короткий снимок состояния на день.</span>
+                </li>
+                <li>
+                  <strong>Работай из вкладки “Действия”.</strong>
+                  <span>Для нового действия сначала выбери клиента из базы. Компания и контакт берутся из карточки, а в действии фиксируются дата, тип, задача и результат.</span>
+                </li>
+                <li>
+                  <strong>Закрывай действие только с результатом.</strong>
+                  <span>Для статуса “Сделано” обязательно запиши результат. Затем укажи следующий шаг и дату либо заверши компанию статусом “Клиент”, “Отказ” или “Пауза”.</span>
+                </li>
+                <li>
+                  <strong>В конце дня обнови очередь.</strong>
+                  <span>У активных компаний не должно оставаться пустого следующего шага. Если нужна помощь руководителя, отметь это и добавь два варианта решения.</span>
+                </li>
+              </ol>
+            </section>
+
+            <section class="sales-panel">
+              <div class="sales-panel-head">
+                <div>
+                  <span class="sales-eyebrow">Быстрый ввод</span>
+                  <h2>Новая компания</h2>
+                </div>
+              </div>
+              <div class="sales-guide-cards">
+                <article>
+                  <strong>Минимум для старта</strong>
+                  <span>Компания, сегмент, первое действие, дата и потенциал. Действия по этой компании дальше ведутся только через выбор клиента из списка.</span>
+                </article>
+                <article>
+                  <strong>Карточка клиента</strong>
+                  <span>Используй её, когда уже есть контакт, роль, телефон/email, сайт, город, комментарий и понятный следующий шаг.</span>
+                </article>
+                <article>
+                  <strong>Нельзя оставлять активного клиента без шага</strong>
+                  <span>Если статус не финальный, система требует следующий шаг и дату следующего действия.</span>
+                </article>
+              </div>
+            </section>
+
+            <section class="sales-panel">
+              <div class="sales-panel-head">
+                <div>
+                  <span class="sales-eyebrow">Контроль</span>
+                  <h2>Неделя и руководитель</h2>
+                </div>
+              </div>
+              <div class="sales-guide-cards">
+                <article>
+                  <strong>Менеджер</strong>
+                  <span>В конце недели добавляет короткий комментарий: что сработало, где стопор, какие компании требуют решения.</span>
+                </article>
+                <article>
+                  <strong>Руководитель</strong>
+                  <span>Смотрит итоговые цифры, просрочки, комментарии и фиксирует решение или приоритет на следующую неделю.</span>
+                </article>
+                <article>
+                  <strong>Audit log</strong>
+                  <span>Изменения пишутся в историю без отдельного интерфейса: кто создал, обновил, закрыл, импортировал или изменил регламентные данные.</span>
+                </article>
+              </div>
+            </section>
+
+            <section class="sales-panel">
+              <div class="sales-panel-head">
+                <div>
+                  <span class="sales-eyebrow">Файл</span>
+                  <h2>Экспорт XLSX</h2>
+                </div>
+              </div>
+              <div class="sales-guide-cards">
+                <article>
+                  <strong>Когда выгружать</strong>
+                  <span>Перед созвоном, недельным разбором или передачей статуса. Экспорт собирает панель, клиентов, действия, итоги недели и историю.</span>
+                </article>
+                <article>
+                  <strong>Что не делать</strong>
+                  <span>Не вести параллельный CSV как основную базу. Источником правды для MVP является трекер, XLSX нужен для передачи и анализа.</span>
+                </article>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="sales-view" data-view="settings">
+          <div class="sales-grid sales-grid--settings">
+            <section class="sales-panel">
+              <div class="sales-panel-head">
+                <div>
+                  <span class="sales-eyebrow">Excel</span>
+                  <h2>Импорт / экспорт</h2>
+                </div>
+              </div>
+              <div class="sales-actions-stack">
+                <button class="sales-button sales-button--primary" type="button" data-export-xlsx>Экспортировать XLSX</button>
+                <button class="sales-button" type="button" data-import-prototype>Импортировать прототип ещё раз</button>
+                <p>Импорт прототипа идемпотентный: повторный запуск не создаёт дубликаты базовых строк.</p>
+              </div>
+            </section>
+            <section class="sales-panel">
+              <div class="sales-panel-head">
+                <div>
+                  <span class="sales-eyebrow">Пользователи MVP</span>
+                  <h2>Павел, Слава, Андрей</h2>
+                </div>
+              </div>
+              <div class="sales-list">
+                <article><strong>pavel</strong><span>Павел: менеджер, видит и ведёт только свои компании и действия.</span></article>
+                <article><strong>slava</strong><span>Слава: менеджер, видит и ведёт только свои компании и действия.</span></article>
+                <article><strong>andrey</strong><span>Андрей: руководитель и админ, видит всё и назначает клиентов менеджерам.</span></article>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <p class="sales-status sales-status--global" data-global-status></p>
+      </section>
+    </main>
+
+    <style is:global>
+      .sales-body {
+        min-height: 100vh;
+        background: #061d36;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      .sales-app {
+        width: min(1500px, calc(100% - 28px));
+        min-height: 100vh;
+        margin: 0 auto;
+        padding: 14px 0 36px;
+      }
+
+      .sales-topbar,
+      .sales-filterbar,
+      .sales-panel,
+      .sales-login-card {
+        border: 1px solid rgba(216, 251, 255, 0.18);
+        border-radius: 6px;
+        background:
+          linear-gradient(135deg, rgba(7, 31, 59, 0.9), rgba(5, 22, 43, 0.84)),
+          rgba(255, 255, 255, 0.06);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.08),
+          0 22px 46px rgba(0, 8, 24, 0.2);
+        backdrop-filter: blur(10px);
+      }
+
+      .sales-topbar {
+        position: sticky;
+        top: 10px;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        min-height: 66px;
+        padding: 12px 14px;
+      }
+
+      .sales-brand,
+      .sales-session {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .sales-brand > span {
+        color: rgba(239, 249, 255, 0.86);
+        font-size: 13px;
+        font-weight: 900;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .sales-session {
+        color: rgba(239, 249, 255, 0.82);
+        font-size: 13px;
+        font-weight: 760;
+      }
+
+      .sales-login {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(320px, 430px);
+        gap: 18px;
+        align-items: stretch;
+        padding: clamp(52px, 10vh, 110px) 0;
+      }
+
+      .sales-login h1 {
+        max-width: 850px;
+        margin: 10px 0 18px;
+        color: #fff;
+        font-size: clamp(42px, 6vw, 88px);
+        line-height: 0.94;
+      }
+
+      .sales-login p {
+        max-width: 680px;
+        margin: 0;
+        color: rgba(231, 244, 255, 0.82);
+        font-size: 18px;
+        line-height: 1.6;
+      }
+
+      .sales-login-card,
+      .sales-form {
+        display: grid;
+        gap: 12px;
+        padding: 18px;
+      }
+
+      .sales-workspace {
+        display: grid;
+        gap: 14px;
+        padding-top: 14px;
+      }
+
+      .sales-tabs {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+      }
+
+      .sales-tab {
+        flex: 0 0 auto;
+      }
+
+      .sales-tab,
+      .sales-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 36px;
+        border: 1px solid rgba(216, 251, 255, 0.22);
+        border-radius: 4px;
+        padding: 8px 12px;
+        color: rgba(239, 249, 255, 0.9);
+        background: rgba(216, 251, 255, 0.08);
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 840;
+        letter-spacing: 0;
+      }
+
+      .sales-tab.is-active,
+      .sales-button--primary {
+        border-color: rgba(255, 203, 104, 0.66);
+        color: #061d36;
+        background: #ffcb68;
+        text-shadow: none;
+      }
+
+      .sales-button--ghost {
+        background: transparent;
+      }
+
+      .sales-button:disabled {
+        cursor: wait;
+        opacity: 0.58;
+      }
+
+      .sales-filter-toggle {
+        position: relative;
+        display: none;
+        width: 100%;
+        min-height: 46px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        border: 1px solid rgba(216, 251, 255, 0.22);
+        border-radius: 4px;
+        padding: 11px 42px 11px 13px;
+        color: rgba(239, 249, 255, 0.94);
+        text-align: left;
+        background:
+          radial-gradient(circle at 14% 0%, rgba(105, 230, 255, 0.16), transparent 42%),
+          linear-gradient(135deg, rgba(216, 251, 255, 0.09), rgba(2, 13, 28, 0.42)),
+          rgba(2, 13, 28, 0.72);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.12),
+          0 18px 34px -28px rgba(0, 7, 26, 0.58);
+        cursor: pointer;
+        font: inherit;
+      }
+
+      .sales-filter-toggle::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        right: 16px;
+        width: 9px;
+        height: 9px;
+        border-right: 2px solid #69e6ff;
+        border-bottom: 2px solid #69e6ff;
+        filter: drop-shadow(0 0 8px rgba(105, 230, 255, 0.54));
+        transform: translateY(-64%) rotate(45deg);
+        transition: transform 160ms ease;
+      }
+
+      .sales-filter-toggle[aria-expanded="true"]::after {
+        transform: translateY(-28%) rotate(225deg);
+      }
+
+      .sales-filter-toggle span,
+      .sales-filter-toggle strong {
+        display: block;
+        min-width: 0;
+      }
+
+      .sales-filter-toggle span {
+        font-size: 13px;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
+      .sales-filter-toggle strong {
+        color: rgba(216, 251, 255, 0.82);
+        font-size: 12px;
+        font-weight: 760;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .sales-filterbar {
+        position: sticky;
+        top: 88px;
+        z-index: 15;
+        display: grid;
+        grid-template-columns: repeat(5, minmax(140px, 1fr)) auto;
+        gap: 10px;
+        align-items: end;
+        padding: 12px;
+      }
+
+      label {
+        display: grid;
+        gap: 6px;
+        min-width: 0;
+      }
+
+      label > span,
+      .sales-eyebrow {
+        color: rgba(191, 232, 255, 0.78);
+        font-size: 11px;
+        font-weight: 900;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        min-height: 36px;
+        border: 1px solid rgba(216, 251, 255, 0.18);
+        border-radius: 4px;
+        padding: 8px 10px;
+        color: #f6fbff;
+        background: rgba(2, 13, 28, 0.62);
+        outline: none;
+        text-shadow: none;
+      }
+
+      textarea {
+        min-height: 74px;
+        resize: vertical;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: rgba(255, 203, 104, 0.7);
+        box-shadow: 0 0 0 2px rgba(255, 203, 104, 0.12);
+      }
+
+      .sales-view {
+        display: none;
+        gap: 14px;
+      }
+
+      .sales-view.is-active {
+        display: grid;
+      }
+
+      .sales-metrics {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .sales-metric {
+        min-height: 92px;
+        border: 1px solid rgba(216, 251, 255, 0.16);
+        border-radius: 6px;
+        padding: 14px;
+        background: rgba(2, 13, 28, 0.42);
+      }
+
+      .sales-metric span,
+      .sales-list span,
+      .sales-status {
+        color: rgba(231, 244, 255, 0.72);
+      }
+
+      .sales-metric strong {
+        display: block;
+        margin-top: 10px;
+        color: #fff;
+        font-size: 32px;
+        line-height: 1;
+      }
+
+      .sales-grid {
+        display: grid;
+        gap: 14px;
+      }
+
+      .sales-grid--dashboard,
+      .sales-grid--settings {
+        grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+      }
+
+      .sales-grid--forms {
+        grid-template-columns: minmax(320px, 0.45fr) minmax(0, 1fr);
+        align-items: start;
+      }
+
+      .sales-guide-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.12fr) minmax(340px, 0.88fr);
+        gap: 14px;
+        align-items: start;
+      }
+
+      .sales-panel {
+        min-width: 0;
+        padding: 14px;
+      }
+
+      .sales-panel-head {
+        display: flex;
+        align-items: start;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+
+      .sales-panel h2 {
+        margin: 4px 0 0;
+        color: #fff;
+        font-size: 20px;
+        line-height: 1.15;
+      }
+
+      .sales-form {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .sales-form .sales-panel-head,
+      .sales-form .sales-wide,
+      .sales-form button[type="submit"],
+      .sales-form--action .sales-wide {
+        grid-column: 1 / -1;
+      }
+
+      .sales-check {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 36px;
+      }
+
+      .sales-check input {
+        width: 18px;
+        min-height: 18px;
+      }
+
+      .sales-client-lock {
+        min-height: 36px;
+        border: 1px solid rgba(216, 251, 255, 0.14);
+        border-radius: 4px;
+        padding: 9px 10px;
+        color: rgba(231, 244, 255, 0.68);
+        background: rgba(2, 13, 28, 0.28);
+        font-size: 13px;
+        line-height: 1.35;
+      }
+
+      .sales-client-lock.is-selected {
+        border-color: rgba(158, 240, 198, 0.32);
+        color: #eafff3;
+        background: rgba(83, 214, 151, 0.08);
+      }
+
+      .sales-inline-filters {
+        display: grid;
+        grid-template-columns: minmax(160px, 220px) minmax(150px, 190px) minmax(150px, 230px);
+        gap: 8px;
+      }
+
+      .sales-table-wrap {
+        overflow-x: auto;
+        border: 1px solid rgba(216, 251, 255, 0.12);
+        border-radius: 4px;
+      }
+
+      .sales-table-wrap--tall {
+        max-height: 820px;
+        overflow: auto;
+      }
+
+      table {
+        width: 100%;
+        min-width: 1040px;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        border-bottom: 1px solid rgba(216, 251, 255, 0.1);
+        padding: 10px;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        color: rgba(191, 232, 255, 0.8);
+        background: rgba(4, 21, 42, 0.96);
+        font-size: 11px;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
+      td {
+        color: rgba(239, 249, 255, 0.88);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      th:first-child,
+      td:first-child {
+        white-space: nowrap;
+      }
+
+      tr[data-state="overdue"] td {
+        background: rgba(255, 83, 95, 0.12);
+      }
+
+      tr[data-state="today"] td {
+        background: rgba(255, 203, 104, 0.12);
+      }
+
+      tr[data-state="done"] td {
+        background: rgba(83, 214, 151, 0.1);
+      }
+
+      .sales-pill {
+        display: inline-flex;
+        align-items: center;
+        border: 1px solid rgba(216, 251, 255, 0.18);
+        border-radius: 999px;
+        padding: 4px 8px;
+        color: rgba(239, 249, 255, 0.88);
+        background: rgba(216, 251, 255, 0.08);
+        font-size: 12px;
+        font-weight: 780;
+        line-height: 1;
+        white-space: nowrap;
+      }
+
+      .sales-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .sales-list article {
+        display: grid;
+        gap: 4px;
+        border: 1px solid rgba(216, 251, 255, 0.12);
+        border-radius: 4px;
+        padding: 10px;
+        background: rgba(2, 13, 28, 0.28);
+      }
+
+      .sales-list strong {
+        color: #fff;
+      }
+
+      .sales-list--compact {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .sales-guide-steps,
+      .sales-guide-cards {
+        display: grid;
+        gap: 10px;
+        margin: 0;
+        padding: 0;
+      }
+
+      .sales-guide-steps {
+        counter-reset: sales-step;
+        list-style: none;
+      }
+
+      .sales-guide-steps li,
+      .sales-guide-cards article {
+        display: grid;
+        gap: 5px;
+        border: 1px solid rgba(216, 251, 255, 0.12);
+        border-radius: 4px;
+        padding: 12px;
+        background: rgba(2, 13, 28, 0.28);
+      }
+
+      .sales-guide-steps li {
+        position: relative;
+        min-height: 72px;
+        padding-left: 50px;
+      }
+
+      .sales-guide-steps li::before {
+        counter-increment: sales-step;
+        content: counter(sales-step);
+        position: absolute;
+        left: 12px;
+        top: 12px;
+        display: grid;
+        width: 26px;
+        height: 26px;
+        place-items: center;
+        border: 1px solid rgba(255, 203, 104, 0.48);
+        border-radius: 999px;
+        color: #061d36;
+        background: #ffcb68;
+        font-size: 12px;
+        font-weight: 900;
+      }
+
+      .sales-guide-steps strong,
+      .sales-guide-cards strong {
+        color: #fff;
+        font-size: 14px;
+      }
+
+      .sales-guide-steps span,
+      .sales-guide-cards span {
+        color: rgba(231, 244, 255, 0.74);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .sales-actions-stack {
+        display: grid;
+        gap: 12px;
+        max-width: 520px;
+      }
+
+      .sales-status {
+        min-height: 20px;
+        margin: 0;
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .sales-status[data-mode="error"],
+      .sales-status.is-error {
+        color: #ff9da7;
+      }
+
+      .sales-status[data-mode="success"],
+      .sales-status.is-success {
+        color: #9ef0c6;
+      }
+
+      .sales-status--global {
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        z-index: 40;
+        max-width: min(420px, calc(100% - 36px));
+        border: 1px solid rgba(216, 251, 255, 0.22);
+        border-radius: 4px;
+        padding: 10px 12px;
+        background: rgba(2, 13, 28, 0.92);
+      }
+
+      @media (max-width: 1100px) {
+        .sales-login,
+        .sales-grid--dashboard,
+        .sales-grid--forms,
+        .sales-grid--settings,
+        .sales-guide-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .sales-filterbar {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .sales-metrics {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .sales-list--compact {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 680px) {
+        .sales-app {
+          width: min(100% - 16px, 1500px);
+        }
+
+        .sales-topbar {
+          position: static;
+        }
+
+        .sales-brand > span {
+          display: none;
+        }
+
+        .sales-filterbar {
+          position: static;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .sales-filter-toggle {
+          display: flex;
+        }
+
+        .sales-filterbar.is-mobile-collapsed {
+          display: none;
+        }
+
+        .sales-filterbar .sales-button {
+          grid-column: 1 / -1;
+        }
+
+        .sales-status--global {
+          position: static;
+          max-width: none;
+          margin-top: 10px;
+        }
+
+        .sales-panel-head,
+        .sales-session {
+          align-items: stretch;
+          flex-direction: column;
+        }
+
+        .sales-form,
+        .sales-inline-filters,
+        .sales-metrics {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+
+    <script is:inline>
+      (() => {
+        const root = document.querySelector("[data-sales-app]");
+        if (!root) return;
+
+        const state = {
+          user: null,
+          users: [],
+          overview: null,
+          clients: [],
+          actions: [],
+          activeTab: "dashboard"
+        };
+
+        const elements = {
+          loginPanel: root.querySelector("[data-login-panel]"),
+          loginForm: root.querySelector("[data-login-form]"),
+          loginStatus: root.querySelector("[data-login-status]"),
+          workspace: root.querySelector("[data-workspace]"),
+          sessionName: root.querySelector("[data-session-name]"),
+          logout: root.querySelector("[data-logout]"),
+          globalStatus: root.querySelector("[data-global-status]"),
+          mobileFilterToggle: root.querySelector("[data-mobile-filter-toggle]"),
+          mobileFilterbar: root.querySelector("[data-mobile-filterbar]"),
+          mobileFilterSummary: root.querySelector("[data-mobile-filter-summary]"),
+          today: root.querySelector("[data-today]"),
+          refresh: root.querySelector("[data-refresh]"),
+          actionMode: root.querySelector("[data-action-mode]"),
+          actionFilterStatus: root.querySelector("[data-action-filter-status]"),
+          actionFilterType: root.querySelector("[data-action-filter-type]"),
+          actionFilterCompany: root.querySelector("[data-action-filter-company]"),
+          metrics: root.querySelector("[data-metrics]"),
+          planDays: root.querySelector("[data-plan-days]"),
+          upcomingActions: root.querySelector("[data-upcoming-actions]"),
+          auditList: root.querySelector("[data-audit-list]"),
+          quickAddForm: root.querySelector("[data-quick-add-form]"),
+          quickOwnerField: root.querySelector("[data-quick-owner-field]"),
+          quickOwnerSelect: root.querySelector("[data-quick-owner-select]"),
+          clientForm: root.querySelector("[data-client-form]"),
+          clientFormTitle: root.querySelector("[data-client-form-title]"),
+          clientOwnerField: root.querySelector("[data-client-owner-field]"),
+          clientOwnerSelect: root.querySelector("[data-client-owner-select]"),
+          clientReset: root.querySelector("[data-client-reset]"),
+          clientSearch: root.querySelector("[data-client-search]"),
+          clientStatus: root.querySelector("[data-client-status]"),
+          clientSegment: root.querySelector("[data-client-segment]"),
+          clientsTable: root.querySelector("[data-clients-table]"),
+          actionForm: root.querySelector("[data-action-form]"),
+          actionFormTitle: root.querySelector("[data-action-form-title]"),
+          actionReset: root.querySelector("[data-action-reset]"),
+          actionClientSelect: root.querySelector("[data-action-client-select]"),
+          actionClientSummary: root.querySelector("[data-action-client-summary]"),
+          actionsTable: root.querySelector("[data-actions-table]"),
+          weeklyTable: root.querySelector("[data-weekly-table]"),
+          exportXlsx: root.querySelector("[data-export-xlsx]"),
+          importPrototype: root.querySelector("[data-import-prototype]")
+        };
+
+        const localToday = () => {
+          const date = new Date();
+          date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+          return date.toISOString().slice(0, 10);
+        };
+
+        const escapeHtml = (value) =>
+          String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+
+        const compact = (value, max = 110) => {
+          const text = String(value ?? "").replace(/\s+/g, " ").trim();
+          return text.length > max ? `${text.slice(0, max - 3).trimEnd()}...` : text;
+        };
+
+        const status = (message, mode = "") => {
+          elements.globalStatus.textContent = message || "";
+          elements.globalStatus.classList.toggle("is-error", mode === "error");
+          elements.globalStatus.classList.toggle("is-success", mode === "success");
+        };
+
+        const updateMobileFilterSummary = () => {
+          if (!elements.mobileFilterSummary || !elements.actionMode) return;
+          const selectedMode = elements.actionMode.selectedOptions?.[0]?.textContent?.trim() || "";
+          elements.mobileFilterSummary.textContent = selectedMode || "Все";
+        };
+
+        const setMobileFiltersOpen = (open) => {
+          if (!elements.mobileFilterToggle || !elements.mobileFilterbar) return;
+          elements.mobileFilterbar.classList.toggle("is-mobile-collapsed", !open);
+          elements.mobileFilterToggle.setAttribute("aria-expanded", String(open));
+          updateMobileFilterSummary();
+        };
+
+        const endpoint = (path, params = {}) => {
+          const url = new URL(path, window.location.origin);
+          Object.entries(params).forEach(([key, value]) => {
+            if (value !== "" && value !== null && value !== undefined && value !== false) {
+              url.searchParams.set(key, String(value));
+            }
+          });
+          return `${url.pathname}${url.search}`;
+        };
+
+        const requestJson = async (path, options = {}) => {
+          const response = await fetch(path, {
+            cache: "no-store",
+            credentials: "same-origin",
+            ...options,
+            headers: {
+              ...(options.body ? { "content-type": "application/json" } : {}),
+              ...(options.headers || {})
+            }
+          });
+          const text = await response.text();
+          let payload = {};
+          try {
+            payload = text ? JSON.parse(text) : {};
+          } catch {
+            payload = { error: text || response.statusText };
+          }
+          if (!response.ok) throw new Error(payload.error || "Запрос не выполнен.");
+          return payload;
+        };
+
+        const formData = (form) => Object.fromEntries(new FormData(form).entries());
+
+        const normalizeCheckboxes = (form, payload) => {
+          form.querySelectorAll("input[type='checkbox'][name]").forEach((input) => {
+            payload[input.name] = input.checked;
+          });
+          return payload;
+        };
+
+        const managerUsers = () => state.users.filter((user) => user.role === "manager");
+
+        const userLabel = (id) => {
+          const user = state.users.find((entry) => entry.id === id || entry.username === id);
+          return user ? user.name : id || "-";
+        };
+
+        const ownerOptions = (selected = "") => {
+          const managers = managerUsers();
+          return managers
+            .map((manager) => `<option value="${escapeHtml(manager.id)}" ${manager.id === selected ? "selected" : ""}>${escapeHtml(manager.name)}</option>`)
+            .join("");
+        };
+
+        const renderOwnerControls = () => {
+          const canAssign = state.user && state.user.role !== "manager";
+          const managers = managerUsers();
+          const defaultOwner = canAssign ? managers[0]?.id || "pavel" : state.user?.id || "";
+
+          [elements.quickOwnerSelect, elements.clientOwnerSelect].forEach((select) => {
+            if (!select) return;
+            const selected = managers.some((manager) => manager.id === select.value) ? select.value : defaultOwner;
+            select.innerHTML = ownerOptions(selected);
+            select.disabled = !canAssign;
+          });
+
+          elements.quickOwnerField.hidden = !canAssign;
+          elements.clientOwnerField.hidden = !canAssign;
+        };
+
+        const setAuthenticated = (session) => {
+          state.user = session.user || null;
+          state.users = session.users || state.users || [];
+          const authenticated = Boolean(state.user);
+          elements.loginPanel.hidden = authenticated;
+          elements.workspace.hidden = !authenticated;
+          elements.logout.hidden = !authenticated;
+          elements.sessionName.textContent = authenticated
+            ? `${state.user.name} / ${state.user.role}`
+            : "Не выполнен вход";
+          renderOwnerControls();
+        };
+
+        const metric = (label, value, hint = "") => `
+          <article class="sales-metric">
+            <span>${escapeHtml(label)}</span>
+            <strong>${escapeHtml(value ?? 0)}</strong>
+            ${hint ? `<span>${escapeHtml(hint)}</span>` : ""}
+          </article>
+        `;
+
+        const renderMetrics = () => {
+          const m = state.overview?.metrics || {};
+          const g = state.overview?.goals || {};
+          elements.metrics.innerHTML = [
+            metric("Цель клиентов / 60 дней", g.clients || 10, "MVP цель"),
+            metric("Клиентов факт", m.clients_count || 0),
+            metric("Компаний в базе", m.companies_count || 0),
+            metric("Встреч", m.meetings_count || 0),
+            metric("КП отправлено", m.proposals_count || 0),
+            metric("Просрочено", m.overdue_count || 0),
+            metric("Сегодня", m.today_count || 0),
+            metric("Без следующего шага", m.without_next_step_count || 0)
+          ].join("");
+        };
+
+        const rowState = (date, statusValue) => {
+          const today = elements.today.value;
+          if (statusValue === "Сделано") return "done";
+          if (date < today) return "overdue";
+          if (date === today) return "today";
+          return "";
+        };
+
+        const renderPlan = () => {
+          elements.planDays.innerHTML = (state.overview?.plan_days || [])
+            .map(
+              (row) => `
+                <tr>
+                  <td>${escapeHtml(row.plan_date)}</td>
+                  <td>${escapeHtml(row.focus)}</td>
+                  <td>${escapeHtml(row.new_companies)}</td>
+                  <td>${escapeHtml(row.contacts)}</td>
+                  <td>${escapeHtml(row.meetings)}</td>
+                  <td>${escapeHtml(row.proposals)}</td>
+                  <td>${escapeHtml(row.main_result)}</td>
+                </tr>
+              `
+            )
+            .join("");
+        };
+
+        const renderUpcoming = () => {
+          const rows = state.overview?.upcoming_actions || [];
+          elements.upcomingActions.innerHTML = rows.length
+            ? rows
+                .map(
+                  (action) => `
+                    <article>
+                      <strong>${escapeHtml(action.action_date)} / ${escapeHtml(action.company_name)}</strong>
+                      <span>${escapeHtml(action.priority)} · ${escapeHtml(action.action_type)} · ${escapeHtml(action.status)}</span>
+                      <span>${escapeHtml(compact(action.task, 160))}</span>
+                    </article>
+                  `
+                )
+                .join("")
+            : `<article><strong>Нет ближайших действий</strong><span>Очередь пуста для выбранной даты.</span></article>`;
+        };
+
+        const renderAudit = () => {
+          const rows = state.overview?.recent_audit || [];
+          elements.auditList.innerHTML = rows.length
+            ? rows
+                .map(
+                  (event) => `
+                    <article>
+                      <strong>${escapeHtml(event.action)} · ${escapeHtml(event.entity_type)}</strong>
+                      <span>${escapeHtml(event.actor_id)} / ${escapeHtml(event.created_at)}</span>
+                    </article>
+                  `
+                )
+                .join("")
+            : `<article><strong>История пока пустая</strong><span>Изменения будут записываться автоматически.</span></article>`;
+        };
+
+        const renderClients = () => {
+          const search = elements.clientSearch.value.trim().toLowerCase();
+          const statusValue = elements.clientStatus.value;
+          const segmentValue = elements.clientSegment.value;
+          const rows = state.clients.filter((client) => {
+            const matchesSearch = !search || [client.company_name, client.contact_name, client.city].join(" ").toLowerCase().includes(search);
+            const matchesStatus = !statusValue || client.status === statusValue;
+            const matchesSegment = !segmentValue || client.segment === segmentValue;
+            return matchesSearch && matchesStatus && matchesSegment;
+          });
+
+          elements.clientsTable.innerHTML = rows.length
+            ? rows
+                .map(
+                  (client) => `
+                    <tr data-state="${rowState(client.next_action_at || "9999-12-31", client.status === "Клиент" ? "Сделано" : "")}">
+                      <td><strong>${escapeHtml(client.company_name)}</strong><br /><span>${escapeHtml(client.contact_name || "")}</span></td>
+                      <td>${escapeHtml(client.segment)}</td>
+                      <td><span class="sales-pill">${escapeHtml(client.status)}</span></td>
+                      <td>${escapeHtml(compact(client.next_action, 120))}</td>
+                      <td>${escapeHtml(client.next_action_at || "-")}</td>
+                      <td>${escapeHtml(client.potential)}</td>
+                      <td>${escapeHtml(userLabel(client.owner_id))}</td>
+                      <td>${escapeHtml(client.open_actions_count || 0)} / ${escapeHtml(client.overdue_actions_count || 0)} проср.</td>
+                      <td><button class="sales-button sales-button--ghost" type="button" data-edit-client="${escapeHtml(client.id)}">Ред.</button></td>
+                    </tr>
+                  `
+                )
+                .join("")
+            : `<tr><td colspan="9">Клиенты не найдены.</td></tr>`;
+        };
+
+        const selectedActionClient = () => state.clients.find((client) => client.id === elements.actionClientSelect.value);
+
+        const updateActionClientSummary = () => {
+          const client = selectedActionClient();
+          elements.actionClientSummary.textContent = client
+            ? `${client.company_name}${client.contact_name ? ` / ${client.contact_name}` : ""}`
+            : "Выберите клиента из базы. Компания и контакт подтянутся из карточки клиента.";
+          elements.actionClientSummary.classList.toggle("is-selected", Boolean(client));
+        };
+
+        const renderClientSelect = () => {
+          const selected = elements.actionClientSelect.value;
+          const hasSelected = state.clients.some((client) => client.id === selected);
+          elements.actionClientSelect.innerHTML = [
+            `<option value="" disabled ${hasSelected ? "" : "selected"}>Выберите клиента</option>`,
+            ...state.clients.map((client) => `<option value="${escapeHtml(client.id)}" ${client.id === selected ? "selected" : ""}>${escapeHtml(client.company_name)}</option>`)
+          ].join("");
+          updateActionClientSummary();
+        };
+
+        const renderActions = () => {
+          elements.actionsTable.innerHTML = state.actions.length
+            ? state.actions
+                .map(
+                  (action) => `
+                    <tr data-state="${rowState(action.action_date, action.status)}">
+                      <td>${escapeHtml(action.action_date)}</td>
+                      <td><strong>${escapeHtml(action.company_name)}</strong><br /><span>${escapeHtml(action.contact_name || "")}</span></td>
+                      <td>${escapeHtml(action.priority)}</td>
+                      <td>${escapeHtml(action.action_type)}</td>
+                      <td>${escapeHtml(compact(action.task, 150))}</td>
+                      <td><span class="sales-pill">${escapeHtml(action.status)}</span></td>
+                      <td>${escapeHtml(compact(action.next_step, 120))}<br /><span>${escapeHtml(action.next_step_date || "")}</span></td>
+                      <td>${escapeHtml(userLabel(action.owner_id))}</td>
+                      <td><button class="sales-button sales-button--ghost" type="button" data-edit-action="${escapeHtml(action.id)}">Ред.</button></td>
+                    </tr>
+                  `
+                )
+                .join("")
+            : `<tr><td colspan="9">Нет действий для выбранного режима.</td></tr>`;
+        };
+
+        const renderWeekly = () => {
+          const rows = state.overview?.weekly_reviews || [];
+          elements.weeklyTable.innerHTML = rows.length
+            ? rows
+                .map(
+                  (week) => `
+                    <tr data-week-id="${escapeHtml(week.id)}" data-week-start="${escapeHtml(week.week_start)}" data-manager-id="${escapeHtml(week.manager_id)}">
+                      <td>${escapeHtml(week.week_start)}</td>
+                      <td>${escapeHtml(userLabel(week.manager_id))}</td>
+                      <td>${escapeHtml(week.new_companies || 0)}</td>
+                      <td>${escapeHtml(week.done_actions || 0)}</td>
+                      <td>${escapeHtml(week.meetings || 0)}</td>
+                      <td>${escapeHtml(week.proposals || 0)}</td>
+                      <td>${escapeHtml(week.new_clients || 0)}</td>
+                      <td>${escapeHtml(week.overdue_actions || 0)}</td>
+                      <td><textarea data-week-manager>${escapeHtml(week.manager_comment || "")}</textarea></td>
+                      <td><textarea data-week-director>${escapeHtml(week.director_comment || "")}</textarea></td>
+                      <td><button class="sales-button sales-button--ghost" type="button" data-save-week>Сохранить</button></td>
+                    </tr>
+                  `
+                )
+                .join("")
+            : `<tr><td colspan="10">Недельные итоги не найдены.</td></tr>`;
+        };
+
+        const renderAll = () => {
+          renderMetrics();
+          renderPlan();
+          renderUpcoming();
+          renderAudit();
+          renderClients();
+          renderClientSelect();
+          renderActions();
+          renderWeekly();
+        };
+
+        const loadOverview = async () => {
+          state.overview = await requestJson(endpoint("/api/sales/overview", { today: elements.today.value }));
+        };
+
+        const loadClients = async () => {
+          const payload = await requestJson("/api/sales/clients");
+          state.clients = payload.clients || [];
+        };
+
+        const actionParams = () => ({
+          today: elements.today.value,
+          mode: elements.actionMode.value,
+          status: elements.actionFilterStatus.value,
+          action_type: elements.actionFilterType.value,
+          company: elements.actionFilterCompany.value
+        });
+
+        const loadActions = async () => {
+          const payload = await requestJson(endpoint("/api/sales/actions", actionParams()));
+          state.actions = payload.actions || [];
+        };
+
+        const loadAll = async () => {
+          status("Загружаю данные...");
+          await Promise.all([loadOverview(), loadClients(), loadActions()]);
+          renderAll();
+          status(`Обновлено: ${new Date().toLocaleTimeString("ru-RU")}`, "success");
+        };
+
+        const resetClientForm = () => {
+          elements.clientForm.reset();
+          elements.clientForm.elements.id.value = "";
+          elements.clientForm.elements.status.value = "Новый";
+          elements.clientForm.elements.potential.value = "Средний";
+          renderOwnerControls();
+          elements.clientFormTitle.textContent = "Новый клиент";
+        };
+
+        const resetActionForm = () => {
+          elements.actionForm.reset();
+          elements.actionForm.elements.id.value = "";
+          elements.actionForm.elements.action_date.value = elements.today.value;
+          elements.actionForm.elements.priority.value = "Средний";
+          elements.actionForm.elements.action_type.value = "Звонок";
+          elements.actionForm.elements.status.value = "Запланировано";
+          elements.actionFormTitle.textContent = "Новое действие";
+          updateActionClientSummary();
+        };
+
+        const fillClientForm = (client) => {
+          resetClientForm();
+          Object.entries(client).forEach(([key, value]) => {
+            if (elements.clientForm.elements[key]) elements.clientForm.elements[key].value = value || "";
+          });
+          elements.clientFormTitle.textContent = client.company_name || "Клиент";
+          setTab("clients");
+        };
+
+        const fillActionForm = (action) => {
+          resetActionForm();
+          Object.entries(action).forEach(([key, value]) => {
+            if (elements.actionForm.elements[key]) {
+              if (elements.actionForm.elements[key].type === "checkbox") {
+                elements.actionForm.elements[key].checked = Boolean(value);
+              } else {
+                elements.actionForm.elements[key].value = value || "";
+              }
+            }
+          });
+          elements.actionFormTitle.textContent = `${action.company_name} / ${action.action_date}`;
+          updateActionClientSummary();
+          setTab("actions");
+        };
+
+        const setTab = (tab) => {
+          state.activeTab = tab;
+          root.querySelectorAll("[data-tab]").forEach((button) => button.classList.toggle("is-active", button.dataset.tab === tab));
+          root.querySelectorAll("[data-view]").forEach((view) => view.classList.toggle("is-active", view.dataset.view === tab));
+        };
+
+        const saveClient = async (form) => {
+          const payload = formData(form);
+          await requestJson("/api/sales/clients", {
+            method: "POST",
+            body: JSON.stringify(payload)
+          });
+          resetClientForm();
+          await loadAll();
+        };
+
+        const saveAction = async (form) => {
+          const payload = normalizeCheckboxes(form, formData(form));
+          if (!payload.client_id) {
+            throw new Error("Выберите клиента для действия.");
+          }
+          await requestJson("/api/sales/actions", {
+            method: "POST",
+            body: JSON.stringify(payload)
+          });
+          resetActionForm();
+          await loadAll();
+        };
+
+        const quickAdd = async (form) => {
+          const payload = formData(form);
+          const client = await requestJson("/api/sales/clients", {
+            method: "POST",
+            body: JSON.stringify({
+              company_name: payload.company_name,
+              segment: payload.segment,
+              contact_name: payload.contact_name,
+              status: "Новый",
+              potential: payload.potential,
+              next_action: payload.task,
+              next_action_at: payload.action_date,
+              source: "Ручное добавление"
+            })
+          });
+          await requestJson("/api/sales/actions", {
+            method: "POST",
+            body: JSON.stringify({
+              action_date: payload.action_date,
+              client_id: client.client.id,
+              priority: payload.potential,
+              action_type: "Звонок",
+              task: payload.task,
+              status: "Запланировано"
+            })
+          });
+          form.reset();
+          form.elements.action_date.value = elements.today.value;
+          renderOwnerControls();
+          await loadAll();
+          status("Компания и первое действие добавлены.", "success");
+        };
+
+        const login = async (form) => {
+          elements.loginStatus.textContent = "Проверяю доступ...";
+          elements.loginStatus.dataset.mode = "";
+          try {
+            const session = await requestJson("/api/sales/session", {
+              method: "POST",
+              body: JSON.stringify(formData(form))
+            });
+            setAuthenticated(session);
+            await loadAll();
+          } catch (error) {
+            elements.loginStatus.textContent = error.message || "Не удалось войти.";
+            elements.loginStatus.dataset.mode = "error";
+          }
+        };
+
+        const logout = async () => {
+          await fetch("/api/sales/session", { method: "DELETE", credentials: "same-origin" });
+          setAuthenticated({ user: null });
+          status("");
+        };
+
+        const saveWeek = async (row) => {
+          await requestJson("/api/sales/weekly", {
+            method: "POST",
+            body: JSON.stringify({
+              id: row.dataset.weekId,
+              week_start: row.dataset.weekStart,
+              manager_id: row.dataset.managerId,
+              manager_comment: row.querySelector("[data-week-manager]").value,
+              director_comment: row.querySelector("[data-week-director]").value
+            })
+          });
+          await loadOverview();
+          renderWeekly();
+          status("Итоги недели сохранены.", "success");
+        };
+
+        const exportXlsx = () => {
+          window.location.href = endpoint("/api/sales/export", { today: elements.today.value });
+        };
+
+        const importPrototype = async () => {
+          await requestJson("/api/sales/import-prototype", { method: "POST", body: "{}" });
+          await loadAll();
+          status("Прототип импортирован без дублей.", "success");
+        };
+
+        root.addEventListener("click", (event) => {
+          const tab = event.target.closest("[data-tab]");
+          if (tab) {
+            setTab(tab.dataset.tab);
+            return;
+          }
+
+          const editClient = event.target.closest("[data-edit-client]");
+          if (editClient) {
+            const client = state.clients.find((entry) => entry.id === editClient.dataset.editClient);
+            if (client) fillClientForm(client);
+            return;
+          }
+
+          const editAction = event.target.closest("[data-edit-action]");
+          if (editAction) {
+            const action = state.actions.find((entry) => entry.id === editAction.dataset.editAction);
+            if (action) fillActionForm(action);
+            return;
+          }
+
+          const saveWeekButton = event.target.closest("[data-save-week]");
+          if (saveWeekButton) {
+            saveWeek(saveWeekButton.closest("tr")).catch((error) => status(error.message, "error"));
+          }
+        });
+
+        elements.loginForm.addEventListener("submit", (event) => {
+          event.preventDefault();
+          login(elements.loginForm);
+        });
+        elements.logout.addEventListener("click", logout);
+        elements.refresh.addEventListener("click", () => loadAll().catch((error) => status(error.message, "error")));
+        elements.quickAddForm.addEventListener("submit", (event) => {
+          event.preventDefault();
+          quickAdd(elements.quickAddForm).catch((error) => status(error.message, "error"));
+        });
+        elements.clientForm.addEventListener("submit", (event) => {
+          event.preventDefault();
+          saveClient(elements.clientForm).catch((error) => status(error.message, "error"));
+        });
+        elements.actionForm.addEventListener("submit", (event) => {
+          event.preventDefault();
+          saveAction(elements.actionForm).catch((error) => status(error.message, "error"));
+        });
+        elements.clientReset.addEventListener("click", resetClientForm);
+        elements.actionReset.addEventListener("click", resetActionForm);
+        elements.actionClientSelect.addEventListener("change", updateActionClientSummary);
+        elements.exportXlsx.addEventListener("click", exportXlsx);
+        elements.importPrototype.addEventListener("click", () => importPrototype().catch((error) => status(error.message, "error")));
+        elements.mobileFilterToggle?.addEventListener("click", () => {
+          setMobileFiltersOpen(elements.mobileFilterbar?.classList.contains("is-mobile-collapsed"));
+        });
+
+        [elements.actionMode, elements.actionFilterStatus, elements.actionFilterType, elements.actionFilterCompany].forEach((element) => {
+          element.addEventListener("change", () => {
+            updateMobileFilterSummary();
+            loadActions().then(renderActions).catch((error) => status(error.message, "error"));
+          });
+          element.addEventListener("input", () => {
+            updateMobileFilterSummary();
+            loadActions().then(renderActions).catch((error) => status(error.message, "error"));
+          });
+        });
+
+        [elements.clientSearch, elements.clientStatus, elements.clientSegment].forEach((element) => {
+          element.addEventListener("input", renderClients);
+          element.addEventListener("change", renderClients);
+        });
+
+        elements.today.value = localToday();
+        elements.quickAddForm.elements.action_date.value = elements.today.value;
+        updateMobileFilterSummary();
+        resetClientForm();
+        resetActionForm();
+
+        requestJson("/api/sales/session")
+          .then(async (session) => {
+            setAuthenticated(session);
+            if (session.authenticated) await loadAll();
+          })
+          .catch(() => setAuthenticated({ user: null }));
+      })();
+    </script>
+  </body>
+</html>
