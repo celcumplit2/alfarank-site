@@ -906,8 +906,8 @@ const formVariant = "alfa-pulse-offer";
   }
 
   .pulse-document-card__head {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
     gap: 12px;
     align-items: center;
     padding: 14px 16px;
@@ -919,8 +919,16 @@ const formVariant = "alfa-pulse-offer";
     text-transform: uppercase;
   }
 
+  .pulse-document-card__head span {
+    line-height: 1.25;
+    overflow-wrap: normal;
+    hyphens: none;
+  }
+
   .pulse-document-card__head strong {
+    min-width: max-content;
     color: #d8fbff;
+    white-space: nowrap;
   }
 
   .pulse-document-card a {
