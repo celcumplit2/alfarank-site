@@ -11,6 +11,8 @@ const DEFAULT_ACCESS_CODE = "AlfaProjects-2026!";
 const isProtectedProjectPath = (pathname: string) =>
   /^\/projects(?:\/|$)/.test(pathname) || /^\/(ro|ru)\/projects(?:\/|$)/.test(pathname);
 
+const slashRedirects = new Set(["/alfa-pulse", "/ro/alfa-pulse", "/ru/alfa-pulse"]);
+
 const localeFromPath = (pathname: string) => {
   const match = pathname.match(/^\/(ro|ru)(?=\/|$)/);
   return match?.[1] ?? "en";
@@ -68,6 +70,11 @@ const readCookie = (request: Request, name: string) => {
 
 export const onRequest: PagesFunction<Env> = async ({ request, env, next }) => {
   const url = new URL(request.url);
+
+  if (slashRedirects.has(url.pathname)) {
+    url.pathname = `${url.pathname}/`;
+    return Response.redirect(url.toString(), 301);
+  }
 
   if (!isProtectedProjectPath(url.pathname)) {
     return next();
