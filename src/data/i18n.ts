@@ -124,6 +124,7 @@ export const staticBaseRoutes = [
   "/terms-and-conditions/",
   "/cookie-policy/",
   "/sitemap/",
+  "/alfa-pulse/",
   "/start-project/",
   "/partner-program/",
   "/start-project/thank-you/"
