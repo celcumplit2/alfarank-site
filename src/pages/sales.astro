@@ -89,7 +89,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
         <div class="sales-filterbar is-mobile-collapsed" id="sales-filterbar" data-mobile-filterbar>
           <label>
             <span>Рабочая дата</span>
-            <input type="date" data-today />
+            <input class="sales-date-input" type="text" inputmode="numeric" autocomplete="off" placeholder="дд.мм.гггг" data-date-field data-today />
           </label>
           <label>
             <span>Режим действий</span>
@@ -173,12 +173,13 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
 
         <section class="sales-view" data-view="clients">
           <div class="sales-grid sales-grid--forms">
-            <form class="sales-panel sales-form" data-quick-add-form>
+            <form class="sales-panel sales-form sales-form--quick" data-quick-add-form>
               <div class="sales-panel-head">
                 <div>
-                  <span class="sales-eyebrow">30 секунд</span>
-                  <h2>Компания + первое действие</h2>
+                  <span class="sales-eyebrow">Короткая карточка</span>
+                  <h2>Новый клиент</h2>
                 </div>
+                <button class="sales-button sales-button--ghost" type="button" data-client-open-details>Расширенная карточка</button>
               </div>
               <label>
                 <span>Компания</span>
@@ -193,12 +194,16 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
                 <input name="contact_name" />
               </label>
               <label>
-                <span>Что сделать</span>
-                <input name="task" required placeholder="Позвонить и назначить встречу" />
+                <span>Источник / кампания</span>
+                <input name="source" placeholder="Рекламная кампания, реферал, сайт..." />
               </label>
               <label>
-                <span>Дата</span>
-                <input name="action_date" type="date" required />
+                <span>Следующий шаг</span>
+                <input name="next_action" required placeholder="Позвонить и назначить встречу" />
+              </label>
+              <label>
+                <span>Дата следующего</span>
+                <input class="sales-date-input" name="next_action_at" type="text" inputmode="numeric" autocomplete="off" placeholder="дд.мм.гггг" data-date-field required />
               </label>
               <label>
                 <span>Потенциал</span>
@@ -208,16 +213,19 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
                 <span>Менеджер</span>
                 <select name="owner_id" data-quick-owner-select></select>
               </label>
-              <button class="sales-button sales-button--primary" type="submit">Добавить</button>
+              <button class="sales-button sales-button--primary" type="submit">Создать клиента</button>
             </form>
 
-            <form class="sales-panel sales-form" data-client-form>
+            <form class="sales-panel sales-form sales-client-details" data-client-form data-client-details-panel hidden>
               <div class="sales-panel-head">
                 <div>
-                  <span class="sales-eyebrow">Карточка</span>
+                  <span class="sales-eyebrow">Расширенная карточка</span>
                   <h2 data-client-form-title>Новый клиент</h2>
                 </div>
-                <button class="sales-button sales-button--ghost" type="button" data-client-reset>Очистить</button>
+                <div class="sales-row-actions">
+                  <button class="sales-button sales-button--ghost" type="button" data-client-reset>Очистить</button>
+                  <button class="sales-button sales-button--ghost" type="button" data-client-close>Закрыть</button>
+                </div>
               </div>
               <input name="id" type="hidden" />
               <label>
@@ -260,13 +268,21 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
                 <span>Телефон / Email</span>
                 <input name="contact_details" />
               </label>
+              <label class="sales-wide">
+                <span>Источник / кампания</span>
+                <input name="source" placeholder="Рекламная кампания: Google Ads / cpc / brand" />
+              </label>
+              <label class="sales-wide">
+                <span>Атрибуция / реклама</span>
+                <textarea name="source_details" placeholder="UTM, кампания, ключевое слово, объявление, click-id, landing, referrer"></textarea>
+              </label>
               <label>
                 <span>Следующее действие</span>
                 <input name="next_action" required />
               </label>
               <label>
                 <span>Дата следующего</span>
-                <input name="next_action_at" type="date" required />
+                <input class="sales-date-input" name="next_action_at" type="text" inputmode="numeric" autocomplete="off" placeholder="дд.мм.гггг" data-date-field required />
               </label>
               <label class="sales-wide">
                 <span>Комментарий</span>
@@ -304,6 +320,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
                     <th>Следующий шаг</th>
                     <th>Дата</th>
                     <th>Потенциал</th>
+                    <th>Источник / кампания</th>
                     <th>Менеджер</th>
                     <th>Открыто</th>
                     <th></th>
@@ -328,7 +345,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
               <input name="id" type="hidden" />
               <label>
                 <span>Дата</span>
-                <input name="action_date" type="date" required />
+                <input class="sales-date-input" name="action_date" type="text" inputmode="numeric" autocomplete="off" placeholder="дд.мм.гггг" data-date-field required />
               </label>
               <label>
                 <span>Клиент</span>
@@ -365,7 +382,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
               </label>
               <label>
                 <span>Дата следующего шага</span>
-                <input name="next_step_date" type="date" />
+                <input class="sales-date-input" name="next_step_date" type="text" inputmode="numeric" autocomplete="off" placeholder="дд.мм.гггг" data-date-field />
               </label>
               <label>
                 <span>Если завершено</span>
@@ -485,7 +502,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
               <div class="sales-guide-cards">
                 <article>
                   <strong>Минимум для старта</strong>
-                  <span>Компания, сегмент, первое действие, дата и потенциал. Действия по этой компании дальше ведутся только через выбор клиента из списка.</span>
+                  <span>Компания, сегмент, следующий шаг, дата и потенциал. Действия по этой компании дальше ведутся только через выбор клиента из списка.</span>
                 </article>
                 <article>
                   <strong>Карточка клиента</strong>
@@ -517,6 +534,10 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
                 <article>
                   <strong>Audit log</strong>
                   <span>Изменения пишутся в историю без отдельного интерфейса: кто создал, обновил, закрыл, импортировал или изменил регламентные данные.</span>
+                </article>
+                <article>
+                  <strong>Удаление тестовых записей</strong>
+                  <span>Кнопка “Удалить” доступна только Андрею. Удаление клиента удаляет и его действия; удаление отдельного действия пересчитывает следующий шаг клиента.</span>
                 </article>
               </div>
             </section>
@@ -720,9 +741,21 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
         background: transparent;
       }
 
+      .sales-button--danger {
+        border-color: rgba(255, 112, 112, 0.48);
+        color: #ffdede;
+        background: rgba(255, 112, 112, 0.1);
+      }
+
       .sales-button:disabled {
         cursor: wait;
         opacity: 0.58;
+      }
+
+      .sales-row-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
       }
 
       .sales-filter-toggle {
@@ -828,6 +861,10 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
         text-shadow: none;
       }
 
+      .sales-date-input {
+        font-variant-numeric: tabular-nums;
+      }
+
       textarea {
         min-height: 74px;
         resize: vertical;
@@ -888,7 +925,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
       }
 
       .sales-grid--forms {
-        grid-template-columns: minmax(320px, 0.45fr) minmax(0, 1fr);
+        grid-template-columns: 1fr;
         align-items: start;
       }
 
@@ -921,6 +958,14 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
 
       .sales-form {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .sales-form--quick {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .sales-client-details[hidden] {
+        display: none !important;
       }
 
       .sales-form .sales-panel-head,
@@ -1180,38 +1225,14 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
       @media (max-width: 680px) {
         .sales-app {
           width: min(100% - 16px, 1500px);
-          padding-top: 8px;
         }
 
         .sales-topbar {
           position: static;
-          min-height: 58px;
-          padding: 10px 12px;
         }
 
         .sales-brand > span {
           display: none;
-        }
-
-        .sales-login {
-          gap: 14px;
-          padding: 18px 0 24px;
-        }
-
-        .sales-login h1 {
-          margin: 8px 0 12px;
-          font-size: clamp(34px, 10.5vw, 44px);
-          line-height: 0.98;
-        }
-
-        .sales-login p {
-          font-size: 15px;
-          line-height: 1.5;
-        }
-
-        .sales-login-card,
-        .sales-form {
-          padding: 16px;
         }
 
         .sales-filterbar {
@@ -1231,58 +1252,10 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           grid-column: 1 / -1;
         }
 
-        .sales-workspace {
-          gap: 10px;
-          padding-top: 10px;
-        }
-
-        .sales-tabs {
-          display: grid;
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-          overflow: visible;
-        }
-
-        .sales-tab {
-          flex: initial;
-          min-width: 0;
-          padding: 8px 6px;
-          white-space: normal;
-        }
-
-        .sales-view,
-        .sales-grid,
-        .sales-panel,
-        .sales-table-wrap {
-          min-width: 0;
-        }
-
-        .sales-view.is-active,
-        .sales-grid,
-        .sales-grid--dashboard,
-        .sales-grid--forms,
-        .sales-grid--settings,
-        .sales-guide-layout {
-          display: grid;
-          grid-template-columns: minmax(0, 1fr);
-        }
-
-        .sales-panel {
-          padding: 12px;
-          overflow: hidden;
-        }
-
-        .sales-table-wrap {
-          max-width: 100%;
-        }
-
         .sales-status--global {
           position: static;
           max-width: none;
           margin-top: 10px;
-        }
-
-        .sales-status--global:empty {
-          display: none;
         }
 
         .sales-panel-head,
@@ -1338,9 +1311,12 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           quickOwnerField: root.querySelector("[data-quick-owner-field]"),
           quickOwnerSelect: root.querySelector("[data-quick-owner-select]"),
           clientForm: root.querySelector("[data-client-form]"),
+          clientDetailsPanel: root.querySelector("[data-client-details-panel]"),
           clientFormTitle: root.querySelector("[data-client-form-title]"),
           clientOwnerField: root.querySelector("[data-client-owner-field]"),
           clientOwnerSelect: root.querySelector("[data-client-owner-select]"),
+          clientOpenDetails: root.querySelector("[data-client-open-details]"),
+          clientClose: root.querySelector("[data-client-close]"),
           clientReset: root.querySelector("[data-client-reset]"),
           clientSearch: root.querySelector("[data-client-search]"),
           clientStatus: root.querySelector("[data-client-status]"),
@@ -1361,6 +1337,58 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           const date = new Date();
           date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
           return date.toISOString().slice(0, 10);
+        };
+
+        const dateFieldNames = new Set(["action_date", "last_contact_at", "next_action_at", "next_step_date"]);
+        const isoDatePattern = /^\d{4}-\d{2}-\d{2}$/;
+
+        const isValidIsoDate = (value) => {
+          if (!isoDatePattern.test(String(value || ""))) return false;
+          const [year, month, day] = String(value).split("-").map(Number);
+          const date = new Date(Date.UTC(year, month - 1, day));
+          return date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day;
+        };
+
+        const toIsoDate = (value) => {
+          const text = String(value ?? "").trim();
+          if (!text) return "";
+          if (isValidIsoDate(text)) return text;
+
+          const match = text.match(/^(\d{1,2})[.\-/](\d{1,2})[.\-/](\d{4})$/);
+          if (!match) return text;
+
+          const day = match[1].padStart(2, "0");
+          const month = match[2].padStart(2, "0");
+          const iso = `${match[3]}-${month}-${day}`;
+          return isValidIsoDate(iso) ? iso : text;
+        };
+
+        const formatDate = (value, fallback = "") => {
+          const iso = toIsoDate(value);
+          if (!isValidIsoDate(iso)) return value ? String(value) : fallback;
+          const [year, month, day] = iso.split("-");
+          return `${day}.${month}.${year}`;
+        };
+
+        const setDateInput = (input, value) => {
+          if (!input) return;
+          input.value = formatDate(value);
+        };
+
+        const normalizeDateInput = (input) => {
+          if (!input) return;
+          const iso = toIsoDate(input.value);
+          if (isValidIsoDate(iso)) input.value = formatDate(iso);
+        };
+
+        const normalizeDateInputs = (scope = root) => {
+          scope.querySelectorAll("[data-date-field]").forEach((input) => normalizeDateInput(input));
+        };
+
+        const currentToday = () => {
+          normalizeDateInput(elements.today);
+          const iso = toIsoDate(elements.today.value);
+          return isValidIsoDate(iso) ? iso : localToday();
         };
 
         const escapeHtml = (value) =>
@@ -1426,7 +1454,14 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           return payload;
         };
 
-        const formData = (form) => Object.fromEntries(new FormData(form).entries());
+        const formData = (form) => {
+          normalizeDateInputs(form);
+          const payload = Object.fromEntries(new FormData(form).entries());
+          dateFieldNames.forEach((key) => {
+            if (key in payload) payload[key] = toIsoDate(payload[key]);
+          });
+          return payload;
+        };
 
         const normalizeCheckboxes = (form, payload) => {
           form.querySelectorAll("input[type='checkbox'][name]").forEach((input) => {
@@ -1436,6 +1471,8 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
         };
 
         const managerUsers = () => state.users.filter((user) => user.role === "manager");
+
+        const isAdmin = () => state.user?.role === "admin";
 
         const userLabel = (id) => {
           const user = state.users.find((entry) => entry.id === id || entry.username === id);
@@ -1502,7 +1539,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
         };
 
         const rowState = (date, statusValue) => {
-          const today = elements.today.value;
+          const today = currentToday();
           if (statusValue === "Сделано") return "done";
           if (date < today) return "overdue";
           if (date === today) return "today";
@@ -1512,9 +1549,9 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
         const renderPlan = () => {
           elements.planDays.innerHTML = (state.overview?.plan_days || [])
             .map(
-              (row) => `
+                  (row) => `
                 <tr>
-                  <td>${escapeHtml(row.plan_date)}</td>
+                  <td>${escapeHtml(formatDate(row.plan_date))}</td>
                   <td>${escapeHtml(row.focus)}</td>
                   <td>${escapeHtml(row.new_companies)}</td>
                   <td>${escapeHtml(row.contacts)}</td>
@@ -1534,7 +1571,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
                 .map(
                   (action) => `
                     <article>
-                      <strong>${escapeHtml(action.action_date)} / ${escapeHtml(action.company_name)}</strong>
+                      <strong>${escapeHtml(formatDate(action.action_date))} / ${escapeHtml(action.company_name)}</strong>
                       <span>${escapeHtml(action.priority)} · ${escapeHtml(action.action_type)} · ${escapeHtml(action.status)}</span>
                       <span>${escapeHtml(compact(action.task, 160))}</span>
                     </article>
@@ -1565,7 +1602,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           const statusValue = elements.clientStatus.value;
           const segmentValue = elements.clientSegment.value;
           const rows = state.clients.filter((client) => {
-            const matchesSearch = !search || [client.company_name, client.contact_name, client.city].join(" ").toLowerCase().includes(search);
+            const matchesSearch = !search || [client.company_name, client.contact_name, client.city, client.source].join(" ").toLowerCase().includes(search);
             const matchesStatus = !statusValue || client.status === statusValue;
             const matchesSegment = !segmentValue || client.segment === segmentValue;
             return matchesSearch && matchesStatus && matchesSegment;
@@ -1580,16 +1617,22 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
                       <td>${escapeHtml(client.segment)}</td>
                       <td><span class="sales-pill">${escapeHtml(client.status)}</span></td>
                       <td>${escapeHtml(compact(client.next_action, 120))}</td>
-                      <td>${escapeHtml(client.next_action_at || "-")}</td>
+                      <td>${escapeHtml(formatDate(client.next_action_at, "-"))}</td>
                       <td>${escapeHtml(client.potential)}</td>
+                      <td>${escapeHtml(compact(client.source, 90) || "-")}</td>
                       <td>${escapeHtml(userLabel(client.owner_id))}</td>
                       <td>${escapeHtml(client.open_actions_count || 0)} / ${escapeHtml(client.overdue_actions_count || 0)} проср.</td>
-                      <td><button class="sales-button sales-button--ghost" type="button" data-edit-client="${escapeHtml(client.id)}">Ред.</button></td>
+                      <td>
+                        <div class="sales-row-actions">
+                          <button class="sales-button sales-button--ghost" type="button" data-edit-client="${escapeHtml(client.id)}">Ред.</button>
+                          ${isAdmin() ? `<button class="sales-button sales-button--danger" type="button" data-delete-client="${escapeHtml(client.id)}">Удалить</button>` : ""}
+                        </div>
+                      </td>
                     </tr>
                   `
                 )
                 .join("")
-            : `<tr><td colspan="9">Клиенты не найдены.</td></tr>`;
+            : `<tr><td colspan="10">Клиенты не найдены.</td></tr>`;
         };
 
         const selectedActionClient = () => state.clients.find((client) => client.id === elements.actionClientSelect.value);
@@ -1618,15 +1661,20 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
                 .map(
                   (action) => `
                     <tr data-state="${rowState(action.action_date, action.status)}">
-                      <td>${escapeHtml(action.action_date)}</td>
+                      <td>${escapeHtml(formatDate(action.action_date))}</td>
                       <td><strong>${escapeHtml(action.company_name)}</strong><br /><span>${escapeHtml(action.contact_name || "")}</span></td>
                       <td>${escapeHtml(action.priority)}</td>
                       <td>${escapeHtml(action.action_type)}</td>
                       <td>${escapeHtml(compact(action.task, 150))}</td>
                       <td><span class="sales-pill">${escapeHtml(action.status)}</span></td>
-                      <td>${escapeHtml(compact(action.next_step, 120))}<br /><span>${escapeHtml(action.next_step_date || "")}</span></td>
+                      <td>${escapeHtml(compact(action.next_step, 120))}<br /><span>${escapeHtml(formatDate(action.next_step_date))}</span></td>
                       <td>${escapeHtml(userLabel(action.owner_id))}</td>
-                      <td><button class="sales-button sales-button--ghost" type="button" data-edit-action="${escapeHtml(action.id)}">Ред.</button></td>
+                      <td>
+                        <div class="sales-row-actions">
+                          <button class="sales-button sales-button--ghost" type="button" data-edit-action="${escapeHtml(action.id)}">Ред.</button>
+                          ${isAdmin() ? `<button class="sales-button sales-button--danger" type="button" data-delete-action="${escapeHtml(action.id)}">Удалить</button>` : ""}
+                        </div>
+                      </td>
                     </tr>
                   `
                 )
@@ -1641,7 +1689,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
                 .map(
                   (week) => `
                     <tr data-week-id="${escapeHtml(week.id)}" data-week-start="${escapeHtml(week.week_start)}" data-manager-id="${escapeHtml(week.manager_id)}">
-                      <td>${escapeHtml(week.week_start)}</td>
+                      <td>${escapeHtml(formatDate(week.week_start))}</td>
                       <td>${escapeHtml(userLabel(week.manager_id))}</td>
                       <td>${escapeHtml(week.new_companies || 0)}</td>
                       <td>${escapeHtml(week.done_actions || 0)}</td>
@@ -1671,7 +1719,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
         };
 
         const loadOverview = async () => {
-          state.overview = await requestJson(endpoint("/api/sales/overview", { today: elements.today.value }));
+          state.overview = await requestJson(endpoint("/api/sales/overview", { today: currentToday() }));
         };
 
         const loadClients = async () => {
@@ -1680,7 +1728,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
         };
 
         const actionParams = () => ({
-          today: elements.today.value,
+          today: currentToday(),
           mode: elements.actionMode.value,
           status: elements.actionFilterStatus.value,
           action_type: elements.actionFilterType.value,
@@ -1699,28 +1747,29 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           status(`Обновлено: ${new Date().toLocaleTimeString("ru-RU")}`, "success");
         };
 
-        const loadAllSafely = async () => {
-          try {
-            await loadAll();
-          } catch (error) {
-            renderAll();
-            status(error.message || "Не удалось загрузить данные.", "error");
-          }
+        const openClientDetails = () => {
+          elements.clientDetailsPanel.hidden = false;
+          elements.clientDetailsPanel.scrollIntoView({ block: "start", behavior: "smooth" });
         };
 
-        const resetClientForm = () => {
+        const closeClientDetails = () => {
+          elements.clientDetailsPanel.hidden = true;
+        };
+
+        const resetClientForm = ({ close = false } = {}) => {
           elements.clientForm.reset();
           elements.clientForm.elements.id.value = "";
           elements.clientForm.elements.status.value = "Новый";
           elements.clientForm.elements.potential.value = "Средний";
           renderOwnerControls();
           elements.clientFormTitle.textContent = "Новый клиент";
+          if (close) closeClientDetails();
         };
 
         const resetActionForm = () => {
           elements.actionForm.reset();
           elements.actionForm.elements.id.value = "";
-          elements.actionForm.elements.action_date.value = elements.today.value;
+          setDateInput(elements.actionForm.elements.action_date, currentToday());
           elements.actionForm.elements.priority.value = "Средний";
           elements.actionForm.elements.action_type.value = "Звонок";
           elements.actionForm.elements.status.value = "Запланировано";
@@ -1731,9 +1780,12 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
         const fillClientForm = (client) => {
           resetClientForm();
           Object.entries(client).forEach(([key, value]) => {
-            if (elements.clientForm.elements[key]) elements.clientForm.elements[key].value = value || "";
+            if (elements.clientForm.elements[key]) {
+              elements.clientForm.elements[key].value = dateFieldNames.has(key) ? formatDate(value) : value || "";
+            }
           });
           elements.clientFormTitle.textContent = client.company_name || "Клиент";
+          openClientDetails();
           setTab("clients");
         };
 
@@ -1744,11 +1796,11 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
               if (elements.actionForm.elements[key].type === "checkbox") {
                 elements.actionForm.elements[key].checked = Boolean(value);
               } else {
-                elements.actionForm.elements[key].value = value || "";
+                elements.actionForm.elements[key].value = dateFieldNames.has(key) ? formatDate(value) : value || "";
               }
             }
           });
-          elements.actionFormTitle.textContent = `${action.company_name} / ${action.action_date}`;
+          elements.actionFormTitle.textContent = `${action.company_name} / ${formatDate(action.action_date)}`;
           updateActionClientSummary();
           setTab("actions");
         };
@@ -1765,7 +1817,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
             method: "POST",
             body: JSON.stringify(payload)
           });
-          resetClientForm();
+          resetClientForm({ close: true });
           await loadAll();
         };
 
@@ -1784,7 +1836,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
 
         const quickAdd = async (form) => {
           const payload = formData(form);
-          const client = await requestJson("/api/sales/clients", {
+          await requestJson("/api/sales/clients", {
             method: "POST",
             body: JSON.stringify({
               company_name: payload.company_name,
@@ -1792,27 +1844,17 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
               contact_name: payload.contact_name,
               status: "Новый",
               potential: payload.potential,
-              next_action: payload.task,
-              next_action_at: payload.action_date,
-              source: "Ручное добавление"
-            })
-          });
-          await requestJson("/api/sales/actions", {
-            method: "POST",
-            body: JSON.stringify({
-              action_date: payload.action_date,
-              client_id: client.client.id,
-              priority: payload.potential,
-              action_type: "Звонок",
-              task: payload.task,
-              status: "Запланировано"
+              next_action: payload.next_action,
+              next_action_at: payload.next_action_at,
+              owner_id: payload.owner_id,
+              source: payload.source || "Ручное добавление"
             })
           });
           form.reset();
-          form.elements.action_date.value = elements.today.value;
+          setDateInput(form.elements.next_action_at, currentToday());
           renderOwnerControls();
           await loadAll();
-          status("Компания и первое действие добавлены.", "success");
+          status("Клиент добавлен. Действия ведутся во вкладке «Действия».", "success");
         };
 
         const login = async (form) => {
@@ -1824,13 +1866,11 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
               body: JSON.stringify(formData(form))
             });
             setAuthenticated(session);
+            await loadAll();
           } catch (error) {
             elements.loginStatus.textContent = error.message || "Не удалось войти.";
             elements.loginStatus.dataset.mode = "error";
-            return;
           }
-
-          await loadAllSafely();
         };
 
         const logout = async () => {
@@ -1856,13 +1896,31 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
         };
 
         const exportXlsx = () => {
-          window.location.href = endpoint("/api/sales/export", { today: elements.today.value });
+          window.location.href = endpoint("/api/sales/export", { today: currentToday() });
         };
 
         const importPrototype = async () => {
           await requestJson("/api/sales/import-prototype", { method: "POST", body: "{}" });
           await loadAll();
           status("Прототип импортирован без дублей.", "success");
+        };
+
+        const deleteClient = async (client) => {
+          if (!window.confirm(`Удалить клиента "${client.company_name}"?\nВсе связанные действия по этому клиенту тоже будут удалены.\nЭто действие нельзя отменить.`)) return;
+
+          await requestJson(endpoint("/api/sales/clients", { id: client.id }), { method: "DELETE" });
+          if (elements.clientForm.elements.id.value === client.id) resetClientForm({ close: true });
+          await loadAll();
+          status(`Клиент удалён: ${client.company_name}`, "success");
+        };
+
+        const deleteAction = async (action) => {
+          if (!window.confirm(`Удалить действие по "${action.company_name}" от ${formatDate(action.action_date)}?\nЭто действие нельзя отменить.`)) return;
+
+          await requestJson(endpoint("/api/sales/actions", { id: action.id }), { method: "DELETE" });
+          if (elements.actionForm.elements.id.value === action.id) resetActionForm();
+          await loadAll();
+          status(`Действие удалено: ${action.company_name}`, "success");
         };
 
         root.addEventListener("click", (event) => {
@@ -1886,6 +1944,20 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
             return;
           }
 
+          const deleteClientButton = event.target.closest("[data-delete-client]");
+          if (deleteClientButton) {
+            const client = state.clients.find((entry) => entry.id === deleteClientButton.dataset.deleteClient);
+            if (client) deleteClient(client).catch((error) => status(error.message, "error"));
+            return;
+          }
+
+          const deleteActionButton = event.target.closest("[data-delete-action]");
+          if (deleteActionButton) {
+            const action = state.actions.find((entry) => entry.id === deleteActionButton.dataset.deleteAction);
+            if (action) deleteAction(action).catch((error) => status(error.message, "error"));
+            return;
+          }
+
           const saveWeekButton = event.target.closest("[data-save-week]");
           if (saveWeekButton) {
             saveWeek(saveWeekButton.closest("tr")).catch((error) => status(error.message, "error"));
@@ -1897,7 +1969,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           login(elements.loginForm);
         });
         elements.logout.addEventListener("click", logout);
-        elements.refresh.addEventListener("click", loadAllSafely);
+        elements.refresh.addEventListener("click", () => loadAll().catch((error) => status(error.message, "error")));
         elements.quickAddForm.addEventListener("submit", (event) => {
           event.preventDefault();
           quickAdd(elements.quickAddForm).catch((error) => status(error.message, "error"));
@@ -1910,7 +1982,14 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           event.preventDefault();
           saveAction(elements.actionForm).catch((error) => status(error.message, "error"));
         });
-        elements.clientReset.addEventListener("click", resetClientForm);
+        elements.clientOpenDetails.addEventListener("click", () => {
+          resetClientForm();
+          openClientDetails();
+        });
+        elements.clientClose.addEventListener("click", () => {
+          resetClientForm({ close: true });
+        });
+        elements.clientReset.addEventListener("click", () => resetClientForm());
         elements.actionReset.addEventListener("click", resetActionForm);
         elements.actionClientSelect.addEventListener("change", updateActionClientSummary);
         elements.exportXlsx.addEventListener("click", exportXlsx);
@@ -1935,16 +2014,21 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           element.addEventListener("change", renderClients);
         });
 
-        elements.today.value = localToday();
-        elements.quickAddForm.elements.action_date.value = elements.today.value;
+        root.querySelectorAll("[data-date-field]").forEach((input) => {
+          input.addEventListener("blur", () => normalizeDateInput(input));
+          input.addEventListener("change", () => normalizeDateInput(input));
+        });
+
+        setDateInput(elements.today, localToday());
+        setDateInput(elements.quickAddForm.elements.next_action_at, currentToday());
         updateMobileFilterSummary();
-        resetClientForm();
+        resetClientForm({ close: true });
         resetActionForm();
 
         requestJson("/api/sales/session")
           .then(async (session) => {
             setAuthenticated(session);
-            if (session.authenticated) await loadAllSafely();
+            if (session.authenticated) await loadAll();
           })
           .catch(() => setAuthenticated({ user: null }));
       })();

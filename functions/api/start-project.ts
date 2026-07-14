@@ -309,6 +309,297 @@ function thankYouUrl(payload: ProjectRequest, requestUrl: string, leadId?: strin
   return url;
 }
 
+function salesClientId(leadId: string): string {
+  return `client_site_${leadId.replace(/[^a-z0-9_-]+/gi, "_").slice(0, 80)}`;
+}
+
+function urlHost(value: string): string {
+  try {
+    return new URL(value).hostname.replace(/^www\./, "");
+  } catch {
+    return "";
+  }
+}
+
+function salesPotential(priority: LeadRouting["lead_priority"]): "Высокий" | "Средний" | "Низкий" {
+  if (priority === "high") return "Высокий";
+  if (priority === "low") return "Низкий";
+  return "Средний";
+}
+
+function trackingParams(payload: ProjectRequest, requestUrl: string): Map<string, string> {
+  const params = new Map<string, string>();
+  const add = (key: string, value: string): void => {
+    const text = compact(value, 500);
+    if (key && text && !params.has(key)) params.set(key, text);
+  };
+
+  add("utm_source", payload.utm_source);
+  add("utm_medium", payload.utm_medium);
+  add("utm_campaign", payload.utm_campaign);
+  add("utm_term", payload.utm_term);
+  add("utm_content", payload.utm_content);
+
+  [payload.source_path, payload.landing_page].forEach((path) => {
+    const sourceUrl = safeUrl(path || "", requestUrl);
+    if (!sourceUrl) return;
+    try {
+      const url = new URL(sourceUrl);
+      url.searchParams.forEach((value, key) => add(key, value));
+    } catch {
+      // Source URL is best-effort attribution context.
+    }
+  });
+
+  return params;
+}
+
+function firstTrackingValue(params: Map<string, string>, keys: string[]): string {
+  for (const key of keys) {
+    const value = params.get(key);
+    if (value) return value;
+  }
+  return "";
+}
+
+function salesLeadSource(payload: ProjectRequest, requestUrl: string): string {
+  const sourceUrl = safeUrl(payload.source_path || payload.landing_page || "/", requestUrl);
+  const params = trackingParams(payload, requestUrl);
+  const utmSource = firstTrackingValue(params, ["utm_source"]);
+  const utmMedium = firstTrackingValue(params, ["utm_medium"]);
+  const utmCampaign = firstTrackingValue(params, ["utm_campaign", "campaign", "campaign_name"]);
+  const referrer = urlHost(payload.referrer);
+  let mainSource = "Сайт";
+
+  if (utmSource || utmMedium || utmCampaign) {
+    mainSource = `Реклама: ${[utmSource, utmMedium, utmCampaign || "кампания не указана"].filter(Boolean).join(" / ")}`;
+  } else if (payload.partner_ref) {
+    mainSource = `Партнер: ${payload.partner_ref}`;
+  } else if (referrer) {
+    mainSource = `Реферал: ${referrer}`;
+  } else if (payload.landing_offer) {
+    mainSource = `Сайт / оффер: ${payload.landing_offer}`;
+  } else if (payload.form_variant) {
+    mainSource = `Сайт / форма: ${payload.form_variant}`;
+  } else if (payload.lead_channel) {
+    mainSource = `Сайт / канал: ${payload.lead_channel}`;
+  }
+
+  const details = [
+    payload.landing_offer && !mainSource.includes(payload.landing_offer) ? `оффер: ${payload.landing_offer}` : "",
+    sourceUrl ? `страница: ${sourceUrl}` : ""
+  ];
+
+  return compact([mainSource, ...details].filter(Boolean).join(" · "), 240);
+}
+
+function salesLeadSourceDetails(id: string, payload: ProjectRequest, routing: LeadRouting, requestUrl: string): string {
+  const sourceUrl = safeUrl(payload.source_path || payload.landing_page || "/", requestUrl);
+  const landingUrl = safeUrl(payload.landing_page || payload.source_path || "/", requestUrl);
+  const params = trackingParams(payload, requestUrl);
+  const keyword = firstTrackingValue(params, ["utm_term", "keyword", "kw", "term"]);
+  const ad = firstTrackingValue(params, ["utm_content", "ad", "ad_id", "creative", "creative_id", "adname"]);
+  const campaign = firstTrackingValue(params, ["utm_campaign", "campaign", "campaign_name", "campaignid", "campaign_id"]);
+  const adGroup = firstTrackingValue(params, ["adgroup", "adgroup_id", "adgroupid", "adset", "adset_id"]);
+  const campaignId = firstTrackingValue(params, ["campaignid", "campaign_id"]);
+  const adGroupId = firstTrackingValue(params, ["adgroupid", "adgroup_id", "adset_id"]);
+  const creativeId = firstTrackingValue(params, ["creative", "creative_id", "ad_id", "adid"]);
+  const clickIds = ["gclid", "gbraid", "wbraid", "msclkid", "fbclid", "yclid", "ttclid"]
+    .map((key) => [key, params.get(key)] as const)
+    .filter(([, value]) => Boolean(value));
+  const known = new Set([
+    "utm_source",
+    "utm_medium",
+    "utm_campaign",
+    "utm_term",
+    "utm_content",
+    "campaign",
+    "campaign_name",
+    "campaignid",
+    "campaign_id",
+    "adgroup",
+    "adgroup_id",
+    "adgroupid",
+    "adset",
+    "adset_id",
+    "keyword",
+    "kw",
+    "term",
+    "ad",
+    "ad_id",
+    "creative",
+    "creative_id",
+    "adname",
+    "gclid",
+    "gbraid",
+    "wbraid",
+    "msclkid",
+    "fbclid",
+    "yclid",
+    "ttclid"
+  ]);
+  const otherParams = [...params.entries()]
+    .filter(([key]) => !known.has(key))
+    .map(([key, value]) => `${key}: ${value}`);
+
+  return [
+    `Lead ID: ${id}`,
+    `Тип источника: ${params.size ? "рекламная/трекинговая заявка" : "сайт без UTM"}`,
+    payload.lead_channel ? `Канал: ${payload.lead_channel}` : "",
+    firstTrackingValue(params, ["utm_source"]) ? `UTM source: ${firstTrackingValue(params, ["utm_source"])}` : "",
+    firstTrackingValue(params, ["utm_medium"]) ? `UTM medium: ${firstTrackingValue(params, ["utm_medium"])}` : "",
+    campaign ? `Кампания: ${campaign}` : "",
+    adGroup ? `Группа объявлений: ${adGroup}` : "",
+    keyword ? `Ключевое слово: ${keyword}` : "",
+    ad ? `Объявление / creative: ${ad}` : "",
+    campaignId ? `Campaign ID: ${campaignId}` : "",
+    adGroupId ? `Ad group ID: ${adGroupId}` : "",
+    creativeId ? `Ad ID / creative ID: ${creativeId}` : "",
+    clickIds.length ? `Click ID: ${clickIds.map(([key, value]) => `${key}=${value}`).join(" / ")}` : "",
+    payload.landing_offer ? `Оффер: ${payload.landing_offer}` : "",
+    payload.form_variant ? `Форма: ${payload.form_variant}` : "",
+    sourceUrl ? `Страница заявки: ${sourceUrl}` : "",
+    landingUrl && landingUrl !== sourceUrl ? `Landing page: ${landingUrl}` : "",
+    payload.referrer ? `Referrer: ${payload.referrer}` : "",
+    payload.partner_ref ? `Partner ref: ${payload.partner_ref}` : "",
+    otherParams.length ? `Другие параметры: ${otherParams.join(" / ")}` : "",
+    `Маршрут: ${routing.routing_bucket} / ${routing.next_action}`,
+    `Приоритет: ${routing.lead_priority} / ${routing.lead_score}`
+  ]
+    .filter(Boolean)
+    .join("\n")
+    .slice(0, 4000);
+}
+
+function salesLeadComment(id: string, payload: ProjectRequest, routing: LeadRouting, requestUrl: string): string {
+  const sourceUrl = safeUrl(payload.source_path || payload.landing_page || "/", requestUrl);
+  const utm = [payload.utm_source, payload.utm_medium, payload.utm_campaign].filter(Boolean).join(" / ");
+  return [
+    `Заявка с сайта: ${id}`,
+    payload.project_type ? `Тип: ${payload.project_type}` : "",
+    payload.current_system ? `Текущая система: ${payload.current_system}` : "",
+    payload.business_problem ? `Проблема: ${payload.business_problem}` : "",
+    payload.desired_result ? `Желаемый результат: ${payload.desired_result}` : "",
+    payload.budget ? `Бюджет: ${payload.budget}` : "",
+    payload.timeline ? `Срок: ${payload.timeline}` : "",
+    sourceUrl ? `Страница: ${sourceUrl}` : "",
+    payload.referrer ? `Referrer: ${payload.referrer}` : "",
+    utm ? `UTM: ${utm}` : "",
+    `Маршрут: ${routing.routing_bucket} / ${routing.next_action} / ${routing.lead_priority} (${routing.lead_score})`
+  ]
+    .filter(Boolean)
+    .join("\n")
+    .slice(0, 1800);
+}
+
+async function syncLeadToSalesTracker(
+  env: Env,
+  id: string,
+  createdAt: string,
+  payload: ProjectRequest,
+  routing: LeadRouting,
+  requestUrl: string
+): Promise<void> {
+  const clientId = salesClientId(id);
+  const source = salesLeadSource(payload, requestUrl);
+  const sourceDetails = salesLeadSourceDetails(id, payload, routing, requestUrl);
+  const client = {
+    id: clientId,
+    company_name: payload.company || payload.name || payload.email || "Заявка с сайта",
+    segment: "B2B услуги",
+    website: null,
+    city: null,
+    contact_name: payload.name || null,
+    contact_role: null,
+    contact_details: [payload.email, payload.contact_details].filter(Boolean).join(" / ") || null,
+    source,
+    source_details: sourceDetails,
+    last_contact_at: null,
+    status: "Новый",
+    next_action: "Связаться по заявке с сайта",
+    next_action_at: createdAt.slice(0, 10),
+    potential: salesPotential(routing.lead_priority),
+    comment: salesLeadComment(id, payload, routing, requestUrl),
+    owner_id: "pavel",
+    created_at: createdAt,
+    updated_at: createdAt
+  };
+
+  try {
+    await env.DB.prepare(
+      `INSERT INTO sales_clients (
+        id,
+        company_name,
+        segment,
+        website,
+        city,
+        contact_name,
+        contact_role,
+        contact_details,
+        source,
+        source_details,
+        last_contact_at,
+        status,
+        next_action,
+        next_action_at,
+        potential,
+        comment,
+        owner_id,
+        created_at,
+        updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    )
+      .bind(
+        client.id,
+        client.company_name,
+        client.segment,
+        client.website,
+        client.city,
+        client.contact_name,
+        client.contact_role,
+        client.contact_details,
+        client.source,
+        client.source_details,
+        client.last_contact_at,
+        client.status,
+        client.next_action,
+        client.next_action_at,
+        client.potential,
+        client.comment,
+        client.owner_id,
+        client.created_at,
+        client.updated_at
+      )
+      .run();
+
+    await env.DB.prepare(
+      `INSERT INTO sales_audit_log (
+        id,
+        entity_type,
+        entity_id,
+        action,
+        actor_id,
+        before_json,
+        after_json,
+        created_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+    )
+      .bind(
+        crypto.randomUUID(),
+        "client",
+        client.id,
+        "create_from_site_lead",
+        "system",
+        null,
+        JSON.stringify({ lead_id: id, client }),
+        createdAt
+      )
+      .run();
+  } catch (error) {
+    console.error("Failed to sync project request into sales tracker", error);
+  }
+}
+
 async function notifyLead(
   env: Env,
   id: string,
@@ -713,6 +1004,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     return htmlResponse("Project request could not be stored. Please try again or contact AlfaRank directly.", 500);
   }
 
+  await syncLeadToSalesTracker(env, id, createdAt, payload, routing, request.url);
   await notifyLead(env, id, createdAt, payload, routing, request.url);
 
   return Response.redirect(thankYouUrl(payload, request.url, id), 303);

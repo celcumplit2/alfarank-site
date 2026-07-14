@@ -30,6 +30,7 @@ type ClientPayload = {
   contact_role?: unknown;
   contact_details?: unknown;
   source?: unknown;
+  source_details?: unknown;
   last_contact_at?: unknown;
   status?: unknown;
   next_action?: unknown;
@@ -49,6 +50,7 @@ type ClientRow = {
   contact_role: string | null;
   contact_details: string | null;
   source: string | null;
+  source_details: string | null;
   last_contact_at: string | null;
   status: string;
   next_action: string | null;
@@ -134,7 +136,8 @@ function validateClient(payload: ClientPayload): { data?: Record<string, string 
       contact_name: nullableClean(payload.contact_name, 160),
       contact_role: nullableClean(payload.contact_role, 160),
       contact_details: nullableClean(payload.contact_details, 300),
-      source: nullableClean(payload.source, 160),
+      source: nullableClean(payload.source, 240),
+      source_details: nullableClean(payload.source_details, 4000),
       last_contact_at: safeDate(payload.last_contact_at),
       status,
       next_action: nextAction,
@@ -167,8 +170,9 @@ export const onRequestGet: PagesFunction<SalesEnv> = async ({ request, env }) =>
       LOWER(c.company_name) LIKE LOWER(?)
       OR LOWER(COALESCE(c.contact_name, '')) LIKE LOWER(?)
       OR LOWER(COALESCE(c.city, '')) LIKE LOWER(?)
+      OR LOWER(COALESCE(c.source, '')) LIKE LOWER(?)
     )`);
-    bindings.push(`%${search}%`, `%${search}%`, `%${search}%`);
+    bindings.push(`%${search}%`, `%${search}%`, `%${search}%`, `%${search}%`);
   }
 
   const status = clean(url.searchParams.get("status"), 80);
@@ -259,6 +263,7 @@ export const onRequestPost: PagesFunction<SalesEnv> = async ({ request, env }) =
         contact_role = ?,
         contact_details = ?,
         source = ?,
+        source_details = ?,
         last_contact_at = ?,
         status = ?,
         next_action = ?,
@@ -278,6 +283,7 @@ export const onRequestPost: PagesFunction<SalesEnv> = async ({ request, env }) =
         validation.data.contact_role,
         validation.data.contact_details,
         validation.data.source,
+        validation.data.source_details,
         validation.data.last_contact_at,
         validation.data.status,
         validation.data.next_action,
@@ -307,6 +313,7 @@ export const onRequestPost: PagesFunction<SalesEnv> = async ({ request, env }) =
       contact_role,
       contact_details,
       source,
+      source_details,
       last_contact_at,
       status,
       next_action,
@@ -316,7 +323,7 @@ export const onRequestPost: PagesFunction<SalesEnv> = async ({ request, env }) =
       owner_id,
       created_at,
       updated_at
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   )
     .bind(
       newId,
@@ -328,6 +335,7 @@ export const onRequestPost: PagesFunction<SalesEnv> = async ({ request, env }) =
       validation.data.contact_role,
       validation.data.contact_details,
       validation.data.source,
+      validation.data.source_details,
       validation.data.last_contact_at,
       validation.data.status,
       validation.data.next_action,
