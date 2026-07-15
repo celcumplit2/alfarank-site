@@ -573,6 +573,8 @@ const structuredData = JSON.stringify([
             if (leadId) {
               fetch(`/api/lead-conversion?lead_id=${encodeURIComponent(leadId)}`, {
                 method: "POST",
+                headers: { "content-type": "application/json" },
+                body: "{}",
                 credentials: "same-origin",
                 cache: "no-store"
               })

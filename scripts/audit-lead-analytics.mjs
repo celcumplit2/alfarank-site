@@ -119,6 +119,8 @@ checkIncludes("src/layouts/Layout.astro", "layout only fires thank_you_view on l
   "/start-project\\/thank-you\\/",
   "/api/lead-conversion?lead_id=",
   'method: "POST"',
+  '"content-type": "application/json"',
+  'body: "{}"',
   "result?.verified === true",
   'track("thank_you_view")'
 ]);

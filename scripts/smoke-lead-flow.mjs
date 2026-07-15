@@ -147,28 +147,30 @@ async function submitLead(testCase) {
 async function verifyConversionProof(submission) {
   const endpoint = new URL("/api/lead-conversion", baseUrl);
   endpoint.searchParams.set("lead_id", submission.leadId);
+  const conversionRequest = (cookie = "") => ({
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      ...(cookie ? { cookie } : {})
+    },
+    body: "{}"
+  });
 
-  const withoutCookie = await fetch(endpoint, { method: "POST" });
+  const withoutCookie = await fetch(endpoint, conversionRequest());
   assert(withoutCookie.ok, `${submission.locale}: conversion check without cookie failed`);
   assert(
     (await withoutCookie.json())?.verified === false,
     `${submission.locale}: lead id alone incorrectly verified a conversion`
   );
 
-  const verified = await fetch(endpoint, {
-    method: "POST",
-    headers: { cookie: submission.conversionCookie }
-  });
+  const verified = await fetch(endpoint, conversionRequest(submission.conversionCookie));
   assert(verified.ok, `${submission.locale}: valid conversion proof failed`);
   assert(
     (await verified.json())?.verified === true,
     `${submission.locale}: valid conversion proof was rejected`
   );
 
-  const replay = await fetch(endpoint, {
-    method: "POST",
-    headers: { cookie: submission.conversionCookie }
-  });
+  const replay = await fetch(endpoint, conversionRequest(submission.conversionCookie));
   assert(replay.ok, `${submission.locale}: replay conversion check failed`);
   assert(
     (await replay.json())?.verified === false,
