@@ -59,14 +59,19 @@ const xDefaultLocale = activeAlternateLocaleSet.has("en") ? "en" : (activeAltern
 const xDefaultUrl = new URL(localizePath(basePath, xDefaultLocale), siteUrl).toString();
 const clientTranslations = JSON.stringify(getClientTranslations(locale));
 const gtmId = import.meta.env.PUBLIC_GTM_ID;
-const gaId = gtmId ? "" : import.meta.env.PUBLIC_GA_ID || import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
+const gaId = import.meta.env.PUBLIC_GA_ID || import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
+const analyticsEnabled = !/^(?:\/(?:ro|ru))?\/(?:access|internal|lead-desk|projects|sales)(?:\/|$)/.test(
+  Astro.url.pathname
+);
+const useGtm = analyticsEnabled && Boolean(gtmId);
+const useDirectGa = analyticsEnabled && !gtmId && Boolean(gaId);
 const plausibleDomain = import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN;
 const plausibleSrc = import.meta.env.PUBLIC_PLAUSIBLE_SRC || "https://plausible.io/js/script.js";
 const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
-const gtmScript = gtmId
+const gtmScript = useGtm
   ? `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer',${JSON.stringify(gtmId)});`
   : "";
-const gaScript = gaId
+const gaScript = useDirectGa
   ? `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.gtag=gtag;gtag('js',new Date());gtag('config',${JSON.stringify(gaId)},{send_page_view:false});`
   : "";
 const baseStructuredData = [
@@ -93,7 +98,11 @@ const structuredData = JSON.stringify([
 ---
 
 <!doctype html>
-<html lang={locale}>
+<html
+  lang={locale}
+  data-analytics-enabled={analyticsEnabled ? "true" : "false"}
+  data-analytics-mode={useGtm ? "gtm" : useDirectGa ? "gtag" : "none"}
+>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -121,14 +130,14 @@ const structuredData = JSON.stringify([
     <script is:inline type="application/ld+json" set:html={structuredData}></script>
     <script is:inline type="application/json" id="alfarank-translations" set:html={clientTranslations}></script>
     {gtmScript && <script is:inline set:html={gtmScript}></script>}
-    {gaId && <script async src={`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(gaId)}`}></script>}
+    {useDirectGa && <script async src={`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(gaId)}`}></script>}
     {gaScript && <script is:inline set:html={gaScript}></script>}
     {plausibleDomain && <script defer data-domain={plausibleDomain} src={plausibleSrc}></script>}
     {turnstileSiteKey && <script is:inline async defer src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>}
     <title>{pageTitle}</title>
   </head>
   <body>
-    {gtmId && (
+    {useGtm && (
       <noscript>
         <iframe
           src={`https://www.googletagmanager.com/ns.html?id=${encodeURIComponent(gtmId)}`}
@@ -504,7 +513,10 @@ const structuredData = JSON.stringify([
             window.dataLayer.push(payload);
             window.dispatchEvent(new CustomEvent("alfarank:analytics", { detail: payload }));
 
-            if (typeof window.gtag === "function") {
+            if (
+              document.documentElement.dataset.analyticsMode === "gtag" &&
+              typeof window.gtag === "function"
+            ) {
               window.gtag("event", eventName, payload.alfarank);
             }
 
@@ -648,7 +660,9 @@ const structuredData = JSON.stringify([
         };
 
         setupNativeSelects();
-        setupLeadAnalytics();
+        if (document.documentElement.dataset.analyticsEnabled === "true") {
+          setupLeadAnalytics();
+        }
 
         try {
         const ruExactFallback = {
