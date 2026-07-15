@@ -135,7 +135,45 @@ async function submitLead(testCase) {
   const formVariant = new URL(location, baseUrl).searchParams.get("form_variant") || "";
   assert(formVariant === testCase.formVariant, `${testCase.locale}: redirect is missing form_variant`);
 
-  return { ...testCase, email, leadId, location };
+  const conversionCookie = response.headers.get("set-cookie") || "";
+  assert(
+    conversionCookie.includes("alfarank_lead_conversion="),
+    `${testCase.locale}: redirect is missing one-time conversion cookie`
+  );
+
+  return { ...testCase, email, leadId, location, conversionCookie: conversionCookie.split(";", 1)[0] };
+}
+
+async function verifyConversionProof(submission) {
+  const endpoint = new URL("/api/lead-conversion", baseUrl);
+  endpoint.searchParams.set("lead_id", submission.leadId);
+
+  const withoutCookie = await fetch(endpoint, { method: "POST" });
+  assert(withoutCookie.ok, `${submission.locale}: conversion check without cookie failed`);
+  assert(
+    (await withoutCookie.json())?.verified === false,
+    `${submission.locale}: lead id alone incorrectly verified a conversion`
+  );
+
+  const verified = await fetch(endpoint, {
+    method: "POST",
+    headers: { cookie: submission.conversionCookie }
+  });
+  assert(verified.ok, `${submission.locale}: valid conversion proof failed`);
+  assert(
+    (await verified.json())?.verified === true,
+    `${submission.locale}: valid conversion proof was rejected`
+  );
+
+  const replay = await fetch(endpoint, {
+    method: "POST",
+    headers: { cookie: submission.conversionCookie }
+  });
+  assert(replay.ok, `${submission.locale}: replay conversion check failed`);
+  assert(
+    (await replay.json())?.verified === false,
+    `${submission.locale}: conversion proof was accepted more than once`
+  );
 }
 
 async function updateLeadStatus(submission) {
@@ -412,8 +450,9 @@ async function main() {
 
   for (const testCase of cases) {
     const submission = await submitLead(testCase);
+    await verifyConversionProof(submission);
     submissions.push(submission);
-    console.log(`${testCase.locale}: stored ${submission.email}`);
+    console.log(`${testCase.locale}: stored ${submission.email}; one-time conversion proof verified`);
   }
 
   const lifecycleUpdate = await updateLeadStatus(submissions[0]);

@@ -309,6 +309,16 @@ function thankYouUrl(payload: ProjectRequest, requestUrl: string, leadId?: strin
   return url;
 }
 
+async function hashConversionToken(token: string): Promise<string> {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(token));
+  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
+}
+
+function conversionCookie(leadId: string, token: string, requestUrl: string): string {
+  const secure = new URL(requestUrl).protocol === "https:" ? "; Secure" : "";
+  return `alfarank_lead_conversion=${leadId}.${token}; Path=/; Max-Age=600; HttpOnly; SameSite=Lax${secure}`;
+}
+
 function salesClientId(leadId: string): string {
   return `client_site_${leadId.replace(/[^a-z0-9_-]+/gi, "_").slice(0, 80)}`;
 }
@@ -921,6 +931,8 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   }
 
   const id = crypto.randomUUID();
+  const conversionToken = crypto.randomUUID();
+  const conversionTokenHash = await hashConversionToken(conversionToken);
   const createdAt = new Date().toISOString();
   const routing = leadRouting(payload);
 
@@ -959,9 +971,10 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
         lead_priority,
         routing_bucket,
         next_action,
+        conversion_token_hash,
         status,
         created_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'new', ?)`
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'new', ?)`
     )
       .bind(
         id,
@@ -996,6 +1009,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
         routing.lead_priority,
         routing.routing_bucket,
         routing.next_action,
+        conversionTokenHash,
         createdAt
       )
       .run();
@@ -1007,7 +1021,14 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   await syncLeadToSalesTracker(env, id, createdAt, payload, routing, request.url);
   await notifyLead(env, id, createdAt, payload, routing, request.url);
 
-  return Response.redirect(thankYouUrl(payload, request.url, id), 303);
+  return new Response(null, {
+    status: 303,
+    headers: {
+      location: thankYouUrl(payload, request.url, id).toString(),
+      "set-cookie": conversionCookie(id, conversionToken, request.url),
+      "cache-control": "no-store"
+    }
+  });
 };
 
 export const onRequestGet: PagesFunction = async () => {

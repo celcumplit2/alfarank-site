@@ -42,6 +42,7 @@ function routeHtml(routePath, label, needles) {
 }
 
 const requiredFiles = [
+  "functions/api/lead-conversion.ts",
   "src/layouts/Layout.astro",
   "src/pages/start-project.astro",
   "src/pages/lp/[slug].astro",
@@ -116,7 +117,18 @@ checkIncludes("src/layouts/Layout.astro", "layout infers partner, paid, campaign
 
 checkIncludes("src/layouts/Layout.astro", "layout only fires thank_you_view on localized thank-you routes", [
   "/start-project\\/thank-you\\/",
+  "/api/lead-conversion?lead_id=",
+  'method: "POST"',
+  "result?.verified === true",
   'track("thank_you_view")'
+]);
+
+checkIncludes("functions/api/lead-conversion.ts", "conversion endpoint requires and consumes one-time server proof", [
+  "alfarank_lead_conversion",
+  "conversion_token_hash = ?",
+  "conversion_recorded_at IS NULL",
+  "Number(result.meta.changes || 0) === 1",
+  "onRequestPost"
 ]);
 
 const trackedFormFields = [

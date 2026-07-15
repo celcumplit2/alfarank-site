@@ -568,11 +568,22 @@ const structuredData = JSON.stringify([
           document.documentElement.dataset.leadAnalytics = "ready";
           track("page_view");
 
-          if (
-            /^(?:\/(?:ro|ru))?\/start-project\/thank-you\/$/.test(window.location.pathname) &&
-            new URLSearchParams(window.location.search).has("lead_id")
-          ) {
-            track("thank_you_view");
+          if (/^(?:\/(?:ro|ru))?\/start-project\/thank-you\/$/.test(window.location.pathname)) {
+            const leadId = new URLSearchParams(window.location.search).get("lead_id");
+            if (leadId) {
+              fetch(`/api/lead-conversion?lead_id=${encodeURIComponent(leadId)}`, {
+                method: "POST",
+                credentials: "same-origin",
+                cache: "no-store"
+              })
+                .then((response) => (response.ok ? response.json() : { verified: false }))
+                .then((result) => {
+                  if (result?.verified === true) track("thank_you_view");
+                })
+                .catch(() => {
+                  // A failed verification must never be counted as a conversion.
+                });
+            }
           }
 
           document.addEventListener("click", (event) => {

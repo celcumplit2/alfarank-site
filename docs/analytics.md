@@ -102,6 +102,14 @@ conversion back to the originating page, campaign, form, language, and
 partner/referral code without exposing the submitter's name, email, referrer,
 or project details in the URL.
 
+The URL is not proof of conversion. A successful submission also creates a
+short-lived `HttpOnly` cookie containing a random one-time token whose SHA-256
+hash is stored with the lead. The thank-you page sends the `lead_id` to
+`POST /api/lead-conversion`; the endpoint atomically accepts the matching token
+only when `conversion_recorded_at` is still empty. Only a verified response
+pushes `thank_you_view` to the data layer. Missing cookies, copied URLs,
+mismatched IDs, and replays do not emit the conversion event.
+
 Supporting funnel events:
 
 - `cta_click`
