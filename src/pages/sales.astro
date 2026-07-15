@@ -764,6 +764,22 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
         gap: 6px;
       }
 
+      .sales-table-actions {
+        display: inline-flex;
+        flex-wrap: nowrap;
+        gap: 4px;
+        align-items: center;
+        justify-content: flex-end;
+        white-space: nowrap;
+      }
+
+      .sales-table-actions .sales-button {
+        min-height: 28px;
+        padding: 4px 7px;
+        font-size: 11px;
+        line-height: 1;
+      }
+
       .sales-filter-toggle {
         position: relative;
         display: none;
@@ -1436,6 +1452,14 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
       th:first-child,
       td:first-child {
         white-space: nowrap;
+      }
+
+      th:last-child,
+      td:last-child {
+        width: 118px;
+        padding-right: 8px;
+        padding-left: 8px;
+        text-align: right;
       }
 
       tr[data-state="overdue"] td {
@@ -2387,9 +2411,9 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
                       <td>${escapeHtml(userLabel(client.owner_id))}</td>
                       <td>${escapeHtml(client.open_actions_count || 0)} / ${escapeHtml(client.overdue_actions_count || 0)} проср.</td>
                       <td>
-                        <div class="sales-row-actions">
-                          <button class="sales-button sales-button--ghost" type="button" data-edit-client="${escapeHtml(client.id)}">Ред.</button>
-                          ${isAdmin() ? `<button class="sales-button sales-button--danger" type="button" data-delete-client="${escapeHtml(client.id)}">Удалить</button>` : ""}
+                        <div class="sales-table-actions">
+                          <button class="sales-button sales-button--ghost" type="button" data-edit-client="${escapeHtml(client.id)}" title="Редактировать клиента" aria-label="Редактировать клиента ${escapeHtml(client.company_name)}">Ред.</button>
+                          ${isAdmin() ? `<button class="sales-button sales-button--danger" type="button" data-delete-client="${escapeHtml(client.id)}" title="Удалить клиента" aria-label="Удалить клиента ${escapeHtml(client.company_name)}">Удал.</button>` : ""}
                         </div>
                       </td>
                     </tr>
@@ -2435,9 +2459,9 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
                       <td>${escapeHtml(compact(action.next_step, 120))}<br /><span>${escapeHtml(formatDate(action.next_step_date))}</span></td>
                       <td>${escapeHtml(userLabel(action.owner_id))}</td>
                       <td>
-                        <div class="sales-row-actions">
-                          <button class="sales-button sales-button--ghost" type="button" data-edit-action="${escapeHtml(action.id)}">Ред.</button>
-                          ${isAdmin() ? `<button class="sales-button sales-button--danger" type="button" data-delete-action="${escapeHtml(action.id)}">Удалить</button>` : ""}
+                        <div class="sales-table-actions">
+                          <button class="sales-button sales-button--ghost" type="button" data-edit-action="${escapeHtml(action.id)}" title="Редактировать действие" aria-label="Редактировать действие по ${escapeHtml(action.company_name)}">Ред.</button>
+                          ${isAdmin() ? `<button class="sales-button sales-button--danger" type="button" data-delete-action="${escapeHtml(action.id)}" title="Удалить действие" aria-label="Удалить действие по ${escapeHtml(action.company_name)}">Удал.</button>` : ""}
                         </div>
                       </td>
                     </tr>
