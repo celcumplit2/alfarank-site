@@ -31,7 +31,11 @@ async function loadRemote(url) {
 
 const source = readText("src/pages/sales.astro");
 const globalCss = readText("src/styles/global.css");
+const nativeSelects = readText("src/scripts/native-selects.js");
 const startProjectApi = readText("functions/api/start-project.ts");
+const salesClientsApi = readText("functions/api/sales/clients.ts");
+const salesActionsApi = readText("functions/api/sales/actions.ts");
+const salesSharedApi = readText("functions/api/sales/_shared.ts");
 const sourceDetailsMigration = readText("migrations/0015_sales_client_source_details.sql");
 
 assert(source.includes('<body class="sales-body">'), "Sales page must keep the sales-body scope.");
@@ -50,11 +54,75 @@ assert(
 );
 assert(source.includes("data-export-xlsx"), "Sales page must keep the XLSX export control.");
 assert(source.includes("data-delete-client") && source.includes("data-delete-action"), "Sales page must keep admin delete controls.");
+assert(
+  salesSharedApi.includes("canDeleteSalesData") &&
+    salesClientsApi.includes("export const onRequestDelete") &&
+    salesClientsApi.includes("canDeleteSalesData(user)") &&
+    salesClientsApi.includes("DELETE FROM sales_actions WHERE client_id = ?") &&
+    salesClientsApi.includes("DELETE FROM sales_clients WHERE id = ?") &&
+    salesActionsApi.includes("export const onRequestDelete") &&
+    salesActionsApi.includes("canDeleteSalesData(user)") &&
+    salesActionsApi.includes("DELETE FROM sales_actions WHERE id = ?"),
+  "Sales delete buttons must have working admin-only DELETE API handlers for clients and actions."
+);
 assert(source.includes("<th>Источник / кампания</th>"), "Clients table must expose the source/campaign column.");
 assert(source.includes('name="source"'), "Client cards must expose the source field.");
 assert(source.includes('name="source_details"'), "Extended client card must expose full attribution details.");
+assert(
+  source.includes('class="sales-root"') &&
+    source.includes(".sales-root::-webkit-scrollbar") &&
+    source.includes(".sales-root::-webkit-scrollbar-button") &&
+    source.includes(".sales-root::-webkit-scrollbar-button:single-button") &&
+    source.includes("opacity: 0 !important") &&
+    source.includes("background-image: none !important") &&
+    source.includes(".sales-page-scrollbar") &&
+    source.includes(".sales-custom-scrollbar") &&
+    source.includes("setupCustomScrollbars") &&
+    source.includes(".sales-table-wrap::-webkit-scrollbar") &&
+    source.includes("scrollbar-width: none") &&
+    source.includes(".sales-app *::-webkit-scrollbar") &&
+    source.includes(".sales-app .ar-native-select__menu::-webkit-scrollbar") &&
+    source.includes(".sales-body::-webkit-scrollbar-button") &&
+    source.includes("scrollbar-color:") &&
+    source.includes("scrollbar-gutter: stable"),
+  "Sales UI must keep custom AlfaRank scrollbars instead of native Windows scrollbars."
+);
+assert(
+  source.includes(".sales-check input") &&
+    source.includes("appearance: none") &&
+    source.includes(".sales-check input:checked"),
+  "Sales checkbox controls must keep custom AlfaRank styling."
+);
+assert(
+  source.includes(".sales-panel:has(.ar-native-select.is-open)") &&
+    source.includes(".sales-filterbar:has(.ar-native-select.is-open)") &&
+    source.includes(".sales-login-card:has(.ar-native-select.is-open)") &&
+    source.includes(".sales-panel.has-open-native-select") &&
+    source.includes(".sales-app .ar-native-select.is-open") &&
+    source.includes(".sales-app .ar-native-select__menu") &&
+    nativeSelects.includes("layerHostSelector") &&
+    nativeSelects.includes("has-open-native-select") &&
+    hasRule(source, ".sales-panel", ["position: relative", "overflow: visible"]),
+  "Sales custom select menus must stay above adjacent panels when open."
+);
 assert(sourceDetailsMigration.includes("source_details"), "Sales D1 migration must add source_details.");
 assert(source.includes("data-client-details-panel hidden"), "Extended client card must be hidden until opened from the short card or client row.");
+assert(
+  source.includes("sales-form--quick is-collapsed") &&
+    source.includes("sales-form--action is-collapsed") &&
+    source.includes("data-quick-toggle") &&
+    source.includes("data-action-toggle") &&
+    source.includes(".sales-form.is-collapsed > :not(.sales-panel-head)") &&
+    source.includes("setQuickFormExpanded(false)") &&
+    source.includes("setActionFormExpanded(false)"),
+  "New client and new action forms must be collapsed by default and expand only on click."
+);
+assert(
+  source.includes(".sales-form--quick[hidden]") &&
+    source.includes("elements.quickAddForm.hidden = true") &&
+    source.includes("elements.quickAddForm.hidden = false"),
+  "Clients tab must show either the short client card or the extended client card, never both at once."
+);
 assert(!source.includes("первое действие"), "Clients flow must use client next step wording, not first-action wording.");
 assert(!source.includes("Компания + первое действие"), "Clients tab must not present client creation as first-action creation.");
 assert(!source.includes("первое действие добавлены"), "Quick client creation must not create an action.");
@@ -81,6 +149,15 @@ assert(
   !/<input[^>]*data-date-field[^>]*type="date"|<input[^>]*type="date"[^>]*data-date-field/.test(source),
   "Sales date fields must stay text inputs to avoid the native browser calendar regression."
 );
+assert(
+  source.includes(".sales-date-picker") &&
+    source.includes(".sales-date-trigger") &&
+    source.includes("setupDatePickers") &&
+    source.includes("renderDatePicker") &&
+    source.includes("data-date-today") &&
+    source.includes("data-date-value"),
+  "Sales date fields must use the custom AlfaRank calendar instead of a plain text-only date control."
+);
 
 const distPath = "dist/sales/index.html";
 if (existsSync(resolve(root, distPath))) {
@@ -106,6 +183,7 @@ if (remoteUrl) {
   assert(!html.includes("Компания + первое действие"), "Remote /sales/ page still has first-action client copy.");
   assert(!html.includes("payload.task"), "Remote /sales/ page still creates an action from the quick client form.");
   assert(!html.includes('type="date"'), "Remote /sales/ page still ships native date inputs.");
+  assert(html.includes("sales-date-picker"), "Remote /sales/ page is missing the custom AlfaRank calendar.");
 }
 
 console.log("Sales page QA passed. Still run browser screenshot QA before production deploy.");

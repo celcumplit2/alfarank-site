@@ -141,6 +141,10 @@ export function canSeeAll(user: SalesUser): boolean {
   return user.role === "director" || user.role === "admin";
 }
 
+export function canDeleteSalesData(user: SalesUser): boolean {
+  return user.role === "admin";
+}
+
 export function isManagerId(id: string): boolean {
   return MANAGER_IDS.includes(id);
 }

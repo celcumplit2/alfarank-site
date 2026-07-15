@@ -6,6 +6,7 @@
   const selectsToSync = new Set();
   let selectCounter = 0;
   const selectSelector = "select:not([multiple]):not([size]):not([data-native-select]):not([data-ar-native-enhanced])";
+  const layerHostSelector = ".sales-panel, .sales-filterbar, .sales-login-card";
 
   const optionLabel = (option) => {
     if (!option) return "";
@@ -33,6 +34,7 @@
     if (!wrapper) return;
     const button = wrapper.querySelector(".ar-native-select__button");
     wrapper.classList.remove("is-open");
+    wrapper.closest(layerHostSelector)?.classList.remove("has-open-native-select");
     button?.setAttribute("aria-expanded", "false");
   };
 
@@ -129,6 +131,7 @@
     renderOptions(select);
     closeAllSelects(instance.wrapper);
     instance.wrapper.classList.add("is-open");
+    instance.wrapper.closest(layerHostSelector)?.classList.add("has-open-native-select");
     instance.button.setAttribute("aria-expanded", "true");
     if (focusSelected) {
       requestAnimationFrame(() => focusOption(instance));

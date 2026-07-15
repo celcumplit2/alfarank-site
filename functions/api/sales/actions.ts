@@ -5,6 +5,7 @@ import {
   PRIORITIES,
   TERMINAL_CLIENT_STATUSES,
   boolValue,
+  canDeleteSalesData,
   canSeeAll,
   clean,
   jsonResponse,
@@ -521,4 +522,33 @@ export const onRequestPost: PagesFunction<SalesEnv> = async ({ request, env }) =
   const created = await findAction(env, user, newId);
   await recordAudit(env, user, "action", newId, "create", null, created);
   return jsonResponse({ action: created }, 201);
+};
+
+export const onRequestDelete: PagesFunction<SalesEnv> = async ({ request, env }) => {
+  const userOrResponse = await requireSalesUser(request, env);
+  if (userOrResponse instanceof Response) return userOrResponse;
+
+  const user = userOrResponse;
+  if (!canDeleteSalesData(user)) {
+    return jsonResponse({ error: "Удаление доступно только администратору." }, 403);
+  }
+
+  const url = new URL(request.url);
+  const id = clean(url.searchParams.get("id"), 120);
+  if (!id) {
+    return jsonResponse({ error: "Не указано действие для удаления." }, 400);
+  }
+
+  const existing = await findAction(env, user, id);
+  if (!existing) {
+    return jsonResponse({ error: "Действие не найдено." }, 404);
+  }
+
+  await env.DB.prepare("DELETE FROM sales_actions WHERE id = ?").bind(id).run();
+  await recordAudit(env, user, "action", id, "delete", existing, null);
+
+  return jsonResponse({
+    deleted: true,
+    action_id: id
+  });
 };

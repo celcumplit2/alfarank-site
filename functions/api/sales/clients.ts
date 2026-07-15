@@ -2,6 +2,7 @@ import {
   CLIENT_STATUSES,
   PRIORITIES,
   SEGMENTS,
+  canDeleteSalesData,
   canSeeAll,
   clean,
   isActiveClientStatus,
@@ -351,4 +352,51 @@ export const onRequestPost: PagesFunction<SalesEnv> = async ({ request, env }) =
   const created = await findClient(env, user, newId, today);
   await recordAudit(env, user, "client", newId, "create", null, created);
   return jsonResponse({ client: created }, 201);
+};
+
+export const onRequestDelete: PagesFunction<SalesEnv> = async ({ request, env }) => {
+  const userOrResponse = await requireSalesUser(request, env);
+  if (userOrResponse instanceof Response) return userOrResponse;
+
+  const user = userOrResponse;
+  if (!canDeleteSalesData(user)) {
+    return jsonResponse({ error: "Удаление доступно только администратору." }, 403);
+  }
+
+  const url = new URL(request.url);
+  const id = clean(url.searchParams.get("id"), 120);
+  if (!id) {
+    return jsonResponse({ error: "Не указан клиент для удаления." }, 400);
+  }
+
+  const today = todayParam(request);
+  const existing = await findClient(env, user, id, today);
+  if (!existing) {
+    return jsonResponse({ error: "Клиент не найден." }, 404);
+  }
+
+  const relatedActions = await env.DB.prepare("SELECT * FROM sales_actions WHERE client_id = ?").bind(id).all();
+  const actionRows = relatedActions.results || [];
+
+  await env.DB.prepare("DELETE FROM sales_actions WHERE client_id = ?").bind(id).run();
+  await env.DB.prepare("DELETE FROM sales_clients WHERE id = ?").bind(id).run();
+
+  await recordAudit(
+    env,
+    user,
+    "client",
+    id,
+    "delete",
+    {
+      ...existing,
+      related_actions: actionRows
+    },
+    null
+  );
+
+  return jsonResponse({
+    deleted: true,
+    client_id: id,
+    actions_deleted: actionRows.length
+  });
 };

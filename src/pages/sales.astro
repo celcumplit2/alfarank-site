@@ -13,7 +13,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
 ---
 
 <!doctype html>
-<html lang="ru">
+<html lang="ru" class="sales-root">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -173,13 +173,16 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
 
         <section class="sales-view" data-view="clients">
           <div class="sales-grid sales-grid--forms">
-            <form class="sales-panel sales-form sales-form--quick" data-quick-add-form>
+            <form class="sales-panel sales-form sales-form--quick is-collapsed" data-quick-add-form>
               <div class="sales-panel-head">
                 <div>
                   <span class="sales-eyebrow">Короткая карточка</span>
                   <h2>Новый клиент</h2>
                 </div>
-                <button class="sales-button sales-button--ghost" type="button" data-client-open-details>Расширенная карточка</button>
+                <div class="sales-row-actions">
+                  <button class="sales-button sales-button--primary" type="button" data-quick-toggle aria-expanded="false">Развернуть</button>
+                  <button class="sales-button sales-button--ghost" type="button" data-client-open-details>Расширенная карточка</button>
+                </div>
               </div>
               <label>
                 <span>Компания</span>
@@ -334,13 +337,16 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
 
         <section class="sales-view" data-view="actions">
           <div class="sales-grid sales-grid--forms">
-            <form class="sales-panel sales-form sales-form--action" data-action-form>
+            <form class="sales-panel sales-form sales-form--action is-collapsed" data-action-form>
               <div class="sales-panel-head">
                 <div>
                   <span class="sales-eyebrow">Действие</span>
                   <h2 data-action-form-title>Новое действие</h2>
                 </div>
-                <button class="sales-button sales-button--ghost" type="button" data-action-reset>Очистить</button>
+                <div class="sales-row-actions">
+                  <button class="sales-button sales-button--primary" type="button" data-action-toggle aria-expanded="false">Развернуть</button>
+                  <button class="sales-button sales-button--ghost" type="button" data-action-reset>Очистить</button>
+                </div>
               </div>
               <input name="id" type="hidden" />
               <label>
@@ -865,9 +871,290 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
         font-variant-numeric: tabular-nums;
       }
 
+      .sales-date-control {
+        position: relative;
+        width: 100%;
+      }
+
+      .sales-date-control .sales-date-input {
+        padding-right: 46px;
+        cursor: pointer;
+      }
+
+      .sales-date-trigger {
+        position: absolute;
+        top: 1px;
+        right: 1px;
+        bottom: 1px;
+        display: grid;
+        width: 40px;
+        place-items: center;
+        border: 0;
+        border-left: 1px solid rgba(105, 230, 255, 0.18);
+        border-radius: 0 3px 3px 0;
+        color: #69e6ff;
+        background: linear-gradient(180deg, rgba(105, 230, 255, 0.1), rgba(255, 203, 104, 0.08));
+        cursor: pointer;
+      }
+
+      .sales-date-trigger:hover,
+      .sales-date-trigger:focus-visible {
+        color: #ffcb68;
+        background: linear-gradient(180deg, rgba(105, 230, 255, 0.18), rgba(255, 203, 104, 0.14));
+        outline: none;
+      }
+
+      .sales-date-trigger span {
+        position: relative;
+        display: block;
+        width: 17px;
+        height: 17px;
+        border: 2px solid currentColor;
+        border-radius: 4px;
+      }
+
+      .sales-date-trigger span::before,
+      .sales-date-trigger span::after {
+        position: absolute;
+        content: "";
+      }
+
+      .sales-date-trigger span::before {
+        top: 4px;
+        left: 2px;
+        right: 2px;
+        border-top: 2px solid currentColor;
+      }
+
+      .sales-date-trigger span::after {
+        top: 8px;
+        left: 3px;
+        width: 3px;
+        height: 3px;
+        background: currentColor;
+        box-shadow:
+          5px 0 0 currentColor,
+          10px 0 0 currentColor,
+          0 5px 0 currentColor,
+          5px 5px 0 currentColor;
+        opacity: 0.9;
+      }
+
+      .sales-date-picker {
+        position: fixed;
+        z-index: 120;
+        width: min(316px, calc(100vw - 16px));
+        padding: 10px;
+        border: 1px solid rgba(105, 230, 255, 0.36);
+        border-radius: 8px;
+        color: #f6fbff;
+        background:
+          linear-gradient(180deg, rgba(11, 43, 70, 0.98), rgba(3, 18, 38, 0.98)),
+          rgba(2, 13, 28, 0.98);
+        box-shadow:
+          0 22px 48px rgba(0, 0, 0, 0.42),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+      }
+
+      .sales-date-picker[hidden] {
+        display: none !important;
+      }
+
+      .sales-date-picker__head,
+      .sales-date-picker__actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .sales-date-picker__title {
+        flex: 1;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 900;
+      }
+
+      .sales-date-picker__nav,
+      .sales-date-picker__action {
+        min-height: 34px;
+        border: 1px solid rgba(216, 251, 255, 0.18);
+        border-radius: 5px;
+        color: #d7f6ff;
+        background: rgba(2, 13, 28, 0.54);
+        font-weight: 900;
+        cursor: pointer;
+      }
+
+      .sales-date-picker__nav {
+        width: 38px;
+        font-size: 18px;
+        line-height: 1;
+      }
+
+      .sales-date-picker__action {
+        flex: 1;
+        padding: 8px 10px;
+      }
+
+      .sales-date-picker__nav:hover,
+      .sales-date-picker__nav:focus-visible,
+      .sales-date-picker__action:hover,
+      .sales-date-picker__action:focus-visible,
+      .sales-date-day:hover,
+      .sales-date-day:focus-visible {
+        border-color: rgba(105, 230, 255, 0.76);
+        color: #ffffff;
+        background: rgba(105, 230, 255, 0.16);
+        outline: none;
+      }
+
+      .sales-date-picker__week,
+      .sales-date-picker__days {
+        display: grid;
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        gap: 4px;
+      }
+
+      .sales-date-picker__week {
+        margin: 10px 0 5px;
+      }
+
+      .sales-date-picker__weekday {
+        color: rgba(191, 232, 255, 0.72);
+        font-size: 11px;
+        font-weight: 900;
+        text-align: center;
+        text-transform: uppercase;
+      }
+
+      .sales-date-day {
+        min-height: 36px;
+        border: 1px solid rgba(216, 251, 255, 0.13);
+        border-radius: 5px;
+        color: #f6fbff;
+        background: rgba(2, 13, 28, 0.45);
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+        cursor: pointer;
+      }
+
+      .sales-date-day.is-muted {
+        color: rgba(191, 232, 255, 0.46);
+        background: rgba(2, 13, 28, 0.28);
+      }
+
+      .sales-date-day.is-today {
+        border-color: rgba(105, 230, 255, 0.72);
+        box-shadow: inset 0 0 0 1px rgba(105, 230, 255, 0.28);
+      }
+
+      .sales-date-day.is-selected {
+        border-color: rgba(255, 203, 104, 0.95);
+        color: #061326;
+        background: linear-gradient(180deg, #ffdb8a, #ffbf4f);
+        box-shadow: 0 0 18px rgba(255, 203, 104, 0.24);
+      }
+
+      .sales-date-picker__actions {
+        margin-top: 10px;
+      }
+
       textarea {
         min-height: 74px;
         resize: vertical;
+      }
+
+      .sales-root,
+      .sales-body,
+      .sales-app,
+      .sales-app * {
+        scrollbar-color: rgba(105, 230, 255, 0.56) rgba(2, 13, 28, 0.62);
+        scrollbar-width: thin;
+      }
+
+      .sales-root::-webkit-scrollbar,
+      .sales-body::-webkit-scrollbar,
+      .sales-app *::-webkit-scrollbar {
+        width: 12px;
+        height: 12px;
+      }
+
+      .sales-root::-webkit-scrollbar-track,
+      .sales-body::-webkit-scrollbar-track,
+      .sales-app *::-webkit-scrollbar-track {
+        border: 1px solid rgba(216, 251, 255, 0.1);
+        border-radius: 999px;
+        background: rgba(2, 13, 28, 0.64);
+        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18);
+      }
+
+      .sales-root::-webkit-scrollbar-thumb,
+      .sales-body::-webkit-scrollbar-thumb,
+      .sales-app *::-webkit-scrollbar-thumb {
+        border: 2px solid rgba(2, 13, 28, 0.82);
+        border-radius: 999px;
+        background: linear-gradient(90deg, rgba(105, 230, 255, 0.88), rgba(255, 203, 104, 0.88));
+        box-shadow: 0 0 14px rgba(105, 230, 255, 0.22);
+      }
+
+      .sales-root::-webkit-scrollbar-thumb:hover,
+      .sales-body::-webkit-scrollbar-thumb:hover,
+      .sales-app *::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(90deg, #69e6ff, #ffcb68);
+      }
+
+      .sales-root::-webkit-scrollbar-corner,
+      .sales-body::-webkit-scrollbar-corner,
+      .sales-app *::-webkit-scrollbar-corner {
+        background: rgba(2, 13, 28, 0.72);
+      }
+
+      .sales-root::-webkit-scrollbar-button,
+      .sales-body::-webkit-scrollbar-button,
+      .sales-app *::-webkit-scrollbar-button {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+        border: 0;
+        background: transparent;
+        background-image: none !important;
+        color: transparent !important;
+        opacity: 0 !important;
+        -webkit-appearance: none;
+      }
+
+      .sales-root::-webkit-scrollbar-button:single-button,
+      .sales-body::-webkit-scrollbar-button:single-button,
+      .sales-app *::-webkit-scrollbar-button:single-button,
+      .sales-root::-webkit-scrollbar-button:vertical:start:decrement,
+      .sales-body::-webkit-scrollbar-button:vertical:start:decrement,
+      .sales-app *::-webkit-scrollbar-button:vertical:start:decrement,
+      .sales-root::-webkit-scrollbar-button:vertical:end:increment,
+      .sales-body::-webkit-scrollbar-button:vertical:end:increment,
+      .sales-app *::-webkit-scrollbar-button:vertical:end:increment,
+      .sales-root::-webkit-scrollbar-button:horizontal:start:decrement,
+      .sales-body::-webkit-scrollbar-button:horizontal:start:decrement,
+      .sales-app *::-webkit-scrollbar-button:horizontal:start:decrement,
+      .sales-root::-webkit-scrollbar-button:horizontal:end:increment,
+      .sales-body::-webkit-scrollbar-button:horizontal:end:increment,
+      .sales-app *::-webkit-scrollbar-button:horizontal:end:increment {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+        border: 0 !important;
+        background: transparent !important;
+        background-image: none !important;
+        color: transparent !important;
+        opacity: 0 !important;
+        -webkit-appearance: none;
+      }
+
+      .sales-app textarea::-webkit-resizer {
+        border-width: 0 0 9px 9px;
+        border-style: solid;
+        border-color: transparent transparent rgba(105, 230, 255, 0.55) transparent;
+        background: rgba(2, 13, 28, 0.74);
       }
 
       input:focus,
@@ -937,8 +1224,19 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
       }
 
       .sales-panel {
+        position: relative;
         min-width: 0;
         padding: 14px;
+        overflow: visible;
+      }
+
+      .sales-panel:has(.ar-native-select.is-open),
+      .sales-filterbar:has(.ar-native-select.is-open),
+      .sales-login-card:has(.ar-native-select.is-open),
+      .sales-panel.has-open-native-select,
+      .sales-filterbar.has-open-native-select,
+      .sales-login-card.has-open-native-select {
+        z-index: 180;
       }
 
       .sales-panel-head {
@@ -964,6 +1262,19 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }
 
+      .sales-form.is-collapsed {
+        grid-template-columns: 1fr;
+      }
+
+      .sales-form.is-collapsed > :not(.sales-panel-head) {
+        display: none !important;
+      }
+
+      .sales-form.is-collapsed .sales-panel-head {
+        margin-bottom: 0;
+      }
+
+      .sales-form--quick[hidden],
       .sales-client-details[hidden] {
         display: none !important;
       }
@@ -983,8 +1294,46 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
       }
 
       .sales-check input {
+        position: relative;
+        display: grid;
+        flex: 0 0 18px;
         width: 18px;
         min-height: 18px;
+        appearance: none;
+        border: 1px solid rgba(216, 251, 255, 0.28);
+        border-radius: 4px;
+        padding: 0;
+        background:
+          linear-gradient(135deg, rgba(105, 230, 255, 0.14), rgba(255, 203, 104, 0.06)),
+          rgba(2, 13, 28, 0.72);
+        box-shadow: inset 0 0 0 1px rgba(2, 13, 28, 0.4);
+        place-items: center;
+        cursor: pointer;
+      }
+
+      .sales-check input::after {
+        content: "";
+        width: 8px;
+        height: 5px;
+        border-left: 2px solid #061d36;
+        border-bottom: 2px solid #061d36;
+        opacity: 0;
+        transform: rotate(-45deg) translateY(-1px);
+      }
+
+      .sales-check input:checked {
+        border-color: rgba(255, 203, 104, 0.78);
+        background: linear-gradient(135deg, #69e6ff, #ffcb68);
+        box-shadow: 0 0 0 2px rgba(255, 203, 104, 0.13), 0 0 18px rgba(105, 230, 255, 0.2);
+      }
+
+      .sales-check input:checked::after {
+        opacity: 1;
+      }
+
+      .sales-check input:focus-visible {
+        outline: 2px solid rgba(255, 203, 104, 0.45);
+        outline-offset: 2px;
       }
 
       .sales-client-lock {
@@ -1014,11 +1363,43 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
         overflow-x: auto;
         border: 1px solid rgba(216, 251, 255, 0.12);
         border-radius: 4px;
+        background:
+          linear-gradient(180deg, rgba(8, 34, 62, 0.22), rgba(2, 13, 28, 0.1)),
+          rgba(2, 13, 28, 0.14);
+        scrollbar-gutter: stable;
       }
 
       .sales-table-wrap--tall {
         max-height: 820px;
         overflow: auto;
+      }
+
+      .sales-app .ar-native-select__menu {
+        z-index: 220;
+        border-color: rgba(105, 230, 255, 0.2);
+        background:
+          linear-gradient(180deg, rgba(7, 41, 70, 0.96), rgba(2, 13, 28, 0.98)),
+          rgba(2, 13, 28, 0.96);
+        scrollbar-gutter: stable;
+      }
+
+      .sales-app .ar-native-select.is-open {
+        z-index: 220;
+      }
+
+      .sales-app .ar-native-select__menu::-webkit-scrollbar {
+        width: 12px;
+      }
+
+      .sales-app .ar-native-select__menu::-webkit-scrollbar-track {
+        border-radius: 0;
+        background: rgba(2, 13, 28, 0.7);
+      }
+
+      .sales-app .ar-native-select__menu::-webkit-scrollbar-thumb {
+        border: 3px solid rgba(2, 13, 28, 0.82);
+        border-radius: 999px;
+        background: linear-gradient(180deg, rgba(105, 230, 255, 0.9), rgba(255, 203, 104, 0.84));
       }
 
       table {
@@ -1200,6 +1581,76 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
         background: rgba(2, 13, 28, 0.92);
       }
 
+      .sales-root,
+      .sales-body,
+      .sales-table-wrap {
+        scrollbar-width: none;
+      }
+
+      .sales-root::-webkit-scrollbar,
+      .sales-body::-webkit-scrollbar,
+      .sales-table-wrap::-webkit-scrollbar {
+        width: 0 !important;
+        height: 0 !important;
+      }
+
+      .sales-page-scrollbar,
+      .sales-custom-scrollbar {
+        border: 1px solid rgba(105, 230, 255, 0.16);
+        border-radius: 999px;
+        background: rgba(2, 13, 28, 0.42);
+        box-shadow: inset 0 0 0 1px rgba(2, 13, 28, 0.42);
+      }
+
+      .sales-page-scrollbar {
+        position: fixed;
+        top: 4px;
+        right: 4px;
+        bottom: 4px;
+        z-index: 70;
+        width: 10px;
+      }
+
+      .sales-custom-scrollbar {
+        position: relative;
+        z-index: 5;
+        height: 10px;
+        margin: -14px 12px 8px;
+      }
+
+      .sales-page-scrollbar[hidden],
+      .sales-custom-scrollbar[hidden] {
+        display: none !important;
+      }
+
+      .sales-page-scrollbar__thumb,
+      .sales-custom-scrollbar__thumb {
+        position: absolute;
+        left: 1px;
+        top: 1px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, rgba(105, 230, 255, 0.92), rgba(255, 203, 104, 0.88));
+        box-shadow: 0 0 16px rgba(105, 230, 255, 0.28);
+        cursor: grab;
+        touch-action: none;
+      }
+
+      .sales-page-scrollbar__thumb {
+        right: 1px;
+        min-height: 36px;
+      }
+
+      .sales-custom-scrollbar__thumb {
+        bottom: 1px;
+        min-width: 36px;
+      }
+
+      .sales-page-scrollbar__thumb:active,
+      .sales-custom-scrollbar__thumb:active {
+        cursor: grabbing;
+        background: linear-gradient(90deg, #69e6ff, #ffcb68);
+      }
+
       @media (max-width: 1100px) {
         .sales-login,
         .sales-grid--dashboard,
@@ -1308,6 +1759,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           upcomingActions: root.querySelector("[data-upcoming-actions]"),
           auditList: root.querySelector("[data-audit-list]"),
           quickAddForm: root.querySelector("[data-quick-add-form]"),
+          quickToggle: root.querySelector("[data-quick-toggle]"),
           quickOwnerField: root.querySelector("[data-quick-owner-field]"),
           quickOwnerSelect: root.querySelector("[data-quick-owner-select]"),
           clientForm: root.querySelector("[data-client-form]"),
@@ -1324,6 +1776,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           clientsTable: root.querySelector("[data-clients-table]"),
           actionForm: root.querySelector("[data-action-form]"),
           actionFormTitle: root.querySelector("[data-action-form-title]"),
+          actionToggle: root.querySelector("[data-action-toggle]"),
           actionReset: root.querySelector("[data-action-reset]"),
           actionClientSelect: root.querySelector("[data-action-client-select]"),
           actionClientSummary: root.querySelector("[data-action-client-summary]"),
@@ -1331,6 +1784,112 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           weeklyTable: root.querySelector("[data-weekly-table]"),
           exportXlsx: root.querySelector("[data-export-xlsx]"),
           importPrototype: root.querySelector("[data-import-prototype]")
+        };
+
+        const scrollbarState = {
+          frame: 0,
+          page: null,
+          horizontal: new WeakMap()
+        };
+
+        const clampNumber = (value, min, max) => Math.min(Math.max(value, min), max);
+
+        const updatePageScrollbar = () => {
+          const rail = scrollbarState.page;
+          if (!rail) return;
+          const thumb = rail.querySelector(".sales-page-scrollbar__thumb");
+          const scrollable = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+          rail.hidden = scrollable <= 2;
+          if (rail.hidden || !thumb) return;
+
+          const railHeight = rail.clientHeight;
+          const thumbHeight = clampNumber((window.innerHeight / document.documentElement.scrollHeight) * railHeight, 36, railHeight);
+          const maxThumbTop = Math.max(0, railHeight - thumbHeight - 2);
+          const thumbTop = scrollable ? (window.scrollY / scrollable) * maxThumbTop : 0;
+          thumb.style.height = `${thumbHeight}px`;
+          thumb.style.transform = `translateY(${thumbTop}px)`;
+        };
+
+        const updateHorizontalScrollbar = (wrap) => {
+          const rail = scrollbarState.horizontal.get(wrap);
+          if (!rail) return;
+          const thumb = rail.querySelector(".sales-custom-scrollbar__thumb");
+          const scrollable = Math.max(0, wrap.scrollWidth - wrap.clientWidth);
+          rail.hidden = scrollable <= 2;
+          if (rail.hidden || !thumb) return;
+
+          const railWidth = rail.clientWidth;
+          const thumbWidth = clampNumber((wrap.clientWidth / wrap.scrollWidth) * railWidth, 36, railWidth);
+          const maxThumbLeft = Math.max(0, railWidth - thumbWidth - 2);
+          const thumbLeft = scrollable ? (wrap.scrollLeft / scrollable) * maxThumbLeft : 0;
+          thumb.style.width = `${thumbWidth}px`;
+          thumb.style.transform = `translateX(${thumbLeft}px)`;
+        };
+
+        const queueCustomScrollbarUpdate = () => {
+          if (scrollbarState.frame) cancelAnimationFrame(scrollbarState.frame);
+          scrollbarState.frame = requestAnimationFrame(() => {
+            scrollbarState.frame = 0;
+            updatePageScrollbar();
+            root.querySelectorAll(".sales-table-wrap").forEach(updateHorizontalScrollbar);
+          });
+        };
+
+        const dragScrollbar = (event, axis, getRail, onMove) => {
+          event.preventDefault();
+          const rail = getRail();
+          if (!rail) return;
+          const move = (moveEvent) => {
+            const rect = rail.getBoundingClientRect();
+            const size = axis === "x" ? rect.width : rect.height;
+            const point = axis === "x" ? moveEvent.clientX - rect.left : moveEvent.clientY - rect.top;
+            onMove(clampNumber(point / Math.max(1, size), 0, 1));
+          };
+          const stop = () => {
+            window.removeEventListener("pointermove", move);
+            window.removeEventListener("pointerup", stop);
+          };
+          move(event);
+          window.addEventListener("pointermove", move);
+          window.addEventListener("pointerup", stop, { once: true });
+        };
+
+        const setupPageScrollbar = () => {
+          if (scrollbarState.page) return;
+          const rail = document.createElement("div");
+          rail.className = "sales-page-scrollbar";
+          rail.innerHTML = `<div class="sales-page-scrollbar__thumb"></div>`;
+          document.body.appendChild(rail);
+          scrollbarState.page = rail;
+          rail.addEventListener("pointerdown", (event) => {
+            dragScrollbar(event, "y", () => rail, (ratio) => {
+              const scrollable = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+              window.scrollTo({ top: ratio * scrollable, behavior: "auto" });
+            });
+          });
+          window.addEventListener("scroll", queueCustomScrollbarUpdate, { passive: true });
+          window.addEventListener("resize", queueCustomScrollbarUpdate);
+        };
+
+        const setupHorizontalScrollbar = (wrap) => {
+          if (scrollbarState.horizontal.has(wrap)) return;
+          const rail = document.createElement("div");
+          rail.className = "sales-custom-scrollbar sales-custom-scrollbar--x";
+          rail.innerHTML = `<div class="sales-custom-scrollbar__thumb"></div>`;
+          wrap.insertAdjacentElement("afterend", rail);
+          scrollbarState.horizontal.set(wrap, rail);
+          wrap.addEventListener("scroll", () => updateHorizontalScrollbar(wrap), { passive: true });
+          rail.addEventListener("pointerdown", (event) => {
+            dragScrollbar(event, "x", () => rail, (ratio) => {
+              wrap.scrollLeft = ratio * Math.max(0, wrap.scrollWidth - wrap.clientWidth);
+            });
+          });
+        };
+
+        const setupCustomScrollbars = () => {
+          setupPageScrollbar();
+          root.querySelectorAll(".sales-table-wrap").forEach(setupHorizontalScrollbar);
+          queueCustomScrollbarUpdate();
         };
 
         const localToday = () => {
@@ -1383,6 +1942,211 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
 
         const normalizeDateInputs = (scope = root) => {
           scope.querySelectorAll("[data-date-field]").forEach((input) => normalizeDateInput(input));
+        };
+
+        const isoToDate = (value) => {
+          const iso = toIsoDate(value);
+          if (!isValidIsoDate(iso)) return null;
+          const [year, month, day] = iso.split("-").map(Number);
+          return new Date(year, month - 1, day);
+        };
+
+        const dateToIso = (date) => {
+          const year = date.getFullYear();
+          const month = String(date.getMonth() + 1).padStart(2, "0");
+          const day = String(date.getDate()).padStart(2, "0");
+          return `${year}-${month}-${day}`;
+        };
+
+        const monthTitle = (date) => {
+          const title = date.toLocaleDateString("ru-RU", { month: "long", year: "numeric" });
+          return title.charAt(0).toUpperCase() + title.slice(1);
+        };
+
+        const datePickerState = {
+          input: null,
+          month: null,
+          picker: null
+        };
+
+        const closeDatePicker = () => {
+          const { input, picker } = datePickerState;
+          if (input) input.setAttribute("aria-expanded", "false");
+          if (picker) picker.hidden = true;
+          datePickerState.input = null;
+        };
+
+        const placeDatePicker = () => {
+          const { input, picker } = datePickerState;
+          if (!input || !picker || picker.hidden) return;
+          const rect = input.getBoundingClientRect();
+          const width = Math.min(316, window.innerWidth - 16);
+          picker.style.width = `${width}px`;
+          const pickerHeight = picker.offsetHeight || 360;
+          const left = clampNumber(rect.left, 8, Math.max(8, window.innerWidth - width - 8));
+          let top = rect.bottom + 8;
+          if (top + pickerHeight > window.innerHeight - 8) top = rect.top - pickerHeight - 8;
+          picker.style.left = `${left}px`;
+          picker.style.top = `${Math.max(8, top)}px`;
+        };
+
+        const renderDatePicker = () => {
+          const { input, picker, month } = datePickerState;
+          if (!input || !picker || !month) return;
+          const title = picker.querySelector("[data-date-title]");
+          const days = picker.querySelector("[data-date-days]");
+          const selectedIso = isValidIsoDate(toIsoDate(input.value)) ? toIsoDate(input.value) : "";
+          const todayIso = localToday();
+          const firstDay = new Date(month.getFullYear(), month.getMonth(), 1);
+          const gridStart = new Date(firstDay);
+          gridStart.setDate(1 - ((firstDay.getDay() + 6) % 7));
+
+          title.textContent = monthTitle(month);
+          days.innerHTML = "";
+
+          for (let index = 0; index < 42; index += 1) {
+            const day = new Date(gridStart);
+            day.setDate(gridStart.getDate() + index);
+            const iso = dateToIso(day);
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "sales-date-day";
+            button.textContent = String(day.getDate());
+            button.dataset.dateValue = iso;
+            button.setAttribute("aria-label", formatDate(iso));
+            button.classList.toggle("is-muted", day.getMonth() !== month.getMonth());
+            button.classList.toggle("is-today", iso === todayIso);
+            button.classList.toggle("is-selected", iso === selectedIso);
+            if (iso === selectedIso) button.setAttribute("aria-current", "date");
+            days.appendChild(button);
+          }
+
+          placeDatePicker();
+        };
+
+        const ensureDatePicker = () => {
+          if (datePickerState.picker) return datePickerState.picker;
+
+          const picker = document.createElement("div");
+          picker.className = "sales-date-picker";
+          picker.hidden = true;
+          picker.setAttribute("role", "dialog");
+          picker.setAttribute("aria-label", "Календарь");
+          picker.innerHTML = `
+            <div class="sales-date-picker__head">
+              <button class="sales-date-picker__nav" type="button" aria-label="Предыдущий месяц" data-date-prev>&lt;</button>
+              <strong class="sales-date-picker__title" data-date-title></strong>
+              <button class="sales-date-picker__nav" type="button" aria-label="Следующий месяц" data-date-next>&gt;</button>
+            </div>
+            <div class="sales-date-picker__week" aria-hidden="true">
+              <span class="sales-date-picker__weekday">Пн</span>
+              <span class="sales-date-picker__weekday">Вт</span>
+              <span class="sales-date-picker__weekday">Ср</span>
+              <span class="sales-date-picker__weekday">Чт</span>
+              <span class="sales-date-picker__weekday">Пт</span>
+              <span class="sales-date-picker__weekday">Сб</span>
+              <span class="sales-date-picker__weekday">Вс</span>
+            </div>
+            <div class="sales-date-picker__days" data-date-days></div>
+            <div class="sales-date-picker__actions">
+              <button class="sales-date-picker__action" type="button" data-date-today>Сегодня</button>
+              <button class="sales-date-picker__action" type="button" data-date-close>Закрыть</button>
+            </div>
+          `;
+          document.body.appendChild(picker);
+          datePickerState.picker = picker;
+
+          picker.addEventListener("click", (event) => {
+            const moveMonth = event.target.closest("[data-date-prev], [data-date-next]");
+            if (moveMonth) {
+              const direction = moveMonth.hasAttribute("data-date-prev") ? -1 : 1;
+              datePickerState.month = new Date(datePickerState.month.getFullYear(), datePickerState.month.getMonth() + direction, 1);
+              renderDatePicker();
+              return;
+            }
+
+            if (event.target.closest("[data-date-today]")) {
+              const today = localToday();
+              setDateInput(datePickerState.input, today);
+              datePickerState.input.dispatchEvent(new Event("input", { bubbles: true }));
+              datePickerState.input.dispatchEvent(new Event("change", { bubbles: true }));
+              closeDatePicker();
+              return;
+            }
+
+            if (event.target.closest("[data-date-close]")) {
+              closeDatePicker();
+              return;
+            }
+
+            const dayButton = event.target.closest("[data-date-value]");
+            if (dayButton) {
+              setDateInput(datePickerState.input, dayButton.dataset.dateValue);
+              datePickerState.input.dispatchEvent(new Event("input", { bubbles: true }));
+              datePickerState.input.dispatchEvent(new Event("change", { bubbles: true }));
+              closeDatePicker();
+            }
+          });
+
+          document.addEventListener("pointerdown", (event) => {
+            if (picker.hidden) return;
+            if (picker.contains(event.target) || event.target.closest(".sales-date-control")) return;
+            closeDatePicker();
+          });
+          window.addEventListener("resize", placeDatePicker);
+          window.addEventListener("scroll", placeDatePicker, true);
+          return picker;
+        };
+
+        const openDatePicker = (input) => {
+          const picker = ensureDatePicker();
+          normalizeDateInput(input);
+          const selectedDate = isoToDate(input.value) || isoToDate(localToday());
+          datePickerState.input = input;
+          datePickerState.month = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
+          input.setAttribute("aria-expanded", "true");
+          picker.hidden = false;
+          renderDatePicker();
+          placeDatePicker();
+        };
+
+        const setupDatePickerField = (input) => {
+          if (!input || input.dataset.datePickerReady === "true") return;
+          input.dataset.datePickerReady = "true";
+          input.setAttribute("aria-haspopup", "dialog");
+          input.setAttribute("aria-expanded", "false");
+
+          const wrapper = document.createElement("div");
+          wrapper.className = "sales-date-control";
+          input.insertAdjacentElement("beforebegin", wrapper);
+          wrapper.appendChild(input);
+
+          const trigger = document.createElement("button");
+          trigger.className = "sales-date-trigger";
+          trigger.type = "button";
+          trigger.setAttribute("aria-label", "Открыть календарь");
+          trigger.innerHTML = `<span aria-hidden="true"></span>`;
+          wrapper.appendChild(trigger);
+
+          input.addEventListener("focus", () => openDatePicker(input));
+          input.addEventListener("click", () => openDatePicker(input));
+          input.addEventListener("blur", () => normalizeDateInput(input));
+          input.addEventListener("change", () => normalizeDateInput(input));
+          input.addEventListener("keydown", (event) => {
+            if (event.key === "ArrowDown") {
+              event.preventDefault();
+              openDatePicker(input);
+            }
+            if (event.key === "Escape") closeDatePicker();
+          });
+          trigger.addEventListener("click", () => {
+            input.focus();
+            openDatePicker(input);
+          });
+        };
+
+        const setupDatePickers = () => {
+          root.querySelectorAll("[data-date-field]").forEach(setupDatePickerField);
         };
 
         const currentToday = () => {
@@ -1633,6 +2397,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
                 )
                 .join("")
             : `<tr><td colspan="10">Клиенты не найдены.</td></tr>`;
+          queueCustomScrollbarUpdate();
         };
 
         const selectedActionClient = () => state.clients.find((client) => client.id === elements.actionClientSelect.value);
@@ -1680,6 +2445,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
                 )
                 .join("")
             : `<tr><td colspan="9">Нет действий для выбранного режима.</td></tr>`;
+          queueCustomScrollbarUpdate();
         };
 
         const renderWeekly = () => {
@@ -1716,6 +2482,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           renderClientSelect();
           renderActions();
           renderWeekly();
+          setupCustomScrollbars();
         };
 
         const loadOverview = async () => {
@@ -1747,13 +2514,34 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           status(`Обновлено: ${new Date().toLocaleTimeString("ru-RU")}`, "success");
         };
 
+        const setCollapsibleFormExpanded = (form, toggle, expanded) => {
+          form.classList.toggle("is-collapsed", !expanded);
+          if (toggle) {
+            toggle.setAttribute("aria-expanded", String(expanded));
+            toggle.textContent = expanded ? "Свернуть" : "Развернуть";
+          }
+          queueCustomScrollbarUpdate();
+        };
+
+        const setQuickFormExpanded = (expanded) => {
+          setCollapsibleFormExpanded(elements.quickAddForm, elements.quickToggle, expanded);
+        };
+
+        const setActionFormExpanded = (expanded) => {
+          setCollapsibleFormExpanded(elements.actionForm, elements.actionToggle, expanded);
+        };
+
         const openClientDetails = () => {
+          setQuickFormExpanded(false);
+          elements.quickAddForm.hidden = true;
           elements.clientDetailsPanel.hidden = false;
           elements.clientDetailsPanel.scrollIntoView({ block: "start", behavior: "smooth" });
         };
 
         const closeClientDetails = () => {
           elements.clientDetailsPanel.hidden = true;
+          elements.quickAddForm.hidden = false;
+          setQuickFormExpanded(false);
         };
 
         const resetClientForm = ({ close = false } = {}) => {
@@ -1802,6 +2590,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           });
           elements.actionFormTitle.textContent = `${action.company_name} / ${formatDate(action.action_date)}`;
           updateActionClientSummary();
+          setActionFormExpanded(true);
           setTab("actions");
         };
 
@@ -1809,6 +2598,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           state.activeTab = tab;
           root.querySelectorAll("[data-tab]").forEach((button) => button.classList.toggle("is-active", button.dataset.tab === tab));
           root.querySelectorAll("[data-view]").forEach((view) => view.classList.toggle("is-active", view.dataset.view === tab));
+          queueCustomScrollbarUpdate();
         };
 
         const saveClient = async (form) => {
@@ -1831,6 +2621,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
             body: JSON.stringify(payload)
           });
           resetActionForm();
+          setActionFormExpanded(false);
           await loadAll();
         };
 
@@ -1853,6 +2644,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           form.reset();
           setDateInput(form.elements.next_action_at, currentToday());
           renderOwnerControls();
+          setQuickFormExpanded(false);
           await loadAll();
           status("Клиент добавлен. Действия ведутся во вкладке «Действия».", "success");
         };
@@ -1986,16 +2778,23 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           resetClientForm();
           openClientDetails();
         });
+        elements.quickToggle.addEventListener("click", () => {
+          setQuickFormExpanded(elements.quickAddForm.classList.contains("is-collapsed"));
+        });
         elements.clientClose.addEventListener("click", () => {
           resetClientForm({ close: true });
         });
         elements.clientReset.addEventListener("click", () => resetClientForm());
+        elements.actionToggle.addEventListener("click", () => {
+          setActionFormExpanded(elements.actionForm.classList.contains("is-collapsed"));
+        });
         elements.actionReset.addEventListener("click", resetActionForm);
         elements.actionClientSelect.addEventListener("change", updateActionClientSummary);
         elements.exportXlsx.addEventListener("click", exportXlsx);
         elements.importPrototype.addEventListener("click", () => importPrototype().catch((error) => status(error.message, "error")));
         elements.mobileFilterToggle?.addEventListener("click", () => {
           setMobileFiltersOpen(elements.mobileFilterbar?.classList.contains("is-mobile-collapsed"));
+          queueCustomScrollbarUpdate();
         });
 
         [elements.actionMode, elements.actionFilterStatus, elements.actionFilterType, elements.actionFilterCompany].forEach((element) => {
@@ -2014,16 +2813,17 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           element.addEventListener("change", renderClients);
         });
 
-        root.querySelectorAll("[data-date-field]").forEach((input) => {
-          input.addEventListener("blur", () => normalizeDateInput(input));
-          input.addEventListener("change", () => normalizeDateInput(input));
-        });
+        setupDatePickers();
+        elements.today.addEventListener("change", () => loadAll().catch((error) => status(error.message, "error")));
 
         setDateInput(elements.today, localToday());
         setDateInput(elements.quickAddForm.elements.next_action_at, currentToday());
         updateMobileFilterSummary();
         resetClientForm({ close: true });
         resetActionForm();
+        setQuickFormExpanded(false);
+        setActionFormExpanded(false);
+        setupCustomScrollbars();
 
         requestJson("/api/sales/session")
           .then(async (session) => {
