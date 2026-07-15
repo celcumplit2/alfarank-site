@@ -556,7 +556,10 @@ const structuredData = JSON.stringify([
           document.documentElement.dataset.leadAnalytics = "ready";
           track("page_view");
 
-          if (/^(?:\/(?:ro|ru))?\/start-project\/thank-you\/$/.test(window.location.pathname)) {
+          if (
+            /^(?:\/(?:ro|ru))?\/start-project\/thank-you\/$/.test(window.location.pathname) &&
+            new URLSearchParams(window.location.search).has("lead_id")
+          ) {
             track("thank_you_view");
           }
 

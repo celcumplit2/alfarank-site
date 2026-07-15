@@ -904,7 +904,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const payload = await parseRequest(request);
 
   if (payload.honeypot) {
-    return Response.redirect(thankYouUrl(payload, request.url), 303);
+    return new Response(null, { status: 204 });
   }
 
   const turnstile = await verifyTurnstile(env, payload.turnstile_token, payload.ip_address);
