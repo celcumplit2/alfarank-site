@@ -197,8 +197,16 @@ if (remoteUrl) {
     "Remote /sales/ page does not include the sales-app stacking fix."
   );
   assert(html.includes("data-export-xlsx"), "Remote /sales/ page is missing XLSX export.");
-  assert(html.includes("Короткая карточка"), "Remote /sales/ page is missing the short client card.");
-  assert(html.includes("data-client-details-panel hidden"), "Remote /sales/ page must ship the hidden extended client card.");
+  assert(
+    html.includes("data-quick-add-form data-client-form") &&
+      html.includes("data-client-form-title") &&
+      html.includes("data-client-submit"),
+    "Remote /sales/ page is missing the single collapsible client form."
+  );
+  assert(!html.includes("data-client-details-panel"), "Remote /sales/ page still ships the removed extended client panel.");
+  assert(!html.includes("data-client-open-details"), "Remote /sales/ page still ships the removed client details trigger.");
+  assert(!/<input[^>]*name="next_action"/.test(html), "Remote client form still edits the next action.");
+  assert(!/<input[^>]*name="next_action_at"/.test(html), "Remote client form still edits the next action date.");
   assert(!html.includes("Компания + первое действие"), "Remote /sales/ page still has first-action client copy.");
   assert(!html.includes("payload.task"), "Remote /sales/ page still creates an action from the quick client form.");
   assert(!html.includes('type="date"'), "Remote /sales/ page still ships native date inputs.");
