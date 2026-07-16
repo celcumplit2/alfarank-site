@@ -223,6 +223,40 @@ async function updateClientNextStep(
   }
 }
 
+async function syncClientNextStepFromOpenActions(
+  env: SalesEnv,
+  user: SalesUser,
+  clientId: string | null,
+  updatedAt: string
+): Promise<void> {
+  if (!clientId) return;
+
+  const client = await findClient(env, user, clientId);
+  if (!client) return;
+  if (TERMINAL_CLIENT_STATUSES.includes(client.status)) return;
+
+  const next = await env.DB.prepare(
+    `SELECT task, action_date
+    FROM sales_actions
+    WHERE client_id = ? AND status <> 'Сделано'
+    ORDER BY
+      action_date ASC,
+      CASE priority WHEN 'Высокий' THEN 1 WHEN 'Средний' THEN 2 ELSE 3 END,
+      updated_at DESC
+    LIMIT 1`
+  )
+    .bind(clientId)
+    .first<{ task: string; action_date: string }>();
+
+  await env.DB.prepare(
+    `UPDATE sales_clients
+    SET next_action = ?, next_action_at = ?, updated_at = ?
+    WHERE id = ?`
+  )
+    .bind(next?.task || null, next?.action_date || null, updatedAt, clientId)
+    .run();
+}
+
 async function createFollowUpAction(
   env: SalesEnv,
   action: Record<string, string | number | null>,
@@ -456,6 +490,11 @@ export const onRequestPost: PagesFunction<SalesEnv> = async ({ request, env }) =
       }
     }
 
+    const finalStatus = validation.data.final_client_status ? String(validation.data.final_client_status) : null;
+    if (!finalStatus || !TERMINAL_CLIENT_STATUSES.includes(finalStatus)) {
+      await syncClientNextStepFromOpenActions(env, user, String(validation.data.client_id || existing.client_id || ""), now);
+    }
+
     const updated = await findAction(env, user, id);
     await recordAudit(env, user, "action", id, "update", existing, updated);
     return jsonResponse({ action: updated, follow_up: followUp });
@@ -507,16 +546,8 @@ export const onRequestPost: PagesFunction<SalesEnv> = async ({ request, env }) =
     )
     .run();
 
-  if (validation.data.client_id && validation.data.status !== "Сделано") {
-    await updateClientNextStep(
-      env,
-      user,
-      String(validation.data.client_id),
-      String(validation.data.task),
-      String(validation.data.action_date),
-      null,
-      now
-    );
+  if (validation.data.client_id) {
+    await syncClientNextStepFromOpenActions(env, user, String(validation.data.client_id), now);
   }
 
   const created = await findAction(env, user, newId);
@@ -545,6 +576,7 @@ export const onRequestDelete: PagesFunction<SalesEnv> = async ({ request, env })
   }
 
   await env.DB.prepare("DELETE FROM sales_actions WHERE id = ?").bind(id).run();
+  await syncClientNextStepFromOpenActions(env, user, existing.client_id, nowIso());
   await recordAudit(env, user, "action", id, "delete", existing, null);
 
   return jsonResponse({

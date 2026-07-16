@@ -106,7 +106,19 @@ assert(
   "Sales custom select menus must stay above adjacent panels when open."
 );
 assert(sourceDetailsMigration.includes("source_details"), "Sales D1 migration must add source_details.");
-assert(source.includes("data-client-details-panel hidden"), "Extended client card must be hidden until opened from the short card or client row.");
+assert(
+  source.includes('data-quick-add-form data-client-form') &&
+    source.includes("data-client-form-title") &&
+    source.includes("data-client-submit") &&
+    !source.includes("data-client-details-panel") &&
+    !source.includes("data-client-open-details"),
+  "Clients tab must use one collapsible client form instead of separate short and extended forms."
+);
+assert(
+  (source.match(/name="contact_name"/g) || []).length === 1 &&
+    (source.match(/name="source"/g) || []).length === 1,
+  "Client form must keep contact and source fields in one place, without duplicate inputs."
+);
 assert(
   source.includes("sales-form--quick is-collapsed") &&
     source.includes("sales-form--action is-collapsed") &&
@@ -118,16 +130,23 @@ assert(
   "New client and new action forms must be collapsed by default and expand only on click."
 );
 assert(
-  source.includes(".sales-form--quick[hidden]") &&
-    source.includes("elements.quickAddForm.hidden = true") &&
-    source.includes("elements.quickAddForm.hidden = false"),
-  "Clients tab must show either the short client card or the extended client card, never both at once."
+    !/<input[^>]*name="next_action"/.test(source) &&
+    !/<input[^>]*name="next_action_at"/.test(source) &&
+    source.includes("<th>Ближайшее действие</th>") &&
+    salesClientsApi.includes("COALESCE(next_action_at, '9999-12-31')"),
+  "Client form must not edit next action fields; client tables should show the nearest action as read-only."
 );
 assert(!source.includes("первое действие"), "Clients flow must use client next step wording, not first-action wording.");
 assert(!source.includes("Компания + первое действие"), "Clients tab must not present client creation as first-action creation.");
 assert(!source.includes("первое действие добавлены"), "Quick client creation must not create an action.");
 assert(!source.includes("payload.task"), "Quick client form must save client fields, not an action task.");
-assert(!source.includes("quickAddForm.elements.action_date"), "Quick client form must use next_action_at, not action_date.");
+assert(!source.includes("quickAddForm.elements.action_date"), "Client form must not use an action date field.");
+assert(
+  source.includes("data-action-completion-field") &&
+    source.includes("updateActionCompletionFields") &&
+    source.includes("Следующий шаг после результата"),
+  "Action follow-up fields must be separated from the planned action itself."
+);
 assert(
   startProjectApi.includes("syncLeadToSalesTracker") &&
     startProjectApi.includes('owner_id: "pavel"') &&

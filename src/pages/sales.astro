@@ -173,61 +173,15 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
 
         <section class="sales-view" data-view="clients">
           <div class="sales-grid sales-grid--forms">
-            <form class="sales-panel sales-form sales-form--quick is-collapsed" data-quick-add-form>
+            <form class="sales-panel sales-form sales-form--quick is-collapsed" data-quick-add-form data-client-form>
               <div class="sales-panel-head">
                 <div>
-                  <span class="sales-eyebrow">Короткая карточка</span>
-                  <h2>Новый клиент</h2>
-                </div>
-                <div class="sales-row-actions">
-                  <button class="sales-button sales-button--primary" type="button" data-quick-toggle aria-expanded="false">Развернуть</button>
-                  <button class="sales-button sales-button--ghost" type="button" data-client-open-details>Расширенная карточка</button>
-                </div>
-              </div>
-              <label>
-                <span>Компания</span>
-                <input name="company_name" required />
-              </label>
-              <label>
-                <span>Сегмент</span>
-                <select name="segment">{segments.map((segment) => <option value={segment}>{segment}</option>)}</select>
-              </label>
-              <label>
-                <span>Контакт</span>
-                <input name="contact_name" />
-              </label>
-              <label>
-                <span>Источник / кампания</span>
-                <input name="source" placeholder="Рекламная кампания, реферал, сайт..." />
-              </label>
-              <label>
-                <span>Следующий шаг</span>
-                <input name="next_action" required placeholder="Позвонить и назначить встречу" />
-              </label>
-              <label>
-                <span>Дата следующего</span>
-                <input class="sales-date-input" name="next_action_at" type="text" inputmode="numeric" autocomplete="off" placeholder="дд.мм.гггг" data-date-field required />
-              </label>
-              <label>
-                <span>Потенциал</span>
-                <select name="potential">{priorities.map((priority) => <option value={priority}>{priority}</option>)}</select>
-              </label>
-              <label data-quick-owner-field hidden>
-                <span>Менеджер</span>
-                <select name="owner_id" data-quick-owner-select></select>
-              </label>
-              <button class="sales-button sales-button--primary" type="submit">Создать клиента</button>
-            </form>
-
-            <form class="sales-panel sales-form sales-client-details" data-client-form data-client-details-panel hidden>
-              <div class="sales-panel-head">
-                <div>
-                  <span class="sales-eyebrow">Расширенная карточка</span>
+                  <span class="sales-eyebrow">Карточка клиента</span>
                   <h2 data-client-form-title>Новый клиент</h2>
                 </div>
                 <div class="sales-row-actions">
+                  <button class="sales-button sales-button--primary" type="button" data-quick-toggle aria-expanded="false">Развернуть</button>
                   <button class="sales-button sales-button--ghost" type="button" data-client-reset>Очистить</button>
-                  <button class="sales-button sales-button--ghost" type="button" data-client-close>Закрыть</button>
                 </div>
               </div>
               <input name="id" type="hidden" />
@@ -240,16 +194,16 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
                 <select name="segment">{segments.map((segment) => <option value={segment}>{segment}</option>)}</select>
               </label>
               <label>
-                <span>Статус</span>
+                <span>Стадия клиента</span>
                 <select name="status">{clientStatuses.map((status) => <option value={status}>{status}</option>)}</select>
               </label>
               <label>
                 <span>Потенциал</span>
                 <select name="potential">{priorities.map((priority) => <option value={priority}>{priority}</option>)}</select>
               </label>
-              <label data-client-owner-field hidden>
+              <label data-quick-owner-field data-client-owner-field hidden>
                 <span>Менеджер</span>
-                <select name="owner_id" data-client-owner-select></select>
+                <select name="owner_id" data-quick-owner-select data-client-owner-select></select>
               </label>
               <label>
                 <span>Сайт</span>
@@ -260,7 +214,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
                 <input name="city" />
               </label>
               <label>
-                <span>Контакт</span>
+                <span>Контактное лицо</span>
                 <input name="contact_name" />
               </label>
               <label>
@@ -273,25 +227,17 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
               </label>
               <label class="sales-wide">
                 <span>Источник / кампания</span>
-                <input name="source" placeholder="Рекламная кампания: Google Ads / cpc / brand" />
+                <input name="source" placeholder="Реклама, реферал, сайт, LinkedIn..." />
               </label>
               <label class="sales-wide">
-                <span>Атрибуция / реклама</span>
+                <span>Детали рекламы</span>
                 <textarea name="source_details" placeholder="UTM, кампания, ключевое слово, объявление, click-id, landing, referrer"></textarea>
-              </label>
-              <label>
-                <span>Следующее действие</span>
-                <input name="next_action" required />
-              </label>
-              <label>
-                <span>Дата следующего</span>
-                <input class="sales-date-input" name="next_action_at" type="text" inputmode="numeric" autocomplete="off" placeholder="дд.мм.гггг" data-date-field required />
               </label>
               <label class="sales-wide">
                 <span>Комментарий</span>
                 <textarea name="comment"></textarea>
               </label>
-              <button class="sales-button sales-button--primary" type="submit">Сохранить клиента</button>
+              <button class="sales-button sales-button--primary" type="submit" data-client-submit>Создать клиента</button>
             </form>
           </div>
 
@@ -319,8 +265,8 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
                   <tr>
                     <th>Компания</th>
                     <th>Сегмент</th>
-                    <th>Статус</th>
-                    <th>Следующий шаг</th>
+                    <th>Стадия</th>
+                    <th>Ближайшее действие</th>
                     <th>Дата</th>
                     <th>Потенциал</th>
                     <th>Источник / кампания</th>
@@ -363,7 +309,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
                 Выберите клиента из базы. Компания и контакт подтянутся из карточки клиента.
               </div>
               <label>
-                <span>Приоритет</span>
+                <span>Приоритет задачи</span>
                 <select name="priority">{priorities.map((priority) => <option value={priority}>{priority}</option>)}</select>
               </label>
               <label>
@@ -371,26 +317,26 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
                 <select name="action_type">{actionTypes.map((type) => <option value={type}>{type}</option>)}</select>
               </label>
               <label>
-                <span>Статус</span>
+                <span>Статус действия</span>
                 <select name="status">{actionStatuses.map((status) => <option value={status}>{status}</option>)}</select>
               </label>
               <label class="sales-wide">
                 <span>Что конкретно сделать</span>
                 <textarea name="task" required></textarea>
               </label>
-              <label class="sales-wide">
+              <label class="sales-wide" data-action-completion-field>
                 <span>Результат</span>
                 <textarea name="result" placeholder="Обязательно для статуса Сделано"></textarea>
               </label>
-              <label>
-                <span>Следующий шаг</span>
+              <label data-action-completion-field>
+                <span>Следующий шаг после результата</span>
                 <input name="next_step" />
               </label>
-              <label>
+              <label data-action-completion-field>
                 <span>Дата следующего шага</span>
                 <input class="sales-date-input" name="next_step_date" type="text" inputmode="numeric" autocomplete="off" placeholder="дд.мм.гггг" data-date-field />
               </label>
-              <label>
+              <label data-action-completion-field>
                 <span>Если завершено</span>
                 <select name="final_client_status">{terminalStatuses.map((status) => <option value={status}>{status || "Не завершать клиента"}</option>)}</select>
               </label>
@@ -418,11 +364,11 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
                     <tr>
                       <th>Дата</th>
                       <th>Компания</th>
-                      <th>Приоритет</th>
+                      <th>Приоритет задачи</th>
                       <th>Тип</th>
                       <th>Задача</th>
-                      <th>Статус</th>
-                      <th>Следующий шаг</th>
+                      <th>Статус действия</th>
+                      <th>Следующий шаг после результата</th>
                       <th>Менеджер</th>
                       <th></th>
                     </tr>
@@ -1787,12 +1733,10 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           quickOwnerField: root.querySelector("[data-quick-owner-field]"),
           quickOwnerSelect: root.querySelector("[data-quick-owner-select]"),
           clientForm: root.querySelector("[data-client-form]"),
-          clientDetailsPanel: root.querySelector("[data-client-details-panel]"),
           clientFormTitle: root.querySelector("[data-client-form-title]"),
+          clientSubmit: root.querySelector("[data-client-submit]"),
           clientOwnerField: root.querySelector("[data-client-owner-field]"),
           clientOwnerSelect: root.querySelector("[data-client-owner-select]"),
-          clientOpenDetails: root.querySelector("[data-client-open-details]"),
-          clientClose: root.querySelector("[data-client-close]"),
           clientReset: root.querySelector("[data-client-reset]"),
           clientSearch: root.querySelector("[data-client-search]"),
           clientStatus: root.querySelector("[data-client-status]"),
@@ -1802,6 +1746,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           actionFormTitle: root.querySelector("[data-action-form-title]"),
           actionToggle: root.querySelector("[data-action-toggle]"),
           actionReset: root.querySelector("[data-action-reset]"),
+          actionCompletionFields: root.querySelectorAll("[data-action-completion-field]"),
           actionClientSelect: root.querySelector("[data-action-client-select]"),
           actionClientSummary: root.querySelector("[data-action-client-summary]"),
           actionsTable: root.querySelector("[data-actions-table]"),
@@ -2404,7 +2349,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
                       <td><strong>${escapeHtml(client.company_name)}</strong><br /><span>${escapeHtml(client.contact_name || "")}</span></td>
                       <td>${escapeHtml(client.segment)}</td>
                       <td><span class="sales-pill">${escapeHtml(client.status)}</span></td>
-                      <td>${escapeHtml(compact(client.next_action, 120))}</td>
+                      <td>${escapeHtml(compact(client.next_action, 120) || "-")}</td>
                       <td>${escapeHtml(formatDate(client.next_action_at, "-"))}</td>
                       <td>${escapeHtml(client.potential)}</td>
                       <td>${escapeHtml(compact(client.source, 90) || "-")}</td>
@@ -2456,7 +2401,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
                       <td>${escapeHtml(action.action_type)}</td>
                       <td>${escapeHtml(compact(action.task, 150))}</td>
                       <td><span class="sales-pill">${escapeHtml(action.status)}</span></td>
-                      <td>${escapeHtml(compact(action.next_step, 120))}<br /><span>${escapeHtml(formatDate(action.next_step_date))}</span></td>
+                      <td>${escapeHtml(compact(action.next_step, 120) || "-")}<br /><span>${escapeHtml(formatDate(action.next_step_date, "-"))}</span></td>
                       <td>${escapeHtml(userLabel(action.owner_id))}</td>
                       <td>
                         <div class="sales-table-actions">
@@ -2555,17 +2500,12 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           setCollapsibleFormExpanded(elements.actionForm, elements.actionToggle, expanded);
         };
 
-        const openClientDetails = () => {
-          setQuickFormExpanded(false);
-          elements.quickAddForm.hidden = true;
-          elements.clientDetailsPanel.hidden = false;
-          elements.clientDetailsPanel.scrollIntoView({ block: "start", behavior: "smooth" });
-        };
-
-        const closeClientDetails = () => {
-          elements.clientDetailsPanel.hidden = true;
-          elements.quickAddForm.hidden = false;
-          setQuickFormExpanded(false);
+        const updateActionCompletionFields = () => {
+          const isDone = elements.actionForm.elements.status.value === "Сделано";
+          elements.actionCompletionFields.forEach((field) => {
+            field.hidden = !isDone;
+          });
+          queueCustomScrollbarUpdate();
         };
 
         const resetClientForm = ({ close = false } = {}) => {
@@ -2575,7 +2515,8 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           elements.clientForm.elements.potential.value = "Средний";
           renderOwnerControls();
           elements.clientFormTitle.textContent = "Новый клиент";
-          if (close) closeClientDetails();
+          elements.clientSubmit.textContent = "Создать клиента";
+          if (close) setQuickFormExpanded(false);
         };
 
         const resetActionForm = () => {
@@ -2587,6 +2528,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           elements.actionForm.elements.status.value = "Запланировано";
           elements.actionFormTitle.textContent = "Новое действие";
           updateActionClientSummary();
+          updateActionCompletionFields();
         };
 
         const fillClientForm = (client) => {
@@ -2597,7 +2539,9 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
             }
           });
           elements.clientFormTitle.textContent = client.company_name || "Клиент";
-          openClientDetails();
+          elements.clientSubmit.textContent = "Сохранить клиента";
+          setQuickFormExpanded(true);
+          elements.clientForm.scrollIntoView({ block: "start", behavior: "smooth" });
           setTab("clients");
         };
 
@@ -2614,6 +2558,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           });
           elements.actionFormTitle.textContent = `${action.company_name} / ${formatDate(action.action_date)}`;
           updateActionClientSummary();
+          updateActionCompletionFields();
           setActionFormExpanded(true);
           setTab("actions");
         };
@@ -2647,30 +2592,6 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           resetActionForm();
           setActionFormExpanded(false);
           await loadAll();
-        };
-
-        const quickAdd = async (form) => {
-          const payload = formData(form);
-          await requestJson("/api/sales/clients", {
-            method: "POST",
-            body: JSON.stringify({
-              company_name: payload.company_name,
-              segment: payload.segment,
-              contact_name: payload.contact_name,
-              status: "Новый",
-              potential: payload.potential,
-              next_action: payload.next_action,
-              next_action_at: payload.next_action_at,
-              owner_id: payload.owner_id,
-              source: payload.source || "Ручное добавление"
-            })
-          });
-          form.reset();
-          setDateInput(form.elements.next_action_at, currentToday());
-          renderOwnerControls();
-          setQuickFormExpanded(false);
-          await loadAll();
-          status("Клиент добавлен. Действия ведутся во вкладке «Действия».", "success");
         };
 
         const login = async (form) => {
@@ -2786,10 +2707,6 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
         });
         elements.logout.addEventListener("click", logout);
         elements.refresh.addEventListener("click", () => loadAll().catch((error) => status(error.message, "error")));
-        elements.quickAddForm.addEventListener("submit", (event) => {
-          event.preventDefault();
-          quickAdd(elements.quickAddForm).catch((error) => status(error.message, "error"));
-        });
         elements.clientForm.addEventListener("submit", (event) => {
           event.preventDefault();
           saveClient(elements.clientForm).catch((error) => status(error.message, "error"));
@@ -2798,15 +2715,8 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           event.preventDefault();
           saveAction(elements.actionForm).catch((error) => status(error.message, "error"));
         });
-        elements.clientOpenDetails.addEventListener("click", () => {
-          resetClientForm();
-          openClientDetails();
-        });
         elements.quickToggle.addEventListener("click", () => {
           setQuickFormExpanded(elements.quickAddForm.classList.contains("is-collapsed"));
-        });
-        elements.clientClose.addEventListener("click", () => {
-          resetClientForm({ close: true });
         });
         elements.clientReset.addEventListener("click", () => resetClientForm());
         elements.actionToggle.addEventListener("click", () => {
@@ -2814,6 +2724,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
         });
         elements.actionReset.addEventListener("click", resetActionForm);
         elements.actionClientSelect.addEventListener("change", updateActionClientSummary);
+        elements.actionForm.elements.status.addEventListener("change", updateActionCompletionFields);
         elements.exportXlsx.addEventListener("click", exportXlsx);
         elements.importPrototype.addEventListener("click", () => importPrototype().catch((error) => status(error.message, "error")));
         elements.mobileFilterToggle?.addEventListener("click", () => {
@@ -2841,7 +2752,6 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
         elements.today.addEventListener("change", () => loadAll().catch((error) => status(error.message, "error")));
 
         setDateInput(elements.today, localToday());
-        setDateInput(elements.quickAddForm.elements.next_action_at, currentToday());
         updateMobileFilterSummary();
         resetClientForm({ close: true });
         resetActionForm();

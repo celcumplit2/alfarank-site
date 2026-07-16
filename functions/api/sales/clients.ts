@@ -5,7 +5,6 @@ import {
   canDeleteSalesData,
   canSeeAll,
   clean,
-  isActiveClientStatus,
   isManagerId,
   jsonResponse,
   nullableClean,
@@ -67,7 +66,49 @@ type ClientRow = {
 };
 
 const CLIENT_SELECT = `SELECT
-  c.*,
+  c.id,
+  c.company_name,
+  c.segment,
+  c.website,
+  c.city,
+  c.contact_name,
+  c.contact_role,
+  c.contact_details,
+  c.source,
+  c.source_details,
+  c.last_contact_at,
+  c.status,
+  COALESCE(
+    (
+      SELECT a.task
+      FROM sales_actions a
+      WHERE a.client_id = c.id AND a.status <> 'Сделано'
+      ORDER BY
+        a.action_date ASC,
+        CASE a.priority WHEN 'Высокий' THEN 1 WHEN 'Средний' THEN 2 ELSE 3 END,
+        a.updated_at DESC
+      LIMIT 1
+    ),
+    c.next_action
+  ) AS next_action,
+  COALESCE(
+    (
+      SELECT a.action_date
+      FROM sales_actions a
+      WHERE a.client_id = c.id AND a.status <> 'Сделано'
+      ORDER BY
+        a.action_date ASC,
+        CASE a.priority WHEN 'Высокий' THEN 1 WHEN 'Средний' THEN 2 ELSE 3 END,
+        a.updated_at DESC
+      LIMIT 1
+    ),
+    c.next_action_at
+  ) AS next_action_at,
+  c.potential,
+  c.comment,
+  c.owner_id,
+  c.created_at,
+  c.updated_at,
   (
     SELECT COUNT(*)
     FROM sales_actions a
@@ -117,15 +158,9 @@ async function findClient(env: SalesEnv, user: SalesUser, id: string, today: str
 function validateClient(payload: ClientPayload): { data?: Record<string, string | null>; error?: string } {
   const companyName = clean(payload.company_name, 180);
   const status = oneOf(payload.status, CLIENT_STATUSES, "Новый");
-  const nextAction = nullableClean(payload.next_action, 500);
-  const nextActionAt = safeDate(payload.next_action_at);
 
   if (!companyName) {
     return { error: "Название компании обязательно." };
-  }
-
-  if (isActiveClientStatus(status) && (!nextAction || !nextActionAt)) {
-    return { error: "У активного клиента должен быть следующий шаг и дата следующего действия." };
   }
 
   return {
@@ -141,8 +176,6 @@ function validateClient(payload: ClientPayload): { data?: Record<string, string 
       source_details: nullableClean(payload.source_details, 4000),
       last_contact_at: safeDate(payload.last_contact_at),
       status,
-      next_action: nextAction,
-      next_action_at: nextActionAt,
       potential: oneOf(payload.potential, PRIORITIES, "Средний"),
       comment: nullableClean(payload.comment, 1000)
     }
@@ -195,11 +228,34 @@ export const onRequestGet: PagesFunction<SalesEnv> = async ({ request, env }) =>
   }
 
   if (url.searchParams.get("without_next_step") === "1") {
-    conditions.push("c.company_name <> '' AND c.status NOT IN ('Клиент', 'Отказ', 'Пауза') AND COALESCE(NULLIF(c.next_action, ''), '') = ''");
+    conditions.push(`c.company_name <> ''
+      AND c.status NOT IN ('Клиент', 'Отказ', 'Пауза')
+      AND NOT EXISTS (
+        SELECT 1
+        FROM sales_actions a
+        WHERE a.client_id = c.id AND a.status <> 'Сделано'
+      )
+      AND COALESCE(NULLIF(c.next_action, ''), '') = ''`);
   }
 
   if (url.searchParams.get("overdue") === "1") {
-    conditions.push("c.status NOT IN ('Клиент', 'Отказ', 'Пауза') AND c.next_action_at < ?");
+    conditions.push(`c.status NOT IN ('Клиент', 'Отказ', 'Пауза')
+      AND (
+        EXISTS (
+          SELECT 1
+          FROM sales_actions a
+          WHERE a.client_id = c.id AND a.status <> 'Сделано' AND a.action_date < ?
+        )
+        OR (
+          NOT EXISTS (
+            SELECT 1
+            FROM sales_actions a
+            WHERE a.client_id = c.id AND a.status <> 'Сделано'
+          )
+          AND c.next_action_at < ?
+        )
+      )`);
+    bindings.push(today);
     bindings.push(today);
   }
 
@@ -207,9 +263,9 @@ export const onRequestGet: PagesFunction<SalesEnv> = async ({ request, env }) =>
   const rows = await env.DB.prepare(
     `${CLIENT_SELECT}
     ${whereSql}
-    ORDER BY
-      CASE c.potential WHEN 'Высокий' THEN 1 WHEN 'Средний' THEN 2 ELSE 3 END,
-      COALESCE(c.next_action_at, '9999-12-31') ASC,
+      ORDER BY
+        CASE c.potential WHEN 'Высокий' THEN 1 WHEN 'Средний' THEN 2 ELSE 3 END,
+      COALESCE(next_action_at, '9999-12-31') ASC,
       c.updated_at DESC
     LIMIT 300`
   )
@@ -267,8 +323,6 @@ export const onRequestPost: PagesFunction<SalesEnv> = async ({ request, env }) =
         source_details = ?,
         last_contact_at = ?,
         status = ?,
-        next_action = ?,
-        next_action_at = ?,
         potential = ?,
         comment = ?,
         owner_id = ?,
@@ -287,8 +341,6 @@ export const onRequestPost: PagesFunction<SalesEnv> = async ({ request, env }) =
         validation.data.source_details,
         validation.data.last_contact_at,
         validation.data.status,
-        validation.data.next_action,
-        validation.data.next_action_at,
         validation.data.potential,
         validation.data.comment,
         canSeeAll(user) ? ownerId : existing.owner_id,
@@ -339,8 +391,8 @@ export const onRequestPost: PagesFunction<SalesEnv> = async ({ request, env }) =
       validation.data.source_details,
       validation.data.last_contact_at,
       validation.data.status,
-      validation.data.next_action,
-      validation.data.next_action_at,
+      null,
+      null,
       validation.data.potential,
       validation.data.comment,
       ownerId,
