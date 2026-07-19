@@ -161,6 +161,27 @@ async function fetchProject({ accountId, token, projectName }) {
   return payload.result;
 }
 
+async function fetchDeployments({ accountId, token, projectName }) {
+  const response = await fetch(
+    `https://api.cloudflare.com/client/v4/accounts/${accountId}/pages/projects/${projectName}/deployments?env=production&per_page=25`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+  );
+  const payload = await response.json();
+
+  if (!response.ok || !payload.success) {
+    const messages = Array.isArray(payload.errors)
+      ? payload.errors.map((error) => error.message || String(error)).join("; ")
+      : `HTTP ${response.status}`;
+    throw new Error(`Cloudflare Pages deployment lookup failed: ${messages}`);
+  }
+
+  return Array.isArray(payload.result) ? payload.result : [];
+}
+
 async function main() {
   if (hasFlag("--help") || hasFlag("-h")) {
     printHelp();
@@ -193,11 +214,19 @@ async function main() {
   }
 
   const project = await fetchProject({ accountId, token, projectName });
+  const deployments = await fetchDeployments({ accountId, token, projectName });
   const configs = project.deployment_configs || {};
   const config = configs[environment] || {};
   const envVarNames = new Set(namesFromEnvVars(config.env_vars));
   const d1BindingNames = namesFromBindingConfig(config.d1_databases);
-  const latestDeployment = project.latest_deployment;
+  const activeProductionDeployment = deployments.find((deployment) =>
+    (deployment.aliases || []).includes("https://alfarank.com")
+  );
+  const latestDeployment = environment === "production"
+    ? activeProductionDeployment || project.latest_deployment
+    : project.latest_deployment;
+  const latestDeploymentTrigger = latestDeployment?.deployment_trigger?.type || "unknown";
+  const latestDeploymentCommit = latestDeployment?.deployment_trigger?.metadata?.commit_hash || null;
   const domains = Array.isArray(project.domains) ? project.domains : [];
   const envVarNameList = [...envVarNames].sort();
 
@@ -217,6 +246,11 @@ async function main() {
       "Latest deployment succeeded",
       isSuccessfulDeploymentStatus(latestDeployment?.latest_stage?.status),
       "Latest production deployment did not finish successfully."
+    );
+    check(
+      "Latest production deployment came from GitHub push",
+      latestDeploymentTrigger === "github:push",
+      `Latest production deployment trigger is ${latestDeploymentTrigger}. Direct/ad_hoc production uploads are forbidden.`
     );
   }
 
@@ -291,6 +325,8 @@ async function main() {
     console.log(
       `Latest deployment: ${latestDeployment.environment || "unknown"} ${latestDeployment.latest_stage?.status || "unknown"} ${latestDeployment.url || ""}`.trim()
     );
+    console.log(`Latest deployment trigger: ${latestDeploymentTrigger}`);
+    console.log(`Latest deployment commit: ${latestDeploymentCommit || "unknown"}`);
   }
   console.log(`Visible ${environment} env names: ${envVarNameList.length ? envVarNameList.join(", ") : "(none)"}`);
   console.log(`Visible ${environment} D1 bindings: ${d1BindingNames.length ? d1BindingNames.join(", ") : "(none)"}`);
@@ -320,7 +356,9 @@ async function main() {
       ? {
           environment: latestDeployment.environment || null,
           status: latestDeployment.latest_stage?.status || null,
-          url: latestDeployment.url || null
+          url: latestDeployment.url || null,
+          trigger: latestDeploymentTrigger,
+          commit: latestDeploymentCommit
         }
       : null,
     d1_bindings: d1BindingNames,
