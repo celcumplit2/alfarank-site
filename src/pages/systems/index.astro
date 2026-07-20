@@ -12,11 +12,63 @@ type Props = {
 
 const { locale = "en" } = Astro.props;
 const systems = getSystems(locale);
+const siteUrl = Astro.site ?? new URL("https://alfarank.com");
+const pagePath = localizePath("/systems/", locale);
+const pageUrl = new URL(pagePath, siteUrl).toString();
+const pageDescription = translateCopy(
+  locale,
+  "This section is structured around systems, modules, workflows, outputs, and implementation logic instead of a generic portfolio grid."
+);
 
 const systemSignals = ["Profile", "Modules", "Workflow", "Output", "Scope", "Launch"].map((signal) => translateCopy(locale, signal));
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: translateCopy(locale, "Systems | AlfaRank"),
+    description: pageDescription,
+    url: pageUrl,
+    inLanguage: locale
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: translateCopy(locale, "AlfaRank system profiles"),
+    itemListElement: systems.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.title,
+      description: item.summary,
+      url: new URL(localizePath(`/systems/${item.slug}/`, locale), siteUrl).toString()
+    }))
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "AlfaRank",
+        item: new URL(localizePath("/", locale), siteUrl).toString()
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: translateCopy(locale, "Systems"),
+        item: pageUrl
+      }
+    ]
+  }
+];
 ---
 
-<Layout title="Systems | AlfaRank" locale={locale}>
+<Layout
+  title={translateCopy(locale, "Systems | AlfaRank")}
+  description={pageDescription}
+  locale={locale}
+  structuredData={structuredData}
+>
   <PageHero
     eyebrow="Systems"
     title="System and project profiles."

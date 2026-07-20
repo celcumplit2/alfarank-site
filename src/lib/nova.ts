@@ -573,32 +573,83 @@ const novaUrl = (path: string) => {
   return url;
 };
 
+const novaFetchAttempts = 4;
+const novaRetryDelayMs = 400;
+let publishedArticleSummariesPromise: Promise<NovaArticleSummary[]> | undefined;
+const sourceArticlePromises = new Map<string, Promise<NovaArticle | undefined>>();
+
+const wait = (delayMs: number) => new Promise((resolve) => setTimeout(resolve, delayMs));
+
+const fetchNova = async (url: URL, label: string) => {
+  let lastError: unknown;
+
+  for (let attempt = 1; attempt <= novaFetchAttempts; attempt += 1) {
+    try {
+      const response = await fetch(url);
+      if (response.ok || response.status < 500) return response;
+      lastError = new Error(`${label} failed: ${response.status}`);
+    } catch (error) {
+      lastError = error;
+    }
+
+    if (attempt < novaFetchAttempts) {
+      await wait(novaRetryDelayMs * attempt);
+    }
+  }
+
+  throw lastError instanceof Error ? lastError : new Error(`${label} failed`);
+};
+
+const getPublishedArticleSummaries = () => {
+  if (!publishedArticleSummariesPromise) {
+    publishedArticleSummariesPromise = (async () => {
+      const response = await fetchNova(novaUrl("/articles"), "NOVA articles request");
+      if (!response.ok) {
+        throw new Error(`NOVA articles request failed: ${response.status}`);
+      }
+
+      const data = (await response.json()) as NovaListResponse;
+      return (data.articles || []).filter((article) => article.slug && article.status === "published");
+    })();
+  }
+
+  return publishedArticleSummariesPromise;
+};
+
+const getSourceArticle = (slug: string) => {
+  const existing = sourceArticlePromises.get(slug);
+  if (existing) return existing;
+
+  const promise = (async () => {
+    const response = await fetchNova(
+      novaUrl(`/articles/${encodeURIComponent(slug)}`),
+      `NOVA article request for ${slug}`
+    );
+    if (!response.ok) {
+      throw new Error(`NOVA article request failed for ${slug}: ${response.status}`);
+    }
+
+    const data = (await response.json()) as NovaArticleResponse;
+    return data.article ? (normalizeGeneratedHeadings(data.article) as NovaArticle) : undefined;
+  })();
+
+  sourceArticlePromises.set(slug, promise);
+  return promise;
+};
+
 export const newsPath = (path: string, locale: NewsLocale = "en") => localizePath(path, locale);
 
 export const normalizeArticleUrl = (slug: string, locale: NewsLocale = "en") =>
   `https://alfarank.com${newsPath(`/news/${slug}/`, locale)}`;
 
 export async function getNovaArticleSummaries(locale: NewsLocale = "en") {
-  const response = await fetch(novaUrl("/articles"));
-  if (!response.ok) {
-    throw new Error(`NOVA articles request failed: ${response.status}`);
-  }
-
-  const data = (await response.json()) as NovaListResponse;
-  const articles = (data.articles || []).filter((article) => article.slug && article.status === "published");
+  const articles = await getPublishedArticleSummaries();
   return Promise.all(articles.map((article) => translateNovaArticleSummaryWithLang(article, locale)));
 }
 
 export async function getNovaArticle(slug: string, locale: NewsLocale = "en") {
-  const response = await fetch(novaUrl(`/articles/${encodeURIComponent(slug)}`));
-  if (!response.ok) {
-    throw new Error(`NOVA article request failed for ${slug}: ${response.status}`);
-  }
-
-  const data = (await response.json()) as NovaArticleResponse;
-  if (!data.article) return undefined;
-
-  const normalizedArticle = normalizeGeneratedHeadings(data.article) as NovaArticle;
+  const normalizedArticle = await getSourceArticle(slug);
+  if (!normalizedArticle) return undefined;
   const translatedArticle = await translateNovaArticleWithLang(normalizedArticle, locale);
   return personalizeArticleHeadings(translatedArticle, normalizedArticle, locale);
 }

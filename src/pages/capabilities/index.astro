@@ -14,6 +14,13 @@ type Props = {
 const { locale = "en" } = Astro.props;
 const capabilities = getCapabilities(locale);
 const solutions = getSolutions(locale);
+const siteUrl = Astro.site ?? new URL("https://alfarank.com");
+const pagePath = localizePath("/capabilities/", locale);
+const pageUrl = new URL(pagePath, siteUrl).toString();
+const pageDescription = translateCopy(
+  locale,
+  "AlfaRank capabilities are organized around what the company can build, connect, automate, and launch."
+);
 
 const capabilityTags: Record<string, string[]> = {
   "ai-automation": ["AI workflows", "CRM", "Content"],
@@ -51,9 +58,54 @@ const capabilityGroups = [
 
 const capabilityBySlug = new Map(capabilities.map((item) => [item.slug, item]));
 const solutionBySlug = new Map(solutions.map((item) => [item.slug, item]));
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: translateCopy(locale, "Capabilities | AlfaRank"),
+    description: pageDescription,
+    url: pageUrl,
+    inLanguage: locale
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: translateCopy(locale, "AlfaRank capability directions"),
+    itemListElement: capabilities.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.title,
+      description: item.summary,
+      url: new URL(localizePath(`/capabilities/${item.slug}/`, locale), siteUrl).toString()
+    }))
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "AlfaRank",
+        item: new URL(localizePath("/", locale), siteUrl).toString()
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: translateCopy(locale, "Capabilities"),
+        item: pageUrl
+      }
+    ]
+  }
+];
 ---
 
-<Layout title={translateCopy(locale, "Capabilities | AlfaRank")} locale={locale}>
+<Layout
+  title={translateCopy(locale, "Capabilities | AlfaRank")}
+  description={pageDescription}
+  locale={locale}
+  structuredData={structuredData}
+>
   <PageHero
     eyebrow={translateCopy(locale, "Capabilities")}
     title={translateCopy(locale, "Technical directions for building digital systems.")}

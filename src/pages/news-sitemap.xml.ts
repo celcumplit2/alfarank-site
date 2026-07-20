@@ -2,6 +2,7 @@ import { articleDate, getNovaArticleSummaries, normalizeArticleUrl } from "@/lib
 import type { NewsLocale } from "@/lib/nova";
 
 const newsLocales: NewsLocale[] = ["en", "ro", "ru"];
+const newsSitemapWindowMs = 48 * 60 * 60 * 1000;
 
 const escapeXml = (value: string) =>
   value
@@ -12,10 +13,14 @@ const escapeXml = (value: string) =>
     .replace(/'/g, "&apos;");
 
 export async function GET() {
+  const cutoffTime = Date.now() - newsSitemapWindowMs;
   const articlesByLocale = await Promise.all(
     newsLocales.map(async (locale) => ({
       locale,
-      articles: await getNovaArticleSummaries(locale)
+      articles: (await getNovaArticleSummaries(locale)).filter((article) => {
+        const publishedAt = Date.parse(articleDate(article));
+        return Number.isFinite(publishedAt) && publishedAt >= cutoffTime;
+      })
     }))
   );
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

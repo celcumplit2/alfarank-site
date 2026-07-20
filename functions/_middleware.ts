@@ -71,6 +71,16 @@ const readCookie = (request: Request, name: string) => {
 export const onRequest: PagesFunction<Env> = async ({ request, env, next }) => {
   const url = new URL(request.url);
 
+  if (/\/feed\/?$/.test(url.pathname)) {
+    return new Response("Gone", {
+      status: 410,
+      headers: {
+        "content-type": "text/plain; charset=utf-8",
+        "x-robots-tag": "noindex, nofollow"
+      }
+    });
+  }
+
   if (slashRedirects.has(url.pathname)) {
     url.pathname = `${url.pathname}/`;
     return Response.redirect(url.toString(), 301);
