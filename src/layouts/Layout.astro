@@ -580,7 +580,7 @@ const structuredData = JSON.stringify([
               })
                 .then((response) => (response.ok ? response.json() : { verified: false }))
                 .then((result) => {
-                  if (result?.verified === true) track("thank_you_view");
+                  if (result?.verified === true) track("verified_lead_submit");
                 })
                 .catch(() => {
                   // A failed verification must never be counted as a conversion.

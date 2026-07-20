@@ -83,7 +83,7 @@ const analyticsEvents = [
   'track("form_validation_error"',
   'track("form_submit_click"',
   'track("form_submit_attempt"',
-  'track("thank_you_view")',
+  'track("verified_lead_submit")',
   'track("quick_contact_click"'
 ];
 
@@ -115,14 +115,14 @@ checkIncludes("src/layouts/Layout.astro", "layout infers partner, paid, campaign
   'return "direct"'
 ]);
 
-checkIncludes("src/layouts/Layout.astro", "layout only fires thank_you_view on localized thank-you routes", [
+checkIncludes("src/layouts/Layout.astro", "layout only fires verified_lead_submit after server verification", [
   "/start-project\\/thank-you\\/",
   "/api/lead-conversion?lead_id=",
   'method: "POST"',
   '"content-type": "application/json"',
   'body: "{}"',
   "result?.verified === true",
-  'track("thank_you_view")'
+  'track("verified_lead_submit")'
 ]);
 
 checkIncludes("functions/api/lead-conversion.ts", "conversion endpoint requires and consumes one-time server proof", [
@@ -183,7 +183,7 @@ checkIncludes("docs/analytics.md", "analytics docs describe events, properties, 
   "form_validation_error",
   "form_submit_click",
   "form_submit_attempt",
-  "thank_you_view",
+  "verified_lead_submit",
   "quick_contact_click",
   "lead_channel",
   "partner_ref",
@@ -199,7 +199,7 @@ if (!exists("dist")) {
   ["start-project/thank-you", "ru/start-project/thank-you", "ro/start-project/thank-you"].forEach((routePath) => {
     routeHtml(routePath, `built ${routePath} page contains conversion analytics context`, [
       "alfarank:analytics",
-      "thank_you_view",
+      "verified_lead_submit",
       "lead_id",
       "landing_page",
       "landing_offer",

@@ -246,7 +246,7 @@ Required work:
   form variant, lead channel, partner/ref, and UTM fields; analytics audit
   verifies source and built output coverage.
 - Add conversion events on thank-you and successful form submission.
-  Status: `thank_you_view` and `form_submit_attempt` implemented; analytics
+  Status: `verified_lead_submit` and `form_submit_attempt` implemented; analytics
   audit verifies localized thank-you routes and conversion context.
 - Build a simple reporting view or dashboard specification:
   traffic source, landing page, offer, CTA, submission, lead quality. Status:

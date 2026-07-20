@@ -51,7 +51,7 @@ for QA.
 - `form_validation_error`
 - `form_submit_click`
 - `form_submit_attempt`
-- `thank_you_view`
+- `verified_lead_submit`
 - `quick_contact_click`
 
 ## Shared Properties
@@ -92,12 +92,12 @@ Quick contact events also include:
 
 Primary conversion:
 
-- `thank_you_view`
+- `verified_lead_submit`
 
 On successful project request submissions, the thank-you redirect preserves
 non-PII conversion context in the URL: `lead_id`, `source_path`,
 `landing_page`, `landing_offer`, `form_variant`, `locale`, `lead_channel`,
-`partner_ref`, and UTM parameters. This lets the `thank_you_view` event tie the
+`partner_ref`, and UTM parameters. This lets the `verified_lead_submit` event tie the
 conversion back to the originating page, campaign, form, language, and
 partner/referral code without exposing the submitter's name, email, referrer,
 or project details in the URL.
@@ -107,7 +107,7 @@ short-lived `HttpOnly` cookie containing a random one-time token whose SHA-256
 hash is stored with the lead. The thank-you page sends the `lead_id` to
 `POST /api/lead-conversion`; the endpoint atomically accepts the matching token
 only when `conversion_recorded_at` is still empty. Only a verified response
-pushes `thank_you_view` to the data layer. Missing cookies, copied URLs,
+pushes `verified_lead_submit` to the data layer. Missing cookies, copied URLs,
 mismatched IDs, and replays do not emit the conversion event.
 
 Supporting funnel events:

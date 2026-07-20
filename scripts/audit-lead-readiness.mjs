@@ -570,7 +570,7 @@ checkIncludes("src/layouts/Layout.astro", "layout emits first-party lead analyti
   "form_validation_error",
   "form_submit_attempt",
   "quick_contact_click",
-  "thank_you_view",
+  "verified_lead_submit",
   "https://www.googletagmanager.com/gtag/js?id=",
   "PUBLIC_GTM_ID",
   "PUBLIC_GA_ID",
