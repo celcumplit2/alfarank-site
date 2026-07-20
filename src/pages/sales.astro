@@ -3,6 +3,9 @@ import BrandLogo from "@/components/BrandLogo.astro";
 import LiquidBackground from "@/components/LiquidBackground.astro";
 import globalStylesUrl from "@/styles/global.css?url";
 import nativeSelectsUrl from "@/scripts/native-selects.js?url";
+import salesVoiceUrl from "@/scripts/sales-voice.js?url";
+
+const salesVoiceModuleUrl = `${salesVoiceUrl}?v=restored-20260720-1`;
 
 const segments = ["B2B услуги", "Локальный бизнес", "E-commerce", "Образование", "Медицина", "Другое"];
 const clientStatuses = ["Новый", "Контакт", "Встреча назначена", "Встреча проведена", "КП отправлено", "Переговоры", "Клиент", "Отказ", "Пауза"];
@@ -173,7 +176,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
 
         <section class="sales-view" data-view="clients">
           <div class="sales-grid sales-grid--forms">
-            <form class="sales-panel sales-form sales-form--quick is-collapsed" data-quick-add-form data-client-form>
+            <form class="sales-panel sales-form sales-form--quick is-collapsed" data-quick-add-form data-client-form data-voice-form>
               <div class="sales-panel-head">
                 <div>
                   <span class="sales-eyebrow">Карточка клиента</span>
@@ -283,7 +286,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
 
         <section class="sales-view" data-view="actions">
           <div class="sales-grid sales-grid--forms">
-            <form class="sales-panel sales-form sales-form--action is-collapsed" data-action-form>
+            <form class="sales-panel sales-form sales-form--action is-collapsed" data-action-form data-voice-form>
               <div class="sales-panel-head">
                 <div>
                   <span class="sales-eyebrow">Действие</span>
@@ -1386,6 +1389,84 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
         grid-column: 1 / -1;
       }
 
+      .sales-voice-panel {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        min-height: 78px;
+        border: 1px solid rgba(105, 230, 255, 0.24);
+        border-radius: 6px;
+        padding: 12px 14px;
+        background:
+          radial-gradient(circle at 12% 0%, rgba(105, 230, 255, 0.14), transparent 48%),
+          rgba(2, 13, 28, 0.48);
+      }
+
+      .sales-voice-copy {
+        display: grid;
+        gap: 3px;
+        min-width: 0;
+      }
+
+      .sales-voice-copy > span {
+        color: #69e6ff;
+        font-size: 10px;
+        font-weight: 900;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+      }
+
+      .sales-voice-copy strong {
+        color: #fff;
+        font-size: 14px;
+      }
+
+      .sales-voice-copy p {
+        margin: 0;
+        color: rgba(231, 244, 255, 0.68);
+        font-size: 12px;
+        line-height: 1.35;
+      }
+
+      .sales-voice-copy p[data-mode="error"] {
+        color: #ffb9b9;
+      }
+
+      .sales-voice-copy p[data-mode="success"] {
+        color: #9ef0c6;
+      }
+
+      .sales-voice-copy p[data-mode="listening"] {
+        color: #ffe0a3;
+      }
+
+      .sales-voice-button {
+        display: inline-flex;
+        flex: 0 0 auto;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 132px;
+      }
+
+      .sales-voice-button[data-phase="listening"] {
+        border-color: rgba(255, 118, 118, 0.66);
+        color: #fff;
+        background: rgba(177, 35, 35, 0.32);
+        box-shadow: 0 0 0 3px rgba(255, 91, 91, 0.09);
+      }
+
+      .sales-voice-panel.is-unavailable .sales-voice-button {
+        opacity: 0.5;
+      }
+
+      .sales-form label.is-voice-filled input,
+      .sales-form label.is-voice-filled textarea,
+      .sales-form label.is-voice-filled .ar-native-select__button {
+        border-color: rgba(83, 214, 151, 0.7);
+      }
+
       .sales-check {
         display: flex;
         align-items: center;
@@ -1831,6 +1912,15 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
         .sales-inline-filters,
         .sales-metrics {
           grid-template-columns: 1fr;
+        }
+
+        .sales-voice-panel {
+          align-items: stretch;
+          flex-direction: column;
+        }
+
+        .sales-voice-button {
+          width: 100%;
         }
       }
     </style>
@@ -3113,5 +3203,6 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           .catch(() => setAuthenticated({ user: null }));
       })();
     </script>
+    <script is:inline type="module" src={salesVoiceModuleUrl}></script>
   </body>
 </html>

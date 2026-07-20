@@ -20,6 +20,8 @@ export type SalesEnv = {
   SALES_DIRECTOR_PIN?: string;
   SALES_ADMIN_PIN?: string;
   PRIVATE_PROJECTS_COOKIE_SECRET?: string;
+  XAI_API_KEY?: string;
+  XAI_SALES_EXTRACT_MODEL?: string;
 };
 
 type SessionPayload = {

@@ -39,6 +39,8 @@ const salesDocumentsApi = readText("functions/api/sales/documents.ts");
 const salesSharedApi = readText("functions/api/sales/_shared.ts");
 const sourceDetailsMigration = readText("migrations/0015_sales_client_source_details.sql");
 const actionDocumentsMigration = readText("migrations/0017_sales_action_documents.sql");
+const salesVoice = readText("src/scripts/sales-voice.js");
+const salesVoiceApi = readText("functions/api/sales/voice.ts");
 
 assert(source.includes('<body class="sales-body">'), "Sales page must keep the sales-body scope.");
 assert(source.includes("<LiquidBackground />"), "Sales page must keep the shared LiquidBackground component.");
@@ -107,6 +109,29 @@ assert(
 assert(source.includes("<th>Источник / кампания</th>"), "Clients table must expose the source/campaign column.");
 assert(source.includes('name="source"'), "Client cards must expose the source field.");
 assert(source.includes('name="source_details"'), "Extended client card must expose full attribution details.");
+assert(
+  source.includes("salesVoiceUrl") &&
+    (source.match(/data-voice-form/g) || []).length === 2 &&
+    source.includes("salesVoiceModuleUrl"),
+  "Both active Sales forms must load the shared voice input module."
+);
+assert(
+  salesVoice.includes("MediaRecorder") &&
+    salesVoice.includes("/api/sales/voice") &&
+    salesVoice.includes('body.append("form_schema"') &&
+    salesVoice.includes("payload.values") &&
+    salesVoice.includes("TRANSIENT_VOICE_STATUSES") &&
+    salesVoice.includes("Автоматически повторяю запрос"),
+  "Sales voice module must record one utterance and apply structured values across the active form."
+);
+assert(
+  salesVoiceApi.includes("requireSalesUser") &&
+    salesVoiceApi.includes("XAI_API_KEY") &&
+    salesVoiceApi.includes("https://api.x.ai/v1/stt") &&
+    salesVoiceApi.includes("https://api.x.ai/v1/chat/completions") &&
+    salesVoiceApi.includes('type: "json_schema"'),
+  "Sales voice API must authenticate and use server-side xAI STT plus structured field extraction."
+);
 assert(
   source.includes('class="sales-root"') &&
     source.includes(".sales-root::-webkit-scrollbar") &&
@@ -257,6 +282,7 @@ if (remoteUrl) {
   assert(!html.includes("payload.task"), "Remote /sales/ page still creates an action from the quick client form.");
   assert(!html.includes('type="date"'), "Remote /sales/ page still ships native date inputs.");
   assert(html.includes("sales-date-picker"), "Remote /sales/ page is missing the custom AlfaRank calendar.");
+  assert(html.includes("data-voice-form") && html.includes("sales-voice"), "Remote /sales/ page is missing voice input.");
 }
 
 console.log("Sales page QA passed. Still run browser screenshot QA before production deploy.");
