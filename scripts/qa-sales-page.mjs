@@ -169,6 +169,13 @@ assert(
   "New client and new action forms must be collapsed by default and expand only on click."
 );
 assert(
+  source.includes('data-action-form-title tabindex="-1"') &&
+    source.includes('elements.actionForm.scrollIntoView({ block: "start", behavior: "smooth" })') &&
+    source.includes("elements.actionFormTitle.focus({ preventScroll: true })") &&
+    source.includes("Открыто редактирование действия:"),
+  "Editing an action must scroll to the populated form and expose clear visual feedback."
+);
+assert(
     !/<input[^>]*name="next_action"/.test(source) &&
     !/<input[^>]*name="next_action_at"/.test(source) &&
     source.includes("<th>Ближайшее действие</th>") &&

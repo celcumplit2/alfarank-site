@@ -287,7 +287,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
               <div class="sales-panel-head">
                 <div>
                   <span class="sales-eyebrow">Действие</span>
-                  <h2 data-action-form-title>Новое действие</h2>
+                  <h2 data-action-form-title tabindex="-1">Новое действие</h2>
                 </div>
                 <div class="sales-row-actions">
                   <button class="sales-button sales-button--primary" type="button" data-action-toggle aria-expanded="false">Развернуть</button>
@@ -2789,8 +2789,13 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           elements.actionFormTitle.textContent = `${action.company_name} / ${formatDate(action.action_date)}`;
           updateActionClientSummary();
           updateActionCompletionFields();
-          setActionFormExpanded(true);
           setTab("actions");
+          setActionFormExpanded(true);
+          requestAnimationFrame(() => {
+            elements.actionForm.scrollIntoView({ block: "start", behavior: "smooth" });
+            elements.actionFormTitle.focus({ preventScroll: true });
+          });
+          status(`Открыто редактирование действия: ${action.company_name}`, "success");
         };
 
         const setTab = (tab) => {
