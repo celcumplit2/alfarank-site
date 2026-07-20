@@ -35,7 +35,7 @@
     "lead-env:checklist": "node scripts/write-lead-production-checklist.mjs",
     "lead-env:sync": "node scripts/sync-cloudflare-pages-lead-env.mjs",
     "news:translate": "node scripts/sync-nova-news-translations.mjs",
-    "build": "npm run news:translate && astro build && node scripts/validate-heading-copy.mjs",
+    "build": "npm run news:translate && astro build && node scripts/validate-heading-copy.mjs && node scripts/audit-indexable-pages.mjs",
     "preview": "astro preview --host 127.0.0.1"
   },
   "dependencies": {

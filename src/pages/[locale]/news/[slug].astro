@@ -39,6 +39,7 @@ if (!article) {
   description={articleDescription(article)}
   image={articleImage(article) || undefined}
   locale={locale}
+  robots="noindex, follow"
   ogType="article"
   structuredData={newsArticleSchema(article, locale)}
 >

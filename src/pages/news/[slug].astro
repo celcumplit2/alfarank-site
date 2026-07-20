@@ -31,6 +31,7 @@ if (!article) {
   title={`${articleTitle(article)} | AlfaRank`}
   description={articleDescription(article)}
   image={articleImage(article) || undefined}
+  robots="noindex, follow"
   ogType="article"
   structuredData={newsArticleSchema(article, locale)}
 >
