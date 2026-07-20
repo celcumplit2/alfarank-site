@@ -35,8 +35,10 @@ const nativeSelects = readText("src/scripts/native-selects.js");
 const startProjectApi = readText("functions/api/start-project.ts");
 const salesClientsApi = readText("functions/api/sales/clients.ts");
 const salesActionsApi = readText("functions/api/sales/actions.ts");
+const salesDocumentsApi = readText("functions/api/sales/documents.ts");
 const salesSharedApi = readText("functions/api/sales/_shared.ts");
 const sourceDetailsMigration = readText("migrations/0015_sales_client_source_details.sql");
+const actionDocumentsMigration = readText("migrations/0017_sales_action_documents.sql");
 
 assert(source.includes('<body class="sales-body">'), "Sales page must keep the sales-body scope.");
 assert(source.includes("<LiquidBackground />"), "Sales page must keep the shared LiquidBackground component.");
@@ -53,6 +55,43 @@ assert(
   "Sales page must keep separate Clients and Actions tabs."
 );
 assert(source.includes("data-export-xlsx"), "Sales page must keep the XLSX export control.");
+assert(
+  source.includes("data-upload-action") &&
+    source.includes("data-action-document-input") &&
+    source.includes('requestJson("/api/sales/documents"') &&
+    source.includes("loadDocuments") &&
+    source.includes("download title=\"Скачать"),
+  "Action cards must expose document upload, listing, and authenticated download controls."
+);
+assert(
+  source.includes("data-action-form-document-trigger") &&
+    source.includes("data-action-form-document-input") &&
+    source.includes("data-action-form-document-list") &&
+    source.includes("pendingActionDocuments") &&
+    source.includes("uploadActionDocument(savedAction.id, file)") &&
+    source.includes("Документы выбраны:") &&
+    source.includes("Действие сохранено. Документы загружены:"),
+  "New action form must queue selected documents and upload them immediately after the action is saved."
+);
+assert(
+  source.includes("options.body instanceof FormData") && source.includes("!isMultipart"),
+  "Sales JSON helper must preserve the browser multipart boundary for document uploads."
+);
+assert(
+  salesDocumentsApi.includes("export const onRequestGet") &&
+    salesDocumentsApi.includes("export const onRequestPost") &&
+    salesDocumentsApi.includes("request.formData()") &&
+    salesDocumentsApi.includes("INSERT INTO sales_action_documents") &&
+    salesDocumentsApi.includes('"content-disposition"') &&
+    salesDocumentsApi.includes("actionScope(user)"),
+  "Sales document API must authenticate, scope, store, list, and download action documents."
+);
+assert(
+  actionDocumentsMigration.includes("CREATE TABLE IF NOT EXISTS sales_action_documents") &&
+    actionDocumentsMigration.includes("content BLOB NOT NULL") &&
+    actionDocumentsMigration.includes("REFERENCES sales_actions (id) ON DELETE CASCADE"),
+  "Sales D1 migration must store action documents and remove them with their action."
+);
 assert(source.includes("data-delete-client") && source.includes("data-delete-action"), "Sales page must keep admin delete controls.");
 assert(
   salesSharedApi.includes("canDeleteSalesData") &&

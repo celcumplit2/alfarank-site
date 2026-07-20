@@ -348,7 +348,20 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
                 <span>Два варианта решения</span>
                 <textarea name="solution_options" placeholder={"1. ...\n2. ..."}></textarea>
               </label>
-              <button class="sales-button sales-button--primary" type="submit">Сохранить действие</button>
+              <div class="sales-action-form-documents sales-wide">
+                <div class="sales-action-form-document-head">
+                  <div>
+                    <strong>Документы</strong>
+                    <span>Выберите файлы сейчас — они загрузятся автоматически после сохранения действия.</span>
+                  </div>
+                  <button class="sales-button sales-button--ghost" type="button" data-action-form-document-trigger>Выбрать документы</button>
+                </div>
+                <input class="sales-file-input" type="file" data-action-form-document-input accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.txt,.rtf,.odt,.ods,.ppt,.pptx,.png,.jpg,.jpeg,.webp,.heic,.zip" multiple />
+                <div class="sales-action-form-document-list" data-action-form-document-list>
+                  <span class="sales-action-document-empty">Документы не выбраны</span>
+                </div>
+              </div>
+              <button class="sales-button sales-button--primary" type="submit" data-action-submit>Сохранить действие</button>
             </form>
 
             <section class="sales-panel">
@@ -359,7 +372,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
                 </div>
               </div>
               <div class="sales-table-wrap sales-table-wrap--tall">
-                <table>
+                <table class="sales-actions-table">
                   <thead>
                     <tr>
                       <th>Дата</th>
@@ -369,6 +382,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
                       <th>Задача</th>
                       <th>Статус действия</th>
                       <th>Следующий шаг после результата</th>
+                      <th>Документы</th>
                       <th>Менеджер</th>
                       <th></th>
                     </tr>
@@ -724,6 +738,130 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
         padding: 4px 7px;
         font-size: 11px;
         line-height: 1;
+      }
+
+      .sales-action-form-documents {
+        display: grid;
+        gap: 10px;
+        border: 1px solid rgba(105, 230, 255, 0.2);
+        border-radius: 6px;
+        padding: 12px;
+        background: rgba(105, 230, 255, 0.05);
+      }
+
+      .sales-action-form-document-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .sales-action-form-document-head > div {
+        display: grid;
+        gap: 3px;
+      }
+
+      .sales-action-form-document-head strong {
+        color: #eaf9ff;
+        font-size: 12px;
+      }
+
+      .sales-action-form-document-head span {
+        color: rgba(191, 232, 255, 0.72);
+        font-size: 11px;
+        line-height: 1.45;
+      }
+
+      .sales-action-form-document-head .sales-button {
+        flex: 1 0 100%;
+        width: 100%;
+      }
+
+      .sales-action-form-document-list {
+        display: grid;
+        gap: 6px;
+      }
+
+      .sales-action-form-document-item {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid rgba(105, 230, 255, 0.18);
+        border-radius: 4px;
+        padding: 7px 8px;
+        color: #eaf9ff;
+        background: rgba(6, 29, 54, 0.42);
+      }
+
+      .sales-action-form-document-item strong {
+        overflow: hidden;
+        font-size: 11px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .sales-action-form-document-item span {
+        color: rgba(191, 232, 255, 0.68);
+        font-size: 10px;
+        white-space: nowrap;
+      }
+
+      .sales-action-documents {
+        display: grid;
+        min-width: 190px;
+        gap: 7px;
+      }
+
+      .sales-action-document-list {
+        display: grid;
+        gap: 5px;
+      }
+
+      .sales-action-document {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid rgba(105, 230, 255, 0.2);
+        border-radius: 4px;
+        padding: 6px 7px;
+        color: #eaf9ff;
+        background: rgba(105, 230, 255, 0.07);
+        text-decoration: none;
+      }
+
+      .sales-action-document:hover,
+      .sales-action-document:focus-visible {
+        border-color: rgba(105, 230, 255, 0.62);
+        background: rgba(105, 230, 255, 0.14);
+        outline: none;
+      }
+
+      .sales-action-document strong {
+        overflow: hidden;
+        font-size: 11px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .sales-action-document span,
+      .sales-action-document-empty {
+        color: rgba(191, 232, 255, 0.68);
+        font-size: 10px;
+        white-space: nowrap;
+      }
+
+      .sales-action-documents .sales-button {
+        width: 100%;
+        min-height: 30px;
+        padding: 5px 8px;
+        font-size: 11px;
+      }
+
+      .sales-file-input {
+        display: none;
       }
 
       .sales-filter-toggle {
@@ -1370,6 +1508,10 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
         border-collapse: collapse;
       }
 
+      .sales-actions-table {
+        min-width: 1260px;
+      }
+
       th,
       td {
         border-bottom: 1px solid rgba(216, 251, 255, 0.1);
@@ -1704,6 +1846,8 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           overview: null,
           clients: [],
           actions: [],
+          documents: [],
+          pendingActionDocuments: [],
           activeTab: "dashboard"
         };
 
@@ -1749,6 +1893,10 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           actionCompletionFields: root.querySelectorAll("[data-action-completion-field]"),
           actionClientSelect: root.querySelector("[data-action-client-select]"),
           actionClientSummary: root.querySelector("[data-action-client-summary]"),
+          actionDocumentTrigger: root.querySelector("[data-action-form-document-trigger]"),
+          actionDocumentInput: root.querySelector("[data-action-form-document-input]"),
+          actionDocumentList: root.querySelector("[data-action-form-document-list]"),
+          actionSubmit: root.querySelector("[data-action-submit]"),
           actionsTable: root.querySelector("[data-actions-table]"),
           weeklyTable: root.querySelector("[data-weekly-table]"),
           exportXlsx: root.querySelector("[data-export-xlsx]"),
@@ -2137,6 +2285,56 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           return text.length > max ? `${text.slice(0, max - 3).trimEnd()}...` : text;
         };
 
+        const formatFileSize = (value) => {
+          const bytes = Number(value || 0);
+          if (bytes < 1024) return `${bytes} Б`;
+          if (bytes < 1024 * 1024) return `${Math.ceil(bytes / 1024)} КБ`;
+          return `${(bytes / (1024 * 1024)).toFixed(1)} МБ`;
+        };
+
+        const actionDocumentExtensions = new Set([
+          "pdf", "doc", "docx", "xls", "xlsx", "csv", "txt", "rtf", "odt", "ods",
+          "ppt", "pptx", "png", "jpg", "jpeg", "webp", "heic", "zip"
+        ]);
+
+        const renderPendingActionDocuments = () => {
+          const files = state.pendingActionDocuments;
+          elements.actionDocumentList.innerHTML = files.length
+            ? files
+                .map(
+                  (file) => `
+                    <div class="sales-action-form-document-item">
+                      <strong>${escapeHtml(file.name)}</strong>
+                      <span>${escapeHtml(formatFileSize(file.size))}</span>
+                    </div>
+                  `
+                )
+                .join("")
+            : '<span class="sales-action-document-empty">Документы не выбраны</span>';
+        };
+
+        const validatePendingActionDocuments = (actionId) => {
+          const files = state.pendingActionDocuments;
+          const existingCount = actionId
+            ? state.documents.filter((document) => document.action_id === actionId).length
+            : 0;
+          if (existingCount + files.length > 12) {
+            throw new Error("К одному действию можно прикрепить не больше 12 документов.");
+          }
+          files.forEach((file) => {
+            const extension = file.name.toLowerCase().split(".").pop() || "";
+            if (!actionDocumentExtensions.has(extension)) {
+              throw new Error(`Тип файла ${file.name} не поддерживается.`);
+            }
+            if (!file.size) {
+              throw new Error(`Файл ${file.name} пустой.`);
+            }
+            if (file.size > 1_750_000) {
+              throw new Error(`Файл ${file.name} больше 1,7 МБ.`);
+            }
+          });
+        };
+
         const status = (message, mode = "") => {
           elements.globalStatus.textContent = message || "";
           elements.globalStatus.classList.toggle("is-error", mode === "error");
@@ -2167,12 +2365,13 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
         };
 
         const requestJson = async (path, options = {}) => {
+          const isMultipart = typeof FormData !== "undefined" && options.body instanceof FormData;
           const response = await fetch(path, {
             cache: "no-store",
             credentials: "same-origin",
             ...options,
             headers: {
-              ...(options.body ? { "content-type": "application/json" } : {}),
+              ...(options.body && !isMultipart ? { "content-type": "application/json" } : {}),
               ...(options.headers || {})
             }
           });
@@ -2393,27 +2592,50 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           elements.actionsTable.innerHTML = state.actions.length
             ? state.actions
                 .map(
-                  (action) => `
-                    <tr data-state="${rowState(action.action_date, action.status)}">
-                      <td>${escapeHtml(formatDate(action.action_date))}</td>
-                      <td><strong>${escapeHtml(action.company_name)}</strong><br /><span>${escapeHtml(action.contact_name || "")}</span></td>
-                      <td>${escapeHtml(action.priority)}</td>
-                      <td>${escapeHtml(action.action_type)}</td>
-                      <td>${escapeHtml(compact(action.task, 150))}</td>
-                      <td><span class="sales-pill">${escapeHtml(action.status)}</span></td>
-                      <td>${escapeHtml(compact(action.next_step, 120) || "-")}<br /><span>${escapeHtml(formatDate(action.next_step_date, "-"))}</span></td>
-                      <td>${escapeHtml(userLabel(action.owner_id))}</td>
-                      <td>
-                        <div class="sales-table-actions">
-                          <button class="sales-button sales-button--ghost" type="button" data-edit-action="${escapeHtml(action.id)}" title="Редактировать действие" aria-label="Редактировать действие по ${escapeHtml(action.company_name)}">Ред.</button>
-                          ${isAdmin() ? `<button class="sales-button sales-button--danger" type="button" data-delete-action="${escapeHtml(action.id)}" title="Удалить действие" aria-label="Удалить действие по ${escapeHtml(action.company_name)}">Удал.</button>` : ""}
-                        </div>
-                      </td>
-                    </tr>
-                  `
+                  (action) => {
+                    const documents = state.documents.filter((document) => document.action_id === action.id);
+                    return `
+                      <tr data-state="${rowState(action.action_date, action.status)}">
+                        <td>${escapeHtml(formatDate(action.action_date))}</td>
+                        <td><strong>${escapeHtml(action.company_name)}</strong><br /><span>${escapeHtml(action.contact_name || "")}</span></td>
+                        <td>${escapeHtml(action.priority)}</td>
+                        <td>${escapeHtml(action.action_type)}</td>
+                        <td>${escapeHtml(compact(action.task, 150))}</td>
+                        <td><span class="sales-pill">${escapeHtml(action.status)}</span></td>
+                        <td>${escapeHtml(compact(action.next_step, 120) || "-")}<br /><span>${escapeHtml(formatDate(action.next_step_date, "-"))}</span></td>
+                        <td>
+                          <div class="sales-action-documents">
+                            <div class="sales-action-document-list">
+                              ${documents.length
+                                ? documents
+                                    .map(
+                                      (document) => `
+                                        <a class="sales-action-document" href="${endpoint("/api/sales/documents", { id: document.id })}" download title="Скачать ${escapeHtml(document.file_name)}">
+                                          <strong>${escapeHtml(document.file_name)}</strong>
+                                          <span>${escapeHtml(formatFileSize(document.byte_size))}</span>
+                                        </a>
+                                      `
+                                    )
+                                    .join("")
+                                : '<span class="sales-action-document-empty">Документов пока нет</span>'}
+                            </div>
+                            <button class="sales-button sales-button--ghost" type="button" data-upload-action="${escapeHtml(action.id)}">Загрузить документ</button>
+                            <input class="sales-file-input" type="file" data-action-document-input="${escapeHtml(action.id)}" accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.txt,.rtf,.odt,.ods,.ppt,.pptx,.png,.jpg,.jpeg,.webp,.heic,.zip" multiple />
+                          </div>
+                        </td>
+                        <td>${escapeHtml(userLabel(action.owner_id))}</td>
+                        <td>
+                          <div class="sales-table-actions">
+                            <button class="sales-button sales-button--ghost" type="button" data-edit-action="${escapeHtml(action.id)}" title="Редактировать действие" aria-label="Редактировать действие по ${escapeHtml(action.company_name)}">Ред.</button>
+                            ${isAdmin() ? `<button class="sales-button sales-button--danger" type="button" data-delete-action="${escapeHtml(action.id)}" title="Удалить действие" aria-label="Удалить действие по ${escapeHtml(action.company_name)}">Удал.</button>` : ""}
+                          </div>
+                        </td>
+                      </tr>
+                    `;
+                  }
                 )
                 .join("")
-            : `<tr><td colspan="9">Нет действий для выбранного режима.</td></tr>`;
+            : `<tr><td colspan="10">Нет действий для выбранного режима.</td></tr>`;
           queueCustomScrollbarUpdate();
         };
 
@@ -2476,9 +2698,14 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           state.actions = payload.actions || [];
         };
 
+        const loadDocuments = async () => {
+          const payload = await requestJson("/api/sales/documents");
+          state.documents = payload.documents || [];
+        };
+
         const loadAll = async () => {
           status("Загружаю данные...");
-          await Promise.all([loadOverview(), loadClients(), loadActions()]);
+          await Promise.all([loadOverview(), loadClients(), loadActions(), loadDocuments()]);
           renderAll();
           status(`Обновлено: ${new Date().toLocaleTimeString("ru-RU")}`, "success");
         };
@@ -2522,11 +2749,14 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
         const resetActionForm = () => {
           elements.actionForm.reset();
           elements.actionForm.elements.id.value = "";
+          state.pendingActionDocuments = [];
+          elements.actionDocumentInput.value = "";
           setDateInput(elements.actionForm.elements.action_date, currentToday());
           elements.actionForm.elements.priority.value = "Средний";
           elements.actionForm.elements.action_type.value = "Звонок";
           elements.actionForm.elements.status.value = "Запланировано";
           elements.actionFormTitle.textContent = "Новое действие";
+          renderPendingActionDocuments();
           updateActionClientSummary();
           updateActionCompletionFields();
         };
@@ -2585,13 +2815,90 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           if (!payload.client_id) {
             throw new Error("Выберите клиента для действия.");
           }
-          await requestJson("/api/sales/actions", {
+          validatePendingActionDocuments(payload.id);
+
+          const files = [...state.pendingActionDocuments];
+          const originalSubmitText = elements.actionSubmit.textContent;
+          let savedAction = null;
+          elements.actionSubmit.disabled = true;
+          elements.actionSubmit.textContent = files.length ? "Сохраняю и загружаю..." : "Сохраняю...";
+
+          try {
+            const response = await requestJson("/api/sales/actions", {
+              method: "POST",
+              body: JSON.stringify(payload)
+            });
+            savedAction = response.action;
+            if (!savedAction?.id) throw new Error("Сервер не вернул созданное действие.");
+
+            form.elements.id.value = savedAction.id;
+            for (const file of files) {
+              await uploadActionDocument(savedAction.id, file);
+              state.pendingActionDocuments = state.pendingActionDocuments.filter((entry) => entry !== file);
+              renderPendingActionDocuments();
+            }
+
+            resetActionForm();
+            setActionFormExpanded(false);
+            await loadAll();
+            status(
+              files.length
+                ? `Действие сохранено. Документы загружены: ${files.length}`
+                : "Действие сохранено.",
+              "success"
+            );
+          } catch (error) {
+            if (savedAction?.id && state.pendingActionDocuments.length) {
+              try {
+                await Promise.all([loadActions(), loadDocuments()]);
+                renderActions();
+              } catch {
+                // Keep the original upload error visible.
+              }
+              elements.actionFormTitle.textContent = `${savedAction.company_name || "Действие"} / ${formatDate(savedAction.action_date)}`;
+              throw new Error(`Действие сохранено, но не все документы загрузились: ${error.message}`);
+            }
+            throw error;
+          } finally {
+            elements.actionSubmit.disabled = false;
+            elements.actionSubmit.textContent = originalSubmitText;
+          }
+        };
+
+        const uploadActionDocument = async (actionId, file) => {
+          const payload = new FormData();
+          payload.append("action_id", actionId);
+          payload.append("file", file);
+          await requestJson("/api/sales/documents", {
             method: "POST",
-            body: JSON.stringify(payload)
+            body: payload
           });
-          resetActionForm();
-          setActionFormExpanded(false);
-          await loadAll();
+        };
+
+        const uploadActionDocuments = async (action, input) => {
+          const files = Array.from(input.files || []);
+          if (!files.length) return;
+
+          const button = input.closest(".sales-action-documents")?.querySelector("[data-upload-action]");
+          if (button) {
+            button.disabled = true;
+            button.textContent = "Загружаю...";
+          }
+
+          try {
+            for (const file of files) {
+              await uploadActionDocument(action.id, file);
+            }
+            await loadDocuments();
+            renderActions();
+            status(`Документы загружены: ${files.length}`, "success");
+          } finally {
+            input.value = "";
+            if (button) {
+              button.disabled = false;
+              button.textContent = "Загрузить документ";
+            }
+          }
         };
 
         const login = async (form) => {
@@ -2681,6 +2988,13 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
             return;
           }
 
+          const uploadActionButton = event.target.closest("[data-upload-action]");
+          if (uploadActionButton) {
+            const input = uploadActionButton.closest(".sales-action-documents")?.querySelector("[data-action-document-input]");
+            input?.click();
+            return;
+          }
+
           const deleteClientButton = event.target.closest("[data-delete-client]");
           if (deleteClientButton) {
             const client = state.clients.find((entry) => entry.id === deleteClientButton.dataset.deleteClient);
@@ -2699,6 +3013,32 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           if (saveWeekButton) {
             saveWeek(saveWeekButton.closest("tr")).catch((error) => status(error.message, "error"));
           }
+        });
+
+        root.addEventListener("change", (event) => {
+          const formInput = event.target.closest("[data-action-form-document-input]");
+          if (formInput) {
+            state.pendingActionDocuments = Array.from(formInput.files || []);
+            try {
+              validatePendingActionDocuments(elements.actionForm.elements.id.value);
+              renderPendingActionDocuments();
+              if (state.pendingActionDocuments.length) {
+                status(`Документы выбраны: ${state.pendingActionDocuments.length}. Сохраните действие для загрузки.`, "success");
+              }
+            } catch (error) {
+              state.pendingActionDocuments = [];
+              formInput.value = "";
+              renderPendingActionDocuments();
+              status(error.message, "error");
+            }
+            return;
+          }
+
+          const input = event.target.closest("[data-action-document-input]");
+          if (!input) return;
+          const action = state.actions.find((entry) => entry.id === input.dataset.actionDocumentInput);
+          if (!action) return;
+          uploadActionDocuments(action, input).catch((error) => status(error.message, "error"));
         });
 
         elements.loginForm.addEventListener("submit", (event) => {
@@ -2723,6 +3063,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
           setActionFormExpanded(elements.actionForm.classList.contains("is-collapsed"));
         });
         elements.actionReset.addEventListener("click", resetActionForm);
+        elements.actionDocumentTrigger.addEventListener("click", () => elements.actionDocumentInput.click());
         elements.actionClientSelect.addEventListener("change", updateActionClientSummary);
         elements.actionForm.elements.status.addEventListener("change", updateActionCompletionFields);
         elements.exportXlsx.addEventListener("click", exportXlsx);
