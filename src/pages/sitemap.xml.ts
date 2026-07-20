@@ -1,12 +1,16 @@
 import { allBaseRoutes, alternatePaths, allLocalizedRoutes } from "@/data/i18n";
 
 const baseUrl = "https://alfarank.com";
-const lastmod = "2026-07-20";
 const excludedSitemapRoutes = new Set([
   "/start-project/thank-you/",
   "/ro/start-project/thank-you/",
   "/ru/start-project/thank-you/"
 ]);
+
+const isCuratedPublicRoute = (route: string) => {
+  const baseRoute = route.replace(/^\/(ro|ru)(?=\/)/, "");
+  return !/^\/cases\/[^/]+\/[^/]+\/$/.test(baseRoute);
+};
 
 const escapeXml = (value: string) =>
   value
@@ -17,7 +21,9 @@ const escapeXml = (value: string) =>
     .replace(/'/g, "&apos;");
 
 const localizedRouteXml = () => {
-  const routes = allLocalizedRoutes().filter((route) => !excludedSitemapRoutes.has(route));
+  const routes = allLocalizedRoutes().filter(
+    (route) => !excludedSitemapRoutes.has(route) && isCuratedPublicRoute(route)
+  );
   return routes
     .map(
       (route) => {
@@ -28,7 +34,6 @@ const localizedRouteXml = () => {
 
         return `  <url>
     <loc>${baseUrl}${route}</loc>
-    <lastmod>${lastmod}</lastmod>
 ${alternates}
     <xhtml:link rel="alternate" hreflang="x-default" href="${baseUrl}${baseRoute}" />
   </url>`;

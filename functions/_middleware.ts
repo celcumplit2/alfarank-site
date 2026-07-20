@@ -13,6 +13,24 @@ const isProtectedProjectPath = (pathname: string) =>
 
 const slashRedirects = new Set(["/alfa-pulse", "/ro/alfa-pulse", "/ru/alfa-pulse"]);
 
+const isPublicPageRequest = (request: Request, pathname: string) => {
+  if (request.method !== "GET" && request.method !== "HEAD") return false;
+  if (pathname.startsWith("/api/")) return false;
+
+  const lastSegment = pathname.split("/").filter(Boolean).at(-1) ?? "";
+  return pathname.endsWith("/") || !lastSegment.includes(".");
+};
+
+const goneResponse = (request: Request) =>
+  new Response(request.method === "HEAD" ? null : "Gone", {
+    status: 410,
+    headers: {
+      "cache-control": "public, max-age=300",
+      "content-type": "text/plain; charset=utf-8",
+      "x-robots-tag": "noindex, nofollow"
+    }
+  });
+
 const localeFromPath = (pathname: string) => {
   const match = pathname.match(/^\/(ro|ru)(?=\/|$)/);
   return match?.[1] ?? "en";
@@ -72,13 +90,7 @@ export const onRequest: PagesFunction<Env> = async ({ request, env, next }) => {
   const url = new URL(request.url);
 
   if (/\/feed\/?$/.test(url.pathname)) {
-    return new Response("Gone", {
-      status: 410,
-      headers: {
-        "content-type": "text/plain; charset=utf-8",
-        "x-robots-tag": "noindex, nofollow"
-      }
-    });
+    return goneResponse(request);
   }
 
   if (slashRedirects.has(url.pathname)) {
@@ -87,7 +99,8 @@ export const onRequest: PagesFunction<Env> = async ({ request, env, next }) => {
   }
 
   if (!isProtectedProjectPath(url.pathname)) {
-    return next();
+    const response = await next();
+    return response.status === 404 && isPublicPageRequest(request, url.pathname) ? goneResponse(request) : response;
   }
 
   const expectedCookie = await cookieValueFor(env);

@@ -4,7 +4,6 @@ import { landingOffers } from "@/data/landing";
 import { capabilities, industries, solutions, systems } from "@/data/site";
 
 const baseUrl = "https://alfarank.com";
-const lastmod = "2026-07-20";
 
 const priorityBaseRoutes = [
   "/",
@@ -57,7 +56,6 @@ const routeXml = () =>
 
       return `  <url>
     <loc>${escapeXml(`${baseUrl}${route}`)}</loc>
-    <lastmod>${lastmod}</lastmod>
 ${alternates}
     <xhtml:link rel="alternate" hreflang="x-default" href="${escapeXml(`${baseUrl}${baseRoute}`)}" />
   </url>`;

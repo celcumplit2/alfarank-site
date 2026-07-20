@@ -58,6 +58,36 @@ for (const slug of ["automate-lead-processing", "ai-content-workflow", "ecommerc
   check(`${pathname} is a landing offer`, html.includes(`landing_offer`) && !html.includes("Digital systems that connect, automate, and perform."), `${pathname} fell back to the home page.`);
 }
 
+for (const pathname of [
+  "/essential-pixel-search-tool-for-android-users/",
+  "/fortnite-chapter-7-season-1-new-features-updates/",
+  "/digital-marketing-manager-opportunity-at-the-orchard/"
+]) {
+  const response = await fetch(`${baseUrl}${pathname}`, {
+    redirect: "manual",
+    headers: {
+      "cache-control": "no-cache",
+      "user-agent": "AlfaRank-Production-QA/1.0"
+    }
+  });
+  check(`${pathname} is permanently removed`, response.status === 410, `${pathname} returned HTTP ${response.status} instead of 410.`);
+  check(
+    `${pathname} blocks indexing`,
+    (response.headers.get("x-robots-tag") || "").includes("noindex"),
+    `${pathname} is missing the X-Robots-Tag noindex directive.`
+  );
+}
+
+{
+  const response = await fetchCritical("/sitemap.xml");
+  const xml = await response.text();
+  const urls = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+  const caseDetailUrls = urls.filter((url) => /\/cases\/[^/]+\/[^/]+\/$/.test(new URL(url).pathname.replace(/^\/(ro|ru)/, "")));
+  check("Sitemap stays within the curated crawl set", urls.length <= 200, `Sitemap advertises ${urls.length} URLs.`);
+  check("Sitemap excludes detailed case inventory", caseDetailUrls.length === 0, `Sitemap advertises detailed cases: ${caseDetailUrls.join(", ")}.`);
+  check("Sitemap does not fake last-modified dates", !xml.includes("<lastmod>"), "Sitemap contains blanket lastmod values.");
+}
+
 {
   const pathname = "/sales/";
   const response = await fetchCritical(pathname);
