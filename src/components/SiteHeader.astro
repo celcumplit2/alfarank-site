@@ -78,7 +78,16 @@ const languageNames: Record<Locale, string> = {
         </div>
       </details>
     ))}
-    {directNavItems.map((item) => <a href={item.href}>{item.label}</a>)}
+    {directNavItems.map((item) => (
+      <a
+        class:list={{ notranslate: item.label === "ALFA Pulse" }}
+        href={item.href}
+        data-no-translate={item.label === "ALFA Pulse" ? "" : undefined}
+        translate={item.label === "ALFA Pulse" ? "no" : undefined}
+      >
+        {item.label}
+      </a>
+    ))}
   </nav>
   <div class="header-actions">
     <details class="language-switcher" data-no-translate>
@@ -106,7 +115,16 @@ const languageNames: Record<Locale, string> = {
           {group.items.map((item) => <a href={item.href}>{item.label}</a>)}
         </div>
       ))}
-      {directNavItems.map((item) => <a href={item.href}>{item.label}</a>)}
+      {directNavItems.map((item) => (
+        <a
+          class:list={{ notranslate: item.label === "ALFA Pulse" }}
+          href={item.href}
+          data-no-translate={item.label === "ALFA Pulse" ? "" : undefined}
+          translate={item.label === "ALFA Pulse" ? "no" : undefined}
+        >
+          {item.label}
+        </a>
+      ))}
       <details class="language-switcher mobile-language-switcher" data-no-translate>
         <summary aria-label={t(locale, "language")}>
           <span>{localeLabels[locale]}</span>

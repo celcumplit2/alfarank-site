@@ -177,7 +177,16 @@ const footerNodes = [
     <nav class:list={["footer-orbit-node", node.className]} aria-label={node.title}>
       <h2>{node.title}</h2>
       <div class="footer-links">
-        {node.links.map((item) => <a href={item.href}>{item.label}</a>)}
+        {node.links.map((item) => (
+          <a
+            class:list={{ notranslate: item.label === "ALFA Pulse" }}
+            href={item.href}
+            data-no-translate={item.label === "ALFA Pulse" ? "" : undefined}
+            translate={item.label === "ALFA Pulse" ? "no" : undefined}
+          >
+            {item.label}
+          </a>
+        ))}
       </div>
     </nav>
   ))}
