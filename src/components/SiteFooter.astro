@@ -109,6 +109,7 @@ const solutionLinks = solutionSlugs
   .map((item) => ({ label: item!.title, href: localizePath(`/solutions/${item!.slug}/`, locale) }));
 
 const routeLinks = [
+  { label: "ALFA Pulse", href: localizePath("/alfa-pulse/", locale) },
   { label: t(locale, "startProject"), href: localizePath("/start-project/", locale) },
   { label: t(locale, "partnerProgram"), href: localizePath("/partner-program/", locale) }
 ];

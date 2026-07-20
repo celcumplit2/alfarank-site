@@ -39,6 +39,15 @@ for (const localePath of ["", "/ro", "/ru"]) {
   const html = await response.text();
   const title = html.match(/<title>(.*?)<\/title>/i)?.[1] || "";
   check(`${pathname} is Alfa Pulse`, title.includes("ALFA Pulse"), `${pathname} fell back to the home page (title: ${title || "missing"}).`);
+
+  const homePath = `${localePath}/`;
+  const homeResponse = await fetchCritical(homePath);
+  const homeHtml = await homeResponse.text();
+  check(
+    `${homePath} links to Alfa Pulse`,
+    homeHtml.includes(`href="${pathname}"`),
+    `${homePath} does not provide a crawlable link to ${pathname}.`
+  );
 }
 
 for (const locale of ["en", "ro", "ru"]) {
