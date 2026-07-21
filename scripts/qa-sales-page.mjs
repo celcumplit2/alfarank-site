@@ -133,6 +133,16 @@ assert(
   "Sales voice API must authenticate and use server-side xAI STT plus structured field extraction."
 );
 assert(
+  salesVoice.includes('navigator.permissions.query({ name: "microphone" })') &&
+    salesVoice.includes('navigator.mediaDevices.getUserMedia({ audio: true })') &&
+    salesVoice.includes("data-voice-permission-dialog") &&
+    salesVoice.includes("showPermissionDialog(instance)") &&
+    salesVoice.includes("Запросить снова") &&
+    source.includes(".sales-voice-permission-dialog::backdrop") &&
+    source.includes(".sales-voice-permission-actions"),
+  "Denied microphone access must open an in-app recovery dialog while first-time access keeps the native browser prompt."
+);
+assert(
   source.includes('class="sales-root"') &&
     source.includes(".sales-root::-webkit-scrollbar") &&
     source.includes(".sales-root::-webkit-scrollbar-button") &&

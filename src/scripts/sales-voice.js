@@ -14,6 +14,7 @@ const TRANSIENT_VOICE_STATUSES = new Set([408, 429, 500, 502, 503, 504]);
 const MAX_SAFE_ERROR_CHARS = 360;
 
 let activeRecording = null;
+let permissionDialogInstance = null;
 
 function preferredMimeType() {
   if (typeof MediaRecorder === "undefined") return "";
@@ -34,6 +35,83 @@ function friendlyMicError(error) {
     if (error.name === "NotReadableError") return "Микрофон занят другим приложением или недоступен.";
   }
   return error instanceof Error ? error.message : "Браузер не дал доступ к микрофону.";
+}
+
+function permissionError(message, code = "permission-denied") {
+  const error = new Error(message);
+  error.code = code;
+  return error;
+}
+
+function isMicrophonePermissionError(error) {
+  return Boolean(
+    error?.code === "permission-denied" ||
+      error?.code === "permission-timeout" ||
+      (error instanceof DOMException && ["NotAllowedError", "SecurityError"].includes(error.name))
+  );
+}
+
+async function microphonePermissionState() {
+  if (!navigator.permissions?.query) return "unknown";
+  try {
+    const permission = await navigator.permissions.query({ name: "microphone" });
+    return permission.state;
+  } catch {
+    return "unknown";
+  }
+}
+
+function closePermissionDialog() {
+  const dialog = document.querySelector("[data-voice-permission-dialog]");
+  if (!dialog) return;
+  if (typeof dialog.close === "function" && dialog.open) dialog.close();
+  else dialog.removeAttribute("open");
+}
+
+function ensurePermissionDialog() {
+  const existing = document.querySelector("[data-voice-permission-dialog]");
+  if (existing) return existing;
+
+  const dialog = document.createElement("dialog");
+  dialog.className = "sales-voice-permission-dialog";
+  dialog.dataset.voicePermissionDialog = "";
+  dialog.setAttribute("aria-labelledby", "sales-voice-permission-title");
+  dialog.innerHTML = `
+    <div class="sales-voice-permission-card">
+      <span class="sales-eyebrow">Доступ к микрофону</span>
+      <h2 id="sales-voice-permission-title">Разрешите микрофон для Sales Tracker</h2>
+      <p>Браузер уже заблокировал микрофон и не позволяет сайту самостоятельно изменить это разрешение.</p>
+      <ol>
+        <li>Нажмите значок замка или настроек слева от адреса сайта.</li>
+        <li>Найдите пункт «Микрофон» и выберите «Разрешить».</li>
+        <li>Вернитесь в Sales Tracker и нажмите «Запросить снова».</li>
+      </ol>
+      <div class="sales-voice-permission-actions">
+        <button class="sales-button sales-button--primary" type="button" data-voice-permission-retry>Запросить снова</button>
+        <button class="sales-button sales-button--ghost" type="button" data-voice-permission-close>Закрыть</button>
+      </div>
+    </div>`;
+  document.body.append(dialog);
+  dialog.querySelector("[data-voice-permission-close]")?.addEventListener("click", closePermissionDialog);
+  dialog.querySelector("[data-voice-permission-retry]")?.addEventListener("click", () => {
+    const instance = permissionDialogInstance;
+    closePermissionDialog();
+    if (instance) startListening(instance);
+  });
+  dialog.addEventListener("click", (event) => {
+    if (event.target === dialog) closePermissionDialog();
+  });
+  return dialog;
+}
+
+function showPermissionDialog(instance) {
+  permissionDialogInstance = instance;
+  const dialog = ensurePermissionDialog();
+  if (!dialog.open) {
+    if (typeof dialog.showModal === "function") dialog.showModal();
+    else dialog.setAttribute("open", "");
+  }
+  window.setTimeout(() => dialog.querySelector("[data-voice-permission-retry]")?.focus(), 0);
 }
 
 function fieldLabel(field) {
@@ -412,6 +490,11 @@ async function transcribe(session, chunks) {
 }
 
 async function requestMicrophone() {
+  const permissionState = await microphonePermissionState();
+  if (permissionState === "denied") {
+    throw permissionError("Доступ к микрофону запрещён в настройках браузера.");
+  }
+
   let timedOut = false;
   const streamPromise = navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
     if (timedOut) {
@@ -425,7 +508,7 @@ async function requestMicrophone() {
     new Promise((_, reject) => {
       window.setTimeout(() => {
         timedOut = true;
-        reject(new Error("Браузер не показал запрос доступа к микрофону."));
+        reject(permissionError("Браузер не показал запрос доступа к микрофону.", "permission-timeout"));
       }, 10000);
     })
   ]);
@@ -478,7 +561,12 @@ async function startListening(instance) {
     activeRecording?.stream?.getTracks().forEach((track) => track.stop());
     activeRecording = null;
     setButtonPhase(instance, "idle");
-    setPanelStatus(instance, friendlyMicError(error), "error");
+    if (isMicrophonePermissionError(error)) {
+      setPanelStatus(instance, "Микрофон заблокирован. Открыл инструкцию по разрешению доступа.", "error");
+      showPermissionDialog(instance);
+    } else {
+      setPanelStatus(instance, friendlyMicError(error), "error");
+    }
   }
 }
 

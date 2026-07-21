@@ -1461,6 +1461,68 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
         opacity: 0.5;
       }
 
+      .sales-voice-permission-dialog {
+        position: fixed;
+        inset: 0;
+        z-index: 400;
+        width: min(520px, calc(100vw - 28px));
+        max-height: calc(100dvh - 28px);
+        margin: auto;
+        border: 1px solid rgba(105, 230, 255, 0.42);
+        border-radius: 10px;
+        padding: 0;
+        color: #f6fbff;
+        background:
+          radial-gradient(circle at 12% 0%, rgba(105, 230, 255, 0.18), transparent 46%),
+          linear-gradient(180deg, rgba(8, 39, 68, 0.99), rgba(2, 16, 34, 0.99));
+        box-shadow:
+          0 28px 80px rgba(0, 0, 0, 0.62),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+      }
+
+      .sales-voice-permission-dialog:not([open]) {
+        display: none;
+      }
+
+      .sales-voice-permission-dialog::backdrop {
+        background: rgba(0, 8, 20, 0.76);
+        backdrop-filter: blur(5px);
+      }
+
+      .sales-voice-permission-card {
+        display: grid;
+        gap: 12px;
+        padding: 22px;
+      }
+
+      .sales-voice-permission-card h2 {
+        margin: 0;
+        color: #fff;
+        font-size: 24px;
+        line-height: 1.15;
+      }
+
+      .sales-voice-permission-card p,
+      .sales-voice-permission-card ol {
+        margin: 0;
+        color: rgba(231, 244, 255, 0.78);
+        font-size: 14px;
+        line-height: 1.55;
+      }
+
+      .sales-voice-permission-card ol {
+        display: grid;
+        gap: 7px;
+        padding-left: 22px;
+      }
+
+      .sales-voice-permission-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 4px;
+      }
+
       .sales-form label.is-voice-filled input,
       .sales-form label.is-voice-filled textarea,
       .sales-form label.is-voice-filled .ar-native-select__button {
@@ -1920,6 +1982,18 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
         }
 
         .sales-voice-button {
+          width: 100%;
+        }
+
+        .sales-voice-permission-card {
+          padding: 18px;
+        }
+
+        .sales-voice-permission-card h2 {
+          font-size: 21px;
+        }
+
+        .sales-voice-permission-actions .sales-button {
           width: 100%;
         }
       }
