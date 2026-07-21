@@ -133,20 +133,20 @@ assert(
   "Sales voice API must authenticate and use server-side xAI STT plus structured field extraction."
 );
 assert(
-  salesVoice.includes('navigator.permissions.query({ name: "microphone" })') &&
-    salesVoice.includes('navigator.mediaDevices.getUserMedia({ audio: true })') &&
+  salesVoice.includes('navigator.mediaDevices.getUserMedia({ audio: true })') &&
     salesVoice.includes("data-voice-permission-help") &&
     salesVoice.includes("data-voice-permission-feedback") &&
     salesVoice.includes("showPermissionHelp(instance)") &&
     salesVoice.includes("hidePermissionHelp(instance)") &&
-    salesVoice.includes("Я разрешил — проверить") &&
-    salesVoice.includes("watchMicrophonePermission(instance)") &&
+    salesVoice.includes("Проверить микрофон") &&
+    !salesVoice.includes("microphonePermissionState") &&
+    !salesVoice.includes("navigator.permissions.query") &&
     !salesVoice.includes("showModal") &&
     !salesVoice.includes("data-voice-permission-dialog") &&
     source.includes(".sales-voice-permission-help[hidden]") &&
     source.includes(".sales-voice-permission-feedback[hidden]") &&
     source.includes(".sales-voice-permission-actions"),
-  "Denied microphone access must use non-blocking inline help, while first-time access keeps the native browser prompt."
+  "Microphone access must be tested through getUserMedia without blocking on a potentially stale Permissions API state."
 );
 assert(
   source.includes('class="sales-root"') &&

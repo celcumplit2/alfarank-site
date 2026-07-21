@@ -50,16 +50,6 @@ function isMicrophonePermissionError(error) {
   );
 }
 
-async function microphonePermissionState() {
-  if (!navigator.permissions?.query) return "unknown";
-  try {
-    const permission = await navigator.permissions.query({ name: "microphone" });
-    return permission.state;
-  } catch {
-    return "unknown";
-  }
-}
-
 function microphoneSettingsHint() {
   const userAgent = navigator.userAgent.toLowerCase();
   if (userAgent.includes("firefox")) {
@@ -76,7 +66,7 @@ function showPermissionHelp(instance, feedback = "") {
   instance.permissionHint.textContent = microphoneSettingsHint();
   instance.permissionFeedback.hidden = !feedback;
   instance.permissionFeedback.textContent = feedback;
-  setPanelStatus(instance, "Микрофон заблокирован браузером. Остальные поля карточки доступны.", "error");
+  setPanelStatus(instance, "Браузер не смог открыть микрофон. Остальные поля карточки доступны.", "error");
 }
 
 function hidePermissionHelp(instance) {
@@ -88,36 +78,10 @@ function hidePermissionHelp(instance) {
 async function checkMicrophonePermission(instance) {
   instance.permissionCheck.disabled = true;
   instance.permissionCheck.textContent = "Проверяю...";
-  const permissionState = await microphonePermissionState();
-  instance.permissionCheck.disabled = false;
-  instance.permissionCheck.textContent = "Я разрешил — проверить";
-
-  if (permissionState === "denied") {
-    showPermissionHelp(instance, "Разрешение пока не изменилось. Голосовой ввод остаётся выключенным, но карточку можно заполнять вручную.");
-    return;
-  }
-
   hidePermissionHelp(instance);
   await startListening(instance);
-}
-
-async function watchMicrophonePermission(instance) {
-  if (!navigator.permissions?.query) return;
-  try {
-    const permission = await navigator.permissions.query({ name: "microphone" });
-    const handleChange = () => {
-      if (permission.state === "denied") {
-        showPermissionHelp(instance);
-      } else {
-        hidePermissionHelp(instance);
-        setPanelStatus(instance, "Доступ к микрофону разрешён. Нажмите «Говорить».", "success");
-      }
-    };
-    if (permission.state === "denied") showPermissionHelp(instance);
-    permission.addEventListener?.("change", handleChange);
-  } catch {
-    // The browser will still expose its native permission prompt through getUserMedia.
-  }
+  instance.permissionCheck.disabled = false;
+  instance.permissionCheck.textContent = "Проверить микрофон";
 }
 
 function fieldLabel(field) {
@@ -496,11 +460,6 @@ async function transcribe(session, chunks) {
 }
 
 async function requestMicrophone() {
-  const permissionState = await microphonePermissionState();
-  if (permissionState === "denied") {
-    throw permissionError("Доступ к микрофону запрещён в настройках браузера.");
-  }
-
   let timedOut = false;
   const streamPromise = navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
     if (timedOut) {
@@ -592,11 +551,11 @@ function createPanel(form) {
       <span data-voice-button-label>Говорить</span>
     </button>
     <div class="sales-voice-permission-help" data-voice-permission-help hidden>
-      <strong>Микрофон заблокирован браузером</strong>
+      <strong>Микрофон не открылся</strong>
       <p data-voice-permission-hint></p>
       <p class="sales-voice-permission-feedback" data-voice-permission-feedback aria-live="polite" hidden></p>
       <div class="sales-voice-permission-actions">
-        <button class="sales-button sales-button--primary" type="button" data-voice-permission-check>Я разрешил — проверить</button>
+        <button class="sales-button sales-button--primary" type="button" data-voice-permission-check>Проверить микрофон</button>
         <button class="sales-button sales-button--ghost" type="button" data-voice-permission-dismiss>Скрыть</button>
       </div>
     </div>`;
@@ -634,7 +593,6 @@ function createPanel(form) {
     hidePermissionHelp(instance);
     setPanelStatus(instance, "Голосовой ввод выключен. Карточку можно заполнять вручную.");
   });
-  watchMicrophonePermission(instance);
 }
 
 function initializeVoiceForms() {
