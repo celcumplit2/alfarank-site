@@ -86,17 +86,40 @@ function ensurePermissionDialog() {
         <li>Найдите пункт «Микрофон» и выберите «Разрешить».</li>
         <li>Вернитесь в Sales Tracker и нажмите «Запросить снова».</li>
       </ol>
+      <p class="sales-voice-permission-feedback" data-voice-permission-feedback aria-live="polite" hidden></p>
       <div class="sales-voice-permission-actions">
         <button class="sales-button sales-button--primary" type="button" data-voice-permission-retry>Запросить снова</button>
-        <button class="sales-button sales-button--ghost" type="button" data-voice-permission-close>Закрыть</button>
+        <button class="sales-button sales-button--ghost" type="button" data-voice-permission-close>Закрыть и продолжить</button>
       </div>
     </div>`;
   document.body.append(dialog);
   dialog.querySelector("[data-voice-permission-close]")?.addEventListener("click", closePermissionDialog);
-  dialog.querySelector("[data-voice-permission-retry]")?.addEventListener("click", () => {
+  dialog.querySelector("[data-voice-permission-retry]")?.addEventListener("click", async (event) => {
     const instance = permissionDialogInstance;
+    const button = event.currentTarget;
+    const feedback = dialog.querySelector("[data-voice-permission-feedback]");
+    button.disabled = true;
+    button.textContent = "Проверяю доступ...";
+
+    const permissionState = await microphonePermissionState();
+    if (!dialog.open) {
+      button.disabled = false;
+      button.textContent = "Запросить снова";
+      return;
+    }
+    if (permissionState === "denied") {
+      if (feedback) {
+        feedback.hidden = false;
+        feedback.textContent = "Микрофон всё ещё заблокирован в браузере. Сначала выберите «Разрешить», затем нажмите эту кнопку ещё раз.";
+      }
+      button.disabled = false;
+      button.textContent = "Запросить снова";
+      button.focus();
+      return;
+    }
+
     closePermissionDialog();
-    if (instance) startListening(instance);
+    if (instance) await startListening(instance);
   });
   dialog.addEventListener("click", (event) => {
     if (event.target === dialog) closePermissionDialog();
@@ -107,6 +130,16 @@ function ensurePermissionDialog() {
 function showPermissionDialog(instance) {
   permissionDialogInstance = instance;
   const dialog = ensurePermissionDialog();
+  const button = dialog.querySelector("[data-voice-permission-retry]");
+  const feedback = dialog.querySelector("[data-voice-permission-feedback]");
+  if (button) {
+    button.disabled = false;
+    button.textContent = "Запросить снова";
+  }
+  if (feedback) {
+    feedback.hidden = true;
+    feedback.textContent = "";
+  }
   if (!dialog.open) {
     if (typeof dialog.showModal === "function") dialog.showModal();
     else dialog.setAttribute("open", "");
