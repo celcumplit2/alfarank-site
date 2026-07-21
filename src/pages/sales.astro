@@ -5,7 +5,7 @@ import globalStylesUrl from "@/styles/global.css?url";
 import nativeSelectsUrl from "@/scripts/native-selects.js?url";
 import salesVoiceUrl from "@/scripts/sales-voice.js?url";
 
-const salesVoiceModuleUrl = `${salesVoiceUrl}?v=restored-20260720-1`;
+const salesVoiceModuleUrl = `${salesVoiceUrl}?v=inline-permission-20260721-1`;
 
 const segments = ["B2B услуги", "Локальный бизнес", "E-commerce", "Образование", "Медицина", "Другое"];
 const clientStatuses = ["Новый", "Контакт", "Встреча назначена", "Встреча проведена", "КП отправлено", "Переговоры", "Клиент", "Отказ", "Пауза"];
@@ -1391,6 +1391,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
 
       .sales-voice-panel {
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
         gap: 14px;
@@ -1405,6 +1406,7 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
 
       .sales-voice-copy {
         display: grid;
+        flex: 1 1 320px;
         gap: 3px;
         min-width: 0;
       }
@@ -1461,65 +1463,35 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
         opacity: 0.5;
       }
 
-      .sales-voice-permission-dialog {
-        position: fixed;
-        inset: 0;
-        z-index: 400;
-        width: min(520px, calc(100vw - 28px));
-        max-height: calc(100dvh - 28px);
-        margin: auto;
-        border: 1px solid rgba(105, 230, 255, 0.42);
-        border-radius: 10px;
-        padding: 0;
-        color: #f6fbff;
-        background:
-          radial-gradient(circle at 12% 0%, rgba(105, 230, 255, 0.18), transparent 46%),
-          linear-gradient(180deg, rgba(8, 39, 68, 0.99), rgba(2, 16, 34, 0.99));
-        box-shadow:
-          0 28px 80px rgba(0, 0, 0, 0.62),
-          inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+      .sales-voice-permission-help {
+        display: grid;
+        flex: 1 0 100%;
+        gap: 7px;
+        border-top: 1px solid rgba(255, 190, 76, 0.24);
+        padding-top: 11px;
       }
 
-      .sales-voice-permission-dialog:not([open]) {
+      .sales-voice-permission-help[hidden] {
         display: none;
       }
 
-      .sales-voice-permission-dialog::backdrop {
-        background: rgba(0, 8, 20, 0.76);
-        backdrop-filter: blur(5px);
-      }
-
-      .sales-voice-permission-card {
-        display: grid;
-        gap: 12px;
-        padding: 22px;
-      }
-
-      .sales-voice-permission-card h2 {
+      .sales-voice-permission-help strong {
         margin: 0;
-        color: #fff;
-        font-size: 24px;
-        line-height: 1.15;
+        color: #ffd889;
+        font-size: 13px;
       }
 
-      .sales-voice-permission-card p,
-      .sales-voice-permission-card ol {
+      .sales-voice-permission-help p {
         margin: 0;
         color: rgba(231, 244, 255, 0.78);
-        font-size: 14px;
-        line-height: 1.55;
-      }
-
-      .sales-voice-permission-card ol {
-        display: grid;
-        gap: 7px;
-        padding-left: 22px;
+        font-size: 12px;
+        line-height: 1.45;
       }
 
       .sales-voice-permission-feedback {
         border: 1px solid rgba(255, 190, 76, 0.42);
         border-radius: 7px;
-        padding: 10px 12px;
+        padding: 8px 10px;
         color: #ffd889 !important;
         background: rgba(255, 174, 32, 0.1);
       }
@@ -1995,14 +1967,6 @@ const terminalStatuses = ["", "Клиент", "Отказ", "Пауза"];
 
         .sales-voice-button {
           width: 100%;
-        }
-
-        .sales-voice-permission-card {
-          padding: 18px;
-        }
-
-        .sales-voice-permission-card h2 {
-          font-size: 21px;
         }
 
         .sales-voice-permission-actions .sales-button {

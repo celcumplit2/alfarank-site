@@ -14,7 +14,6 @@ const TRANSIENT_VOICE_STATUSES = new Set([408, 429, 500, 502, 503, 504]);
 const MAX_SAFE_ERROR_CHARS = 360;
 
 let activeRecording = null;
-let permissionDialogInstance = null;
 
 function preferredMimeType() {
   if (typeof MediaRecorder === "undefined") return "";
@@ -61,90 +60,64 @@ async function microphonePermissionState() {
   }
 }
 
-function closePermissionDialog() {
-  const dialog = document.querySelector("[data-voice-permission-dialog]");
-  if (!dialog) return;
-  if (typeof dialog.close === "function" && dialog.open) dialog.close();
-  else dialog.removeAttribute("open");
+function microphoneSettingsHint() {
+  const userAgent = navigator.userAgent.toLowerCase();
+  if (userAgent.includes("firefox")) {
+    return "Нажмите значок разрешений слева от адреса сайта, сбросьте блокировку микрофона и выберите «Разрешить» при следующем запросе.";
+  }
+  if (userAgent.includes("safari") && !userAgent.includes("chrome") && !userAgent.includes("chromium")) {
+    return "Откройте Safari → «Настройки для этого веб-сайта» → «Микрофон» и выберите «Разрешить».";
+  }
+  return "Нажмите значок настроек сайта слева от адреса, откройте «Микрофон» и выберите «Разрешить».";
 }
 
-function ensurePermissionDialog() {
-  const existing = document.querySelector("[data-voice-permission-dialog]");
-  if (existing) return existing;
+function showPermissionHelp(instance, feedback = "") {
+  instance.permissionHelp.hidden = false;
+  instance.permissionHint.textContent = microphoneSettingsHint();
+  instance.permissionFeedback.hidden = !feedback;
+  instance.permissionFeedback.textContent = feedback;
+  setPanelStatus(instance, "Микрофон заблокирован браузером. Остальные поля карточки доступны.", "error");
+}
 
-  const dialog = document.createElement("dialog");
-  dialog.className = "sales-voice-permission-dialog";
-  dialog.dataset.voicePermissionDialog = "";
-  dialog.setAttribute("aria-labelledby", "sales-voice-permission-title");
-  dialog.innerHTML = `
-    <div class="sales-voice-permission-card">
-      <span class="sales-eyebrow">Доступ к микрофону</span>
-      <h2 id="sales-voice-permission-title">Разрешите микрофон для Sales Tracker</h2>
-      <p>Браузер уже заблокировал микрофон и не позволяет сайту самостоятельно изменить это разрешение.</p>
-      <ol>
-        <li>Нажмите значок замка или настроек слева от адреса сайта.</li>
-        <li>Найдите пункт «Микрофон» и выберите «Разрешить».</li>
-        <li>Вернитесь в Sales Tracker и нажмите «Запросить снова».</li>
-      </ol>
-      <p class="sales-voice-permission-feedback" data-voice-permission-feedback aria-live="polite" hidden></p>
-      <div class="sales-voice-permission-actions">
-        <button class="sales-button sales-button--primary" type="button" data-voice-permission-retry>Запросить снова</button>
-        <button class="sales-button sales-button--ghost" type="button" data-voice-permission-close>Закрыть и продолжить</button>
-      </div>
-    </div>`;
-  document.body.append(dialog);
-  dialog.querySelector("[data-voice-permission-close]")?.addEventListener("click", closePermissionDialog);
-  dialog.querySelector("[data-voice-permission-retry]")?.addEventListener("click", async (event) => {
-    const instance = permissionDialogInstance;
-    const button = event.currentTarget;
-    const feedback = dialog.querySelector("[data-voice-permission-feedback]");
-    button.disabled = true;
-    button.textContent = "Проверяю доступ...";
+function hidePermissionHelp(instance) {
+  instance.permissionHelp.hidden = true;
+  instance.permissionFeedback.hidden = true;
+  instance.permissionFeedback.textContent = "";
+}
 
-    const permissionState = await microphonePermissionState();
-    if (!dialog.open) {
-      button.disabled = false;
-      button.textContent = "Запросить снова";
-      return;
-    }
-    if (permissionState === "denied") {
-      if (feedback) {
-        feedback.hidden = false;
-        feedback.textContent = "Микрофон всё ещё заблокирован в браузере. Сначала выберите «Разрешить», затем нажмите эту кнопку ещё раз.";
+async function checkMicrophonePermission(instance) {
+  instance.permissionCheck.disabled = true;
+  instance.permissionCheck.textContent = "Проверяю...";
+  const permissionState = await microphonePermissionState();
+  instance.permissionCheck.disabled = false;
+  instance.permissionCheck.textContent = "Я разрешил — проверить";
+
+  if (permissionState === "denied") {
+    showPermissionHelp(instance, "Разрешение пока не изменилось. Голосовой ввод остаётся выключенным, но карточку можно заполнять вручную.");
+    return;
+  }
+
+  hidePermissionHelp(instance);
+  await startListening(instance);
+}
+
+async function watchMicrophonePermission(instance) {
+  if (!navigator.permissions?.query) return;
+  try {
+    const permission = await navigator.permissions.query({ name: "microphone" });
+    const handleChange = () => {
+      if (permission.state === "denied") {
+        showPermissionHelp(instance);
+      } else {
+        hidePermissionHelp(instance);
+        setPanelStatus(instance, "Доступ к микрофону разрешён. Нажмите «Говорить».", "success");
       }
-      button.disabled = false;
-      button.textContent = "Запросить снова";
-      button.focus();
-      return;
-    }
-
-    closePermissionDialog();
-    if (instance) await startListening(instance);
-  });
-  dialog.addEventListener("click", (event) => {
-    if (event.target === dialog) closePermissionDialog();
-  });
-  return dialog;
-}
-
-function showPermissionDialog(instance) {
-  permissionDialogInstance = instance;
-  const dialog = ensurePermissionDialog();
-  const button = dialog.querySelector("[data-voice-permission-retry]");
-  const feedback = dialog.querySelector("[data-voice-permission-feedback]");
-  if (button) {
-    button.disabled = false;
-    button.textContent = "Запросить снова";
+    };
+    if (permission.state === "denied") showPermissionHelp(instance);
+    permission.addEventListener?.("change", handleChange);
+  } catch {
+    // The browser will still expose its native permission prompt through getUserMedia.
   }
-  if (feedback) {
-    feedback.hidden = true;
-    feedback.textContent = "";
-  }
-  if (!dialog.open) {
-    if (typeof dialog.showModal === "function") dialog.showModal();
-    else dialog.setAttribute("open", "");
-  }
-  window.setTimeout(() => dialog.querySelector("[data-voice-permission-retry]")?.focus(), 0);
 }
 
 function fieldLabel(field) {
@@ -558,6 +531,7 @@ async function startListening(instance) {
     setButtonPhase(instance, "requesting");
     setPanelStatus(instance, "Жду доступ к микрофону...");
     const stream = await requestMicrophone();
+    hidePermissionHelp(instance);
     const mimeType = preferredMimeType();
     const recorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
     const chunks = [];
@@ -595,8 +569,7 @@ async function startListening(instance) {
     activeRecording = null;
     setButtonPhase(instance, "idle");
     if (isMicrophonePermissionError(error)) {
-      setPanelStatus(instance, "Микрофон заблокирован. Открыл инструкцию по разрешению доступа.", "error");
-      showPermissionDialog(instance);
+      showPermissionHelp(instance);
     } else {
       setPanelStatus(instance, friendlyMicError(error), "error");
     }
@@ -617,7 +590,16 @@ function createPanel(form) {
     <button class="sales-button sales-voice-button" type="button" data-voice-button data-phase="idle" aria-pressed="false">
       <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path d="M12 15a3.5 3.5 0 0 0 3.5-3.5v-5a3.5 3.5 0 1 0-7 0v5A3.5 3.5 0 0 0 12 15Zm-6-3.5a6 6 0 0 0 12 0M12 17.5V22m-3 0h6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"/></svg>
       <span data-voice-button-label>Говорить</span>
-    </button>`;
+    </button>
+    <div class="sales-voice-permission-help" data-voice-permission-help hidden>
+      <strong>Микрофон заблокирован браузером</strong>
+      <p data-voice-permission-hint></p>
+      <p class="sales-voice-permission-feedback" data-voice-permission-feedback aria-live="polite" hidden></p>
+      <div class="sales-voice-permission-actions">
+        <button class="sales-button sales-button--primary" type="button" data-voice-permission-check>Я разрешил — проверить</button>
+        <button class="sales-button sales-button--ghost" type="button" data-voice-permission-dismiss>Скрыть</button>
+      </div>
+    </div>`;
 
   form.querySelector(":scope > .sales-panel-head")?.insertAdjacentElement("afterend", panel);
   const instance = {
@@ -625,7 +607,11 @@ function createPanel(form) {
     panel,
     status: panel.querySelector("[data-voice-status]"),
     button: panel.querySelector("[data-voice-button]"),
-    buttonLabel: panel.querySelector("[data-voice-button-label]")
+    buttonLabel: panel.querySelector("[data-voice-button-label]"),
+    permissionHelp: panel.querySelector("[data-voice-permission-help]"),
+    permissionHint: panel.querySelector("[data-voice-permission-hint]"),
+    permissionFeedback: panel.querySelector("[data-voice-permission-feedback]"),
+    permissionCheck: panel.querySelector("[data-voice-permission-check]")
   };
 
   if (!voiceSupported()) {
@@ -643,6 +629,12 @@ function createPanel(form) {
     );
   }
   instance.button.addEventListener("click", () => startListening(instance));
+  instance.permissionCheck.addEventListener("click", () => checkMicrophonePermission(instance));
+  panel.querySelector("[data-voice-permission-dismiss]")?.addEventListener("click", () => {
+    hidePermissionHelp(instance);
+    setPanelStatus(instance, "Голосовой ввод выключен. Карточку можно заполнять вручную.");
+  });
+  watchMicrophonePermission(instance);
 }
 
 function initializeVoiceForms() {

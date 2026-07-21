@@ -41,9 +41,6 @@ const sourceDetailsMigration = readText("migrations/0015_sales_client_source_det
 const actionDocumentsMigration = readText("migrations/0017_sales_action_documents.sql");
 const salesVoice = readText("src/scripts/sales-voice.js");
 const salesVoiceApi = readText("functions/api/sales/voice.ts");
-const voiceRetryStart = salesVoice.indexOf('dialog.querySelector("[data-voice-permission-retry]")');
-const voiceRetryEnd = salesVoice.indexOf('dialog.addEventListener("click"', voiceRetryStart);
-const voiceRetryHandler = salesVoice.slice(voiceRetryStart, voiceRetryEnd);
 
 assert(source.includes('<body class="sales-body">'), "Sales page must keep the sales-body scope.");
 assert(source.includes("<LiquidBackground />"), "Sales page must keep the shared LiquidBackground component.");
@@ -138,19 +135,18 @@ assert(
 assert(
   salesVoice.includes('navigator.permissions.query({ name: "microphone" })') &&
     salesVoice.includes('navigator.mediaDevices.getUserMedia({ audio: true })') &&
-    salesVoice.includes("data-voice-permission-dialog") &&
-    salesVoice.includes("showPermissionDialog(instance)") &&
+    salesVoice.includes("data-voice-permission-help") &&
     salesVoice.includes("data-voice-permission-feedback") &&
-    voiceRetryStart >= 0 &&
-    voiceRetryEnd > voiceRetryStart &&
-    voiceRetryHandler.includes('if (permissionState === "denied")') &&
-    voiceRetryHandler.indexOf("await microphonePermissionState()") < voiceRetryHandler.indexOf("closePermissionDialog()") &&
-    salesVoice.includes("Микрофон всё ещё заблокирован в браузере") &&
-    salesVoice.includes("Запросить снова") &&
-    source.includes(".sales-voice-permission-dialog::backdrop") &&
+    salesVoice.includes("showPermissionHelp(instance)") &&
+    salesVoice.includes("hidePermissionHelp(instance)") &&
+    salesVoice.includes("Я разрешил — проверить") &&
+    salesVoice.includes("watchMicrophonePermission(instance)") &&
+    !salesVoice.includes("showModal") &&
+    !salesVoice.includes("data-voice-permission-dialog") &&
+    source.includes(".sales-voice-permission-help[hidden]") &&
     source.includes(".sales-voice-permission-feedback[hidden]") &&
     source.includes(".sales-voice-permission-actions"),
-  "Denied microphone access must keep a stable recovery dialog without a close/reopen retry loop, while first-time access keeps the native browser prompt."
+  "Denied microphone access must use non-blocking inline help, while first-time access keeps the native browser prompt."
 );
 assert(
   source.includes('class="sales-root"') &&
