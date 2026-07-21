@@ -26,7 +26,7 @@ async function loadRemote(url) {
   assert(url, "Pass a URL after --url.");
   const response = await fetch(url);
   assert(response.ok, `Remote sales page returned HTTP ${response.status}.`);
-  return response.text();
+  return { html: await response.text(), headers: response.headers };
 }
 
 const source = readText("src/pages/sales.astro");
@@ -41,6 +41,7 @@ const sourceDetailsMigration = readText("migrations/0015_sales_client_source_det
 const actionDocumentsMigration = readText("migrations/0017_sales_action_documents.sql");
 const salesVoice = readText("src/scripts/sales-voice.js");
 const salesVoiceApi = readText("functions/api/sales/voice.ts");
+const responseHeaders = readText("public/_headers");
 
 assert(source.includes('<body class="sales-body">'), "Sales page must keep the sales-body scope.");
 assert(source.includes("<LiquidBackground />"), "Sales page must keep the shared LiquidBackground component.");
@@ -147,6 +148,13 @@ assert(
     source.includes(".sales-voice-permission-feedback[hidden]") &&
     source.includes(".sales-voice-permission-actions"),
   "Microphone access must be tested through getUserMedia without blocking on a potentially stale Permissions API state."
+);
+assert(
+  responseHeaders.includes("/sales/*") &&
+    responseHeaders.includes("! Permissions-Policy") &&
+    responseHeaders.includes("microphone=(self)") &&
+    responseHeaders.includes("microphone=()"),
+  "Sales Tracker must allow its own microphone while the rest of the site keeps the restrictive microphone policy."
 );
 assert(
   source.includes('class="sales-root"') &&
@@ -277,7 +285,12 @@ if (existsSync(resolve(root, distPath))) {
 }
 
 if (remoteUrl) {
-  const html = await loadRemote(remoteUrl);
+  const { html, headers } = await loadRemote(remoteUrl);
+  const permissionsPolicy = headers.get("permissions-policy") || "";
+  assert(
+    permissionsPolicy.includes("microphone=(self)") && !permissionsPolicy.includes("microphone=()"),
+    `Remote /sales/ must allow its own microphone. Received Permissions-Policy: ${permissionsPolicy || "missing"}`
+  );
   assert(html.includes("Sales Tracker | AlfaRank"), "Remote /sales/ page title is missing.");
   assert(
     /\.sales-app\{[^}]*position:relative[^}]*z-index:1/.test(html),
