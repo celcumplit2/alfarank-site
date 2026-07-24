@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 
 const root = process.cwd();
@@ -35,6 +35,26 @@ function checkIncludes(filePath, label, needles) {
   const source = read(filePath);
   const missing = needles.filter((needle) => !source.includes(needle));
   check(label, missing.length === 0, `${filePath}: missing ${missing.join(", ")}`);
+}
+
+function listFiles(directory) {
+  return readdirSync(absolute(directory), { withFileTypes: true }).flatMap((entry) => {
+    const relativePath = path.join(directory, entry.name);
+    return entry.isDirectory() ? listFiles(relativePath) : [relativePath];
+  });
+}
+
+function checkAbsent(filePaths, label, needles) {
+  const matches = [];
+
+  for (const filePath of filePaths) {
+    const source = read(filePath);
+    for (const needle of needles) {
+      if (source.includes(needle)) matches.push(`${filePath}: ${needle}`);
+    }
+  }
+
+  check(label, matches.length === 0, `${label}: found ${matches.join(", ")}`);
 }
 
 function routeHtml(routePath, label, needles) {
@@ -125,6 +145,12 @@ checkIncludes("src/layouts/Layout.astro", "layout only fires verified_lead_submi
   'track("verified_lead_submit")'
 ]);
 
+checkAbsent(
+  listFiles("src").filter((filePath) => /\.(astro|js|mjs|ts)$/.test(filePath)),
+  "source contains no legacy thank-you conversion event",
+  ["thank_you_view"]
+);
+
 checkIncludes("functions/api/lead-conversion.ts", "conversion endpoint requires and consumes one-time server proof", [
   "alfarank_lead_conversion",
   "conversion_token_hash = ?",
@@ -163,6 +189,14 @@ checkIncludes("src/pages/lp/[slug].astro", "landing page forms expose analytics 
   ...trackedFormFields
 ]);
 
+checkIncludes("src/pages/alfa-pulse.astro", "ALFA Pulse form exposes analytics attribution fields", [
+  'const formVariant = "alfa-pulse-offer"',
+  "data-conversion-form={formVariant}",
+  'name="landing_offer" value="alfa-pulse"',
+  "structuredData={structuredData}",
+  ...trackedFormFields
+]);
+
 checkIncludes("src/pages/partner-program.astro", "partner intake exposes analytics attribution fields", [
   'data-conversion-form="partner-program"',
   'name="lead_channel" value="partner"',
@@ -196,6 +230,12 @@ checkIncludes("docs/analytics.md", "analytics docs describe events, properties, 
 if (!exists("dist")) {
   failures.push("dist: missing build output. Run `npm run build` before this audit.");
 } else {
+  checkAbsent(
+    listFiles("dist").filter((filePath) => /\.(html|js)$/.test(filePath)),
+    "build contains no legacy thank-you conversion event",
+    ["thank_you_view"]
+  );
+
   ["start-project/thank-you", "ru/start-project/thank-you", "ro/start-project/thank-you"].forEach((routePath) => {
     routeHtml(routePath, `built ${routePath} page contains conversion analytics context`, [
       "alfarank:analytics",
@@ -231,6 +271,22 @@ if (!exists("dist")) {
     "partner_ref",
     "utm_source"
   ]);
+
+  ["alfa-pulse", "ru/alfa-pulse", "ro/alfa-pulse"].forEach((routePath) => {
+    routeHtml(routePath, `built ${routePath} page contains tracked ALFA Pulse form`, [
+      'data-conversion-form="alfa-pulse-offer"',
+      'name="landing_offer" value="alfa-pulse"',
+      'name="form_variant" value="alfa-pulse-offer"',
+      'name="source_path"',
+      'name="landing_page"',
+      'name="lead_channel"',
+      'name="utm_source"',
+      'name="utm_medium"',
+      'name="utm_campaign"',
+      '"@type":"Service"',
+      '"name":"ALFA Pulse"'
+    ]);
+  });
 
   routeHtml("lp/automate-lead-processing", "built lead LP contains quick and full campaign conversion context", [
     'data-conversion-form="lp:automate-lead-processing:quick"',

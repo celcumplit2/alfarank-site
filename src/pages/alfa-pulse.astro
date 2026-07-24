@@ -561,9 +561,31 @@ const copy = offers[locale] ?? offers.en;
 const sourcePath = localizePath("/alfa-pulse/", locale);
 const formVariant = "alfa-pulse-offer";
 const documentCardLabel = copy.pdfLabel.replace(/\s+PDF$/i, "");
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "ALFA Pulse",
+  description: copy.metaDescription,
+  provider: {
+    "@type": "Organization",
+    name: "AlfaRank",
+    url: "https://alfarank.com"
+  },
+  areaServed: {
+    "@type": "Country",
+    name: "Moldova"
+  },
+  url: new URL(sourcePath, Astro.site ?? "https://alfarank.com").toString()
+};
 ---
 
-<Layout title={copy.metaTitle} description={copy.metaDescription} image={copy.cover} locale={locale}>
+<Layout
+  title={copy.metaTitle}
+  description={copy.metaDescription}
+  image={copy.cover}
+  locale={locale}
+  structuredData={structuredData}
+>
   <div class="pulse-page" data-no-translate>
     <section class="section pulse-hero" aria-labelledby="pulse-title">
       <div class="pulse-hero__copy">

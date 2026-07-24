@@ -107,7 +107,11 @@ const localizedTechnologyMatrix = technologyMatrix.map((group) => ({
 }));
 ---
 
-<Layout title="Technologies | AlfaRank" locale={locale}>
+<Layout
+  title="Technologies | AlfaRank"
+  description={translateCopy(locale, "The stack is selected for practical delivery: clear content models, stable deployment, API integration, automation, data processing, and measurable operations.")}
+  locale={locale}
+>
   <PageHero
     eyebrow="Technologies"
     title="The implementation layer behind AlfaRank systems."

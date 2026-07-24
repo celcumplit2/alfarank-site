@@ -20,6 +20,8 @@ const priorityBaseRoutes = [
   ...caseDirections.map((direction) => `/cases/${direction.slug}/`),
   "/about/",
   "/contact/",
+  "/alfa-pulse/",
+  "/start-project/",
   "/partner-program/",
   "/news/",
   "/news/about/",

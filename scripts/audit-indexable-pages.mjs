@@ -29,10 +29,42 @@ function robotsContent(html) {
   return meta.match(/content=["']([^"']*)["']/i)?.[1]?.toLowerCase() ?? "";
 }
 
+function elementContent(html, pattern) {
+  return html.match(pattern)?.[1]?.trim() ?? "";
+}
+
+function attributeContent(html, elementPattern, attribute) {
+  const element = html.match(elementPattern)?.[0] ?? "";
+  return element.match(new RegExp(`${attribute}=["']([^"']*)["']`, "i"))?.[1]?.trim() ?? "";
+}
+
+function duplicateValues(pages, field) {
+  const values = new Map();
+  for (const page of pages) {
+    if (!page[field]) continue;
+    const locale = page.route.match(/^\/(ro|ru)(?:\/|$)/)?.[1] ?? "en";
+    const key = `${locale}\u0000${page[field]}`;
+    const routes = values.get(key) ?? [];
+    routes.push(page.route);
+    values.set(key, routes);
+  }
+  return [...values.entries()]
+    .filter(([, routes]) => routes.length > 1)
+    .map(([key, routes]) => [key.split("\u0000", 2)[1], routes]);
+}
+
 const files = await listHtmlFiles(distDir);
 const pages = await Promise.all(files.map(async (file) => {
   const html = await readFile(file, "utf8");
-  return { route: routeFromFile(file), robots: robotsContent(html) };
+  return {
+    route: routeFromFile(file),
+    robots: robotsContent(html),
+    title: elementContent(html, /<title>([^<]*)<\/title>/i),
+    description: attributeContent(html, /<meta\s+[^>]*name=["']description["'][^>]*>/i, "content"),
+    canonical: attributeContent(html, /<link\s+[^>]*rel=["']canonical["'][^>]*>/i, "href"),
+    h1Count: html.match(/<h1\b/gi)?.length ?? 0,
+    alternateCount: html.match(/<link\s+[^>]*rel=["']alternate["'][^>]*hreflang=/gi)?.length ?? 0
+  };
 }));
 const indexable = pages.filter((page) => !page.robots.includes("noindex"));
 
@@ -70,6 +102,27 @@ for (const pattern of requiredNoindexPatterns) {
 
 if (indexable.length !== expectedIndexablePages) {
   failures.push(`Indexable HTML count is ${indexable.length}; expected exactly ${expectedIndexablePages}`);
+}
+
+for (const page of indexable) {
+  const expectedCanonical = `https://alfarank.com${page.route}`;
+  if (!page.title) failures.push(`Missing title: ${page.route}`);
+  if (!page.description) failures.push(`Missing description: ${page.route}`);
+  if (page.canonical !== expectedCanonical) {
+    failures.push(`Invalid canonical on ${page.route}: ${page.canonical || "(missing)"}`);
+  }
+  if (page.h1Count !== 1) failures.push(`Expected one H1 on ${page.route}; found ${page.h1Count}`);
+  if (page.alternateCount !== 4) {
+    failures.push(`Expected three locales plus x-default on ${page.route}; found ${page.alternateCount}`);
+  }
+}
+
+for (const [value, routes] of duplicateValues(indexable, "title")) {
+  failures.push(`Duplicate title "${value}" on ${routes.join(", ")}`);
+}
+
+for (const [value, routes] of duplicateValues(indexable, "description")) {
+  failures.push(`Duplicate description "${value}" on ${routes.join(", ")}`);
 }
 
 if (failures.length > 0) {

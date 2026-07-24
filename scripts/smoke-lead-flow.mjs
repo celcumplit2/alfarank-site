@@ -53,6 +53,54 @@ const cases = [
     medium: "referral",
     campaign: "lead-smoke-ro",
     partner: `smoke-${runId}`
+  },
+  {
+    locale: "en",
+    prefix: "",
+    formVariant: "alfa-pulse-offer",
+    sourcePath: "/alfa-pulse/",
+    offer: "alfa-pulse",
+    projectType: "Digital revenue operations",
+    problem: "Need to connect advertising, website leads, CRM, and revenue reporting.",
+    result: "A verified lead and revenue measurement path.",
+    output: "ALFA Pulse operating layer",
+    integrations: "Google Ads, GA4, GTM, CRM",
+    source: "google",
+    medium: "cpc",
+    campaign: "alfa-pulse-smoke-en",
+    partner: ""
+  },
+  {
+    locale: "ro",
+    prefix: "/ro",
+    formVariant: "alfa-pulse-offer",
+    sourcePath: "/ro/alfa-pulse/",
+    offer: "alfa-pulse",
+    projectType: "Digital revenue operations",
+    problem: "Conectarea publicitatii, formularului, CRM-ului si veniturilor.",
+    result: "Masurarea verificata a lead-urilor si veniturilor.",
+    output: "Sistem operational ALFA Pulse",
+    integrations: "Google Ads, GA4, GTM, CRM",
+    source: "google",
+    medium: "cpc",
+    campaign: "alfa-pulse-smoke-ro",
+    partner: ""
+  },
+  {
+    locale: "ru",
+    prefix: "/ru",
+    formVariant: "alfa-pulse-offer",
+    sourcePath: "/ru/alfa-pulse/",
+    offer: "alfa-pulse",
+    projectType: "Digital revenue operations",
+    problem: "Связать рекламу, заявки сайта, CRM и выручку.",
+    result: "Проверяемый контур измерения лидов и выручки.",
+    output: "Операционный контур ALFA Pulse",
+    integrations: "Google Ads, GA4, GTM, CRM",
+    source: "google",
+    medium: "cpc",
+    campaign: "alfa-pulse-smoke-ru",
+    partner: ""
   }
 ];
 
@@ -68,7 +116,8 @@ function localizedThankYouPath(testCase) {
 
 function formPayload(testCase) {
   const sourcePath = testCase.sourcePath || `${testCase.prefix}/start-project/` || "/start-project/";
-  const email = `lead-smoke-${runId}-${testCase.locale}@example.com`;
+  const variantSlug = testCase.formVariant.replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "").toLowerCase();
+  const email = `lead-smoke-${runId}-${testCase.locale}-${variantSlug}@example.com`;
   const body = new URLSearchParams({
     name: `Lead Smoke ${testCase.locale.toUpperCase()}`,
     email,

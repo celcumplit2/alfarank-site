@@ -57,7 +57,11 @@ const sendingRequestLabel = translateCopy(locale, "Sending request...");
 const sendingSourceStatus = translateCopy(locale, "Sending request with source context...");
 ---
 
-<Layout title="Start a Project | AlfaRank" locale={locale}>
+<Layout
+  title="Start a Project | AlfaRank"
+  description={translateCopy(locale, "Use the form to describe the project type, current setup, business problem, desired result, and optional timeline or budget.")}
+  locale={locale}
+>
   <PageHero
     eyebrow={translateCopy(locale, "Start a Project")}
     title={translateCopy(locale, "Define the system your business needs.")}
